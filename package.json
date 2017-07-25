@@ -1,0 +1,41 @@
+{
+  "name": "ember-cli-update",
+  "version": "0.0.0",
+  "description": "Update Ember CLI Ember.js apps and addons",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env DEBUG=ember-cli-update mocha \"test/!(fixtures)/**/*-test.js\"",
+    "posttest": "npm run lint",
+    "prelint": "eslint --version",
+    "lint": "eslint bin \"test/!(fixtures)/**/*-test.js\"",
+    "lint:fix": "npm run lint -- --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kellyselden/ember-cli-update.git"
+  },
+  "keywords": [
+    "ember.js",
+    "ember-cli"
+  ],
+  "author": "Kelly Selden",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kellyselden/ember-cli-update/issues"
+  },
+  "homepage": "https://github.com/kellyselden/ember-cli-update#readme",
+  "dependencies": {
+    "git-diff-apply": "0.0.3",
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "cross-env": "^5.0.1",
+    "debug": "^2.6.8",
+    "eslint": "^4.3.0",
+    "eslint-config-sane": "^0.1.0",
+    "fixturify": "^0.3.3",
+    "fs-extra": "^4.0.0",
+    "mocha": "^3.4.2"
+  }
+}
