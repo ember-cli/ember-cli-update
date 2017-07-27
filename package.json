@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/kellyselden/ember-cli-update#readme",
   "dependencies": {
-    "git-diff-apply": "0.0.3",
+    "git-diff-apply": "0.0.4",
     "yargs": "^8.0.2"
   },
   "devDependencies": {
