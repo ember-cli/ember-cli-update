@@ -2,12 +2,15 @@
   "name": "ember-cli-update",
   "version": "0.0.0",
   "description": "Update Ember CLI Ember.js apps and addons",
-  "main": "index.js",
+  "main": "src/index.js",
+  "bin": {
+    "ember-cli-update": "bin/ember-cli-update.js"
+  },
   "scripts": {
-    "test": "cross-env DEBUG=ember-cli-update mocha \"test/!(fixtures)/**/*-test.js\"",
+    "test": "cross-env DEBUG=ember-cli-update,git-diff-apply mocha \"test/!(fixtures)/**/*-test.js\"",
     "posttest": "npm run lint",
     "prelint": "eslint --version",
-    "lint": "eslint bin \"test/!(fixtures)/**/*-test.js\"",
+    "lint": "eslint bin src \"test/!(fixtures)/**/*-test.js\"",
     "lint:fix": "npm run lint -- --fix"
   },
   "repository": {
