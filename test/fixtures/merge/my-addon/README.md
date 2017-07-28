@@ -1,6 +1,6 @@
 # my-addon
 
-This README outlines the details of collaborating on this Ember addon.
+This is my filled out section
 
 ## Installation
 

@@ -1,4 +1,6 @@
 {
   "name": "my-addon",
-  "dependencies": {}
+  "dependencies": {
+    "ember": "2.8.0"
+  }
 }

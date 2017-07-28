@@ -22,11 +22,9 @@ module.exports = function emberCliUpdate(options) {
 
   let projectKeyword = projectType === 'app' ? 'new' : 'addon';
 
-  let remoteName = `ember-${projectKeyword}-output`;
-  let remoteUrl = `https://github.com/ember-cli/${remoteName}`;
+  let remoteUrl = `https://github.com/ember-cli/ember-${projectKeyword}-output`;
 
   gitDiffApply({
-    remoteName,
     remoteUrl,
     startTag,
     endTag
