@@ -7,7 +7,7 @@
     "ember-cli-update": "bin/ember-cli-update.js"
   },
   "scripts": {
-    "test": "cross-env DEBUG=ember-cli-update,git-diff-apply mocha \"test/!(fixtures)/**/*-test.js\"",
+    "test": "cross-env DEBUG=ember-cli-update,git-diff-apply,ember-cli-addon-tests mocha \"test/!(fixtures)/**/*-test.js\"",
     "posttest": "npm run lint",
     "prelint": "eslint --version",
     "lint": "eslint bin src test",
@@ -19,6 +19,7 @@
   },
   "keywords": [
     "ember.js",
+    "ember-addon",
     "ember-cli"
   ],
   "author": "Kelly Selden",
@@ -36,10 +37,15 @@
   "devDependencies": {
     "chai": "^4.1.0",
     "cross-env": "^5.0.1",
+    "ember-cli": "^2.14.2",
+    "ember-cli-addon-tests": "^0.9.0",
     "eslint": "^4.3.0",
     "eslint-config-sane": "^0.1.0",
     "fixturify": "^0.3.3",
     "fs-extra": "^4.0.0",
     "mocha": "^3.4.2"
+  },
+  "ember-addon": {
+    "main": "src/ember-addon.js"
   }
 }
