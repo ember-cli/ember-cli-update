@@ -56,14 +56,6 @@ function fixtureCompare(
   delete actual['.git'];
 
   expect(actual).to.deep.equal(expected);
-
-  let result = run('git log -1', {
-    cwd: tmpPath
-  });
-
-  expect(result).to.contain('Author: Your Name <you@example.com>');
-  expect(result).to.contain('v2.11.1-v2.14.1');
-  expect(result).to.not.contain('add files');
 }
 
 describe('Acceptance - ember-cli-build', function() {
@@ -101,6 +93,7 @@ describe('Acceptance - ember-cli-build', function() {
       ps.stdout.on('data', data => {
         let str = data.toString();
         if (str.includes('Normal merge conflict')) {
+          ps.stdin.write(']c\n');
           ps.stdin.write(':diffg 3\n');
           ps.stdin.write(':wqa\n');
         } else if (str.includes('Deleted merge conflict')) {
@@ -117,11 +110,33 @@ describe('Acceptance - ember-cli-build', function() {
       ps.stderr.pipe(process.stdout);
 
       ps.on('exit', () => {
+        let status = run('git status', {
+          cwd: tmpPath
+        });
+
         expect(stderr).to.not.contain('Error:');
         expect(stderr).to.not.contain('fatal:');
         expect(stderr).to.not.contain('Command failed');
 
-        resolve(stderr);
+        let result = run('git log -1', {
+          cwd: tmpPath
+        });
+
+        // verify it is not committed
+        expect(result).to.contain('Author: Your Name <you@example.com>');
+        expect(result).to.contain('add files');
+
+        result = run('git branch', {
+          cwd: tmpPath
+        });
+
+        // verify branch was deleted
+        expect(result.trim()).to.contain('* master');
+
+        resolve({
+          status,
+          stderr
+        });
       });
     });
   }
@@ -130,11 +145,25 @@ describe('Acceptance - ember-cli-build', function() {
     return merge(
       'test/fixtures/local/my-app',
       'tmp/my-app'
-    ).then(() => {
+    ).then(result => {
+      let status = result.status;
+
       fixtureCompare(
         'tmp/my-app',
         'test/fixtures/merge/my-app'
       );
+
+      // changed locally, no change upstream
+      expect(status).to.not.contain(' .ember-cli');
+
+      // exists locally, also added upstream with changes
+      expect(status).to.contain('modified:   .eslintrc.js');
+
+      // changed locally, removed upstream
+      expect(status).to.contain('deleted:    bower.json');
+
+      // changed locally, also changed upstream
+      expect(status).to.contain('modified:   README.md');
     });
   });
 
@@ -142,11 +171,25 @@ describe('Acceptance - ember-cli-build', function() {
     return merge(
       'test/fixtures/local/my-addon',
       'tmp/my-addon'
-    ).then(() => {
+    ).then(result => {
+      let status = result.status;
+
       fixtureCompare(
         'tmp/my-addon',
         'test/fixtures/merge/my-addon'
       );
+
+      // changed locally, no change upstream
+      expect(status).to.not.contain(' .ember-cli');
+
+      // exists locally, also added upstream with changes
+      expect(status).to.contain('modified:   .eslintrc.js');
+
+      // changed locally, removed upstream
+      expect(status).to.contain('deleted:    bower.json');
+
+      // changed locally, also changed upstream
+      expect(status).to.contain('modified:   README.md');
     });
   });
 });

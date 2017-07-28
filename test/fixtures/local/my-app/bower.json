@@ -1,5 +1,6 @@
 {
   "name": "my-app",
   "dependencies": {
+    "ember": "2.8.0"
   }
 }
