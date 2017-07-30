@@ -1,6 +1,7 @@
 {
   "name": "my-addon",
   "dependencies": {
-    "ember": "2.8.0"
+  },
+  "devDependencies": {
   }
 }
