@@ -10,7 +10,7 @@
     "test": "cross-env DEBUG=ember-cli-update,git-diff-apply mocha \"test/!(fixtures)/**/*-test.js\"",
     "posttest": "npm run lint",
     "prelint": "eslint --version",
-    "lint": "eslint bin src \"test/!(fixtures)/**/*-test.js\"",
+    "lint": "eslint bin src test",
     "lint:fix": "npm run lint -- --fix"
   },
   "repository": {
