@@ -9,6 +9,7 @@ const argv = require('yargs')
       type: 'string'
     }
   })
+  .help()
   .argv;
 
 const endTag = argv['end-tag'];
