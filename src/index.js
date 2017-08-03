@@ -7,6 +7,7 @@ const getProjectType = require('./get-project-type');
 const gitDiffApply = require('git-diff-apply');
 
 module.exports = function emberCliUpdate(options) {
+  let distTag = options.distTag;
   let version = options.version;
 
   let packageVersion = getPackageVersion('.');
@@ -14,7 +15,7 @@ module.exports = function emberCliUpdate(options) {
 
   let startTag = projectVersion;
 
-  let endTag = getTagVersion(version, 'latest');
+  let endTag = getTagVersion(version, distTag);
 
   let projectType = getProjectType('.');
 
