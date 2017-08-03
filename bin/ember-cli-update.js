@@ -6,7 +6,9 @@ const emberCliUpdate = require('../src');
 const argv = require('yargs')
   .options({
     'version': {
-      type: 'string'
+      alias: 'v',
+      type: 'string',
+      description: 'Update to a version that isn\'t latest'
     }
   })
   .help()
