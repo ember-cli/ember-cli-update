@@ -1,22 +1,14 @@
 'use strict';
 
 const run = require('./run');
+const semver = require('semver');
 
 module.exports = function getProjectVersion(packageVersion) {
-  let output = run(`npm info ember-cli@${packageVersion} version`);
+  let versions = JSON.parse(
+    run('npm info ember-cli versions --json')
+  );
 
-  let lines = output.split(/\r?\n/).filter(Boolean);
+  let projectVersion = semver.minSatisfying(versions, packageVersion);
 
-  let startTag = lines.map(line => {
-    let version = line.split(' ').pop().replace(/'/g, '');
-    return `v${version}`;
-  }).pop();
-
-  return startTag;
-
-  // let versions = JSON.parse(
-  //   run(`npm info ember-cli@${packageVersion} version --json`)
-  // );
-
-  // return `v${versions.pop()}`;
+  return `v${projectVersion}`;
 };

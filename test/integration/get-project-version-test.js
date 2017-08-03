@@ -8,6 +8,6 @@ describe('Integration - getProjectVersion', function() {
 
   it('works', function() {
     expect(getProjectVersion('2.11.1')).to.equal('v2.11.1');
-    expect(getProjectVersion('2.12')).to.equal('v2.12.3');
+    expect(getProjectVersion('2.12')).to.equal('v2.12.0');
   });
 });
