@@ -5,15 +5,15 @@ const emberCliUpdate = require('../src');
 
 const argv = require('yargs')
   .options({
-    'end-tag': {
+    'version': {
       type: 'string'
     }
   })
   .help()
   .argv;
 
-const endTag = argv['end-tag'];
+const version = argv['version'];
 
 emberCliUpdate({
-  endTag
+  version
 });
