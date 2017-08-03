@@ -5,10 +5,13 @@ const getTagVersion = require('../../src/get-tag-version');
 const semver = require('semver');
 
 describe('Integration - getTagVersion', function() {
-  this.timeout(10000);
+  this.timeout(5000);
 
-  it('works', function() {
+  it('works for beta', function() {
     expect(semver.valid(getTagVersion('beta'))).to.not.be.null;
+  });
+
+  it('works for latest', function() {
     expect(semver.valid(getTagVersion('latest'))).to.not.be.null;
   });
 });
