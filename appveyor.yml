@@ -9,6 +9,8 @@ init:
 # Install scripts. (runs after repo cloning)
 install:
   - ps: Install-Product node $env:nodejs_version
+  - npm config set spin false
+  - npm install -g npm
   - npm install
 
 # Post-install test scripts.

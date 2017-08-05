@@ -5,3 +5,8 @@ node_js:
 cache:
   directories:
     - $HOME/.npm
+
+before_install:
+  - npm config set spin false
+  - npm install -g npm
+  - npm --version
