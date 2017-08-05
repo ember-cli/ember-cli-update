@@ -2,20 +2,10 @@
 'use strict';
 
 const emberCliUpdate = require('../src');
+const args = require('../src/args');
 
 const argv = require('yargs')
-  .options({
-    'dist-tag': {
-      type: 'string',
-      default: 'latest',
-      description: 'Update via dist-tag ("latest", "beta", etc...)'
-    },
-    'version': {
-      alias: 'v',
-      type: 'string',
-      description: 'Update to a version that isn\'t latest'
-    }
-  })
+  .options(args)
   .help()
   .argv;
 
