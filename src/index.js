@@ -23,7 +23,7 @@ module.exports = function emberCliUpdate(options) {
 
   let remoteUrl = `https://github.com/ember-cli/ember-${projectKeyword}-output`;
 
-  gitDiffApply({
+  return gitDiffApply({
     remoteUrl,
     startTag,
     endTag
