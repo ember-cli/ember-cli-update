@@ -44,6 +44,14 @@ function buildTmp(
   run('git commit -m "add files"', {
     cwd: tmpPath
   });
+
+  run('git branch foo', {
+    cwd: tmpPath
+  });
+
+  run('git checkout foo', {
+    cwd: tmpPath
+  });
 }
 
 function fixtureCompare(
@@ -138,7 +146,7 @@ describe('Acceptance - ember-cli-build', function() {
         });
 
         // verify branch was deleted
-        expect(result.trim()).to.equal('* master');
+        expect(result.trim()).to.match(/\* foo\r?\n {2}master/);
 
         resolve({
           status,
