@@ -138,7 +138,7 @@ describe('Acceptance - ember-cli-build', function() {
         });
 
         // verify branch was deleted
-        expect(result.trim()).to.contain('* master');
+        expect(result.trim()).to.equal('* master');
 
         resolve({
           status,
