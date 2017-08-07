@@ -1,20 +1,24 @@
 language: node_js
 node_js:
-  - "4"
-
+- '4'
 cache:
   directories:
-    - $HOME/.npm
-
+  - "$HOME/.npm"
 env:
-  - TEST_COMMAND=test:bin
-  - TEST_COMMAND=test:command
-  - TEST_COMMAND=lint
-
+- TEST_COMMAND=test:bin
+- TEST_COMMAND=test:command
+- TEST_COMMAND=lint
 before_install:
-  - npm config set spin false
-  - npm install -g npm
-  - npm --version
-
+- npm config set spin false
+- npm install -g npm
+- npm --version
 script:
-  - npm run $TEST_COMMAND
+- npm run $TEST_COMMAND
+deploy:
+  provider: npm
+  email: kellyselden@gmail.com
+  api_key:
+    secure: fsaEla75b+L0VNtqjKckCo/mETVvfy6ldQl14fJUtwwe4356aiSnUAxdwMSgbtpCi6pX1mjQqDVKTzTTUuuDKGwzUoYnpaBzxPO0UhGEQQ2tofU6SS3/sPqW4YVIw313cHaAKwccjT9wt2z8K6o6wqa+V5kwOMda8sbfxZGA6bykzHw/4p6a7X+CzDNzN6EkjhtnQ1EDBlcrhfOlZfXS9tb5B2LCn7YsKYDLJG3QyYU3SuQOllrDBdDieG+7NVeNvFFGRJEg967L1HLjNN2cR6D7EjVpbgJhI/l8U7Yzk/CKHqkZH0aeRRxub/oTMU5yHHOkA6jC0lXewuruPN6CeQVwDucpnANEM79veBMcYGo9wJAeN7a1QsR5mE/wKhm19XFvFPF2Q8mRMWwjlVWNK1oxobB3K9vmxU2jtpA8nAVhFjMjPeFQDASHC/SYrBuj5oTTQMJMS8kPIj0HMALISGoOZpels/BncWQlFTM9xWRJCZXEm+FiZKi1QtzKnDft+7F0BLtuPF4BtVuK355/pxMr5c+ZFd8pk5dvBMmK2o9d1fvs6vIOItUWfeWaQoU3uZx+HI9WJy9B7SwkwylBPxCEsR+/kAo9A9xL1IV5MHfCWoskJDJeYc/sYrke3DoitAn86wI0zOeKX800RZYhGSlpCUUqcKKJZ/+w7jhu7+Y=
+  on:
+    tags: true
+    repo: kellyselden/ember-cli-update
