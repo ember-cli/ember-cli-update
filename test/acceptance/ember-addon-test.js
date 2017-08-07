@@ -134,6 +134,11 @@ describe('Acceptance | ember-addon', function() {
 
       return app.run('npm', 'install');
     }).then(() => {
+      // get rid of package-lock.json
+      run('git clean -f', {
+        cwd: app.path
+      });
+
       return app.startServer({
         command: 'update',
         additionalArguments: [
