@@ -6,7 +6,15 @@ cache:
   directories:
     - $HOME/.npm
 
+env:
+  - TEST_COMMAND=test:bin
+  - TEST_COMMAND=test:command
+  - TEST_COMMAND=lint
+
 before_install:
   - npm config set spin false
   - npm install -g npm
   - npm --version
+
+script:
+  - npm run $TEST_COMMAND
