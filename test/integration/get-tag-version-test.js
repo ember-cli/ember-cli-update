@@ -12,10 +12,10 @@ describe('Integration - getTagVersion', function() {
   });
 
   it('works for beta', function() {
-    expect(semver.valid(getTagVersion(null, 'beta'))).to.not.be.null;
+    expect(semver.valid(getTagVersion('beta'))).to.not.be.null;
   });
 
   it('works for latest', function() {
-    expect(semver.valid(getTagVersion(null, 'latest'))).to.not.be.null;
+    expect(semver.valid(getTagVersion('latest'))).to.not.be.null;
   });
 });
