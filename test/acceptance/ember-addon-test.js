@@ -142,7 +142,7 @@ describe('Acceptance | ember-addon', function() {
       return app.startServer({
         command: 'update',
         additionalArguments: [
-          '--version',
+          '--to',
           '2.14.1'
         ],
         detectServerStart() {

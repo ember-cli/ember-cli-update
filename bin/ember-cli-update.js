@@ -9,10 +9,8 @@ const argv = require('yargs')
   .help()
   .argv;
 
-const distTag = argv['dist-tag'];
-const version = argv['version'];
+const to = argv['to'];
 
 emberCliUpdate({
-  distTag,
-  version
+  to
 });
