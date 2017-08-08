@@ -40,7 +40,7 @@
     "chai": "^4.1.0",
     "cross-env": "^5.0.1",
     "ember-cli": "^2.14.2",
-    "ember-cli-addon-tests": "kellyselden/ember-cli-addon-tests",
+    "ember-cli-addon-tests": "^0.9.1",
     "eslint": "^4.3.0",
     "eslint-config-sane": "^0.1.0",
     "fixturify": "^0.3.3",
