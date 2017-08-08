@@ -6,6 +6,7 @@ const args = require('../src/args');
 
 const argv = require('yargs')
   .options(args)
+  .version()
   .help()
   .argv;
 
