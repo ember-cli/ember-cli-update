@@ -92,7 +92,7 @@ describe('Acceptance - ember-cli-build', function() {
     return new Promise(resolve => {
       let ps = cp.spawn('node', [
         binFile,
-        '--version',
+        '--to',
         '2.14.1'
       ], {
         cwd: tmpPath,

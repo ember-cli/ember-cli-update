@@ -6,9 +6,21 @@ const getTagVersion = require('./get-tag-version');
 const getProjectType = require('./get-project-type');
 const gitDiffApply = require('git-diff-apply');
 
+const distTags = [
+  'latest',
+  'beta'
+];
+
 module.exports = function emberCliUpdate(options) {
-  let distTag = options.distTag;
-  let version = options.version;
+  let to = options.to;
+
+  let distTag;
+  let version;
+  if (distTags.indexOf(to) > -1) {
+    distTag = to;
+  } else {
+    version = to;
+  }
 
   let packageVersion = getPackageVersion('.');
   let projectVersion = getProjectVersion(packageVersion);

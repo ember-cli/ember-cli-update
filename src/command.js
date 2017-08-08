@@ -10,16 +10,10 @@ module.exports = {
 
   availableOptions: [
     {
-      name: 'dist-tag',
-      description: args['dist-tag'].description,
+      name: 'to',
+      description: args['to'].description,
       type: String,
-      default: args['dist-tag'].default
-    },
-    {
-      name: 'version',
-      description: args['version'].description,
-      type: String,
-      aliases: args['version'].alias
+      default: args['to'].default
     }
   ],
 
