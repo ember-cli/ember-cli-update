@@ -2,7 +2,20 @@
 
 const run = require('./run');
 
-module.exports = function getTagVersion(version, distTag) {
+const distTags = [
+  'latest',
+  'beta'
+];
+
+module.exports = function getTagVersion(to) {
+  let distTag;
+  let version;
+  if (distTags.indexOf(to) > -1) {
+    distTag = to;
+  } else {
+    version = to;
+  }
+
   if (!version) {
     version = JSON.parse(
       run(`npm info ember-cli@${distTag} version --json`)
