@@ -10,6 +10,11 @@ module.exports = {
 
   availableOptions: [
     {
+      name: 'from',
+      description: args['from'].description,
+      type: String
+    },
+    {
       name: 'to',
       description: args['to'].description,
       type: String,

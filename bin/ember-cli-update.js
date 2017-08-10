@@ -10,8 +10,10 @@ const argv = require('yargs')
   .help()
   .argv;
 
+const from = argv['from'];
 const to = argv['to'];
 
 emberCliUpdate({
+  from,
   to
 });
