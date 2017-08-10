@@ -1,4 +1,8 @@
 module.exports = {
+  'from': {
+    type: 'string',
+    description: 'Use a starting version that is different than what is in your package.json ("2.8.0", "2.9.1")'
+  },
   'to': {
     type: 'string',
     default: 'latest',

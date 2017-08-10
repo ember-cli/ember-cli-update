@@ -8,16 +8,19 @@ const gitDiffApply = require('git-diff-apply');
 const run = require('./run');
 
 module.exports = function emberCliUpdate(options) {
+  let from = options.from;
   let to = options.to;
 
   let versions = JSON.parse(
     run('npm info ember-cli versions --json')
   );
 
-  let packageVersion = getPackageVersion('.');
-  let projectVersion = getProjectVersion(packageVersion, versions);
+  if (!from) {
+    let packageVersion = getPackageVersion('.');
+    from = getProjectVersion(packageVersion, versions);
+  }
 
-  let startTag = projectVersion;
+  let startTag = `v${from}`;
 
   let endTag = getTagVersion(to, versions);
 
