@@ -8,7 +8,7 @@ const distTags = [
   'beta'
 ];
 
-module.exports = function getTagVersion(to) {
+module.exports = function getTagVersion(to, versions) {
   let distTag;
   let version;
   if (distTags.indexOf(to) > -1) {
@@ -20,10 +20,6 @@ module.exports = function getTagVersion(to) {
   if (version) {
     let isAbsolute = semver.clean(version);
     if (!isAbsolute) {
-      let versions = JSON.parse(
-        run('npm info ember-cli versions --json')
-      );
-
       version = semver.maxSatisfying(versions, version);
     }
   } else {

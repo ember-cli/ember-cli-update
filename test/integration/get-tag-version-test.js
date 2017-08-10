@@ -12,7 +12,13 @@ describe('Integration - getTagVersion', function() {
   });
 
   it('allows semver hints', function() {
-    expect(getTagVersion('~2.12')).to.equal('v2.12.3');
+    expect(getTagVersion(
+      '~2.12',
+      [
+        '2.12.0',
+        '2.12.1'
+      ]
+    )).to.equal('v2.12.1');
   });
 
   it('works for beta', function() {
