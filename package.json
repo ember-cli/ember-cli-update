@@ -32,13 +32,14 @@
   "homepage": "https://github.com/kellyselden/ember-cli-update#readme",
   "dependencies": {
     "debug": "^3.0.0",
-    "git-diff-apply": "0.1.7",
+    "git-diff-apply": "^0.1.8",
     "semver": "^5.4.1",
     "yargs": "^8.0.2"
   },
   "devDependencies": {
     "chai": "^4.1.0",
     "cross-env": "^5.0.1",
+    "cross-spawn": "^5.1.0",
     "ember-cli": "^2.14.2",
     "ember-cli-addon-tests": "^0.9.1",
     "eslint": "^4.3.0",
