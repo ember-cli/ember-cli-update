@@ -1,10 +1,17 @@
 environment:
   matrix:
     - nodejs_version: "4"
+      TEST_COMMAND: "test:bin"
+    - nodejs_version: "4"
+      TEST_COMMAND: "test:command"
     - nodejs_version: "6"
+      TEST_COMMAND: "test:bin"
+    - nodejs_version: "6"
+      TEST_COMMAND: "test:command"
     - nodejs_version: "8"
-    - TEST_COMMAND: "test:bin"
-    - TEST_COMMAND: "test:command"
+      TEST_COMMAND: "test:bin"
+    - nodejs_version: "8"
+      TEST_COMMAND: "test:command"
 
 # Fix line endings in Windows. (runs before repo cloning)
 init:

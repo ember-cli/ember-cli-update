@@ -10,12 +10,6 @@ env:
 - TEST_COMMAND=test:bin
 - TEST_COMMAND=test:command
 - TEST_COMMAND=lint
-matrix:
-  exclude:
-  - node_js: 4
-    env: TEST_COMMAND=lint
-  - node_js: 6
-    env: TEST_COMMAND=lint
 before_install:
 - npm config set spin false
 - npm install -g npm
@@ -23,6 +17,11 @@ before_install:
 script:
 - npm run $TEST_COMMAND
 jobs:
+  exclude:
+  - node_js: '4'
+    env: TEST_COMMAND=lint
+  - node_js: '6'
+    env: TEST_COMMAND=lint
   include:
   - stage: Deploy
     cache: ignore
