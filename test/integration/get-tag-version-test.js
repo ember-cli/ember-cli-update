@@ -11,6 +11,10 @@ describe('Integration - getTagVersion', function() {
     expect(getTagVersion('2.13.1')).to.equal('v2.13.1');
   });
 
+  it('allows semver hints', function() {
+    expect(getTagVersion('~2.12')).to.equal('v2.12.3');
+  });
+
   it('works for beta', function() {
     expect(semver.valid(getTagVersion('beta'))).to.not.be.null;
   });
