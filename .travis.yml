@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - '4'
+- '6'
+- '8'
 cache:
   directories:
   - "$HOME/.npm"
@@ -8,6 +10,12 @@ env:
 - TEST_COMMAND=test:bin
 - TEST_COMMAND=test:command
 - TEST_COMMAND=lint
+matrix:
+  exclude:
+  - node_js: 4
+    env: TEST_COMMAND=lint
+  - node_js: 6
+    env: TEST_COMMAND=lint
 before_install:
 - npm config set spin false
 - npm install -g npm
