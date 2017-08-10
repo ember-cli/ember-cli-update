@@ -1,6 +1,7 @@
 'use strict';
 
 const run = require('./run');
+const semver = require('semver');
 
 const distTags = [
   'latest',
@@ -16,7 +17,16 @@ module.exports = function getTagVersion(to) {
     version = to;
   }
 
-  if (!version) {
+  if (version) {
+    let isAbsolute = semver.clean(version);
+    if (!isAbsolute) {
+      let versions = JSON.parse(
+        run('npm info ember-cli versions --json')
+      );
+
+      version = semver.maxSatisfying(versions, version);
+    }
+  } else {
     version = JSON.parse(
       run(`npm info ember-cli@${distTag} version --json`)
     );
