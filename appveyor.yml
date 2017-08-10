@@ -1,6 +1,8 @@
 environment:
-  nodejs_version: "4"
   matrix:
+    - nodejs_version: "4"
+    - nodejs_version: "6"
+    - nodejs_version: "8"
     - TEST_COMMAND: "test:bin"
     - TEST_COMMAND: "test:command"
 
