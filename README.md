@@ -35,7 +35,7 @@ This will update your app or addon to the latest Ember CLI version. It does this
 
 | Option | Description | Examples | Default |
 |---|---|---|---|
-| --to | Update to a version that isn\'t latest | "2.14.1" "~2.15" "latest" "beta" | latest |
+| --to | Update to a version that isn\'t latest | "2.14.1" "~2.15" "latest" "beta" | "latest" |
 
 ## Hints
 
