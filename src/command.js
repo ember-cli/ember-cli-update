@@ -19,6 +19,12 @@ module.exports = {
       description: args['to'].description,
       type: String,
       default: args['to'].default
+    },
+    {
+      name: 'ignore-conflicts',
+      description: args['ignore-conflicts'].description,
+      type: Boolean,
+      default: args['ignore-conflicts'].default
     }
   ],
 
