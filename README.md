@@ -37,6 +37,7 @@ This will update your app or addon to the latest Ember CLI version. It does this
 |---|---|---|---|
 | --from | Use a starting version that is different than what is in your package.json | "2.8.0" "2.9.1" | |
 | --to | Update to a version that isn\'t latest | "2.14.1" "~2.15" "latest" "beta" | "latest" |
+| --ignore-conflict | Handle merge conflicts yourself | | false |
 
 ## Hints
 

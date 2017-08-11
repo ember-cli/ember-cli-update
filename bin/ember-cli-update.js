@@ -12,8 +12,10 @@ const argv = require('yargs')
 
 const from = argv['from'];
 const to = argv['to'];
+const ignoreConflicts = argv['ignore-conflicts'];
 
 emberCliUpdate({
   from,
-  to
+  to,
+  ignoreConflicts
 });

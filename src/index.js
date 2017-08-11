@@ -10,6 +10,7 @@ const run = require('./run');
 module.exports = function emberCliUpdate(options) {
   let from = options.from;
   let to = options.to;
+  let ignoreConflicts = options.ignoreConflicts;
 
   let versions = JSON.parse(
     run('npm info ember-cli versions --json')
@@ -33,6 +34,7 @@ module.exports = function emberCliUpdate(options) {
   return gitDiffApply({
     remoteUrl,
     startTag,
-    endTag
+    endTag,
+    ignoreConflicts
   });
 };

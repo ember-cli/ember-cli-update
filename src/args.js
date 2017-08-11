@@ -7,5 +7,10 @@ module.exports = {
     type: 'string',
     default: 'latest',
     description: 'Update to a version that isn\'t latest ("2.14.1", "~2.15", "latest", "beta")'
+  },
+  'ignore-conflicts': {
+    type: 'boolean',
+    default: false,
+    description: 'Handle merge conflicts yourself'
   }
 };
