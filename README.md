@@ -29,7 +29,11 @@ for global or
 
 as an Ember CLI command.
 
-This will update your app or addon to the latest Ember CLI version. It does this by grabbing your current installed Ember CLI version and looking up the latest version, then applying a diff of the changes to your project. You will probably encounter merge conflicts, in which your system's git merge tool will run.
+This will update your app or addon to the latest Ember CLI version. It does this by grabbing your current installed Ember CLI version and looking up the latest version, then applying a diff of the changes needed to your project. Your project files will only get modified if they were changed in the by Ember CLI between versions, and it will only change the section necessary, not the entire file.
+
+This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
+
+You will probably encounter merge conflicts, in which your system's git merge tool will run.
 
 ## Options
 
