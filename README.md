@@ -41,6 +41,13 @@ This will update your app or addon to the latest Ember CLI version. It does this
 
 ## Hints
 
+If you made a mistake during the update/conflict resolution, run these commands to undo everything and get you back to before the update:
+
+```
+git reset --hard
+git clean -f
+```
+
 If you notice ".orig" files lying around after a merge and don't want that behavior, run `git config mergetool.keepBackup false`.
 
 To avoid being prompted "Hit return to start merge resolution tool (vimdiff):" for every conflict, set a merge tool like `git config merge.tool "vimdiff"`.
