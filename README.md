@@ -41,6 +41,10 @@ This will update your app or addon to the latest Ember CLI version. It does this
 
 ## Hints
 
+Need help using `git mergetool`? Here are some starting points:
+
+* https://git-scm.com/docs/git-mergetool
+
 If you made a mistake during the update/conflict resolution, run these commands to undo everything and get you back to before the update:
 
 ```
