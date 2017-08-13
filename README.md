@@ -45,6 +45,10 @@ You will probably encounter merge conflicts, in which your system's git merge to
 
 ## Hints
 
+Need help using `git mergetool`? Here are some starting points:
+
+* https://git-scm.com/docs/git-mergetool
+
 If you made a mistake during the update/conflict resolution, run these commands to undo everything and get you back to before the update:
 
 ```
