@@ -1,9 +1,11 @@
 'use strict';
 
+const fs = require('fs');
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getProjectType = require('./get-project-type');
+const autoMergePackageJson = require('./auto-merge-package-json');
 const gitDiffApply = require('git-diff-apply');
 const run = require('./run');
 
@@ -40,6 +42,21 @@ module.exports = function emberCliUpdate(options) {
     remoteUrl,
     startTag,
     endTag,
-    ignoreConflicts
+    ignoreConflicts,
+    ignoredFiles: ['package.json']
+  }).then(results => {
+    let myPackageJson = fs.readFileSync('package.json', 'utf8');
+    let fromPackageJson = results.from['package.json'];
+    let toPackageJson = results.to['package.json'];
+
+    let newPackageJson = autoMergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
+
+    fs.writeFileSync('package.json', newPackageJson);
+
+    run('git add package.json');
+  }).catch(err => {
+    require('debug')('ember-cli-update')(err);
+
+    throw err;
   });
 };
