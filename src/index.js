@@ -32,6 +32,11 @@ module.exports = function emberCliUpdate(options) {
 
   let remoteUrl = `https://github.com/ember-cli/ember-${projectKeyword}-output`;
 
+  if (packageJsonOnly) {
+    const autoMergePackageJson = require('./auto-merge-package-json');
+    return autoMergePackageJson(projectType, startTag, endTag);
+  }
+
   return gitDiffApply({
     remoteUrl,
     startTag,
