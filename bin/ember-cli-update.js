@@ -13,9 +13,11 @@ const argv = require('yargs')
 const from = argv['from'];
 const to = argv['to'];
 const ignoreConflicts = argv['ignore-conflicts'];
+const packageJsonOnly = argv['package-json-only'];
 
 emberCliUpdate({
   from,
   to,
-  ignoreConflicts
+  ignoreConflicts,
+  packageJsonOnly
 });

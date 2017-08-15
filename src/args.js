@@ -12,5 +12,10 @@ module.exports = {
     type: 'boolean',
     default: false,
     description: 'Handle merge conflicts yourself'
+  },
+  'package-json-only': {
+    type: 'boolean',
+    default: false,
+    description: 'Attempt to automatically merge package.json changes'
   }
 };
