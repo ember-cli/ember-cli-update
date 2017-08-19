@@ -5,29 +5,10 @@ const expect = require('chai').expect;
 const cp = require('child_process');
 const fs = require('fs-extra');
 const fixturify = require('fixturify');
+const gitFixtures = require('git-fixtures');
 const run = require('../../src/run');
 
-function gitInit(cwd) {
-  run('git init', {
-    cwd
-  });
-
-  run('git config user.email "you@example.com"', {
-    cwd
-  });
-
-  run('git config user.name "Your Name"', {
-    cwd
-  });
-
-  run('git config merge.tool "vimdiff"', {
-    cwd
-  });
-
-  run('git config mergetool.keepBackup false', {
-    cwd
-  });
-}
+const gitInit = gitFixtures.gitInit;
 
 function buildTmp(
   fixturesPath,
