@@ -8,8 +8,8 @@
   },
   "scripts": {
     "test": "npm run test:bin && npm run test:command",
-    "test:bin": "cross-env DEBUG=ember-cli-update,git-diff-apply mocha \"test/!(fixtures)/**/!(ember-addon)-test.js\"",
-    "test:command": "cross-env DEBUG=ember-cli-update,git-diff-apply,ember-cli-addon-tests mocha test/acceptance/ember-addon-test.js",
+    "test:bin": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures mocha \"test/!(fixtures)/**/!(ember-addon)-test.js\"",
+    "test:command": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/ember-addon-test.js",
     "posttest": "npm run lint",
     "prelint": "eslint --version",
     "lint": "eslint bin src test",
@@ -46,6 +46,7 @@
     "eslint-config-sane": "^0.1.0",
     "fixturify": "^0.3.3",
     "fs-extra": "^4.0.0",
+    "git-fixtures": "^0.1.0",
     "mocha": "^3.4.2"
   },
   "ember-addon": {

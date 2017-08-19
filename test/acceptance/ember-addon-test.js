@@ -5,31 +5,12 @@ const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 const fixturify = require('fixturify');
 const spawn = require('cross-spawn');
 const semver = require('semver');
+const gitFixtures = require('git-fixtures');
 const run = require('../../src/run');
 
+const gitInit = gitFixtures.gitInit;
+
 const isNode4Windows = process.platform === 'win32' && semver.satisfies(process.version, '4');
-
-function gitInit(cwd) {
-  run('git init', {
-    cwd
-  });
-
-  run('git config user.email "you@example.com"', {
-    cwd
-  });
-
-  run('git config user.name "Your Name"', {
-    cwd
-  });
-
-  run('git config merge.tool "vimdiff"', {
-    cwd
-  });
-
-  run('git config mergetool.keepBackup false', {
-    cwd
-  });
-}
 
 function commit(tmpPath) {
   gitInit(tmpPath);
