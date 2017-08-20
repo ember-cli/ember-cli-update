@@ -1,17 +1,8 @@
 environment:
   matrix:
     - nodejs_version: "4"
-      TEST_COMMAND: "test:bin"
-    - nodejs_version: "4"
-      TEST_COMMAND: "test:command"
     - nodejs_version: "6"
-      TEST_COMMAND: "test:bin"
-    - nodejs_version: "6"
-      TEST_COMMAND: "test:command"
     - nodejs_version: "8"
-      TEST_COMMAND: "test:bin"
-    - nodejs_version: "8"
-      TEST_COMMAND: "test:command"
 
 # Fix line endings in Windows. (runs before repo cloning)
 init:
@@ -28,7 +19,7 @@ install:
 test_script:
   - node --version
   - npm --version
-  - npm run %TEST_COMMAND%
+  - npm test
 
 # http://help.appveyor.com/discussions/questions/1310-delete-cache
 cache:
