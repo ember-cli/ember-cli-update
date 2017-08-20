@@ -19,7 +19,7 @@ install:
 test_script:
   - node --version
   - npm --version
-  - npm test
+  - npm run test:both
 
 # http://help.appveyor.com/discussions/questions/1310-delete-cache
 cache:
