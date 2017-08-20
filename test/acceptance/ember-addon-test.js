@@ -9,6 +9,7 @@ const gitFixtures = require('git-fixtures');
 const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
+const _commit = gitFixtures.commit;
 
 const isNode4Windows = process.platform === 'win32' && semver.satisfies(process.version, '4');
 
@@ -17,11 +18,8 @@ function commit(tmpPath) {
     cwd: tmpPath
   });
 
-  run('git add -A', {
-    cwd: tmpPath
-  });
-
-  run('git commit -m "add files"', {
+  _commit({
+    m: 'add files',
     cwd: tmpPath
   });
 
