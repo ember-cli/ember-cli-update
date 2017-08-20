@@ -14,7 +14,9 @@ function buildTmp(
   fixturesPath,
   tmpPath
 ) {
-  gitInit(tmpPath);
+  gitInit({
+    cwd: tmpPath
+  });
 
   fs.copySync(fixturesPath, tmpPath);
 
