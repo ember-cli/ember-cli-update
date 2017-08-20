@@ -23,11 +23,7 @@ function commit(tmpPath) {
     cwd: tmpPath
   });
 
-  run('git branch foo', {
-    cwd: tmpPath
-  });
-
-  run('git checkout foo', {
+  run('git checkout -b foo', {
     cwd: tmpPath
   });
 }
