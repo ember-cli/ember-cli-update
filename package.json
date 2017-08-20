@@ -46,7 +46,7 @@
     "eslint-config-sane": "^0.1.0",
     "fixturify": "^0.3.3",
     "fs-extra": "^4.0.0",
-    "git-fixtures": "^0.1.0",
+    "git-fixtures": "^0.1.1",
     "mocha": "^3.4.2"
   },
   "ember-addon": {
