@@ -55,8 +55,7 @@ describe('Acceptance - ember-cli-build', function() {
 
   function merge(
     fixturesPath,
-    tmpPath,
-    messages
+    tmpPath
   ) {
     fs.emptyDirSync(tmpPath);
 
@@ -77,20 +76,13 @@ describe('Acceptance - ember-cli-build', function() {
         env: process.env
       });
 
-      let i = 0;
       ps.stdout.on('data', data => {
         let str = data.toString();
         if (str.includes('Normal merge conflict')) {
           ps.stdin.write(':%diffg 3\n');
           ps.stdin.write(':wqa\n');
-          i++;
         } else if (str.includes('Deleted merge conflict')) {
           ps.stdin.write('d\n');
-          i++;
-        }
-        if (i === messages) {
-          // this is only needed because 'inherit' isn't working in node 4 windows
-          ps.stdin.end();
         }
       });
 
@@ -137,8 +129,7 @@ describe('Acceptance - ember-cli-build', function() {
   it('updates app', function() {
     return merge(
       'test/fixtures/local/my-app',
-      'tmp/my-app',
-      2
+      'tmp/my-app'
     ).then(result => {
       let status = result.status;
 
@@ -164,8 +155,7 @@ describe('Acceptance - ember-cli-build', function() {
   it('updates addon', function() {
     return merge(
       'test/fixtures/local/my-addon',
-      'tmp/my-addon',
-      2
+      'tmp/my-addon'
     ).then(result => {
       let status = result.status;
 
