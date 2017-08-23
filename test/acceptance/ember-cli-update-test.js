@@ -53,10 +53,10 @@ describe('Acceptance - ember-cli-build', function() {
     cwd = process.cwd();
   });
 
-  function merge(
-    fixturesPath,
-    tmpPath
-  ) {
+  function merge(options) {
+    let fixturesPath = options.fixturesPath;
+    let tmpPath = options.tmpPath;
+
     fs.emptyDirSync(tmpPath);
 
     buildTmp(
@@ -127,10 +127,10 @@ describe('Acceptance - ember-cli-build', function() {
   }
 
   it('updates app', function() {
-    return merge(
-      'test/fixtures/local/my-app',
-      'tmp/my-app'
-    ).then(result => {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      tmpPath: 'tmp/my-app'
+    }).then(result => {
       let status = result.status;
 
       fixtureCompare(
@@ -153,10 +153,10 @@ describe('Acceptance - ember-cli-build', function() {
   });
 
   it('updates addon', function() {
-    return merge(
-      'test/fixtures/local/my-addon',
-      'tmp/my-addon'
-    ).then(result => {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-addon',
+      tmpPath: 'tmp/my-addon'
+    }).then(result => {
       let status = result.status;
 
       fixtureCompare(
