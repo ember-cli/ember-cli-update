@@ -9,6 +9,7 @@ const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
 const _commit = gitFixtures.commit;
+const processIo = gitFixtures.processIo;
 const _fixtureCompare = gitFixtures.fixtureCompare;
 
 const isNode4Windows = process.platform === 'win32' && semver.satisfies(process.version, '4');
@@ -41,56 +42,10 @@ function fixtureCompare(
 }
 
 function merge(app) {
-  let server = app.server;
-
-  return new Promise(resolve => {
-    server.stdout.on('data', data => {
-      let str = data.toString();
-      if (str.includes('Normal merge conflict')) {
-        server.stdin.write(':%diffg 3\n');
-        server.stdin.write(':wqa\n');
-      } else if (str.includes('Deleted merge conflict')) {
-        server.stdin.write('d\n');
-      }
-    });
-
-    let stderr = '';
-
-    server.stderr.on('data', data => {
-      stderr += data.toString();
-    });
-
-    server.stderr.pipe(process.stdout);
-
-    server.on('exit', () => {
-      let status = run('git status', {
-        cwd: app.path
-      });
-
-      expect(stderr).to.not.contain('Error:');
-      expect(stderr).to.not.contain('fatal:');
-      expect(stderr).to.not.contain('Command failed');
-
-      let result = run('git log -1', {
-        cwd: app.path
-      });
-
-      // verify it is not committed
-      expect(result).to.contain('Author: Your Name <you@example.com>');
-      expect(result).to.contain('add files');
-
-      result = run('git branch', {
-        cwd: app.path
-      });
-
-      // verify branch was deleted
-      expect(result.trim()).to.match(/\* foo\r?\n {2}master/);
-
-      resolve({
-        status,
-        stderr
-      });
-    });
+  return processIo({
+    ps: app.server,
+    cwd: app.path,
+    expect
   });
 }
 

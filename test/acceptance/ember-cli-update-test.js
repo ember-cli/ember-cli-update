@@ -9,6 +9,7 @@ const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
 const commit = gitFixtures.commit;
+const processIo = gitFixtures.processIo;
 const _fixtureCompare = gitFixtures.fixtureCompare;
 
 function buildTmp(
@@ -72,63 +73,19 @@ describe('Acceptance - ember-cli-build', function() {
 
     let binFile = path.join(cwd, 'bin/ember-cli-update');
 
-    return new Promise(resolve => {
-      let ps = cp.spawn('node', [
-        binFile,
-        '--to',
-        '2.14.1'
-      ], {
-        cwd: tmpPath,
-        env: process.env
-      });
+    let ps = cp.spawn('node', [
+      binFile,
+      '--to',
+      '2.14.1'
+    ], {
+      cwd: tmpPath,
+      env: process.env
+    });
 
-      ps.stdout.on('data', data => {
-        let str = data.toString();
-        if (str.includes('Normal merge conflict')) {
-          ps.stdin.write(':%diffg 3\n');
-          ps.stdin.write(':wqa\n');
-        } else if (str.includes('Deleted merge conflict')) {
-          ps.stdin.write('d\n');
-        }
-      });
-
-      let stderr = '';
-
-      ps.stderr.on('data', data => {
-        stderr += data.toString();
-      });
-
-      ps.stderr.pipe(process.stdout);
-
-      ps.on('exit', () => {
-        let status = run('git status', {
-          cwd: tmpPath
-        });
-
-        expect(stderr).to.not.contain('Error:');
-        expect(stderr).to.not.contain('fatal:');
-        expect(stderr).to.not.contain('Command failed');
-
-        let result = run('git log -1', {
-          cwd: tmpPath
-        });
-
-        // verify it is not committed
-        expect(result).to.contain('Author: Your Name <you@example.com>');
-        expect(result).to.contain('add files');
-
-        result = run('git branch', {
-          cwd: tmpPath
-        });
-
-        // verify branch was deleted
-        expect(result.trim()).to.match(/\* foo\r?\n {2}master/);
-
-        resolve({
-          status,
-          stderr
-        });
-      });
+    return processIo({
+      ps,
+      cwd: tmpPath,
+      expect
     });
   }
 
