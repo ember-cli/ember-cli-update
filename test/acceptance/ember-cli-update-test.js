@@ -13,7 +13,8 @@ const commit = gitFixtures.commit;
 
 function buildTmp(
   fixturesPath,
-  tmpPath
+  tmpPath,
+  dirty
 ) {
   gitInit({
     cwd: tmpPath
@@ -30,6 +31,10 @@ function buildTmp(
   run('git checkout -b foo', {
     cwd: tmpPath
   });
+
+  if (dirty) {
+    fs.writeFileSync(path.join(tmpPath, 'a-random-new-file'), 'foo');
+  }
 }
 
 function fixtureCompare(
@@ -56,12 +61,14 @@ describe('Acceptance - ember-cli-build', function() {
   function merge(options) {
     let fixturesPath = options.fixturesPath;
     let tmpPath = options.tmpPath;
+    let dirty = options.dirty;
 
     fs.emptyDirSync(tmpPath);
 
     buildTmp(
       fixturesPath,
-      tmpPath
+      tmpPath,
+      dirty
     );
 
     let binFile = path.join(cwd, 'bin/ember-cli-update');
@@ -175,6 +182,19 @@ describe('Acceptance - ember-cli-build', function() {
 
       // changed locally, also changed upstream
       expect(status).to.contain('modified:   README.md');
+    });
+  });
+
+  it('handles dirty', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      tmpPath: 'tmp/my-app',
+      dirty: true
+    }).then(result => {
+      let stderr = result.stderr;
+
+      expect(stderr).to.contain('You must start with a clean working directory');
+      expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
     });
   });
 });

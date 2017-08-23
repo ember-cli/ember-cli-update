@@ -18,4 +18,4 @@ emberCliUpdate({
   from,
   to,
   ignoreConflicts
-});
+}).catch(console.error);
