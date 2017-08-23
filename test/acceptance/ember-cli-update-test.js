@@ -26,6 +26,7 @@ function buildTmp(
     cwd: tmpPath
   });
 
+  // non-master branch test
   run('git checkout -b foo', {
     cwd: tmpPath
   });

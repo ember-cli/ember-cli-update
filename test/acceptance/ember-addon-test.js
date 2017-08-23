@@ -23,6 +23,7 @@ function commit(tmpPath) {
     cwd: tmpPath
   });
 
+  // non-master branch test
   run('git checkout -b foo', {
     cwd: tmpPath
   });
