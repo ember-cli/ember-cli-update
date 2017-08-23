@@ -2,7 +2,6 @@
 
 const expect = require('chai').expect;
 const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
-const fixturify = require('fixturify');
 const spawn = require('cross-spawn');
 const semver = require('semver');
 const gitFixtures = require('git-fixtures');
@@ -10,6 +9,7 @@ const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
 const _commit = gitFixtures.commit;
+const _fixtureCompare = gitFixtures.fixtureCompare;
 
 const isNode4Windows = process.platform === 'win32' && semver.satisfies(process.version, '4');
 
@@ -33,13 +33,11 @@ function fixtureCompare(
   tmpPath,
   mergeFixtures
 ) {
-  let actual = fixturify.readSync(tmpPath);
-  let expected = fixturify.readSync(mergeFixtures);
-
-  delete actual['.git'];
-  delete actual['node_modules'];
-
-  expect(actual).to.deep.equal(expected);
+  _fixtureCompare({
+    expect,
+    actual: tmpPath,
+    expected: mergeFixtures
+  });
 }
 
 function merge(app) {

@@ -4,12 +4,12 @@ const path = require('path');
 const expect = require('chai').expect;
 const cp = require('child_process');
 const fs = require('fs-extra');
-const fixturify = require('fixturify');
 const gitFixtures = require('git-fixtures');
 const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
 const commit = gitFixtures.commit;
+const _fixtureCompare = gitFixtures.fixtureCompare;
 
 function buildTmp(
   fixturesPath,
@@ -41,12 +41,11 @@ function fixtureCompare(
   tmpPath,
   mergeFixtures
 ) {
-  let actual = fixturify.readSync(tmpPath);
-  let expected = fixturify.readSync(mergeFixtures);
-
-  delete actual['.git'];
-
-  expect(actual).to.deep.equal(expected);
+  _fixtureCompare({
+    expect,
+    actual: tmpPath,
+    expected: mergeFixtures
+  });
 }
 
 describe('Acceptance - ember-cli-build', function() {
