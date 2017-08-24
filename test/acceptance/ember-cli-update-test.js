@@ -2,14 +2,13 @@
 
 const path = require('path');
 const expect = require('chai').expect;
-const cp = require('child_process');
 const fs = require('fs-extra');
 const gitFixtures = require('git-fixtures');
 const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
 const commit = gitFixtures.commit;
-const processIo = gitFixtures.processIo;
+const processBin = gitFixtures.processBin;
 const _fixtureCompare = gitFixtures.fixtureCompare;
 
 const commitMessage = 'add files';
@@ -54,12 +53,6 @@ function fixtureCompare(
 describe('Acceptance - ember-cli-build', function() {
   this.timeout(30000);
 
-  let cwd;
-
-  before(function() {
-    cwd = process.cwd();
-  });
-
   function merge(options) {
     let fixturesPath = options.fixturesPath;
     let tmpPath = options.tmpPath;
@@ -73,19 +66,12 @@ describe('Acceptance - ember-cli-build', function() {
       dirty
     );
 
-    let binFile = path.join(cwd, 'bin/ember-cli-update');
-
-    let ps = cp.spawn('node', [
-      binFile,
-      '--to',
-      '2.14.1'
-    ], {
-      cwd: tmpPath,
-      env: process.env
-    });
-
-    return processIo({
-      ps,
+    return processBin({
+      binFile: 'ember-cli-update',
+      args: [
+        '--to',
+        '2.14.1'
+      ],
       cwd: tmpPath,
       commitMessage,
       expect
