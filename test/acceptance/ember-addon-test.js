@@ -9,6 +9,7 @@ const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
 const _commit = gitFixtures.commit;
+const postCommit = gitFixtures.postCommit;
 const processIo = gitFixtures.processIo;
 const _fixtureCompare = gitFixtures.fixtureCompare;
 
@@ -26,8 +27,7 @@ function commit(tmpPath) {
     cwd: tmpPath
   });
 
-  // non-master branch test
-  run('git checkout -b foo', {
+  postCommit({
     cwd: tmpPath
   });
 }
