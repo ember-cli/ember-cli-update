@@ -14,13 +14,15 @@ const _fixtureCompare = gitFixtures.fixtureCompare;
 
 const isNode4Windows = process.platform === 'win32' && semver.satisfies(process.version, '4');
 
+const commitMessage = 'add files';
+
 function commit(tmpPath) {
   gitInit({
     cwd: tmpPath
   });
 
   _commit({
-    m: 'add files',
+    m: commitMessage,
     cwd: tmpPath
   });
 
@@ -45,6 +47,7 @@ function merge(app) {
   return processIo({
     ps: app.server,
     cwd: app.path,
+    commitMessage,
     expect
   });
 }
