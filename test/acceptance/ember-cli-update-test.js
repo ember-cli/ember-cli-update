@@ -2,6 +2,7 @@
 
 const path = require('path');
 const expect = require('chai').expect;
+const tmp = require('tmp');
 const fs = require('fs-extra');
 const gitFixtures = require('git-fixtures');
 const run = require('../../src/run');
@@ -39,26 +40,18 @@ function buildTmp(
   }
 }
 
-function fixtureCompare(
-  tmpPath,
-  mergeFixtures
-) {
-  _fixtureCompare({
-    expect,
-    actual: tmpPath,
-    expected: mergeFixtures
-  });
-}
-
 describe('Acceptance - ember-cli-build', function() {
   this.timeout(30000);
 
+  let tmpPath;
+
+  beforeEach(function() {
+    tmpPath = tmp.dirSync().name;
+  });
+
   function merge(options) {
     let fixturesPath = options.fixturesPath;
-    let tmpPath = options.tmpPath;
     let dirty = options.dirty;
-
-    fs.emptyDirSync(tmpPath);
 
     buildTmp(
       fixturesPath,
@@ -78,17 +71,23 @@ describe('Acceptance - ember-cli-build', function() {
     });
   }
 
+  function fixtureCompare(
+    mergeFixtures
+  ) {
+    _fixtureCompare({
+      expect,
+      actual: tmpPath,
+      expected: mergeFixtures
+    });
+  }
+
   it('updates app', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
-      tmpPath: 'tmp/my-app'
+      fixturesPath: 'test/fixtures/local/my-app'
     }).then(result => {
       let status = result.status;
 
-      fixtureCompare(
-        'tmp/my-app',
-        'test/fixtures/merge/my-app'
-      );
+      fixtureCompare('test/fixtures/merge/my-app');
 
       // changed locally, no change upstream
       expect(status).to.not.contain(' .ember-cli');
@@ -106,15 +105,11 @@ describe('Acceptance - ember-cli-build', function() {
 
   it('updates addon', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/my-addon',
-      tmpPath: 'tmp/my-addon'
+      fixturesPath: 'test/fixtures/local/my-addon'
     }).then(result => {
       let status = result.status;
 
-      fixtureCompare(
-        'tmp/my-addon',
-        'test/fixtures/merge/my-addon'
-      );
+      fixtureCompare('test/fixtures/merge/my-addon');
 
       // changed locally, no change upstream
       expect(status).to.not.contain(' .ember-cli');
@@ -133,7 +128,6 @@ describe('Acceptance - ember-cli-build', function() {
   it('handles dirty', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
-      tmpPath: 'tmp/my-app',
       dirty: true
     }).then(result => {
       let stderr = result.stderr;
