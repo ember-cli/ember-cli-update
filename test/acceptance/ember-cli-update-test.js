@@ -12,6 +12,8 @@ const commit = gitFixtures.commit;
 const processIo = gitFixtures.processIo;
 const _fixtureCompare = gitFixtures.fixtureCompare;
 
+const commitMessage = 'add files';
+
 function buildTmp(
   fixturesPath,
   tmpPath,
@@ -24,7 +26,7 @@ function buildTmp(
   fs.copySync(fixturesPath, tmpPath);
 
   commit({
-    m: 'add files',
+    m: commitMessage,
     cwd: tmpPath
   });
 
@@ -85,6 +87,7 @@ describe('Acceptance - ember-cli-build', function() {
     return processIo({
       ps,
       cwd: tmpPath,
+      commitMessage,
       expect
     });
   }
