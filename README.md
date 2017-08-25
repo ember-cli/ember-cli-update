@@ -7,6 +7,8 @@
 
 Update Ember CLI Ember.js apps and addons
 
+You can run this either as a global executable available to all projects or an Ember CLI command in a single project.
+
 ## Installation
 
 As a global executable:
