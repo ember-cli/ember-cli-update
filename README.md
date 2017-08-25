@@ -17,17 +17,19 @@ As an Ember CLI command:
 
 `ember install ember-cli-update`
 
+(You must commit the change to `package.json` before running the update command or else you get an error.)
+
 ## Usage
 
-Inside your project directory, either run
+Make sure your git working directory is clean before updating.
+
+Inside your project directory, if you installed globally run
 
 `ember-cli-update`
 
-for global or
+or if you installed as a command run
 
 `ember update`
-
-as an Ember CLI command.
 
 This will update your app or addon to the latest Ember CLI version. It does this by grabbing your current installed Ember CLI version and looking up the latest version, then applying a diff of the changes needed to your project. Your project files will only get modified if they were changed in the by Ember CLI between versions, and it will only change the section necessary, not the entire file.
 
