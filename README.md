@@ -52,6 +52,7 @@ You will probably encounter merge conflicts, in which your system's git merge to
 Need help using `git mergetool`? Here are some starting points:
 
 * https://git-scm.com/docs/git-mergetool
+* https://gist.github.com/karenyyng/f19ff75c60f18b4b8149
 
 If you made a mistake during the update/conflict resolution, run these commands to undo everything and get you back to before the update:
 
