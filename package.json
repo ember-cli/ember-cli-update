@@ -47,7 +47,7 @@
     "eslint-config-sane": "^0.1.0",
     "eslint-plugin-mocha": "^4.11.0",
     "fs-extra": "^4.0.0",
-    "git-fixtures": "^0.7.2",
+    "git-fixtures": "^0.8.0",
     "mocha": "^3.4.2",
     "tmp": "0.0.33"
   },
