@@ -130,6 +130,11 @@ describe('Acceptance | ember-addon', function() {
     return merge(app).then(result => {
       let status = result.status;
 
+      // remove addon because it's not in the fixtures
+      app.editPackageJSON(pkg => {
+        delete pkg.devDependencies['ember-cli-update'];
+      });
+
       fixtureCompare(
         app.path,
         'test/fixtures/merge/my-app'
