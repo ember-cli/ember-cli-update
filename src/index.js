@@ -11,13 +11,17 @@ module.exports = function emberCliUpdate(options) {
   let from = options.from;
   let to = options.to;
   let ignoreConflicts = options.ignoreConflicts;
+  let packageVersion = getPackageVersion('.');
+
+  if (!packageVersion) {
+    return Promise.reject('Ember CLI was not found in this project\'s package.json');
+  }
 
   let versions = JSON.parse(
     run('npm info ember-cli versions --json')
   );
 
   if (!from) {
-    let packageVersion = getPackageVersion('.');
     from = getProjectVersion(packageVersion, versions);
   }
 
