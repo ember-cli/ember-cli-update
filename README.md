@@ -64,3 +64,14 @@ git clean -f
 If you notice ".orig" files lying around after a merge and don't want that behavior, run `git config --global mergetool.keepBackup false`.
 
 To avoid being prompted "Hit return to start merge resolution tool (vimdiff):" for every conflict, set a merge tool like `git config --global merge.tool "vimdiff"`.
+
+## Troubleshooting
+
+If you are getting an error or unexpected results, running the command with the debug flag:
+
+* Unix (global):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,git-diff-apply ember-cli-update`
+* Windows (global):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,git-diff-apply && ember-cli-update`
+* Unix (command):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,git-diff-apply ember update`
+* Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,git-diff-apply && ember update`
+
+will give you more detailed logging.
