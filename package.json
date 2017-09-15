@@ -44,7 +44,7 @@
     "ember-cli": "^2.14.2",
     "ember-cli-addon-tests": "^0.10.0",
     "eslint": "^4.3.0",
-    "eslint-config-sane": "^0.1.0",
+    "eslint-config-sane": "^0.2.1",
     "eslint-plugin-mocha": "^4.11.0",
     "fs-extra": "^4.0.0",
     "git-fixtures": "^0.8.0",
