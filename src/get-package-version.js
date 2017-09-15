@@ -8,7 +8,9 @@ module.exports = function getPackageVersion(projectPath) {
 
   let packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
 
-  let packageVersion = packageJson.devDependencies && packageJson.devDependencies['ember-cli'];
+  let devDependencies = packageJson.devDependencies;
+
+  let packageVersion = devDependencies && devDependencies['ember-cli'];
 
   return packageVersion;
 };

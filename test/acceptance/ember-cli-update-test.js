@@ -137,6 +137,7 @@ describe('Acceptance - ember-cli-build', function() {
       fixturesPath: 'test/fixtures/app'
     }).then(result => {
       let stderr = result.stderr;
+
       expect(stderr).to.contain('Ember CLI was not found in this project\'s package.json');
     });
   });

@@ -11,6 +11,7 @@ module.exports = function emberCliUpdate(options) {
   let from = options.from;
   let to = options.to;
   let ignoreConflicts = options.ignoreConflicts;
+
   let packageVersion = getPackageVersion('.');
 
   if (!packageVersion) {
