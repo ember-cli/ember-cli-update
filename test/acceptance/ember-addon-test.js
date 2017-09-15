@@ -5,6 +5,7 @@ const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
 const spawn = require('cross-spawn');
 const semver = require('semver');
 const gitFixtures = require('git-fixtures');
+const debug = require('debug')('ember-cli-update');
 const run = require('../../src/run');
 
 const gitInit = gitFixtures.gitInit;
@@ -91,6 +92,7 @@ describe('Acceptance | ember-addon', function() {
             });
 
             let id = setTimeout(() => {
+              debug('timed out waiting for output');
               server.stdout.removeAllListeners();
               server.kill('SIGINT');
               server.on('exit', () => {
