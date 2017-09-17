@@ -7,8 +7,7 @@
     "ember-cli-update": "bin/ember-cli-update.js"
   },
   "scripts": {
-    "test": "npm run test:both",
-    "test:both": "npm run test:bin && npm run test:command",
+    "test": "npm run test:bin && npm run test:command",
     "test:bin": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures mocha \"test/!(fixtures)/**/!(ember-addon)-test.js\"",
     "test:command": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/ember-addon-test.js",
     "posttest": "npm run lint",
