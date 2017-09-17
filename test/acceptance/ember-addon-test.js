@@ -63,7 +63,8 @@ describe('Acceptance | ember-addon', function() {
 
     return app.create('my-app', {
       fixturesPath: 'test/fixtures/local',
-      skipNpm: true
+      skipNpm: true,
+      emberDataVersion: '*'
     }).then(() => {
       app.editPackageJSON(pkg => {
         pkg.devDependencies['ember-cli-update'] = '*';
