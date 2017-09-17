@@ -1,24 +1,16 @@
 'use strict';
 
 const expect = require('chai').expect;
-const fs = require('fs');
 const path = require('path');
 const fixturify = require('fixturify');
+const fixtureSkipper = require('fixture-skipper');
 const autoMergePackageJson = require('../../src/auto-merge-package-json');
 
 const fixturesPath = 'test/fixtures/package.json';
 
-describe('Unit - autoMergePackageJson', function() {
-  function forEachDir(callback) {
-    fs.readdirSync(fixturesPath).forEach(fixtureDir => {
-      let it = global.it;
-      if (fixtureDir.indexOf('_') === 0) {
-        it = it.only;
-      }
-      callback(it, fixtureDir);
-    });
-  }
+const forEachDir = fixtureSkipper(fixturesPath);
 
+describe('Unit - autoMergePackageJson', function() {
   forEachDir((it, fixturesDir) => {
     it(fixturesDir, function() {
       let fixtures = fixturify.readSync(path.join(fixturesPath, fixturesDir));
