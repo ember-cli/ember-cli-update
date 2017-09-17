@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-update",
-  "version": "0.6.8",
+  "version": "0.7.0",
   "description": "Update Ember CLI Ember.js apps and addons",
   "main": "src/index.js",
   "bin": {
