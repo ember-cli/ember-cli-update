@@ -3,17 +3,10 @@
 const expect = require('chai').expect;
 const fs = require('fs');
 const path = require('path');
+const fixturify = require('fixturify');
 const autoMergePackageJson = require('../../src/auto-merge-package-json');
 
 const fixturesPath = 'test/fixtures/package.json';
-
-function getFixtures(fixturesDir) {
-  let fixtures = path.join(fixturesPath, fixturesDir);
-  return fs.readdirSync(fixtures).reduce((result, name) => {
-    result[name] = fs.readFileSync(path.join(fixtures, name, 'package.json'), 'utf8');
-    return result;
-  }, {});
-}
 
 describe('Unit - autoMergePackageJson', function() {
   function forEachDir(callback) {
@@ -28,11 +21,11 @@ describe('Unit - autoMergePackageJson', function() {
 
   forEachDir((it, fixturesDir) => {
     it(fixturesDir, function() {
-      let fixtures = getFixtures(fixturesDir);
-      let from = fixtures.from;
-      let my = fixtures.my;
-      let result = fixtures.result;
-      let to = fixtures.to;
+      let fixtures = fixturify.readSync(path.join(fixturesPath, fixturesDir));
+      let from = fixtures.from['package.json'];
+      let my = fixtures.my['package.json'];
+      let result = fixtures.result['package.json'];
+      let to = fixtures.to['package.json'];
 
       let actual = autoMergePackageJson(my, from, to);
 
