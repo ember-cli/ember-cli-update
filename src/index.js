@@ -54,9 +54,5 @@ module.exports = function emberCliUpdate(options) {
     fs.writeFileSync('package.json', newPackageJson);
 
     run('git add package.json');
-  }).catch(err => {
-    require('debug')('ember-cli-update')(err);
-
-    throw err;
   });
 };
