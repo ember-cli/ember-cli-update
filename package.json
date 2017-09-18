@@ -37,7 +37,7 @@
     "rfc6902-ordered": "^1.0.0",
     "semver": "^5.4.1",
     "three-way-merger": "^0.3.0",
-    "yargs": "^8.0.2"
+    "yargs": "^9.0.1"
   },
   "devDependencies": {
     "chai": "^4.1.0",
