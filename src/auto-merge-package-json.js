@@ -56,7 +56,7 @@ function mergeDependencyChanges(source, ours, theirs) {
 function mergeNonDependencyChanges(source, ours, theirs) {
   let fromSourceToTheirs = rfc6902.createPatch(source, theirs);
 
-  rfc6902.applyPatch(ours, fromSourceToTheirs, theirs);
+  rfc6902.applyPatch(ours, fromSourceToTheirs, source, theirs);
 
   return ours;
 }
