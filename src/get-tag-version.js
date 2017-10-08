@@ -28,5 +28,5 @@ module.exports = function getTagVersion(to, versions) {
     );
   }
 
-  return `v${version}`;
+  return version;
 };

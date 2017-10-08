@@ -24,13 +24,15 @@ module.exports = function emberCliUpdate(options) {
     run('npm info ember-cli versions --json')
   );
 
-  if (!from) {
-    from = getProjectVersion(packageVersion, versions);
+  let startVersion = from;
+  if (!startVersion) {
+    startVersion = getProjectVersion(packageVersion, versions);
   }
 
-  let startTag = `v${from}`;
+  let startTag = `v${startVersion}`;
 
-  let endTag = getTagVersion(to, versions);
+  let endVersion = getTagVersion(to, versions);
+  let endTag = `v${endVersion}`;
 
   let projectType = getProjectType('.');
 
