@@ -6,6 +6,10 @@ node_js:
   - "4"
 
 sudo: false
+dist: trusty
+
+addons:
+  chrome: stable
 
 cache:
   directories:
@@ -30,11 +34,6 @@ before_install:
   - npm config set spin false
   - npm install -g npm@4
   - npm --version
-  - npm install -g phantomjs-prebuilt
-  - phantomjs --version
-
-install:
-  - npm install
 
 script:
   # Usually, it's ok to finish the test scenario without reverting

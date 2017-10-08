@@ -4,6 +4,10 @@ node_js:
   - "6"
 
 sudo: false
+dist: trusty
+
+addons:
+  chrome: stable
 
 cache:
   directories:
@@ -11,11 +15,3 @@ cache:
 
 before_install:
   - npm config set spin false
-  - npm install -g phantomjs-prebuilt
-  - phantomjs --version
-
-install:
-  - npm install
-
-script:
-  - npm test
