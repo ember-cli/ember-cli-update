@@ -1,13 +1,19 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
+const fork = require('child_process').fork;
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getProjectType = require('./get-project-type');
 const autoMergePackageJson = require('./auto-merge-package-json');
 const gitDiffApply = require('git-diff-apply');
+const semver = require('semver');
 const run = require('./run');
+
+const modulesCodemodPath = path.join(__dirname, '../node_modules/ember-modules-codemod/bin/ember-modules-codemod');
+const modulesCodemodVersion = '2.16.0-beta.1';
 
 module.exports = function emberCliUpdate(options) {
   let from = options.from;
@@ -56,5 +62,13 @@ module.exports = function emberCliUpdate(options) {
     fs.writeFileSync('package.json', newPackageJson);
 
     run('git add package.json');
+
+    if (semver.lt(startVersion, modulesCodemodVersion) && semver.gte(endVersion, modulesCodemodVersion)) {
+      return new Promise(resolve => {
+        let cp = fork(modulesCodemodPath);
+
+        cp.on('exit', resolve);
+      });
+    }
   });
 };
