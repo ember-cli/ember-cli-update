@@ -58,7 +58,7 @@ describe('Acceptance - ember-cli-build', function() {
       binFile: 'ember-cli-update',
       args: [
         '--to',
-        '2.14.1'
+        '2.16.0-beta.2'
       ],
       cwd: tmpPath,
       commitMessage,

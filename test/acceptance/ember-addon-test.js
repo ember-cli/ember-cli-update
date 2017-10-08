@@ -85,7 +85,7 @@ describe('Acceptance | ember-addon', function() {
               'node_modules/ember-cli/bin/ember',
               'update',
               '--to',
-              '2.14.1'
+              '2.16.0-beta.2'
             ], {
               cwd: app.path,
               env: process.env
@@ -119,7 +119,7 @@ describe('Acceptance | ember-addon', function() {
         command: 'update',
         additionalArguments: [
           '--to',
-          '2.14.1'
+          '2.16.0-beta.2'
         ],
         detectServerStart() {
           return true;
