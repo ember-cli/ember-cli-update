@@ -33,7 +33,7 @@ or if you installed as a command run
 
 `ember update`
 
-This will update your app or addon to the latest Ember CLI version. It does this by grabbing your current installed Ember CLI version and looking up the latest version, then applying a diff of the changes needed to your project. Your project files will only get modified if they were changed in the by Ember CLI between versions, and it will only change the section necessary, not the entire file.
+This will update your app or addon to the latest Ember CLI version. It does this by fetching the latest version and comparing it to your project's Ember CLI version. It then applies a diff of the changes from the latest version to your project. It will only modify the files if there are changes between your project's version and the latest version, and it will only change the section necessary, not the entire file.
 
 This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
 
