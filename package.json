@@ -33,7 +33,7 @@
   "homepage": "https://github.com/kellyselden/ember-cli-update#readme",
   "dependencies": {
     "debug": "^3.0.0",
-    "ember-modules-codemod": "^0.2.7",
+    "ember-modules-codemod": "^0.2.9",
     "git-diff-apply": "^0.4.1",
     "rfc6902-ordered": "^2.0.0",
     "semver": "^5.4.1",
