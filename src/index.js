@@ -64,7 +64,10 @@ module.exports = function emberCliUpdate(options) {
     run('git add package.json');
 
     if (ignoreConflicts) {
-      return;
+      let hasConflicts = run('git status --porcelain').match(/^\S{2} /m);
+      if (hasConflicts) {
+        return;
+      }
     }
 
     let shouldRunModulesCodemod = semver.lt(startVersion, modulesCodemodVersion) && semver.gte(endVersion, modulesCodemodVersion);

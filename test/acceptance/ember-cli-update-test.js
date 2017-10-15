@@ -4,10 +4,14 @@ const expect = require('chai').expect;
 const tmp = require('tmp');
 const gitFixtures = require('git-fixtures');
 const buildTmp = require('../helpers/build-tmp');
-const assertNormalUpdate = require('../helpers/assert-normal-update');
+const assertions = require('../helpers/assertions');
 
 const processBin = gitFixtures.processBin;
 const _fixtureCompare = gitFixtures.fixtureCompare;
+
+const assertNormalUpdate = assertions.assertNormalUpdate;
+const assertNoUnstaged = assertions.assertNoUnstaged;
+const assertCodemodRan = assertions.assertCodemodRan;
 
 const commitMessage = 'add files';
 
@@ -60,6 +64,8 @@ describe('Acceptance - ember-cli-build', function() {
       fixtureCompare('test/fixtures/merge/my-app');
 
       assertNormalUpdate(status);
+      assertNoUnstaged(status);
+      assertCodemodRan(status);
     });
   });
 
@@ -72,6 +78,8 @@ describe('Acceptance - ember-cli-build', function() {
       fixtureCompare('test/fixtures/merge/my-addon');
 
       assertNormalUpdate(status);
+      assertNoUnstaged(status);
+      assertCodemodRan(status);
     });
   });
 });
