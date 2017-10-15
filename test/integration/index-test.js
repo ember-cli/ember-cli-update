@@ -8,8 +8,12 @@ const gitFixtures = require('git-fixtures');
 const isGitClean = require('git-diff-apply').isGitClean;
 const emberCliUpdate = require('../../src');
 const buildTmp = require('../helpers/build-tmp');
+const assertions = require('../helpers/assertions');
 
 const processExit = gitFixtures.processExit;
+
+const assertNoUnstaged = assertions.assertNoUnstaged;
+const assertCodemodRan = assertions.assertCodemodRan;
 
 const commitMessage = 'add files';
 
@@ -74,7 +78,7 @@ describe('Integration - index', function() {
     });
   });
 
-  it('handles ignoreConflicts', function() {
+  it('doesn\'t run codemods or stage files if conflicts and ignoreConflicts true', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       ignoreConflicts: true
@@ -87,6 +91,20 @@ describe('Integration - index', function() {
 
       expect(status).to.match(/^AA \.eslintrc\.js$/m);
       expect(status).to.match(/^UD bower\.json$/m);
+
+      assertNoUnstaged(status);
+    });
+  });
+
+  it('runs codemods and stages files if no conflicts but ignoreConflicts true', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/noconflict',
+      ignoreConflicts: true
+    }).then(result => {
+      let status = result.status;
+
+      assertNoUnstaged(status);
+      assertCodemodRan(status);
     });
   });
 
