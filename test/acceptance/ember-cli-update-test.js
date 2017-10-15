@@ -4,6 +4,7 @@ const expect = require('chai').expect;
 const tmp = require('tmp');
 const fs = require('fs-extra');
 const gitFixtures = require('git-fixtures');
+const isGitClean = require('git-diff-apply').isGitClean;
 const assertNormalUpdate = require('../helpers/assert-normal-update');
 
 const gitInit = gitFixtures.gitInit;
@@ -118,6 +119,8 @@ describe('Acceptance - ember-cli-build', function() {
       fixturesPath: 'test/fixtures/app'
     }).then(result => {
       let stderr = result.stderr;
+
+      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('Ember CLI was not found in this project\'s package.json');
     });
