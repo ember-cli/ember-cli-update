@@ -4,6 +4,11 @@ environment:
     - nodejs_version: "6"
     - nodejs_version: "8"
 
+branches:
+  only:
+    - master
+    - /^greenkeeper\/.*$/
+
 # Fix line endings in Windows. (runs before repo cloning)
 init:
   - git config --global core.autocrlf true
