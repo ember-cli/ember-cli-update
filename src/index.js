@@ -63,7 +63,8 @@ module.exports = function emberCliUpdate(options) {
 
     run('git add package.json');
 
-    if (semver.lt(startVersion, modulesCodemodVersion) && semver.gte(endVersion, modulesCodemodVersion)) {
+    let shouldRunModulesCodemod = semver.lt(startVersion, modulesCodemodVersion) && semver.gte(endVersion, modulesCodemodVersion);
+    if (shouldRunModulesCodemod) {
       return new Promise(resolve => {
         let cp = fork(modulesCodemodPath);
 
