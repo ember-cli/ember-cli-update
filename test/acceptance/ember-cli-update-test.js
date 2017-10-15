@@ -27,11 +27,11 @@ describe('Acceptance - ember-cli-build', function() {
   function merge(options) {
     let fixturesPath = options.fixturesPath;
 
-    buildTmp(
+    buildTmp({
       fixturesPath,
       tmpPath,
       commitMessage
-    );
+    });
 
     return processBin({
       binFile: 'ember-cli-update',

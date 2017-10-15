@@ -40,12 +40,12 @@ describe('Integration - index', function() {
     let dirty = options.dirty;
     let ignoreConflicts = options.ignoreConflicts;
 
-    buildTmp(
+    buildTmp({
       fixturesPath,
       tmpPath,
       commitMessage,
       dirty
-    );
+    });
 
     process.chdir(tmpPath);
 
