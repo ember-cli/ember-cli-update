@@ -3,6 +3,10 @@ node_js:
 - '4'
 - '6'
 - '8'
+branches:
+  only:
+  - master
+  - /^greenkeeper\/.*$/
 cache:
   directories:
   - "$HOME/.npm"
