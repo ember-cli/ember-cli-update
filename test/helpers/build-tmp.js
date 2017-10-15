@@ -7,7 +7,7 @@ const gitInit = gitFixtures.gitInit;
 const commit = gitFixtures.commit;
 const postCommit = gitFixtures.postCommit;
 
-module.exports = function buildTmp(
+module.exports = function(
   fixturesPath,
   tmpPath,
   commitMessage,

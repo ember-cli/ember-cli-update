@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 
-module.exports.assertNormalUpdate = function assertNormalUpdate(status) {
+module.exports.assertNormalUpdate = function(status) {
   // changed locally, no change upstream
   expect(status).to.not.contain(` .ember-cli
 `);
@@ -23,12 +23,12 @@ module.exports.assertNormalUpdate = function assertNormalUpdate(status) {
   expect(status).to.not.match(/^( M |MM ).+$/m);
 };
 
-module.exports.assertNoUnstaged = function assertNoUnstaged(status) {
+module.exports.assertNoUnstaged = function(status) {
   // assert no unstaged changes
   expect(status).to.not.match(/^( M |MM ).+$/m);
 };
 
-module.exports.assertCodemodRan = function assertCodemodRan(status) {
+module.exports.assertCodemodRan = function(status) {
   // codemod changed locally, no change upstream
   expect(status).to.match(/^M {2}.*app\/controllers\/application\.js$/m);
 
