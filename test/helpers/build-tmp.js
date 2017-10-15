@@ -7,12 +7,12 @@ const gitInit = gitFixtures.gitInit;
 const commit = gitFixtures.commit;
 const postCommit = gitFixtures.postCommit;
 
-module.exports = function(
-  fixturesPath,
-  tmpPath,
-  commitMessage,
-  dirty
-) {
+module.exports = function(options) {
+  let fixturesPath = options.fixturesPath;
+  let tmpPath = options.tmpPath;
+  let commitMessage = options.commitMessage;
+  let dirty = options.dirty;
+
   gitInit({
     cwd: tmpPath
   });
