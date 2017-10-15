@@ -18,4 +18,7 @@ module.exports = function assertNormalUpdate(status) {
   // changed locally, also changed upstream
   expect(status).to.contain(`M  README.md
 `);
+
+  // codemod changed locally, no change upstream
+  expect(status).to.match(/^ M .*app\/controllers\/application\.js$/m);
 };
