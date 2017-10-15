@@ -106,7 +106,11 @@ describe('Acceptance - ember-cli-build', function() {
       fixturesPath: 'test/fixtures/local/my-app',
       dirty: true
     }).then(result => {
+      let status = result.status;
       let stderr = result.stderr;
+
+      expect(status).to.equal(`?? a-random-new-file
+`);
 
       expect(stderr).to.contain('You must start with a clean working directory');
       expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
