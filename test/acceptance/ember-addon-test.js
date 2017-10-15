@@ -7,6 +7,7 @@ const semver = require('semver');
 const gitFixtures = require('git-fixtures');
 const debug = require('debug')('ember-cli-update');
 const run = require('../../src/run');
+const assertNormalUpdate = require('../helpers/assert-normal-update');
 
 const gitInit = gitFixtures.gitInit;
 const _commit = gitFixtures.commit;
@@ -142,17 +143,7 @@ describe('Acceptance | ember-addon', function() {
         'test/fixtures/merge/my-app'
       );
 
-      // changed locally, no change upstream
-      expect(status).to.not.contain(' .ember-cli');
-
-      // exists locally, also added upstream with changes
-      expect(status).to.contain('modified:   .eslintrc.js');
-
-      // changed locally, removed upstream
-      expect(status).to.contain('deleted:    bower.json');
-
-      // changed locally, also changed upstream
-      expect(status).to.contain('modified:   README.md');
+      assertNormalUpdate(status);
     });
   });
 });
