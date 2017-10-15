@@ -16,6 +16,7 @@ const modulesCodemodPath = path.join(__dirname, '../node_modules/ember-modules-c
 const modulesCodemodVersion = '2.16.0-beta.1';
 
 module.exports = function emberCliUpdate(options) {
+  options = options || {};
   let from = options.from;
   let to = options.to;
   let ignoreConflicts = options.ignoreConflicts;
