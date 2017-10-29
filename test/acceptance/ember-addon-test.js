@@ -113,11 +113,16 @@ describe('Acceptance | ember-addon', function() {
     });
   });
 
-  function fixtureCompare(mergeFixtures) {
+  function fixtureCompare(options) {
+    let mergeFixtures = options.mergeFixtures;
+
+    let actual = app.path;
+    let expected = mergeFixtures;
+
     _fixtureCompare({
       expect,
-      actual: app.path,
-      expected: mergeFixtures
+      actual,
+      expected
     });
   }
 
@@ -139,9 +144,9 @@ describe('Acceptance | ember-addon', function() {
         delete pkg.devDependencies['ember-cli-update'];
       });
 
-      fixtureCompare(
-        'test/fixtures/merge/my-app'
-      );
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/merge/my-app'
+      });
 
       assertNormalUpdate(status);
       assertNoUnstaged(status);

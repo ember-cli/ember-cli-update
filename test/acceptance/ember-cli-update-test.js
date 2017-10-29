@@ -45,13 +45,16 @@ describe('Acceptance - ember-cli-build', function() {
     });
   }
 
-  function fixtureCompare(
-    mergeFixtures
-  ) {
+  function fixtureCompare(options) {
+    let mergeFixtures = options.mergeFixtures;
+
+    let actual = tmpPath;
+    let expected = mergeFixtures;
+
     _fixtureCompare({
       expect,
-      actual: tmpPath,
-      expected: mergeFixtures
+      actual,
+      expected
     });
   }
 
@@ -61,7 +64,9 @@ describe('Acceptance - ember-cli-build', function() {
     }).then(result => {
       let status = result.status;
 
-      fixtureCompare('test/fixtures/merge/my-app');
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/merge/my-app'
+      });
 
       assertNormalUpdate(status);
       assertNoUnstaged(status);
@@ -75,7 +80,9 @@ describe('Acceptance - ember-cli-build', function() {
     }).then(result => {
       let status = result.status;
 
-      fixtureCompare('test/fixtures/merge/my-addon');
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/merge/my-addon'
+      });
 
       assertNormalUpdate(status);
       assertNoUnstaged(status);
