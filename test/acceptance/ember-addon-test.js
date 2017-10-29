@@ -38,26 +38,6 @@ function commit(tmpPath) {
   });
 }
 
-function fixtureCompare(
-  tmpPath,
-  mergeFixtures
-) {
-  _fixtureCompare({
-    expect,
-    actual: tmpPath,
-    expected: mergeFixtures
-  });
-}
-
-function merge(app) {
-  return processIo({
-    ps: app.server,
-    cwd: app.path,
-    commitMessage,
-    expect
-  });
-}
-
 describe('Acceptance | ember-addon', function() {
   this.timeout(600000);
 
@@ -133,8 +113,25 @@ describe('Acceptance | ember-addon', function() {
     });
   });
 
+  function fixtureCompare(mergeFixtures) {
+    _fixtureCompare({
+      expect,
+      actual: app.path,
+      expected: mergeFixtures
+    });
+  }
+
+  function merge() {
+    return processIo({
+      ps: app.server,
+      cwd: app.path,
+      commitMessage,
+      expect
+    });
+  }
+
   it('works', function() {
-    return merge(app).then(result => {
+    return merge().then(result => {
       let status = result.status;
 
       // remove addon because it's not in the fixtures
@@ -143,7 +140,6 @@ describe('Acceptance | ember-addon', function() {
       });
 
       fixtureCompare(
-        app.path,
         'test/fixtures/merge/my-app'
       );
 
