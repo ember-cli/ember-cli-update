@@ -18,9 +18,6 @@ module.exports.assertNormalUpdate = function(status) {
   // changed locally, also changed upstream
   expect(status).to.contain(`M  README.md
 `);
-
-  // assert no unstaged changes
-  expect(status).to.not.match(/^( M |MM ).+$/m);
 };
 
 module.exports.assertNoUnstaged = function(status) {
