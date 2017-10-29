@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const fs = require('fs-extra');
 const gitFixtures = require('git-fixtures');
 
@@ -12,12 +13,17 @@ module.exports = function(options) {
   let tmpPath = options.tmpPath;
   let commitMessage = options.commitMessage;
   let dirty = options.dirty;
+  let subDir = options.subDir || '';
 
   gitInit({
     cwd: tmpPath
   });
 
-  fs.copySync(fixturesPath, tmpPath);
+  let tmpSubPath = path.join(tmpPath, subDir);
+
+  fs.ensureDirSync(tmpSubPath);
+
+  fs.copySync(fixturesPath, tmpSubPath);
 
   commit({
     m: commitMessage,

@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const expect = require('chai').expect;
 const tmp = require('tmp');
 const gitFixtures = require('git-fixtures');
@@ -26,12 +27,16 @@ describe('Acceptance - ember-cli-build', function() {
 
   function merge(options) {
     let fixturesPath = options.fixturesPath;
+    let subDir = options.subDir || '';
 
     buildTmp({
       fixturesPath,
       tmpPath,
-      commitMessage
+      commitMessage,
+      subDir
     });
+
+    tmpPath = path.join(tmpPath, subDir);
 
     return processBin({
       binFile: 'ember-cli-update',
@@ -82,6 +87,23 @@ describe('Acceptance - ember-cli-build', function() {
 
       fixtureCompare({
         mergeFixtures: 'test/fixtures/merge/my-addon'
+      });
+
+      assertNormalUpdate(status);
+      assertNoUnstaged(status);
+      assertCodemodRan(status);
+    });
+  });
+
+  it('scopes to sub dir if run from there', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      subDir: 'foo/bar'
+    }).then(result => {
+      let status = result.status;
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/merge/my-app'
       });
 
       assertNormalUpdate(status);
