@@ -52,7 +52,7 @@
     "fixture-skipper": "^1.0.1",
     "fixturify": "^0.3.4",
     "fs-extra": "^4.0.0",
-    "git-fixtures": "^0.9.0",
+    "git-fixtures": "^0.10.0",
     "mocha": "^4.0.0",
     "tmp": "0.0.33"
   },
