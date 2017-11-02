@@ -1,8 +1,7 @@
 language: node_js
 node_js:
 - '4'
-- '6'
-- '8'
+- 'node'
 branches:
   only:
   - master
@@ -18,8 +17,10 @@ env:
 - TEST_COMMAND=lint
 before_install:
 - npm config set spin false
-- npm install -g npm
-- npm --version
+- if [ "$TRAVIS_NODE_VERSION" = "4" ]; then
+    npm install -g npm;
+    npm --version;
+  fi
 script:
 - npm run $TEST_COMMAND
 jobs:
