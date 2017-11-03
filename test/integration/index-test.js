@@ -122,13 +122,25 @@ describe('Integration - index', function() {
 
   it('handles non-npm dir', function() {
     return merge({
-      fixturesPath: 'test/fixtures/npm'
+      fixturesPath: 'test/fixtures/no-package-json'
     }).then(result => {
       let stderr = result.stderr;
 
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('No package.json was found in this directory');
+    });
+  });
+
+  it('handles malformed package.json', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/malformed-package-json'
+    }).then(result => {
+      let stderr = result.stderr;
+
+      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+      expect(stderr).to.contain('The package.json is malformed');
     });
   });
 });
