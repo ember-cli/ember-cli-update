@@ -19,7 +19,13 @@ module.exports = function emberCliUpdate(options) {
   let to = options.to;
   let ignoreConflicts = options.ignoreConflicts;
 
-  let packageVersion = getPackageVersion('.');
+  let packageVersion;
+
+  try {
+    packageVersion = getPackageVersion('.');
+  } catch (err) {
+    return Promise.reject('No package.json was found in this directory');
+  }
 
   if (!packageVersion) {
     return Promise.reject('Ember CLI was not found in this project\'s package.json');

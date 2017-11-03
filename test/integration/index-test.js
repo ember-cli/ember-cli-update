@@ -119,4 +119,16 @@ describe('Integration - index', function() {
       expect(stderr).to.contain('Ember CLI was not found in this project\'s package.json');
     });
   });
+
+  it('handles non-npm dir', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/npm'
+    }).then(result => {
+      let stderr = result.stderr;
+
+      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+      expect(stderr).to.contain('No package.json was found in this directory');
+    });
+  });
 });
