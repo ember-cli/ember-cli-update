@@ -11,7 +11,7 @@ function getProjectType(fixture) {
 
 describe('Integration - getProjectType', function() {
   it('works', function() {
-    expect(getProjectType('test/fixtures/app')).to.equal('app');
-    expect(getProjectType('test/fixtures/addon')).to.equal('addon');
+    expect(getProjectType('test/fixtures/type/app')).to.equal('app');
+    expect(getProjectType('test/fixtures/type/addon')).to.equal('addon');
   });
 });
