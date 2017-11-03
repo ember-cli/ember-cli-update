@@ -19,13 +19,15 @@ module.exports = function emberCliUpdate(options) {
   let to = options.to;
   let ignoreConflicts = options.ignoreConflicts;
 
-  let packageVersion;
+  let packageJson;
 
   try {
-    packageVersion = getPackageVersion('.');
+    packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
   } catch (err) {
     return Promise.reject('No package.json was found in this directory');
   }
+
+  let packageVersion = getPackageVersion(packageJson);
 
   if (!packageVersion) {
     return Promise.reject('Ember CLI was not found in this project\'s package.json');
@@ -45,7 +47,7 @@ module.exports = function emberCliUpdate(options) {
   let endVersion = getTagVersion(to, versions);
   let endTag = `v${endVersion}`;
 
-  let projectType = getProjectType('.');
+  let projectType = getProjectType(packageJson);
 
   let projectKeyword = projectType === 'app' ? 'new' : 'addon';
 
