@@ -52,4 +52,17 @@ describe('Unit - getVersions', function() {
     expect(runStub.calledOnce).to.be.ok;
     expect(runStub.args[0][0]).to.contain('ember-cli');
   });
+
+  it('gets versions for glimmer app', function() {
+    let versionsString = '["3"]';
+
+    let runStub = sandbox.stub(utils, 'run').returns(versionsString);
+
+    let versions = getVersions('glimmer');
+
+    expect(versions).to.deep.equal(['3']);
+
+    expect(runStub.calledOnce).to.be.ok;
+    expect(runStub.args[0][0]).to.contain('@glimmer/blueprint');
+  });
 });

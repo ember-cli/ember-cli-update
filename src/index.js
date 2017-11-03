@@ -76,7 +76,8 @@ module.exports = function emberCliUpdate(options) {
 
     let shouldRunModulesCodemod =
       semver.lt(startVersion, modulesCodemodVersion) &&
-      semver.gte(endVersion, modulesCodemodVersion);
+      semver.gte(endVersion, modulesCodemodVersion) &&
+      projectType !== 'glimmer';
 
     if (shouldRunModulesCodemod) {
       return utils.runCodemods();

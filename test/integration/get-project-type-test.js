@@ -29,4 +29,8 @@ describe('Integration - getProjectType', function() {
   it('detects ember addon', function() {
     expect(getProjectType('test/fixtures/type/addon')).to.equal('addon');
   });
+
+  it('detects glimmer app', function() {
+    expect(getProjectType('test/fixtures/type/glimmer')).to.equal('glimmer');
+  });
 });

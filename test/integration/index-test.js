@@ -13,6 +13,7 @@ const buildTmp = require('../helpers/build-tmp');
 const assertions = require('../helpers/assertions');
 
 const processExit = gitFixtures.processExit;
+const _fixtureCompare = gitFixtures.fixtureCompare;
 
 const assertNoUnstaged = assertions.assertNoUnstaged;
 
@@ -45,6 +46,8 @@ describe('Integration - index', function() {
     let fixturesPath = options.fixturesPath;
     let dirty = options.dirty;
     let ignoreConflicts = options.ignoreConflicts;
+    let from = options.from;
+    let to = options.to || '2.16.0-beta.2';
 
     buildTmp({
       fixturesPath,
@@ -56,7 +59,8 @@ describe('Integration - index', function() {
     process.chdir(tmpPath);
 
     let promise = emberCliUpdate({
-      to: '2.16.0-beta.2',
+      from,
+      to,
       ignoreConflicts
     });
 
@@ -65,6 +69,19 @@ describe('Integration - index', function() {
       cwd: tmpPath,
       commitMessage,
       expect
+    });
+  }
+
+  function fixtureCompare(options) {
+    let mergeFixtures = options.mergeFixtures;
+
+    let actual = tmpPath;
+    let expected = path.join(cwd, mergeFixtures);
+
+    _fixtureCompare({
+      expect,
+      actual,
+      expected
     });
   }
 
@@ -154,6 +171,28 @@ describe('Integration - index', function() {
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('The package.json is malformed');
+    });
+  });
+
+  it('updates glimmer app', function() {
+    let runCodemods = sandbox.spy(utils, 'runCodemods');
+
+    return merge({
+      fixturesPath: 'test/fixtures/local/glimmer-app',
+      from: '0.5.0',
+      to: '0.6.1'
+    }).then(result => {
+      let status = result.status;
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/merge/glimmer-app'
+      });
+
+      expect(status).to.match(/^M {2}src\/index\.ts$/m);
+
+      assertNoUnstaged(status);
+
+      expect(runCodemods.calledOnce).to.not.be.ok;
     });
   });
 });

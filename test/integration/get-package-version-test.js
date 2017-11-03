@@ -35,10 +35,14 @@ describe('Integration - getPackageVersion', function() {
   });
 
   it('works for app type', function() {
-    expect(getPackageVersion('test/fixtures/version/ember-cli', 'app')).to.equal('2.11');
+    expect(getPackageVersion('test/fixtures/version/ember', 'app')).to.equal('2.11');
   });
 
   it('works for addon type', function() {
-    expect(getPackageVersion('test/fixtures/version/ember-cli', 'addon')).to.equal('2.11');
+    expect(getPackageVersion('test/fixtures/version/ember', 'addon')).to.equal('2.11');
+  });
+
+  it('works for glimmer type', function() {
+    expect(getPackageVersion('test/fixtures/version/glimmer', 'glimmer')).to.equal('0.3');
   });
 });
