@@ -22,9 +22,15 @@ module.exports = function emberCliUpdate(options) {
   let packageJson;
 
   try {
-    packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+    packageJson = fs.readFileSync('package.json', 'utf8');
   } catch (err) {
     return Promise.reject('No package.json was found in this directory');
+  }
+
+  try {
+    packageJson = JSON.parse(packageJson);
+  } catch (err) {
+    return Promise.reject('The package.json is malformed');
   }
 
   let packageVersion = getPackageVersion(packageJson);
