@@ -36,9 +36,8 @@
     "ember-modules-codemod": "^0.2.9",
     "execa": "^0.8.0",
     "git-diff-apply": "^0.6.1",
-    "rfc6902-ordered": "^2.0.0",
+    "merge-package.json": "^1.0.1",
     "semver": "^5.4.1",
-    "three-way-merger": "^0.3.0",
     "yargs": "^10.0.3"
   },
   "devDependencies": {
@@ -50,8 +49,6 @@
     "eslint": "^4.3.0",
     "eslint-config-sane": "^0.2.1",
     "eslint-plugin-mocha": "^4.11.0",
-    "fixture-skipper": "^1.0.1",
-    "fixturify": "^0.3.4",
     "fs-extra": "^4.0.0",
     "git-fixtures": "^0.10.0",
     "mocha": "^4.0.0",

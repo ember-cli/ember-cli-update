@@ -6,7 +6,7 @@ const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getProjectType = require('./get-project-type');
-const autoMergePackageJson = require('./auto-merge-package-json');
+const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const semver = require('semver');
 const run = require('./run');
@@ -56,7 +56,7 @@ module.exports = function emberCliUpdate(options) {
     let fromPackageJson = results.from['package.json'];
     let toPackageJson = results.to['package.json'];
 
-    let newPackageJson = autoMergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
+    let newPackageJson = mergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
 
     fs.writeFileSync('package.json', newPackageJson);
 
