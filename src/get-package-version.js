@@ -30,6 +30,9 @@ module.exports = function getPackageVersion(projectPath, projectType) {
       case 'addon':
         packageVersion = devDependencies['ember-cli'];
         break;
+      case 'glimmer':
+        packageVersion = devDependencies['@glimmer/blueprint'];
+        break;
     }
   }
 

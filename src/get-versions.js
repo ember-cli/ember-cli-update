@@ -10,6 +10,9 @@ module.exports = function getVersions(projectType) {
     case 'addon':
       pkg = 'ember-cli';
       break;
+    case 'glimmer':
+      pkg = '@glimmer/blueprint';
+      break;
   }
 
   let versions = JSON.parse(

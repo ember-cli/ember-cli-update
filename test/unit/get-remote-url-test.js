@@ -15,4 +15,10 @@ describe('Unit - getRemoteUrl', function() {
       'https://github.com/ember-cli/ember-addon-output'
     );
   });
+
+  it('gets remote url for glimmer app', function() {
+    expect(getRemoteUrl('glimmer')).to.equal(
+      'https://github.com/glimmerjs/glimmer-blueprint-output'
+    );
+  });
 });

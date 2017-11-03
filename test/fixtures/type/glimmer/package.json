@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@glimmer/blueprint": "0.3"
+  }
+}
