@@ -17,11 +17,11 @@ describe('Integration - getPackageVersion', function() {
   });
 
   it('returns falsy for no devDependencies', function() {
-    expect(getPackageVersion('test/fixtures/version/no-dev-deps')).to.be.not.ok;
+    expect(getPackageVersion('test/fixtures/version/no-dev-deps')).to.not.be.ok;
   });
 
   it('returns falsy for no ember-cli', function() {
-    expect(getPackageVersion('test/fixtures/version/no-ember-cli')).to.be.not.ok;
+    expect(getPackageVersion('test/fixtures/version/no-ember-cli')).to.not.be.ok;
   });
 
   it('works with only ember-cli', function() {

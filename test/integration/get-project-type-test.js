@@ -16,6 +16,10 @@ describe('Integration - getProjectType', function() {
     }).to.throw('The package.json is malformed');
   });
 
+  it('returns falsy for not found', function() {
+    expect(getProjectType('test/fixtures/type/none')).to.not.be.ok;
+  });
+
   it('detects ember app', function() {
     expect(getProjectType('test/fixtures/type/app')).to.equal('app');
   });

@@ -1,5 +1,8 @@
 {
   "keywords": [
     "ember-addon"
-  ]
+  ],
+  "devDependencies": {
+    "ember-cli": "2.11"
+  }
 }

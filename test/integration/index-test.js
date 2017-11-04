@@ -110,7 +110,7 @@ describe('Integration - index', function() {
 
   it('handles non-ember-cli app', function() {
     return merge({
-      fixturesPath: 'test/fixtures/type/app'
+      fixturesPath: 'test/fixtures/type/none'
     }).then(result => {
       let stderr = result.stderr;
 
