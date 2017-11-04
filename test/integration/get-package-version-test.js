@@ -16,12 +16,16 @@ describe('Integration - getPackageVersion', function() {
     }).to.throw('The package.json is malformed');
   });
 
-  it('returns falsy for no devDependencies', function() {
-    expect(getPackageVersion('test/fixtures/version/no-dev-deps')).to.not.be.ok;
+  it('throws if no devDependencies', function() {
+    expect(() => {
+      getPackageVersion('test/fixtures/version/no-dev-deps');
+    }).to.throw('Ember CLI was not found in this project\'s package.json');
   });
 
-  it('returns falsy for no ember-cli', function() {
-    expect(getPackageVersion('test/fixtures/version/no-ember-cli')).to.not.be.ok;
+  it('throws if no ember-cli', function() {
+    expect(() => {
+      getPackageVersion('test/fixtures/version/no-ember-cli');
+    }).to.throw('Ember CLI was not found in this project\'s package.json');
   });
 
   it('works with only ember-cli', function() {

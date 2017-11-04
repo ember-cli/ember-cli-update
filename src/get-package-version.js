@@ -24,5 +24,9 @@ module.exports = function getPackageVersion(projectPath) {
 
   let packageVersion = devDependencies && devDependencies['ember-cli'];
 
+  if (!packageVersion) {
+    throw 'Ember CLI was not found in this project\'s package.json';
+  }
+
   return packageVersion;
 };

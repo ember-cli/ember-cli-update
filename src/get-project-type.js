@@ -35,4 +35,6 @@ module.exports = function getProjectType(projectPath) {
   if (isApp) {
     return 'app';
   }
+
+  throw 'Project type could not be detected';
 };
