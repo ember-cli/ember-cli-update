@@ -24,5 +24,15 @@ module.exports = function getProjectType(projectPath) {
 
   let isAddon = keywords && keywords.indexOf('ember-addon') !== -1;
 
-  return isAddon ? 'addon' : 'app';
+  if (isAddon) {
+    return 'addon';
+  }
+
+  let devDependencies = packageJson.devDependencies;
+
+  let isApp = devDependencies && devDependencies['ember-cli'];
+
+  if (isApp) {
+    return 'app';
+  }
 };
