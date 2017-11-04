@@ -19,16 +19,26 @@ describe('Integration - getPackageVersion', function() {
   it('throws if no devDependencies', function() {
     expect(() => {
       getPackageVersion('test/fixtures/version/no-dev-deps');
-    }).to.throw('Ember CLI was not found in this project\'s package.json');
+    }).to.throw('Ember CLI blueprint version could not be determined');
   });
 
-  it('throws if no ember-cli', function() {
+  it('throws if no ember-cli for app type', function() {
     expect(() => {
-      getPackageVersion('test/fixtures/version/no-ember-cli');
-    }).to.throw('Ember CLI was not found in this project\'s package.json');
+      getPackageVersion('test/fixtures/version/no-ember-cli', 'app');
+    }).to.throw('Ember CLI blueprint version could not be determined');
   });
 
-  it('works with only ember-cli', function() {
-    expect(getPackageVersion('test/fixtures/version/ember-cli')).to.equal('2.11');
+  it('throws if no ember-cli for addon type', function() {
+    expect(() => {
+      getPackageVersion('test/fixtures/version/no-ember-cli', 'addon');
+    }).to.throw('Ember CLI blueprint version could not be determined');
+  });
+
+  it('works for app type', function() {
+    expect(getPackageVersion('test/fixtures/version/ember-cli', 'app')).to.equal('2.11');
+  });
+
+  it('works for addon type', function() {
+    expect(getPackageVersion('test/fixtures/version/ember-cli', 'addon')).to.equal('2.11');
   });
 });

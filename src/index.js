@@ -19,10 +19,18 @@ module.exports = function emberCliUpdate(options) {
   let to = options.to;
   let ignoreConflicts = options.ignoreConflicts;
 
+  let projectType;
+
+  try {
+    projectType = getProjectType('.');
+  } catch (err) {
+    return Promise.reject(err);
+  }
+
   let packageVersion;
 
   try {
-    packageVersion = getPackageVersion('.');
+    packageVersion = getPackageVersion('.', projectType);
   } catch (err) {
     return Promise.reject(err);
   }
@@ -40,14 +48,6 @@ module.exports = function emberCliUpdate(options) {
 
   let endVersion = getTagVersion(to, versions);
   let endTag = `v${endVersion}`;
-
-  let projectType;
-
-  try {
-    projectType = getProjectType('.');
-  } catch (err) {
-    return Promise.reject(err);
-  }
 
   let projectKeyword = projectType === 'app' ? 'new' : 'addon';
 
