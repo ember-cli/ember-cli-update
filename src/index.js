@@ -45,7 +45,13 @@ module.exports = function emberCliUpdate(options) {
   let endVersion = getTagVersion(to, versions);
   let endTag = `v${endVersion}`;
 
-  let projectType = getProjectType('.');
+  let projectType;
+
+  try {
+    projectType = getProjectType('.');
+  } catch (err) {
+    return Promise.reject(err);
+  }
 
   let projectKeyword = projectType === 'app' ? 'new' : 'addon';
 
