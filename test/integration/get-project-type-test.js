@@ -19,7 +19,7 @@ describe('Integration - getProjectType', function() {
   it('throws if not found', function() {
     expect(() => {
       getProjectType('test/fixtures/type/none');
-    }).to.throw('Project type could not be detected');
+    }).to.throw('Ember CLI project type could not be determined');
   });
 
   it('detects ember app', function() {

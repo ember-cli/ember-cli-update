@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function getPackageVersion(projectPath) {
+module.exports = function getPackageVersion(projectPath, projectType) {
   let packagePath = path.join(projectPath, 'package.json');
 
   let packageJson;
@@ -20,12 +20,21 @@ module.exports = function getPackageVersion(projectPath) {
     throw 'The package.json is malformed';
   }
 
+  let packageVersion;
+
   let devDependencies = packageJson.devDependencies;
 
-  let packageVersion = devDependencies && devDependencies['ember-cli'];
+  if (devDependencies) {
+    switch (projectType) {
+      case 'app':
+      case 'addon':
+        packageVersion = devDependencies['ember-cli'];
+        break;
+    }
+  }
 
   if (!packageVersion) {
-    throw 'Ember CLI was not found in this project\'s package.json';
+    throw 'Ember CLI blueprint version could not be determined';
   }
 
   return packageVersion;

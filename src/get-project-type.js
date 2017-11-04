@@ -36,5 +36,5 @@ module.exports = function getProjectType(projectPath) {
     return 'app';
   }
 
-  throw 'Project type could not be detected';
+  throw 'Ember CLI project type could not be determined';
 };

@@ -116,7 +116,7 @@ describe('Integration - index', function() {
 
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
-      expect(stderr).to.contain('Ember CLI was not found in this project\'s package.json');
+      expect(stderr).to.contain('Ember CLI project type could not be determined');
     });
   });
 
