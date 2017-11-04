@@ -1,13 +1,7 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
 const expect = require('chai').expect;
-const _getPackageVersion = require('../../src/get-package-version');
-
-function getPackageVersion(fixture) {
-  return _getPackageVersion(JSON.parse(fs.readFileSync(path.join(fixture, 'package.json'), 'utf8')));
-}
+const getPackageVersion = require('../../src/get-package-version');
 
 describe('Integration - getPackageVersion', function() {
   it('returns falsy for no devDependencies', function() {
