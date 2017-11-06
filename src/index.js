@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
+const getVersions = require('./get-versions');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
@@ -36,9 +37,7 @@ module.exports = function emberCliUpdate(options) {
     return Promise.reject(err);
   }
 
-  let versions = JSON.parse(
-    run('npm info ember-cli versions --json')
-  );
+  let versions = getVersions(projectType);
 
   let startVersion = from;
   if (!startVersion) {
