@@ -5,9 +5,9 @@ const path = require('path');
 const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
 const getVersions = require('./get-versions');
+const getRemoteUrl = require('./get-remote-url');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
-const getRemoteUrl = require('./get-remote-url');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const semver = require('semver');
@@ -39,17 +39,17 @@ module.exports = function emberCliUpdate(options) {
 
   let versions = getVersions(projectType);
 
+  let remoteUrl = getRemoteUrl(projectType);
+
   let startVersion = from;
   if (!startVersion) {
     startVersion = getProjectVersion(packageVersion, versions);
   }
 
-  let startTag = `v${startVersion}`;
-
   let endVersion = getTagVersion(to, versions);
-  let endTag = `v${endVersion}`;
 
-  let remoteUrl = getRemoteUrl(projectType);
+  let startTag = `v${startVersion}`;
+  let endTag = `v${endVersion}`;
 
   return gitDiffApply({
     remoteUrl,
@@ -75,7 +75,10 @@ module.exports = function emberCliUpdate(options) {
       }
     }
 
-    let shouldRunModulesCodemod = semver.lt(startVersion, modulesCodemodVersion) && semver.gte(endVersion, modulesCodemodVersion);
+    let shouldRunModulesCodemod =
+      semver.lt(startVersion, modulesCodemodVersion) &&
+      semver.gte(endVersion, modulesCodemodVersion);
+
     if (shouldRunModulesCodemod) {
       let opts = {
         localDir: path.join(__dirname, '..'),
