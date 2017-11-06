@@ -4,16 +4,17 @@ const path = require('path');
 const expect = require('chai').expect;
 const tmp = require('tmp');
 const fs = require('fs');
+const sinon = require('sinon');
 const gitFixtures = require('git-fixtures');
 const isGitClean = require('git-diff-apply').isGitClean;
 const emberCliUpdate = require('../../src');
+const utils = require('../../src/utils');
 const buildTmp = require('../helpers/build-tmp');
 const assertions = require('../helpers/assertions');
 
 const processExit = gitFixtures.processExit;
 
 const assertNoUnstaged = assertions.assertNoUnstaged;
-const assertCodemodRan = assertions.assertCodemodRan;
 
 const commitMessage = 'add files';
 
@@ -21,6 +22,7 @@ describe('Integration - index', function() {
   this.timeout(30000);
 
   let cwd;
+  let sandbox;
   let tmpPath;
 
   before(function() {
@@ -28,10 +30,14 @@ describe('Integration - index', function() {
   });
 
   beforeEach(function() {
+    sandbox = sinon.sandbox.create();
+
     tmpPath = tmp.dirSync().name;
   });
 
   afterEach(function() {
+    sandbox.restore();
+
     process.chdir(cwd);
   });
 
@@ -79,6 +85,8 @@ describe('Integration - index', function() {
   });
 
   it('doesn\'t run codemods or stage files if conflicts and ignoreConflicts true', function() {
+    let runCodemods = sandbox.spy(utils, 'runCodemods');
+
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       ignoreConflicts: true
@@ -93,10 +101,14 @@ describe('Integration - index', function() {
       expect(status).to.match(/^UD bower\.json$/m);
 
       assertNoUnstaged(status);
+
+      expect(runCodemods.calledOnce).to.not.be.ok;
     });
   });
 
   it('runs codemods and stages files if no conflicts but ignoreConflicts true', function() {
+    let runCodemods = sandbox.spy(utils, 'runCodemods');
+
     return merge({
       fixturesPath: 'test/fixtures/noconflict',
       ignoreConflicts: true
@@ -104,7 +116,8 @@ describe('Integration - index', function() {
       let status = result.status;
 
       assertNoUnstaged(status);
-      assertCodemodRan(status);
+
+      expect(runCodemods.calledOnce).to.be.ok;
     });
   });
 

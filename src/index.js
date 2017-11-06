@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
 const getVersions = require('./get-versions');
@@ -12,7 +11,7 @@ const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const semver = require('semver');
 const run = require('./run');
-const execa = require('execa');
+const utils = require('./utils');
 
 const modulesCodemodVersion = '2.16.0-beta.1';
 
@@ -80,12 +79,7 @@ module.exports = function emberCliUpdate(options) {
       semver.gte(endVersion, modulesCodemodVersion);
 
     if (shouldRunModulesCodemod) {
-      return execa('ember-modules-codemod', {
-        localDir: path.join(__dirname, '..'),
-        stdio: 'inherit'
-      }).then(() => {
-        run('git add -A');
-      });
+      return utils.runCodemods();
     }
   });
 };
