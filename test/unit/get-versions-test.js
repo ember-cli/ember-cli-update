@@ -16,10 +16,21 @@ describe('Unit - getVersions', function() {
     sandbox.restore();
   });
 
+  function createStub(versionsString) {
+    let run = utils.run;
+    return sandbox.stub(utils, 'run').callsFake(function(command) {
+      if (command.indexOf('npm info') > -1) {
+        return versionsString;
+      }
+
+      return run.apply(this, arguments);
+    });
+  }
+
   it('gets versions for ember app', function() {
     let versionsString = '["1"]';
 
-    let runStub = sandbox.stub(utils, 'run').returns(versionsString);
+    let runStub = createStub(versionsString);
 
     let versions = getVersions('app');
 
@@ -32,7 +43,7 @@ describe('Unit - getVersions', function() {
   it('gets versions for ember addon', function() {
     let versionsString = '["2"]';
 
-    let runStub = sandbox.stub(utils, 'run').returns(versionsString);
+    let runStub = createStub(versionsString);
 
     let versions = getVersions('addon');
 
