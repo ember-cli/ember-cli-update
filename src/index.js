@@ -2,10 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
-const getProjectType = require('./get-project-type');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const semver = require('semver');
