@@ -6,6 +6,7 @@ const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
+const getRemoteUrl = require('./get-remote-url');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const semver = require('semver');
@@ -49,9 +50,7 @@ module.exports = function emberCliUpdate(options) {
   let endVersion = getTagVersion(to, versions);
   let endTag = `v${endVersion}`;
 
-  let projectKeyword = projectType === 'app' ? 'new' : 'addon';
-
-  let remoteUrl = `https://github.com/ember-cli/ember-${projectKeyword}-output`;
+  let remoteUrl = getRemoteUrl(projectType);
 
   return gitDiffApply({
     remoteUrl,
