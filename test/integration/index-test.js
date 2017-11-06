@@ -195,4 +195,17 @@ describe('Integration - index', function() {
       expect(runCodemods.calledOnce).to.not.be.ok;
     });
   });
+
+  it('needs --from if glimmer app before 0.6.3', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/local/glimmer-app',
+      to: '0.6.1'
+    }).then(result => {
+      let stderr = result.stderr;
+
+      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+      expect(stderr).to.contain('version cannot be determined');
+    });
+  });
 });

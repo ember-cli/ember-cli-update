@@ -40,7 +40,11 @@ module.exports = function emberCliUpdate(options) {
 
   let startVersion = from;
   if (!startVersion) {
-    startVersion = getProjectVersion(packageVersion, versions);
+    try {
+      startVersion = getProjectVersion(packageVersion, versions, projectType);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 
   let endVersion = getTagVersion(to, versions);
