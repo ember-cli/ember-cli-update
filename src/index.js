@@ -80,11 +80,10 @@ module.exports = function emberCliUpdate(options) {
       semver.gte(endVersion, modulesCodemodVersion);
 
     if (shouldRunModulesCodemod) {
-      let opts = {
+      return execa('ember-modules-codemod', {
         localDir: path.join(__dirname, '..'),
         stdio: 'inherit'
-      };
-      return execa('ember-modules-codemod', opts).then(() => {
+      }).then(() => {
         run('git add -A');
       });
     }
