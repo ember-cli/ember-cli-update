@@ -23,6 +23,11 @@ const isNode4Windows = process.platform === 'win32' && semver.satisfies(process.
 
 const commitMessage = 'add files';
 
+function resetAndClean(cwd) {
+  run('git reset --hard', { cwd });
+  run('git clean -f', { cwd });
+}
+
 function commit(tmpPath) {
   gitInit({
     cwd: tmpPath
@@ -59,9 +64,8 @@ describe('Acceptance | ember-addon', function() {
       return app.run('npm', 'install');
     }).then(() => {
       // get rid of package-lock.json
-      run('git clean -f', {
-        cwd: app.path
-      });
+      // and reset line ending changes on Windows
+      resetAndClean(app.path);
 
       if (isNode4Windows) {
         return new Promise(resolve => {
@@ -81,12 +85,7 @@ describe('Acceptance | ember-addon', function() {
               server.stdout.removeAllListeners();
               server.kill('SIGINT');
               server.on('exit', () => {
-                run('git reset --hard', {
-                  cwd: app.path
-                });
-                run('git clean -f', {
-                  cwd: app.path
-                });
+                resetAndClean(app.path);
                 start();
               });
             }, 10000);
