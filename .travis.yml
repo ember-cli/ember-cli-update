@@ -27,8 +27,6 @@ jobs:
   exclude:
   - node_js: '4'
     env: TEST_COMMAND=lint
-  - node_js: '6'
-    env: TEST_COMMAND=lint
   include:
   - stage: Deploy
     cache: ignore
