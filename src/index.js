@@ -47,7 +47,7 @@ module.exports = function emberCliUpdate(options) {
     }
   }
 
-  let endVersion = getTagVersion(to, versions);
+  let endVersion = getTagVersion(to, versions, projectType);
 
   let remoteUrl = getRemoteUrl(projectType);
 
