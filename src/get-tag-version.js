@@ -1,6 +1,6 @@
 'use strict';
 
-const run = require('./run');
+const utils = require('./utils');
 const semver = require('semver');
 
 const distTags = [
@@ -26,16 +26,17 @@ module.exports = function getTagVersion(to, versions, projectType) {
     let pkg;
 
     switch (projectType) {
+      case 'app':
+      case 'addon':
+        pkg = 'ember-cli';
+        break;
       case 'glimmer':
         pkg = '@glimmer/blueprint';
-        break;
-      default:
-        pkg = 'ember-cli';
         break;
     }
 
     version = JSON.parse(
-      run(`npm info ${pkg}@${distTag} version --json`)
+      utils.run(`npm info ${pkg}@${distTag} version --json`)
     );
   }
 
