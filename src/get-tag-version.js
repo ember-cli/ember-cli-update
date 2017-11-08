@@ -8,7 +8,7 @@ const distTags = [
   'beta'
 ];
 
-module.exports = function getTagVersion(to, versions) {
+module.exports = function getTagVersion(to, versions, projectType) {
   let distTag;
   let version;
   if (distTags.indexOf(to) > -1) {
@@ -23,8 +23,19 @@ module.exports = function getTagVersion(to, versions) {
       version = semver.maxSatisfying(versions, version);
     }
   } else {
+    let pkg;
+
+    switch (projectType) {
+      case 'glimmer':
+        pkg = '@glimmer/blueprint';
+        break;
+      default:
+        pkg = 'ember-cli';
+        break;
+    }
+
     version = JSON.parse(
-      run(`npm info ember-cli@${distTag} version --json`)
+      run(`npm info ${pkg}@${distTag} version --json`)
     );
   }
 
