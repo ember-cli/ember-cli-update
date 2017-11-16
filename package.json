@@ -49,7 +49,7 @@
     "eslint": "^4.3.0",
     "eslint-config-sane": "^0.3.0",
     "eslint-plugin-mocha": "^4.11.0",
-    "eslint-plugin-prefer-let": "^1.0.0",
+    "eslint-plugin-prefer-let": "kellyselden/eslint-plugin-prefer-let",
     "fs-extra": "^4.0.0",
     "git-fixtures": "^0.10.0",
     "mocha": "^4.0.0",
