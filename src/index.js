@@ -19,6 +19,7 @@ module.exports = function emberCliUpdate(options) {
   let from = options.from;
   let to = options.to;
   let ignoreConflicts = options.ignoreConflicts;
+  let runCodemods = options.runCodemods;
 
   let projectType;
 
@@ -47,6 +48,16 @@ module.exports = function emberCliUpdate(options) {
     }
   }
 
+  if (runCodemods) {
+    let shouldRunModulesCodemod =
+      semver.lt(startVersion, modulesCodemodVersion) &&
+      projectType !== 'glimmer';
+
+    if (shouldRunModulesCodemod) {
+      return utils.runCodemods();
+    }
+  }
+
   let endVersion = getTagVersion(to, versions, projectType);
 
   let remoteUrl = getRemoteUrl(projectType);
@@ -70,21 +81,5 @@ module.exports = function emberCliUpdate(options) {
     fs.writeFileSync('package.json', newPackageJson);
 
     run('git add package.json');
-
-    if (ignoreConflicts) {
-      let hasConflicts = run('git status --porcelain').match(/^\S{2} /m);
-      if (hasConflicts) {
-        return;
-      }
-    }
-
-    let shouldRunModulesCodemod =
-      semver.lt(startVersion, modulesCodemodVersion) &&
-      semver.gte(endVersion, modulesCodemodVersion) &&
-      projectType !== 'glimmer';
-
-    if (shouldRunModulesCodemod) {
-      return utils.runCodemods();
-    }
   });
 };

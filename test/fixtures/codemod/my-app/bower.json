@@ -1,5 +1,7 @@
 {
   "name": "my-app",
   "dependencies": {
+  },
+  "devDependencies": {
   }
 }

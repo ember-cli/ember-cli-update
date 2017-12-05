@@ -17,7 +17,6 @@ const _fixtureCompare = gitFixtures.fixtureCompare;
 
 const assertNormalUpdate = assertions.assertNormalUpdate;
 const assertNoUnstaged = assertions.assertNoUnstaged;
-const assertCodemodRan = assertions.assertCodemodRan;
 
 const isNode4Windows = process.platform === 'win32' && semver.satisfies(process.version, '4');
 
@@ -149,7 +148,6 @@ describe('Acceptance | ember-addon', function() {
 
       assertNormalUpdate(status);
       assertNoUnstaged(status);
-      assertCodemodRan(status);
     });
   });
 });
