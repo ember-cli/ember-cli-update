@@ -25,6 +25,12 @@ module.exports = {
       description: args['ignore-conflicts'].description,
       type: Boolean,
       default: args['ignore-conflicts'].default
+    },
+    {
+      name: 'run-codemods',
+      description: args['run-codemods'].description,
+      type: Boolean,
+      default: args['run-codemods'].default
     }
   ],
 

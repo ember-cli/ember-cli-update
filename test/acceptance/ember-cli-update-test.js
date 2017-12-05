@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs-extra');
 const path = require('path');
 const expect = require('chai').expect;
 const tmp = require('tmp');
@@ -27,6 +28,7 @@ describe('Acceptance - ember-cli-build', function() {
 
   function merge(options) {
     let fixturesPath = options.fixturesPath;
+    let runCodemods = options.runCodemods;
     let subDir = options.subDir || '';
 
     buildTmp({
@@ -38,12 +40,19 @@ describe('Acceptance - ember-cli-build', function() {
 
     tmpPath = path.join(tmpPath, subDir);
 
+    let args = [
+      '--to',
+      '2.16.0-beta.2'
+    ];
+    if (runCodemods) {
+      args = [
+        '--run-codemods'
+      ];
+    }
+
     return processBin({
       binFile: 'ember-cli-update',
-      args: [
-        '--to',
-        '2.16.0-beta.2'
-      ],
+      args,
       cwd: tmpPath,
       commitMessage,
       expect
@@ -55,6 +64,9 @@ describe('Acceptance - ember-cli-build', function() {
 
     let actual = tmpPath;
     let expected = mergeFixtures;
+
+    // file is indeterminent between OS's, so ignore
+    fs.removeSync(path.join(actual, 'MODULE_REPORT.md'));
 
     _fixtureCompare({
       expect,
@@ -75,7 +87,6 @@ describe('Acceptance - ember-cli-build', function() {
 
       assertNormalUpdate(status);
       assertNoUnstaged(status);
-      assertCodemodRan(status);
     });
   });
 
@@ -90,6 +101,21 @@ describe('Acceptance - ember-cli-build', function() {
       });
 
       assertNormalUpdate(status);
+      assertNoUnstaged(status);
+    });
+  });
+
+  it('runs codemods', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      runCodemods: true
+    }).then(result => {
+      let status = result.status;
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/codemod/my-app'
+      });
+
       assertNoUnstaged(status);
       assertCodemodRan(status);
     });
@@ -108,7 +134,6 @@ describe('Acceptance - ember-cli-build', function() {
 
       assertNormalUpdate(status);
       assertNoUnstaged(status);
-      assertCodemodRan(status);
     });
   });
 });

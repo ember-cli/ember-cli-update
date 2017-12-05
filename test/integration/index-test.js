@@ -3,7 +3,6 @@
 const path = require('path');
 const expect = require('chai').expect;
 const tmp = require('tmp');
-const fs = require('fs');
 const sinon = require('sinon');
 const gitFixtures = require('git-fixtures');
 const isGitClean = require('git-diff-apply').isGitClean;
@@ -46,6 +45,7 @@ describe('Integration - index', function() {
     let fixturesPath = options.fixturesPath;
     let dirty = options.dirty;
     let ignoreConflicts = options.ignoreConflicts;
+    let runCodemods = options.runCodemods;
     let from = options.from;
     let to = options.to || '2.16.0-beta.2';
 
@@ -61,7 +61,8 @@ describe('Integration - index', function() {
     let promise = emberCliUpdate({
       from,
       to,
-      ignoreConflicts
+      ignoreConflicts,
+      runCodemods
     });
 
     return processExit({
@@ -101,34 +102,12 @@ describe('Integration - index', function() {
     });
   });
 
-  it('doesn\'t run codemods or stage files if conflicts and ignoreConflicts true', function() {
+  it('runs codemods', function() {
     let runCodemods = sandbox.spy(utils, 'runCodemods');
 
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
-      ignoreConflicts: true
-    }).then(result => {
-      let status = result.status;
-
-      let actual = fs.readFileSync(path.join(tmpPath, '.eslintrc.js'), 'utf8');
-
-      expect(actual).to.contain('<<<<<<< HEAD');
-
-      expect(status).to.match(/^AA \.eslintrc\.js$/m);
-      expect(status).to.match(/^UD bower\.json$/m);
-
-      assertNoUnstaged(status);
-
-      expect(runCodemods.calledOnce).to.not.be.ok;
-    });
-  });
-
-  it('runs codemods and stages files if no conflicts but ignoreConflicts true', function() {
-    let runCodemods = sandbox.spy(utils, 'runCodemods');
-
-    return merge({
-      fixturesPath: 'test/fixtures/noconflict',
-      ignoreConflicts: true
+      runCodemods: true
     }).then(result => {
       let status = result.status;
 

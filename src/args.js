@@ -12,5 +12,10 @@ module.exports = {
     type: 'boolean',
     default: false,
     description: 'Handle merge conflicts yourself'
+  },
+  'run-codemods': {
+    type: 'boolean',
+    default: false,
+    description: 'Run codemods to help update your code'
   }
 };
