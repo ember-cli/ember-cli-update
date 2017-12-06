@@ -17,7 +17,7 @@ const assertCodemodRan = assertions.assertCodemodRan;
 
 const commitMessage = 'add files';
 
-describe('Acceptance - ember-cli-build', function() {
+describe('Acceptance - ember-cli-update', function() {
   this.timeout(30000);
 
   let tmpPath;
