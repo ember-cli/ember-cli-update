@@ -28,6 +28,7 @@ describe('Acceptance - ember-cli-update', function() {
 
   function merge(options) {
     let fixturesPath = options.fixturesPath;
+    let to = options.to;
     let runCodemods = options.runCodemods;
     let subDir = options.subDir || '';
 
@@ -40,14 +41,18 @@ describe('Acceptance - ember-cli-update', function() {
 
     tmpPath = path.join(tmpPath, subDir);
 
-    let args = [
-      '--to',
-      '2.16.0-beta.2'
-    ];
+    let args = [];
+
     if (runCodemods) {
-      args = [
-        '--run-codemods'
-      ];
+      args.push('--run-codemods');
+    }
+
+    if (!runCodemods && !to) {
+      to = '2.16.0-beta.2';
+    }
+
+    if (to) {
+      args = args.concat('--to', to);
     }
 
     return processBin({

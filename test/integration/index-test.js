@@ -47,7 +47,11 @@ describe('Integration - index', function() {
     let ignoreConflicts = options.ignoreConflicts;
     let runCodemods = options.runCodemods;
     let from = options.from;
-    let to = options.to || '2.16.0-beta.2';
+    let to = options.to;
+
+    if (!runCodemods && !to) {
+      to = '2.16.0-beta.2';
+    }
 
     buildTmp({
       fixturesPath,
@@ -98,6 +102,21 @@ describe('Integration - index', function() {
 `);
 
       expect(stderr).to.contain('You must start with a clean working directory');
+      expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
+    });
+  });
+
+  it('doesn\'t allow --to with --run-codemods', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      to: '2.16.0-beta.2',
+      runCodemods: true
+    }).then(result => {
+      let stderr = result.stderr;
+
+      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+      expect(stderr).to.contain('You cannot update and run codemods at the same time.');
       expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
     });
   });

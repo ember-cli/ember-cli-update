@@ -21,6 +21,10 @@ module.exports = function emberCliUpdate(options) {
   let ignoreConflicts = options.ignoreConflicts;
   let runCodemods = options.runCodemods;
 
+  if (to && runCodemods) {
+    return Promise.reject('You cannot update and run codemods at the same time. Please remove either the --to option or the --run-codemods option.');
+  }
+
   let projectType;
 
   try {
