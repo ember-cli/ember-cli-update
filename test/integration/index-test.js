@@ -44,7 +44,6 @@ describe('Integration - index', function() {
   function merge(options) {
     let fixturesPath = options.fixturesPath;
     let dirty = options.dirty;
-    let ignoreConflicts = options.ignoreConflicts;
     let runCodemods = options.runCodemods;
     let from = options.from;
     let to = options.to || '2.16.0-beta.2';
@@ -61,7 +60,6 @@ describe('Integration - index', function() {
     let promise = emberCliUpdate({
       from,
       to,
-      ignoreConflicts,
       runCodemods
     });
 
