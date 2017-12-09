@@ -8,10 +8,10 @@ module.exports = {
     default: 'latest',
     description: 'Update to a version that isn\'t latest ("2.14.1", "~2.15", "latest", "beta")'
   },
-  'ignore-conflicts': {
+  'resolve-conflicts': {
     type: 'boolean',
     default: false,
-    description: 'Handle merge conflicts yourself'
+    description: 'Automatically run git mergetool if conflicts found'
   },
   'run-codemods': {
     type: 'boolean',

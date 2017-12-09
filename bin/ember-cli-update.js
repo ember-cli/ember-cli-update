@@ -10,12 +10,12 @@ const argv = require('yargs')
 
 const from = argv['from'];
 const to = argv['to'];
-const ignoreConflicts = argv['ignore-conflicts'];
+const resolveConflicts = argv['resolve-conflicts'];
 const runCodemods = argv['run-codemods'];
 
 emberCliUpdate({
   from,
   to,
-  ignoreConflicts,
+  resolveConflicts,
   runCodemods
 }).catch(console.error);
