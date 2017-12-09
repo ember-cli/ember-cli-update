@@ -18,7 +18,7 @@ const modulesCodemodVersion = '2.16.0-beta.1';
 module.exports = function emberCliUpdate(options) {
   let from = options.from;
   let to = options.to;
-  let ignoreConflicts = options.ignoreConflicts;
+  let resolveConflicts = options.resolveConflicts;
   let runCodemods = options.runCodemods;
 
   let projectType;
@@ -69,7 +69,7 @@ module.exports = function emberCliUpdate(options) {
     remoteUrl,
     startTag,
     endTag,
-    ignoreConflicts,
+    resolveConflicts,
     ignoredFiles: ['package.json']
   }).then(results => {
     let myPackageJson = fs.readFileSync('package.json', 'utf8');

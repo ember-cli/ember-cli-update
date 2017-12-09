@@ -21,10 +21,10 @@ module.exports = {
       default: args['to'].default
     },
     {
-      name: 'ignore-conflicts',
-      description: args['ignore-conflicts'].description,
+      name: 'resolve-conflicts',
+      description: args['resolve-conflicts'].description,
       type: Boolean,
-      default: args['ignore-conflicts'].default
+      default: args['resolve-conflicts'].default
     },
     {
       name: 'run-codemods',
