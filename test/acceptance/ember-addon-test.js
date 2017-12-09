@@ -66,18 +66,25 @@ describe('Acceptance | ember-addon', function() {
       // and reset line ending changes on Windows
       resetAndClean(app.path);
 
+      let args = [
+        '--to',
+        '2.16.0-beta.2'
+      ];
+
       if (isNode4Windows) {
         return new Promise(resolve => {
           (function start() {
-            let server = spawn('node', [
-              'node_modules/ember-cli/bin/ember',
-              'update',
-              '--to',
-              '2.16.0-beta.2'
-            ], {
-              cwd: app.path,
-              env: process.env
-            });
+            let server = spawn(
+              'node',
+              [
+                'node_modules/ember-cli/bin/ember',
+                'update'
+              ].concat(args),
+              {
+                cwd: app.path,
+                env: process.env
+              }
+            );
 
             let id = setTimeout(() => {
               debug('timed out waiting for output');
@@ -100,10 +107,7 @@ describe('Acceptance | ember-addon', function() {
 
       return app.startServer({
         command: 'update',
-        additionalArguments: [
-          '--to',
-          '2.16.0-beta.2'
-        ],
+        additionalArguments: args,
         detectServerStart() {
           return true;
         }
