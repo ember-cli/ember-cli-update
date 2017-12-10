@@ -47,6 +47,7 @@ You will probably encounter merge conflicts, in which the default behavoir is to
 | --to | Update to a version that isn\'t latest | String | "2.14.1" "~2.15" "latest" "beta" | "latest" |
 | --resolve-conflicts | Automatically run git mergetool if conflicts found | Boolean | | false |
 | --run-codemods | Run codemods to help update your code | Boolean | | false |
+| --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
 
 ## Future Plans
 
