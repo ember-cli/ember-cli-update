@@ -15,6 +15,7 @@ const processExit = gitFixtures.processExit;
 const _fixtureCompare = gitFixtures.fixtureCompare;
 
 const assertNoUnstaged = assertions.assertNoUnstaged;
+const assertNoStaged = assertions.assertNoStaged;
 
 const commitMessage = 'add files';
 
@@ -47,6 +48,7 @@ describe('Integration - index', function() {
     let runCodemods = options.runCodemods;
     let from = options.from;
     let to = options.to || '2.16.0-beta.2';
+    let reset = options.reset;
 
     buildTmp({
       fixturesPath,
@@ -60,7 +62,8 @@ describe('Integration - index', function() {
     let promise = emberCliUpdate({
       from,
       to,
-      runCodemods
+      runCodemods,
+      reset
     });
 
     return processExit({
@@ -183,6 +186,27 @@ describe('Integration - index', function() {
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('version cannot be determined');
+    });
+  });
+
+  it('resets app', function() {
+    let runCodemods = sandbox.spy(utils, 'runCodemods');
+
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      reset: true
+    }).then(result => {
+      let status = result.status;
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/reset/my-app'
+      });
+
+      expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
+
+      assertNoStaged(status);
+
+      expect(runCodemods.called).to.not.be.ok;
     });
   });
 });

@@ -20,6 +20,7 @@ module.exports = function emberCliUpdate(options) {
   let to = options.to;
   let resolveConflicts = options.resolveConflicts;
   let runCodemods = options.runCodemods;
+  let reset = options.reset;
 
   let projectType;
 
@@ -65,13 +66,25 @@ module.exports = function emberCliUpdate(options) {
   let startTag = `v${startVersion}`;
   let endTag = `v${endVersion}`;
 
+  let ignoredFiles;
+  if (!reset) {
+    ignoredFiles = ['package.json'];
+  } else {
+    ignoredFiles = [];
+  }
+
   return gitDiffApply({
     remoteUrl,
     startTag,
     endTag,
     resolveConflicts,
-    ignoredFiles: ['package.json']
+    ignoredFiles,
+    reset
   }).then(results => {
+    if (reset) {
+      return;
+    }
+
     let myPackageJson = fs.readFileSync('package.json', 'utf8');
     let fromPackageJson = results.from['package.json'];
     let toPackageJson = results.to['package.json'];

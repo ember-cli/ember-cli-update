@@ -21,6 +21,11 @@ module.exports.assertNoUnstaged = function(status) {
   expect(status).to.not.match(/^.\w/m);
 };
 
+module.exports.assertNoStaged = function(status) {
+  // assert no staged changes
+  expect(status).to.not.match(/^\w/m);
+};
+
 module.exports.assertCodemodRan = function(status) {
   // codemod changed locally, no change upstream
   expect(status).to.match(/^M {2}.*app\/controllers\/application\.js$/m);

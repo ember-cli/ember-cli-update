@@ -17,5 +17,10 @@ module.exports = {
     type: 'boolean',
     default: false,
     description: 'Run codemods to help update your code'
+  },
+  'reset': {
+    type: 'boolean',
+    default: false,
+    description: 'Reset your code to the default blueprint at the new version'
   }
 };
