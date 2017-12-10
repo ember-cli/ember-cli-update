@@ -169,7 +169,7 @@ describe('Integration - index', function() {
 
       assertNoUnstaged(status);
 
-      expect(runCodemods.calledOnce).to.not.be.ok;
+      expect(runCodemods.called).to.not.be.ok;
     });
   });
 
