@@ -18,7 +18,7 @@ module.exports.assertNormalUpdate = function(status) {
 
 module.exports.assertNoUnstaged = function(status) {
   // assert no unstaged changes
-  expect(status).to.not.match(/^( M |MM ).+$/m);
+  expect(status).to.not.match(/^.\w/m);
 };
 
 module.exports.assertCodemodRan = function(status) {
