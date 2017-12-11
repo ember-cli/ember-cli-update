@@ -50,7 +50,7 @@
     "eslint-config-sane": "^0.4.2",
     "eslint-plugin-mocha": "^4.11.0",
     "eslint-plugin-prefer-let": "^1.0.1",
-    "fs-extra": "^4.0.0",
+    "fs-extra": "^5.0.0",
     "git-fixtures": "^0.10.0",
     "mocha": "^4.0.0",
     "sinon": "^4.1.1",
