@@ -82,3 +82,14 @@ If you are getting an error or unexpected results, running the command with the 
 * Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,git-diff-apply && ember update`
 
 will give you more detailed logging.
+
+#### Troubleshooting tips
+Running into the following error `{ Error: Command failed: git apply /var/folders/59/.../T/tmp-.../file.patch
+error: unrecognized input` you may need to update your gitconfig color option.
+
+- .gitconfig
+    The color attribute should be auto.
+    ```sh
+    [color]
+      ui = auto
+    ```
