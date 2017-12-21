@@ -37,7 +37,7 @@ This will update your app or addon to the latest Ember CLI version. It does this
 
 This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
 
-You will probably encounter merge conflicts, in which the default behavoir is to let you resolve conlicts on your own. You can supply the `--resolve-conflicts` option to run your system's git merge tool if any conflicts are found.
+You will probably encounter merge conflicts, in which the default behavior is to let you resolve conflicts on your own. You can supply the `--resolve-conflicts` option to run your system's git merge tool if any conflicts are found.
 
 ## Options
 
