@@ -36,7 +36,7 @@
     "ember-modules-codemod": "^0.2.11",
     "execa": "^0.9.0",
     "git-diff-apply": "^0.8.2",
-    "merge-package.json": "^1.0.1",
+    "merge-package.json": "^1.0.2",
     "semver": "^5.4.1",
     "yargs": "^10.0.3"
   },
