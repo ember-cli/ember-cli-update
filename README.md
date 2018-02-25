@@ -29,7 +29,7 @@ Inside your project directory, if you installed globally run
 
 `ember-cli-update`
 
-or if you installed as a command run
+or if you installed as an Ember CLI command run
 
 `ember update`
 
