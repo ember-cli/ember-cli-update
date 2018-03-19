@@ -7,7 +7,7 @@ This is my filled out section
 You will need the following things properly installed on your computer.
 
 * [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org/) (with NPM)
+* [Node.js](https://nodejs.org/) (with npm)
 * [Ember CLI](https://ember-cli.com/)
 * [Google Chrome](https://google.com/chrome/)
 
@@ -31,6 +31,11 @@ Make use of the many generators for code, try `ember help generate` for more det
 
 * `ember test`
 * `ember test --server`
+
+### Linting
+
+* `npm run lint:js`
+* `npm run lint:js -- --fix`
 
 ### Building
 
