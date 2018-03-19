@@ -42,7 +42,7 @@ describe('Acceptance - ember-cli-update', function() {
 
     let args = [
       '--to',
-      '2.16.0-beta.2',
+      '3.0.1',
       '--resolve-conflicts'
     ];
     if (runCodemods) {

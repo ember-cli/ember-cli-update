@@ -47,7 +47,7 @@ describe('Integration - index', function() {
     let dirty = options.dirty;
     let runCodemods = options.runCodemods;
     let from = options.from;
-    let to = options.to || '2.16.0-beta.2';
+    let to = options.to || '3.0.1';
     let reset = options.reset;
 
     buildTmp({
