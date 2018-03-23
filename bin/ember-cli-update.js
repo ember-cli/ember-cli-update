@@ -13,11 +13,13 @@ const to = argv['to'];
 const resolveConflicts = argv['resolve-conflicts'];
 const runCodemods = argv['run-codemods'];
 const reset = argv['reset'];
+const compareOnly = argv['compare-only'];
 
 emberCliUpdate({
   from,
   to,
   resolveConflicts,
   runCodemods,
-  reset
+  reset,
+  compareOnly
 }).catch(console.error);

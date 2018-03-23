@@ -37,6 +37,12 @@ module.exports = {
       description: args['reset'].description,
       type: Boolean,
       default: args['reset'].default
+    },
+    {
+      name: 'compare-only',
+      description: args['compare-only'].description,
+      type: Boolean,
+      default: args['compare-only'].default
     }
   ],
 

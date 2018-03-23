@@ -49,6 +49,7 @@ describe('Integration - index', function() {
     let from = options.from;
     let to = options.to || '3.0.1';
     let reset = options.reset;
+    let compareOnly = options.compareOnly;
 
     buildTmp({
       fixturesPath,
@@ -63,7 +64,8 @@ describe('Integration - index', function() {
       from,
       to,
       runCodemods,
-      reset
+      reset,
+      compareOnly
     });
 
     return processExit({
@@ -207,6 +209,21 @@ describe('Integration - index', function() {
       assertNoStaged(status);
 
       expect(runCodemods.called).to.not.be.ok;
+    });
+  });
+
+  it('opens compare url', function() {
+    let opn = sandbox.stub(utils, 'opn').resolves();
+
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      compareOnly: true
+    }).then(result => {
+      let status = result.status;
+
+      assertNoUnstaged(status);
+
+      expect(opn.args).to.deep.equal([['https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.0.1']]);
     });
   });
 });
