@@ -48,6 +48,7 @@ You will probably encounter merge conflicts, in which the default behavior is to
 | --resolve-conflicts | Automatically run git mergetool if conflicts found | Boolean | | false |
 | --run-codemods | Run codemods to help update your code | Boolean | | false |
 | --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
+| --compare-only | Show the changes between different versions without updating | Boolean | | false |
 
 ## Future Plans
 

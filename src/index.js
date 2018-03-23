@@ -7,6 +7,7 @@ const getVersions = require('./get-versions');
 const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
+const getCompareUrl = require('./get-compare-url');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const semver = require('semver');
@@ -21,6 +22,7 @@ module.exports = function emberCliUpdate(options) {
   let resolveConflicts = options.resolveConflicts;
   let runCodemods = options.runCodemods;
   let reset = options.reset;
+  let compareOnly = options.compareOnly;
 
   let projectType;
 
@@ -65,6 +67,14 @@ module.exports = function emberCliUpdate(options) {
 
   let startTag = `v${startVersion}`;
   let endTag = `v${endVersion}`;
+
+  if (compareOnly) {
+    return utils.opn(getCompareUrl({
+      remoteUrl,
+      startTag,
+      endTag
+    }));
+  }
 
   let ignoredFiles;
   if (!reset) {

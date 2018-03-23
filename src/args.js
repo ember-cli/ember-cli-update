@@ -22,5 +22,10 @@ module.exports = {
     type: 'boolean',
     default: false,
     description: 'Reset your code to the default blueprint at the new version'
+  },
+  'compare-only': {
+    type: 'boolean',
+    default: false,
+    description: 'Show the changes between different versions without updating'
   }
 };
