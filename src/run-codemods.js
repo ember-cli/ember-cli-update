@@ -1,16 +1,26 @@
 'use strict';
 
-const path = require('path');
-const execa = require('execa');
+const semver = require('semver');
 const debug = require('debug')('ember-cli-update');
 const run = require('./run');
+const utils = require('./utils');
 
-module.exports = function runCodemods() {
-  debug('ember-modules-codemod');
-  return execa('ember-modules-codemod', {
-    localDir: path.join(__dirname, '..'),
-    stdio: 'inherit'
-  }).then(() => {
-    run('git add -A');
-  });
+const modulesCodemodVersion = '2.16.0-beta.1';
+
+module.exports = function runCodemods(options) {
+  let projectType = options.projectType;
+  let startVersion = options.startVersion;
+
+  let shouldRunModulesCodemod =
+    semver.lt(startVersion, modulesCodemodVersion) &&
+    projectType !== 'glimmer';
+
+  if (shouldRunModulesCodemod) {
+    debug('ember-modules-codemod');
+    return utils.runEmberModulesCodemod().then(() => {
+      run('git add -A');
+    });
+  }
+
+  return Promise.resolve();
 };

@@ -8,19 +8,17 @@ const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const getCompareUrl = require('./get-compare-url');
+const runCodemods = require('./run-codemods');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
-const semver = require('semver');
 const run = require('./run');
 const utils = require('./utils');
-
-const modulesCodemodVersion = '2.16.0-beta.1';
 
 module.exports = function emberCliUpdate(options) {
   let from = options.from;
   let to = options.to;
   let resolveConflicts = options.resolveConflicts;
-  let runCodemods = options.runCodemods;
+  let _runCodemods = options.runCodemods;
   let reset = options.reset;
   let compareOnly = options.compareOnly;
 
@@ -51,14 +49,11 @@ module.exports = function emberCliUpdate(options) {
     }
   }
 
-  if (runCodemods) {
-    let shouldRunModulesCodemod =
-      semver.lt(startVersion, modulesCodemodVersion) &&
-      projectType !== 'glimmer';
-
-    if (shouldRunModulesCodemod) {
-      return utils.runCodemods();
-    }
+  if (_runCodemods) {
+    return runCodemods({
+      projectType,
+      startVersion
+    });
   }
 
   let endVersion = getTagVersion(to, versions, projectType);

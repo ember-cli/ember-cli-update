@@ -106,7 +106,7 @@ describe('Integration - index', function() {
   });
 
   it('runs codemods', function() {
-    let runCodemods = sandbox.spy(utils, 'runCodemods');
+    let runEmberModulesCodemod = sandbox.spy(utils, 'runEmberModulesCodemod');
 
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
@@ -116,7 +116,7 @@ describe('Integration - index', function() {
 
       assertNoUnstaged(status);
 
-      expect(runCodemods.calledOnce).to.be.ok;
+      expect(runEmberModulesCodemod.calledOnce).to.be.ok;
     });
   });
 
@@ -157,8 +157,6 @@ describe('Integration - index', function() {
   });
 
   it('updates glimmer app', function() {
-    let runCodemods = sandbox.spy(utils, 'runCodemods');
-
     return merge({
       fixturesPath: 'test/fixtures/local/glimmer-app',
       from: '0.5.0',
@@ -173,8 +171,6 @@ describe('Integration - index', function() {
       expect(status).to.match(/^M {2}src\/index\.ts$/m);
 
       assertNoUnstaged(status);
-
-      expect(runCodemods.called).to.not.be.ok;
     });
   });
 
@@ -192,8 +188,6 @@ describe('Integration - index', function() {
   });
 
   it('resets app', function() {
-    let runCodemods = sandbox.spy(utils, 'runCodemods');
-
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       reset: true
@@ -207,8 +201,6 @@ describe('Integration - index', function() {
       expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
 
       assertNoStaged(status);
-
-      expect(runCodemods.called).to.not.be.ok;
     });
   });
 
