@@ -4,9 +4,13 @@ module.exports = {
     ecmaVersion: 2017
   },
   plugins: [
+    'node',
     'mocha'
   ],
-  extends: 'sane',
+  extends: [
+    'sane',
+    'plugin:node/recommended'
+  ],
   env: {
     es6: true,
     node: true
