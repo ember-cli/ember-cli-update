@@ -13,6 +13,14 @@ const codemods = {
     version: '3.0.0-beta.1',
     projectTypes: ['app', 'addon'],
     commands: ['jscodeshift -t https://rawgit.com/rwjblue/ember-qunit-codemod/master/ember-qunit-codemod.js ./tests/']
+  },
+  'ember-test-helpers-codemod': {
+    version: '3.0.0-beta.1',
+    projectTypes: ['app', 'addon'],
+    commands: [
+      'ember-test-helpers-codemod --type=integration tests/integration',
+      'ember-test-helpers-codemod --type=acceptance tests/acceptance'
+    ]
   }
 };
 

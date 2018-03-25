@@ -96,4 +96,42 @@ describe('Unit - runCodemods', function() {
       });
     });
   });
+
+  describe('ember-test-helpers-codemod', function() {
+    it('runs on apps', function() {
+      return runCodemods({
+        projectType: 'app',
+        startVersion: '3.0.0-beta.1'
+      }).then(() => {
+        expect(npx.calledWith(sinon.match('ember-test-helpers-codemod'))).to.be.ok;
+      });
+    });
+
+    it('runs on addons', function() {
+      return runCodemods({
+        projectType: 'addon',
+        startVersion: '3.0.0-beta.1'
+      }).then(() => {
+        expect(npx.calledWith(sinon.match('ember-test-helpers-codemod'))).to.be.ok;
+      });
+    });
+
+    it('doesn\'t run on glimmer apps', function() {
+      return runCodemods({
+        projectType: 'glimmer',
+        startVersion: '3.0.0-beta.1'
+      }).then(() => {
+        expect(npx.calledWith(sinon.match('ember-test-helpers-codemod'))).to.not.be.ok;
+      });
+    });
+
+    it('doesn\'t run on old versions', function() {
+      return runCodemods({
+        projectType: 'app',
+        startVersion: '2.18.2'
+      }).then(() => {
+        expect(npx.calledWith(sinon.match('ember-test-helpers-codemod'))).to.not.be.ok;
+      });
+    });
+  });
 });
