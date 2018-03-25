@@ -7,7 +7,7 @@ module.exports.run = require('./run');
 module.exports.opn = require('opn');
 
 module.exports.runEmberModulesCodemod = function runEmberModulesCodemod() {
-  return execa('ember-modules-codemod', {
+  return execa('npx', ['ember-modules-codemod'], {
     localDir: path.join(__dirname, '..'),
     stdio: 'inherit'
   });

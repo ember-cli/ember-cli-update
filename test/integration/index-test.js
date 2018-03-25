@@ -106,7 +106,7 @@ describe('Integration - index', function() {
   });
 
   it('runs codemods', function() {
-    let runEmberModulesCodemod = sandbox.spy(utils, 'runEmberModulesCodemod');
+    let runEmberModulesCodemod = sandbox.stub(utils, 'runEmberModulesCodemod').resolves();
 
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
