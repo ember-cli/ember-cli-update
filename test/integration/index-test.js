@@ -45,7 +45,6 @@ describe('Integration - index', function() {
   function merge(options) {
     let fixturesPath = options.fixturesPath;
     let dirty = options.dirty;
-    let runCodemods = options.runCodemods;
     let from = options.from;
     let to = options.to || '3.0.1';
     let reset = options.reset;
@@ -63,7 +62,6 @@ describe('Integration - index', function() {
     let promise = emberCliUpdate({
       from,
       to,
-      runCodemods,
       reset,
       compareOnly
     });
@@ -102,21 +100,6 @@ describe('Integration - index', function() {
 
       expect(stderr).to.contain('You must start with a clean working directory');
       expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
-    });
-  });
-
-  it('runs codemods', function() {
-    let runEmberModulesCodemod = sandbox.stub(utils, 'runEmberModulesCodemod').resolves();
-
-    return merge({
-      fixturesPath: 'test/fixtures/merge/my-app',
-      runCodemods: true
-    }).then(result => {
-      let status = result.status;
-
-      assertNoUnstaged(status);
-
-      expect(runEmberModulesCodemod.calledOnce).to.be.ok;
     });
   });
 
