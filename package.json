@@ -33,10 +33,10 @@
   "homepage": "https://github.com/kellyselden/ember-cli-update#readme",
   "dependencies": {
     "debug": "^3.0.0",
-    "ember-modules-codemod": "^0.2.11",
     "execa": "^0.10.0",
     "git-diff-apply": "^0.8.3",
     "merge-package.json": "^1.0.3",
+    "npx": "^10.0.1",
     "opn": "^5.3.0",
     "semver": "^5.4.1",
     "yargs": "^11.0.0"
