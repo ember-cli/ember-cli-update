@@ -109,7 +109,7 @@ describe('Integration - index', function() {
     let runEmberModulesCodemod = sandbox.stub(utils, 'runEmberModulesCodemod').resolves();
 
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/merge/my-app',
       runCodemods: true
     }).then(result => {
       let status = result.status;

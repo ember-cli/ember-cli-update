@@ -12,7 +12,7 @@ module.exports = function runCodemods(options) {
   let startVersion = options.startVersion;
 
   let shouldRunModulesCodemod =
-    semver.lt(startVersion, modulesCodemodVersion) &&
+    semver.gte(startVersion, modulesCodemodVersion) &&
     projectType !== 'glimmer';
 
   if (shouldRunModulesCodemod) {
