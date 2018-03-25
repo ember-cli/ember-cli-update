@@ -110,7 +110,7 @@ describe('Acceptance - ember-cli-update', function() {
     this.timeout(60000);
 
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/merge/my-app',
       runCodemods: true
     }).then(result => {
       let status = result.status;
