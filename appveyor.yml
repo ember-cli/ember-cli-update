@@ -8,10 +8,6 @@ branches:
     - master
     - /^greenkeeper\/.*$/
 
-# Fix line endings in Windows. (runs before repo cloning)
-init:
-  - git config --global core.autocrlf true
-
 # Install scripts. (runs after repo cloning)
 install:
   - ps: Install-Product node $env:nodejs_version
