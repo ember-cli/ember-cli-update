@@ -8,6 +8,10 @@ branches:
     - master
     - /^greenkeeper\/.*$/
 
+matrix:
+  allow_failures:
+    - nodejs_version: "4"
+
 # Fix line endings in Windows. (runs before repo cloning)
 init:
   - git config --global core.autocrlf true
