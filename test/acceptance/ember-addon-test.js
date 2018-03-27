@@ -130,12 +130,32 @@ describe('Acceptance | ember-addon', function() {
   }
 
   function merge() {
-    return processIo({
-      ps: app.server,
-      cwd: app.path,
-      commitMessage,
-      expect
-    });
+    let server = app.server;
+
+    function _processIo() {
+      return processIo({
+        ps: server,
+        cwd: app.path,
+        commitMessage,
+        expect
+      });
+    }
+
+    if (isNode4Windows) {
+      let id = setTimeout(() => {
+        server.kill('SIGINT');
+        server.on('exit', () => {
+          run('TASKKILL /F /IM git.exe /T');
+        });
+      }, 30000);
+
+      return _processIo().then(result => {
+        clearTimeout(id);
+        return result;
+      });
+    }
+
+    return _processIo();
   }
 
   it('works', function() {
