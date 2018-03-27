@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
-const spawn = require('cross-spawn');
+const execa = require('execa');
 const semver = require('semver');
 const gitFixtures = require('git-fixtures');
 const debug = require('debug')('ember-cli-update');
@@ -75,7 +75,7 @@ describe('Acceptance | ember-addon', function() {
       if (isNode4Windows) {
         return new Promise(resolve => {
           (function start() {
-            let server = spawn(
+            let server = execa(
               'node',
               [
                 'node_modules/ember-cli/bin/ember',
