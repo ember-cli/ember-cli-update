@@ -59,7 +59,7 @@
     "git-fixtures": "^0.10.0",
     "mocha": "^5.0.0",
     "renovate-config-standard": "^1.0.0",
-    "sinon": "^4.1.1",
+    "sinon": "^5.0.0",
     "tmp": "0.0.33"
   },
   "ember-addon": {
