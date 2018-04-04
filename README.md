@@ -82,3 +82,12 @@ If you are getting an error or unexpected results, running the command with the 
 * Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,git-diff-apply && ember update`
 
 will give you more detailed logging.
+
+#### Troubleshooting tips
+
+- .gitconfig
+    The color attribute should be auto.
+    ```sh
+    [color]
+      ui = auto
+    ```
