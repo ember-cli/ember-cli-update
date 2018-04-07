@@ -2,24 +2,7 @@
 
 const semver = require('semver');
 const utils = require('./utils');
-
-const codemods = {
-  'ember-modules-codemod': {
-    version: '2.16.0-beta.1',
-    projectTypes: ['app', 'addon'],
-    commands: ['ember-modules-codemod']
-  },
-  'ember-qunit-codemod': {
-    version: '3.0.0-beta.1',
-    projectTypes: ['app', 'addon'],
-    commands: ['jscodeshift -t https://rawgit.com/rwjblue/ember-qunit-codemod/master/ember-qunit-codemod.js ./tests/']
-  },
-  'es5-getter-ember-codemod': {
-    version: '3.1.0-beta.1',
-    projectTypes: ['app', 'addon'],
-    commands: ['jscodeshift -t https://rawgit.com/rondale-sc/es5-getter-ember-codemod/master/es5-getter-ember-codemod.js ./app']
-  }
-};
+const codemods = require('./codemods');
 
 module.exports = function runCodemods(options) {
   let projectType = options.projectType;
