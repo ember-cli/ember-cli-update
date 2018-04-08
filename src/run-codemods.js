@@ -1,18 +1,19 @@
 'use strict';
 
-const semver = require('semver');
 const utils = require('./utils');
-const getCodemods = require('./get-codemods');
+const getApplicableCodemods = require('./get-applicable-codemods');
 
 module.exports = function runCodemods(options) {
   let projectType = options.projectType;
   let startVersion = options.startVersion;
+  let getCodemods = options.getCodemods;
 
-  return getCodemods().then(codemods => {
-    return Object.keys(codemods).filter(codemod => {
-      return semver.gte(startVersion, codemods[codemod].version) &&
-        codemods[codemod].projectTypes.indexOf(projectType) !== -1;
-    }).reduce((promise, codemod) => {
+  return getApplicableCodemods({
+    projectType,
+    startVersion,
+    getCodemods
+  }).then(codemods => {
+    return Object.keys(codemods).reduce((promise, codemod) => {
       return codemods[codemod].commands.reduce((promise, command) => {
         return promise.then(() => utils.npx(command));
       }, promise);

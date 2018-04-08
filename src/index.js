@@ -8,6 +8,7 @@ const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const getCompareUrl = require('./get-compare-url');
+const _getCodemods = require('./get-codemods');
 const runCodemods = require('./run-codemods');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
@@ -21,6 +22,14 @@ module.exports = function emberCliUpdate(options) {
   let _runCodemods = options.runCodemods;
   let reset = options.reset;
   let compareOnly = options.compareOnly;
+
+  let _cachedCodemods;
+  function getCodemods() {
+    if (!_cachedCodemods) {
+      _cachedCodemods = _getCodemods();
+    }
+    return _cachedCodemods;
+  }
 
   let projectType;
 
@@ -67,7 +76,8 @@ module.exports = function emberCliUpdate(options) {
   if (_runCodemods) {
     return runCodemods({
       projectType,
-      startVersion
+      startVersion,
+      getCodemods
     });
   }
 
