@@ -43,6 +43,12 @@ module.exports = {
       description: args['compare-only'].description,
       type: Boolean,
       default: args['compare-only'].default
+    },
+    {
+      name: 'dry-run',
+      description: args['dry-run'].description,
+      type: Boolean,
+      default: args['dry-run'].default
     }
   ],
 

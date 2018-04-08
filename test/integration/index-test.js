@@ -49,6 +49,7 @@ describe('Integration - index', function() {
     let to = options.to || '3.0.1';
     let reset = options.reset;
     let compareOnly = options.compareOnly;
+    let dryRun = options.dryRun;
 
     buildTmp({
       fixturesPath,
@@ -63,7 +64,8 @@ describe('Integration - index', function() {
       from,
       to,
       reset,
-      compareOnly
+      compareOnly,
+      dryRun
     });
 
     return processExit({
@@ -199,6 +201,24 @@ describe('Integration - index', function() {
       assertNoUnstaged(status);
 
       expect(opn.args).to.deep.equal([['https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.0.1']]);
+    });
+  });
+
+  it('performs a dry run', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      dryRun: true
+    }).then(_result => {
+      let result = _result.result;
+      let status = _result.status;
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/local/my-app'
+      });
+
+      expect(result).to.match(/Would update from 2.11.1 to 3.0.1./);
+
+      assertNoStaged(status);
     });
   });
 });

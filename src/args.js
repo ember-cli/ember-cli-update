@@ -27,5 +27,10 @@ module.exports = {
     type: 'boolean',
     default: false,
     description: 'Show the changes between different versions without updating'
+  },
+  'dry-run': {
+    type: 'boolean',
+    default: false,
+    description: 'Show what would happen without actually doing it'
   }
 };
