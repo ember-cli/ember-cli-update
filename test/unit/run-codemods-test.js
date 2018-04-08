@@ -21,85 +21,76 @@ describe('Unit - runCodemods', function() {
     sandbox.restore();
   });
 
-  describe('ember-modules-codemod', function() {
-    it('runs on apps', function() {
-      return runCodemods({
-        projectType: 'app',
-        startVersion: '2.16.0-beta.1'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-modules-codemod'))).to.be.ok;
-      });
-    });
+  function _runCodemods(options) {
+    let projectType = options.projectType;
+    let startVersion = options.startVersion;
+    let codemods = options.codemods;
 
-    it('runs on addons', function() {
-      return runCodemods({
-        projectType: 'addon',
-        startVersion: '2.16.0-beta.1'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-modules-codemod'))).to.be.ok;
-      });
+    return runCodemods({
+      projectType,
+      startVersion,
+      getCodemods() {
+        return Promise.resolve(codemods);
+      }
     });
+  }
 
-    it('doesn\'t run on glimmer apps', function() {
-      return runCodemods({
-        projectType: 'glimmer',
-        startVersion: '2.16.0-beta.1'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-modules-codemod'))).to.not.be.ok;
-      });
-    });
-
-    it('doesn\'t run on old versions', function() {
-      return runCodemods({
-        projectType: 'app',
-        startVersion: '2.15.1'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-modules-codemod'))).to.not.be.ok;
-      });
+  it('works', function() {
+    return _runCodemods({
+      projectType: 'testProjectType',
+      startVersion: '0.0.1',
+      codemods: {
+        testCodemod: {
+          version: '0.0.1',
+          projectTypes: ['testProjectType'],
+          commands: [
+            'test command'
+          ]
+        }
+      }
+    }).then(() => {
+      expect(npx.args).to.deep.equal([
+        ['test command']
+      ]);
     });
   });
 
-  describe('ember-qunit-codemod', function() {
-    it('runs on apps', function() {
-      return runCodemods({
-        projectType: 'app',
-        startVersion: '3.0.0-beta.1'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-qunit-codemod'))).to.be.ok;
+  it('runs multiple commands sequentially', function() {
+    let npx1 = npx.withArgs('test command 1').callsFake(() => {
+      return Promise.resolve().then(() => {
+        expect(npx2.args).to.deep.equal([]);
+      });
+    });
+    let npx2 = npx.withArgs('test command 2').callsFake(() => {
+      return Promise.resolve().then(() => {
+        expect(npx1.args).to.deep.equal([['test command 1']]);
       });
     });
 
-    it('runs on addons', function() {
-      return runCodemods({
-        projectType: 'addon',
-        startVersion: '3.0.0-beta.1'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-qunit-codemod'))).to.be.ok;
-      });
-    });
-
-    it('doesn\'t run on glimmer apps', function() {
-      return runCodemods({
-        projectType: 'glimmer',
-        startVersion: '3.0.0-beta.1'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-qunit-codemod'))).to.not.be.ok;
-      });
-    });
-
-    it('doesn\'t run on old versions', function() {
-      return runCodemods({
-        projectType: 'app',
-        startVersion: '2.18.2'
-      }).then(() => {
-        expect(npx.calledWith(sinon.match('ember-qunit-codemod'))).to.not.be.ok;
-      });
+    return _runCodemods({
+      projectType: 'testProjectType',
+      startVersion: '0.0.1',
+      codemods: {
+        testCodemod: {
+          version: '0.0.1',
+          projectTypes: ['testProjectType'],
+          commands: [
+            'test command 1',
+            'test command 2'
+          ]
+        }
+      }
+    }).then(() => {
+      expect(npx.args).to.deep.equal([
+        ['test command 1'],
+        ['test command 2']
+      ]);
     });
   });
 
   it('stages files', function() {
-    return runCodemods({
-      startVersion: '0.0.0'
+    return _runCodemods({
+      codemods: {}
     }).then(() => {
       expect(run.calledOnce).to.be.ok;
     });
