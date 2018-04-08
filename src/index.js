@@ -49,13 +49,6 @@ module.exports = function emberCliUpdate(options) {
     }
   }
 
-  if (_runCodemods) {
-    return runCodemods({
-      projectType,
-      startVersion
-    });
-  }
-
   let endVersion = getTagVersion(to, versions, projectType);
 
   let remoteUrl = getRemoteUrl(projectType);
@@ -69,6 +62,13 @@ module.exports = function emberCliUpdate(options) {
       startTag,
       endTag
     }));
+  }
+
+  if (_runCodemods) {
+    return runCodemods({
+      projectType,
+      startVersion
+    });
   }
 
   let ignoredFiles;
