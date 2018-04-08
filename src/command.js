@@ -49,6 +49,12 @@ module.exports = {
       description: args['dry-run'].description,
       type: Boolean,
       default: args['dry-run'].default
+    },
+    {
+      name: 'list-codemods',
+      description: args['list-codemods'].description,
+      type: Boolean,
+      default: args['list-codemods'].default
     }
   ],
 

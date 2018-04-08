@@ -50,6 +50,7 @@ describe('Integration - index', function() {
     let reset = options.reset;
     let compareOnly = options.compareOnly;
     let dryRun = options.dryRun;
+    let listCodemods = options.listCodemods;
 
     buildTmp({
       fixturesPath,
@@ -65,7 +66,8 @@ describe('Integration - index', function() {
       to,
       reset,
       compareOnly,
-      dryRun
+      dryRun,
+      listCodemods
     });
 
     return processExit({
@@ -215,6 +217,26 @@ describe('Integration - index', function() {
       assertNoStaged(status);
 
       expect(result).to.equal('Would update from 2.11.1 to 3.0.1.');
+    });
+  });
+
+  it('lists codemods', function() {
+    sandbox.stub(utils, 'getCodemods').resolves({
+      foo: 'bar'
+    });
+
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      listCodemods: true
+    }).then(_result => {
+      let result = _result.result;
+      let status = _result.status;
+
+      assertNoStaged(status);
+
+      expect(result).to.equal(JSON.stringify({
+        foo: 'bar'
+      }, null, 2));
     });
   });
 });

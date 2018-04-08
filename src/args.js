@@ -32,5 +32,10 @@ module.exports = {
     type: 'boolean',
     default: false,
     description: 'Show what would happen without actually doing it'
+  },
+  'list-codemods': {
+    type: 'boolean',
+    default: false,
+    description: 'List available codemods'
   }
 };
