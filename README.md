@@ -50,6 +50,7 @@ You will probably encounter merge conflicts, in which the default behavior is to
 | --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
 | --compare-only | Show the changes between different versions without updating | Boolean | | false |
 | --dry-run | Show what would happen without actually doing it | Boolean | | false |
+| --list-codemods | List available codemods | Boolean | | false |
 
 ## Hints
 

@@ -23,6 +23,13 @@ module.exports = function emberCliUpdate(options) {
   let reset = options.reset;
   let compareOnly = options.compareOnly;
   let dryRun = options.dryRun;
+  let listCodemods = options.listCodemods;
+
+  if (listCodemods) {
+    return utils.getCodemods().then(codemods => {
+      return JSON.stringify(codemods, null, 2);
+    });
+  }
 
   let projectType;
 

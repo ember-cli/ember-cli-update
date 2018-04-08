@@ -15,6 +15,7 @@ const runCodemods = argv['run-codemods'];
 const reset = argv['reset'];
 const compareOnly = argv['compare-only'];
 const dryRun = argv['dry-run'];
+const listCodemods = argv['list-codemods'];
 
 emberCliUpdate({
   from,
@@ -23,5 +24,6 @@ emberCliUpdate({
   runCodemods,
   reset,
   compareOnly,
-  dryRun
+  dryRun,
+  listCodemods
 }).catch(console.error);
