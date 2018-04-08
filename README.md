@@ -49,6 +49,7 @@ You will probably encounter merge conflicts, in which the default behavior is to
 | --run-codemods | Run codemods to help update your code | Boolean | | false |
 | --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
 | --compare-only | Show the changes between different versions without updating | Boolean | | false |
+| --dry-run | Show what would happen without actually doing it | Boolean | | false |
 
 ## Hints
 
