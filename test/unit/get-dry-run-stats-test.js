@@ -1,9 +1,24 @@
 'use strict';
 
 const expect = require('chai').expect;
+const sinon = require('sinon');
+const utils = require('../../src/utils');
 const getDryRunStats = require('../../src/get-dry-run-stats');
 
 describe('Unit - getDryRunStats', function() {
+  let sandbox;
+  let getCodemods;
+
+  beforeEach(function() {
+    sandbox = sinon.sandbox.create();
+
+    getCodemods = sandbox.stub(utils, 'getCodemods');
+  });
+
+  afterEach(function() {
+    sandbox.restore();
+  });
+
   it('gives versions', function() {
     return getDryRunStats({
       startVersion: '123',
@@ -16,26 +31,25 @@ describe('Unit - getDryRunStats', function() {
   });
 
   it('gives codemods', function() {
+    getCodemods.resolves({
+      testCodemod1: {
+        version: '0.0.1',
+        projectTypes: ['testProjectType']
+      },
+      testCodemod2: {
+        version: '0.0.1',
+        projectTypes: ['testProjectType']
+      },
+      testCodemod3: {
+        version: '0.0.2',
+        projectTypes: ['testProjectType']
+      }
+    });
+
     return getDryRunStats({
       projectType: 'testProjectType',
       startVersion: '0.0.1',
-      runCodemods: true,
-      getCodemods() {
-        return Promise.resolve({
-          testCodemod1: {
-            version: '0.0.1',
-            projectTypes: ['testProjectType']
-          },
-          testCodemod2: {
-            version: '0.0.1',
-            projectTypes: ['testProjectType']
-          },
-          testCodemod3: {
-            version: '0.0.2',
-            projectTypes: ['testProjectType']
-          }
-        });
-      }
+      runCodemods: true
     }).then(message => {
       expect(message).to.equal(
         'Would run the following codemods: testCodemod1, testCodemod2.'

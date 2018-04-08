@@ -8,7 +8,6 @@ const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const getCompareUrl = require('./get-compare-url');
-const getCodemods = require('./get-codemods');
 const getDryRunStats = require('./get-dry-run-stats');
 const runCodemods = require('./run-codemods');
 const mergePackageJson = require('merge-package.json');
@@ -72,16 +71,14 @@ module.exports = function emberCliUpdate(options) {
       projectType,
       startVersion,
       endVersion,
-      runCodemods: _runCodemods,
-      getCodemods
+      runCodemods: _runCodemods
     });
   }
 
   if (_runCodemods) {
     return runCodemods({
       projectType,
-      startVersion,
-      getCodemods
+      startVersion
     });
   }
 

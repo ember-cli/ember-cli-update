@@ -1,33 +1,35 @@
 'use strict';
 
 const expect = require('chai').expect;
+const sinon = require('sinon');
+const utils = require('../../src/utils');
 const getApplicableCodemods = require('../../src/get-applicable-codemods');
 
-function _getApplicableCodemods(options) {
-  let projectType = options.projectType;
-  let startVersion = options.startVersion;
-  let codemods = options.codemods;
-
-  return getApplicableCodemods({
-    projectType,
-    startVersion,
-    getCodemods() {
-      return Promise.resolve(codemods);
-    }
-  });
-}
-
 describe('Unit - getApplicableCodemods', function() {
+  let sandbox;
+  let getCodemods;
+
+  beforeEach(function() {
+    sandbox = sinon.sandbox.create();
+
+    getCodemods = sandbox.stub(utils, 'getCodemods');
+  });
+
+  afterEach(function() {
+    sandbox.restore();
+  });
+
   it('works', function() {
-    return _getApplicableCodemods({
-      projectType: 'testProjectType',
-      startVersion: '0.0.1',
-      codemods: {
-        testCodemod: {
-          version: '0.0.1',
-          projectTypes: ['testProjectType']
-        }
+    getCodemods.resolves({
+      testCodemod: {
+        version: '0.0.1',
+        projectTypes: ['testProjectType']
       }
+    });
+
+    return getApplicableCodemods({
+      projectType: 'testProjectType',
+      startVersion: '0.0.1'
     }).then(codemods => {
       expect(codemods).to.deep.equal({
         testCodemod: {
@@ -39,30 +41,32 @@ describe('Unit - getApplicableCodemods', function() {
   });
 
   it('excludes wrong type', function() {
-    return _getApplicableCodemods({
-      projectType: 'testProjectType1',
-      startVersion: '0.0.1',
-      codemods: {
-        testCodemod: {
-          version: '0.0.1',
-          projectTypes: ['testProjectType2']
-        }
+    getCodemods.resolves({
+      testCodemod: {
+        version: '0.0.1',
+        projectTypes: ['testProjectType2']
       }
+    });
+
+    return getApplicableCodemods({
+      projectType: 'testProjectType1',
+      startVersion: '0.0.1'
     }).then(codemods => {
       expect(codemods).to.deep.equal({});
     });
   });
 
   it('excludes wrong version', function() {
-    return _getApplicableCodemods({
-      projectType: 'testProjectType',
-      startVersion: '0.0.1',
-      codemods: {
-        testCodemod: {
-          version: '0.0.2',
-          projectTypes: ['testProjectType']
-        }
+    getCodemods.resolves({
+      testCodemod: {
+        version: '0.0.2',
+        projectTypes: ['testProjectType']
       }
+    });
+
+    return getApplicableCodemods({
+      projectType: 'testProjectType',
+      startVersion: '0.0.1'
     }).then(codemods => {
       expect(codemods).to.deep.equal({});
     });
