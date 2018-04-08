@@ -212,13 +212,9 @@ describe('Integration - index', function() {
       let result = _result.result;
       let status = _result.status;
 
-      fixtureCompare({
-        mergeFixtures: 'test/fixtures/local/my-app'
-      });
-
-      expect(result).to.match(/Would update from 2.11.1 to 3.0.1./);
-
       assertNoStaged(status);
+
+      expect(result).to.equal('Would update from 2.11.1 to 3.0.1.');
     });
   });
 });
