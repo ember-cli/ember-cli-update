@@ -8,13 +8,13 @@ const runCodemods = require('../../src/run-codemods');
 describe('Unit - runCodemods', function() {
   let sandbox;
   let npx;
+  let run;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
 
-    sandbox.stub(utils, 'run').resolves();
-
     npx = sandbox.stub(utils, 'npx').resolves();
+    run = sandbox.stub(utils, 'run').resolves();
   });
 
   afterEach(function() {
@@ -94,6 +94,14 @@ describe('Unit - runCodemods', function() {
       }).then(() => {
         expect(npx.calledWith(sinon.match('ember-qunit-codemod'))).to.not.be.ok;
       });
+    });
+  });
+
+  it('stages files', function() {
+    return runCodemods({
+      startVersion: '0.0.0'
+    }).then(() => {
+      expect(run.calledOnce).to.be.ok;
     });
   });
 });
