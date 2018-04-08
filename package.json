@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-update",
-  "version": "0.20.0",
+  "version": "0.20.1",
   "description": "Update Ember CLI Ember.js apps and addons (and Glimmer.js apps)",
   "main": "src/index.js",
   "bin": {
