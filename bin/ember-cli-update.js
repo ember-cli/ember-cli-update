@@ -26,4 +26,4 @@ emberCliUpdate({
   compareOnly,
   dryRun,
   listCodemods
-}).catch(console.error);
+}).then(console.log).catch(console.error);
