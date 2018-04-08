@@ -7,13 +7,11 @@ module.exports = function getDryRunStats(options) {
   let startVersion = options.startVersion;
   let endVersion = options.endVersion;
   let runCodemods = options.runCodemods;
-  let getCodemods = options.getCodemods;
 
   if (runCodemods) {
     return getApplicableCodemods({
       projectType,
-      startVersion,
-      getCodemods
+      startVersion
     }).then(codemods => {
       codemods = Object.keys(codemods).join(', ');
       return `Would run the following codemods: ${codemods}.`;
