@@ -210,6 +210,19 @@ describe('Integration - index', function() {
     });
   });
 
+  it('resolves semver ranges', function() {
+    let opn = sandbox.stub(utils, 'opn');
+
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      from: '2.11',
+      to: '^2',
+      compareOnly: true
+    }).then(() => {
+      expect(opn.args[0][0]).to.equal('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v2.18.2');
+    });
+  });
+
   it('performs a dry run', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
