@@ -15,6 +15,10 @@ describe('Unit - compareVersions', function() {
     opn = sandbox.stub(utils, 'opn');
   });
 
+  afterEach(function() {
+    sandbox.restore();
+  });
+
   it('works', function() {
     return compareVersions({
       remoteUrl: 'test-url',
