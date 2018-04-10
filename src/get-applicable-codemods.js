@@ -9,8 +9,10 @@ module.exports = function getApplicableCodemods(options) {
 
   return utils.getCodemods().then(codemods => {
     return Object.keys(codemods).filter(codemod => {
-      return semver.gte(startVersion, codemods[codemod].version) &&
-        codemods[codemod].projectTypes.indexOf(projectType) !== -1;
+      codemod = codemods[codemod];
+      let isVersionInRange = semver.gte(startVersion, codemod.version);
+      let isCorrectProjectType = codemod.projectTypes.indexOf(projectType) !== -1;
+      return isVersionInRange && isCorrectProjectType;
     }).reduce((applicableCodemods, codemod) => {
       applicableCodemods[codemod] = codemods[codemod];
       return applicableCodemods;
