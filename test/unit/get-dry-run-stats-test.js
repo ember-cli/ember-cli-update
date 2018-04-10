@@ -7,12 +7,9 @@ const getDryRunStats = require('../../src/get-dry-run-stats');
 
 describe('Unit - getDryRunStats', function() {
   let sandbox;
-  let getCodemods;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
-
-    getCodemods = sandbox.stub(utils, 'getCodemods');
   });
 
   afterEach(function() {
@@ -31,7 +28,7 @@ describe('Unit - getDryRunStats', function() {
   });
 
   it('gives codemods', function() {
-    getCodemods.resolves({
+    sandbox.stub(utils, 'getCodemods').resolves({
       testCodemod1: {
         version: '0.0.1',
         projectTypes: ['testProjectType']
