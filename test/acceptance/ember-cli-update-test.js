@@ -115,8 +115,13 @@ describe('Acceptance - ember-cli-update', function() {
     }).then(result => {
       let status = result.status;
 
+      let mergeFixtures = 'test/fixtures/codemod/latest-node/my-app';
+      if (process.env.NODE_LTS) {
+        mergeFixtures = 'test/fixtures/codemod/min-node/my-app';
+      }
+
       fixtureCompare({
-        mergeFixtures: 'test/fixtures/codemod/my-app'
+        mergeFixtures
       });
 
       assertNoUnstaged(status);

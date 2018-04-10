@@ -23,6 +23,7 @@ install:
   - ps: |
       If ($env:nodejs_version -eq "4") {
         npm install -g npm
+        set NODE_LTS="true"
       }
   - npm install
 
