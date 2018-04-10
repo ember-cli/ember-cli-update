@@ -20,7 +20,7 @@ before_install:
 - if [ "$TRAVIS_NODE_VERSION" = "4" ]; then
     npm install -g npm;
     npm --version;
-    NODE_LTS=true;
+    export NODE_LTS="true";
   fi
 script:
 - npm run $TEST_COMMAND
