@@ -7,7 +7,7 @@ const sinon = require('sinon');
 const utils = require('../../src/utils');
 
 describe('Integration - getTagVersion', function() {
-  this.timeout(5000);
+  this.timeout(10000);
 
   let sandbox;
   let runSpy;
