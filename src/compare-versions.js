@@ -14,5 +14,10 @@ module.exports = function compareVersions(options) {
     endTag
   });
 
-  return utils.opn(compareUrl);
+  utils.opn(compareUrl, {
+    // this means it no longer returns a promise
+    wait: false
+  });
+
+  return Promise.resolve();
 };
