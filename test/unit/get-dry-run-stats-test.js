@@ -31,17 +31,22 @@ describe('Unit - getDryRunStats', function() {
     sandbox.stub(utils, 'getCodemods').resolves({
       testCodemod1: {
         version: '0.0.1',
-        projectTypes: ['testProjectType']
+        projectTypes: ['testProjectType'],
+        nodeVersion: '4.0.0'
       },
       testCodemod2: {
         version: '0.0.1',
-        projectTypes: ['testProjectType']
+        projectTypes: ['testProjectType'],
+        nodeVersion: '4.0.0'
       },
       testCodemod3: {
         version: '0.0.2',
-        projectTypes: ['testProjectType']
+        projectTypes: ['testProjectType'],
+        nodeVersion: '4.0.0'
       }
     });
+
+    sandbox.stub(utils, 'getNodeVersion').returns('4.0.0');
 
     return getDryRunStats({
       projectType: 'testProjectType',
