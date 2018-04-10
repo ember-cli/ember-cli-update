@@ -192,17 +192,21 @@ describe('Integration - index', function() {
   });
 
   it('opens compare url', function() {
-    let opn = sandbox.stub(utils, 'opn').resolves();
+    let opn = sandbox.stub(utils, 'opn');
 
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       compareOnly: true
-    }).then(result => {
-      let status = result.status;
+    }).then(_result => {
+      let result = _result.result;
+      let status = _result.status;
 
       assertNoUnstaged(status);
 
-      expect(opn.args).to.deep.equal([['https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.0.1']]);
+      expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
+
+      expect(opn.calledOnce).to.be.ok;
+      expect(opn.args[0][0]).to.equal('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.0.1');
     });
   });
 
