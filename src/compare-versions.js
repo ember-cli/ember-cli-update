@@ -1,6 +1,5 @@
 'use strict';
 
-const getCompareUrl = require('./get-compare-url');
 const utils = require('./utils');
 
 module.exports = function compareVersions(options) {
@@ -8,11 +7,7 @@ module.exports = function compareVersions(options) {
   let startTag = options.startTag;
   let endTag = options.endTag;
 
-  let compareUrl = getCompareUrl({
-    remoteUrl,
-    startTag,
-    endTag
-  });
+  let compareUrl = `${remoteUrl}/compare/${startTag}...${endTag}`;
 
   utils.opn(compareUrl, {
     // this means it no longer returns a promise
