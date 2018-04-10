@@ -15,6 +15,7 @@ describe('Unit - runCodemods', function() {
     sandbox = sinon.sandbox.create();
 
     getCodemods = sandbox.stub(utils, 'getCodemods');
+    sandbox.stub(utils, 'getNodeVersion').returns('4.0.0');
     npx = sandbox.stub(utils, 'npx').resolves();
     run = sandbox.stub(utils, 'run').resolves();
   });
@@ -28,6 +29,7 @@ describe('Unit - runCodemods', function() {
       testCodemod: {
         version: '0.0.1',
         projectTypes: ['testProjectType'],
+        nodeVersion: '4.0.0',
         commands: [
           'test command'
         ]
@@ -49,6 +51,7 @@ describe('Unit - runCodemods', function() {
       testCodemod: {
         version: '0.0.1',
         projectTypes: ['testProjectType'],
+        nodeVersion: '4.0.0',
         commands: [
           'test command 1',
           'test command 2'
