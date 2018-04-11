@@ -20,11 +20,12 @@ init:
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm config set spin false
-  - ps: |
-      If ($env:nodejs_version -eq "4") {
+  - ps: >-
+      if ($env:nodejs_version -eq "4") {
         npm install -g npm
-        $env:NODE_LTS = true
+        [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
       }
+  - RefreshEnv
   - npm install
 
 # Post-install test scripts.
