@@ -13,7 +13,9 @@ module.exports = function runCodemods(options) {
   }).then(codemods => {
     return Object.keys(codemods).reduce((promise, codemod) => {
       return codemods[codemod].commands.reduce((promise, command) => {
-        return promise.then(() => utils.npx(command));
+        return promise.then(() => {
+          return utils.npx(command).catch(() => {});
+        });
       }, promise);
     }, Promise.resolve());
   }).then(() => {
