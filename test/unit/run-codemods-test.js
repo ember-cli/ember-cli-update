@@ -88,4 +88,35 @@ describe('Unit - runCodemods', function() {
       expect(run.calledOnce).to.be.ok;
     });
   });
+
+  it('continues if one codemod errors', function() {
+    getCodemods.resolves({
+      testCodemod1: {
+        version: '0.0.1',
+        projectTypes: ['testProjectType'],
+        nodeVersion: '4.0.0',
+        commands: [
+          'test command 1'
+        ]
+      },
+      testCodemod2: {
+        version: '0.0.1',
+        projectTypes: ['testProjectType'],
+        nodeVersion: '4.0.0',
+        commands: [
+          'test command 2'
+        ]
+      }
+    });
+
+    npx.withArgs('test command 1').rejects();
+    let npx2 = npx.withArgs('test command 2').resolves();
+
+    return runCodemods({
+      projectType: 'testProjectType',
+      startVersion: '0.0.1'
+    }).then(() => {
+      expect(npx2.calledOnce).to.be.ok;
+    });
+  });
 });
