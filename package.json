@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kellyselden/ember-cli-update.git"
+    "url": "git+https://github.com/ember-cli/ember-cli-update.git"
   },
   "keywords": [
     "ember.js",
@@ -28,9 +28,9 @@
   "author": "Kelly Selden",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kellyselden/ember-cli-update/issues"
+    "url": "https://github.com/ember-cli/ember-cli-update/issues"
   },
-  "homepage": "https://github.com/kellyselden/ember-cli-update#readme",
+  "homepage": "https://github.com/ember-cli/ember-cli-update#readme",
   "engines": {
     "node": ">=4"
   },
