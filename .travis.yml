@@ -18,7 +18,7 @@ env:
 before_install:
 - npm config set spin false
 - if [ "$TRAVIS_NODE_VERSION" = "4" ]; then
-    npm install -g npm;
+    npm install -g npm5;
     npm --version;
     export NODE_LTS="true";
   fi
