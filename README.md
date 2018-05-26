@@ -39,6 +39,8 @@ This is different from the existing `ember init` command. That command tries to 
 
 You will probably encounter merge conflicts, in which the default behavior is to let you resolve conflicts on your own. You can supply the `--resolve-conflicts` option to run your system's git merge tool if any conflicts are found.
 
+Please note that the update command with `--run-codemods` option will only run the necessary codemods for the intended version. It will not initialize the project to that version. Thus, recommended running the codemods separately after successfully initializing the projects using bare `ember-cli-update` command.
+
 ## Options
 
 | Option | Description | Type | Examples | Default |
