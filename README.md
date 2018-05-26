@@ -49,7 +49,7 @@ After you run the update command, you can use the `--run-codemodes` option to re
 | --from | Use a starting version that is different than what is in your package.json | String | "2.9.1" | |
 | --to | Update to a version that isn\'t latest | String | "2.14.1" "~2.15" "latest" "beta" | "latest" |
 | --resolve-conflicts | Automatically run git mergetool if conflicts found | Boolean | | false |
-| --run-codemods | Run codemods to help update your code. Must be run after Updating | Boolean | | false |
+| --run-codemods | Run codemods to help update your code | Boolean | | false |
 | --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
 | --compare-only | Show the changes between different versions without updating | Boolean | | false |
 | --dry-run | Show what would happen without actually doing it | Boolean | | false |
