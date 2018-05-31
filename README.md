@@ -78,6 +78,48 @@ ember-cli-update --run-codemods
 | --dry-run | Show what would happen without actually doing it | Boolean | | false |
 | --list-codemods | List available codemods | Boolean | | false |
 
+## Power User Guide
+
+Let's update from Ember CLI 2.18.2 to Ember CLI 3.1.4
+
+First, make sure you are on the latest ember-cli-update version for good measure.
+
+```
+npm install -g ember-cli-update
+```
+
+Then, run all compatible codemods against your current version. Since codemods are downloaded on the fly, they can be updated (and new ones added) without even getting a new version of ember-cli-update. Also, we may add additional codemods targeting your older version of Ember.js.
+
+```
+ember-cli-update --run-codemods
+```
+
+Assuming you are multiple versions behind of Ember CLI, you may want to update in stages. Unless you have a really simple app, updating in stages can help isolate upgrade issues.
+
+```
+ember-cli-update --to 3.0
+```
+
+Once you resolve conflicts and commit, You again want to run codemods. This is because new codemods targeting Ember.js 3.0 will now apply.
+
+```
+ember-cli-update --run-codemods
+```
+
+Now you are ready to update again. (If your final update is going to be the latest version of Ember CLI, you don't need the `--to` option.)
+
+```
+ember-cli-update --to 3.1
+```
+
+Again, after you resolve conflicts and commit, you want to run codemods because of new Ember.js 3.1 codemods.
+
+```
+ember-cli-update --run-codemods
+```
+
+And then you're done! You have a freshly updated app (or addon). As noted, you can consolidate these steps by doing a direct update, but then you may be confused if you encounter issues which version is to blame.
+
 ## Hints
 
 Need help using `git mergetool`? Here are some starting points:
