@@ -39,7 +39,31 @@ This is different from the existing `ember init` command. That command tries to 
 
 You will probably encounter merge conflicts, in which the default behavior is to let you resolve conflicts on your own. You can supply the `--resolve-conflicts` option to run your system's git merge tool if any conflicts are found.
 
-After you run the update command, you can use the `--run-codemodes` option to refactor your code based on the new Ember version. Codemods are version specific and will only make code changes pertinent to the new version.
+This tool can also run codemods for you. The option `--run-codemods` will figure out what codemods apply to your current version of Ember, and download and run them for you.
+
+## Examples
+
+(These examples assume you are using the global command.)
+
+To update to the latest version of Ember CLI:
+
+```
+ember-cli-update
+```
+
+To update to a certain version of Ember CLI:
+
+```
+ember-cli-update --to 3.1.0
+```
+
+To run codemods:
+
+(This should be run after running the normal update shown above, and after you've resolved any conflicts.)
+
+```
+ember-cli-update --run-codemods
+```
 
 ## Options
 
@@ -72,6 +96,8 @@ If you notice ".orig" files lying around after a merge and don't want that behav
 
 To avoid being prompted "Hit return to start merge resolution tool (vimdiff):" for every conflict, set a merge tool like `git config --global merge.tool "vimdiff"`.
 
+If you run into an error like `error: unrecognized input`, you may need to update your git config color option like `git config --global color.ui auto`.
+
 ## Troubleshooting
 
 If you are getting an error or unexpected results, running the command with the debug flag:
@@ -82,14 +108,3 @@ If you are getting an error or unexpected results, running the command with the 
 * Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,git-diff-apply && ember update`
 
 will give you more detailed logging.
-
-#### Troubleshooting tips
-Running into the following error `{ Error: Command failed: git apply /var/folders/59/.../T/tmp-.../file.patch
-error: unrecognized input` you may need to update your gitconfig color option.
-
-- .gitconfig
-    The color attribute should be auto.
-    ```sh
-    [color]
-      ui = auto
-    ```
