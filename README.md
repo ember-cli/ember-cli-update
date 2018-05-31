@@ -39,7 +39,7 @@ This is different from the existing `ember init` command. That command tries to 
 
 You will probably encounter merge conflicts, in which the default behavior is to let you resolve conflicts on your own. You can supply the `--resolve-conflicts` option to run your system's git merge tool if any conflicts are found.
 
-This tool can also run codemods for you. The option `--run-codemods` will figure out what codemods apply to your current version of Ember, and download and run them for you.
+This tool can also run codemods for you. The option `--run-codemods` will figure out what codemods apply to your current version of Ember.js, and download and run them for you.
 
 ## Examples
 
