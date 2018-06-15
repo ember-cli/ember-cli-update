@@ -6,7 +6,6 @@ environment:
 branches:
   only:
     - master
-    - /^greenkeeper\/.*$/
 
 matrix:
   allow_failures:
