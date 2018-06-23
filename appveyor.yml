@@ -22,7 +22,7 @@ install:
   - npm config set spin false
   - ps: >-
       if ($env:nodejs_version -eq "4") {
-        npm install -g npm
+        npm install -g npm@5
         [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
       }
   - RefreshEnv
