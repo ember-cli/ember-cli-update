@@ -1,15 +1,11 @@
 environment:
   matrix:
-    - nodejs_version: "4"
+    - nodejs_version: "6.9.5"
     - nodejs_version: ""
 
 branches:
   only:
     - master
-
-matrix:
-  allow_failures:
-    - nodejs_version: "4"
 
 # Fix line endings in Windows. (runs before repo cloning)
 init:
@@ -20,7 +16,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - npm config set spin false
   - ps: >-
-      if ($env:nodejs_version -eq "4") {
+      if ($env:nodejs_version -eq "6.9.5") {
         npm install -g npm@5
         [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
       } else {

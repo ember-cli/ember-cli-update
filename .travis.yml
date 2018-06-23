@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '4'
+- '6'
 - 'node'
 branches:
   only:
@@ -16,7 +16,7 @@ env:
 - TEST_COMMAND=lint
 before_install:
 - npm config set spin false
-- if [ "$TRAVIS_NODE_VERSION" = "4" ]; then
+- if [ "$TRAVIS_NODE_VERSION" = "6" ]; then
     npm install -g npm@5;
     npm --version;
     export NODE_LTS="true";
@@ -25,7 +25,7 @@ script:
 - npm run $TEST_COMMAND
 jobs:
   exclude:
-  - node_js: '4'
+  - node_js: '6'
     env: TEST_COMMAND=lint
   include:
   - stage: Deploy
