@@ -48,7 +48,7 @@
     "chai": "^4.1.0",
     "cross-env": "^5.0.1",
     "cross-spawn": "^6.0.0",
-    "ember-cli": "^3.0.1",
+    "ember-cli": "3.1.2",
     "ember-cli-addon-tests": "^0.11.0",
     "eslint": "^4.3.0",
     "eslint-config-sane": "^0.6.0",
