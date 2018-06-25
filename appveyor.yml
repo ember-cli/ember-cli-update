@@ -19,8 +19,6 @@ install:
       if ($env:nodejs_version -eq "6") {
         npm install -g npm@5
         [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
-      } else {
-        npm install -g npm@5
       }
   - RefreshEnv
   - where npx
