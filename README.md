@@ -9,6 +9,8 @@ Update Ember CLI Ember.js apps and addons (and Glimmer.js apps)
 
 You can run this either as a global executable available to all projects or an Ember CLI command in a single project.
 
+Fetches list of codemods and instructions from [ember-cli-update-codemods-manifest](https://github.com/ember-cli/ember-cli-update-codemods-manifest).
+
 ## Installation
 
 As a global executable:
