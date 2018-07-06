@@ -65,7 +65,7 @@ describe('Acceptance | ember-addon', function() {
         command: 'update',
         additionalArguments: [
           '--to',
-          '3.0.1',
+          '3.2.0-beta.1',
           '--resolve-conflicts'
         ],
         detectServerStart() {
