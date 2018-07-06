@@ -46,7 +46,7 @@ describe('Integration - index', function() {
     let fixturesPath = options.fixturesPath;
     let dirty = options.dirty;
     let from = options.from;
-    let to = options.to || '3.0.1';
+    let to = options.to || '3.2.0-beta.1';
     let reset = options.reset;
     let compareOnly = options.compareOnly;
     let dryRun = options.dryRun;
@@ -206,7 +206,7 @@ describe('Integration - index', function() {
       expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
 
       expect(opn.calledOnce).to.be.ok;
-      expect(opn.args[0][0]).to.equal('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.0.1');
+      expect(opn.args[0][0]).to.equal('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.2.0-beta.1');
     });
   });
 
@@ -233,7 +233,7 @@ describe('Integration - index', function() {
 
       assertNoStaged(status);
 
-      expect(result).to.equal('Would update from 2.11.1 to 3.0.1.');
+      expect(result).to.equal('Would update from 2.11.1 to 3.2.0-beta.1.');
     });
   });
 
