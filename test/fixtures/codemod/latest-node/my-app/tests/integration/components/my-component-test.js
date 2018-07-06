@@ -13,7 +13,7 @@ module('Integration | Component | my component', function(hooks) {
 
     await render(hbs`{{my-component}}`);
 
-    assert.equal(find('*').textContent.trim(), '');
+    assert.dom('*').hasText('');
 
     // Template block usage:
     await render(hbs`
@@ -22,6 +22,6 @@ module('Integration | Component | my component', function(hooks) {
       {{/my-component}}
     `);
 
-    assert.equal(find('*').textContent.trim(), 'template block text');
+    assert.dom('*').hasText('template block text');
   });
 });
