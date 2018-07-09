@@ -4,8 +4,7 @@ module.exports = {
     ecmaVersion: 2017
   },
   plugins: [
-    'node',
-    'mocha'
+    'node'
   ],
   extends: [
     'sane',
@@ -16,6 +15,25 @@ module.exports = {
     node: true
   },
   rules: {
-    'mocha/no-exclusive-tests': 'error'
-  }
+  },
+  overrides: [
+    {
+      files: ['bin/*.js'],
+      rules: {
+        'no-console': 'off'
+      }
+    },
+    {
+      files: ['test/**/*-test.js'],
+      plugins: [
+        'mocha'
+      ],
+      env: {
+        mocha: true
+      },
+      rules: {
+        'mocha/no-exclusive-tests': 'error'
+      }
+    }
+  ]
 };
