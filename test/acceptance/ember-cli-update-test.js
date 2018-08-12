@@ -14,8 +14,11 @@ const {
   assertNoUnstaged,
   assertCodemodRan
 } = require('../helpers/assertions');
+const semver = require('semver');
 
 const commitMessage = 'add files';
+
+const shouldSkipCodemods = process.platform === 'linux' && semver.satisfies(semver.valid(process.version), '6');
 
 describe('Acceptance - ember-cli-update', function() {
   this.timeout(30000);
@@ -57,7 +60,7 @@ describe('Acceptance - ember-cli-update', function() {
       cwd: tmpPath,
       commitMessage,
       expect
-    }).promise;
+    });
   }
 
   function fixtureCompare({
@@ -76,7 +79,7 @@ describe('Acceptance - ember-cli-update', function() {
   it('updates app', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app'
-    }).then(({
+    }).promise.then(({
       status
     }) => {
       fixtureCompare({
@@ -91,7 +94,7 @@ describe('Acceptance - ember-cli-update', function() {
   it('updates addon', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-addon'
-    }).then(({
+    }).promise.then(({
       status
     }) => {
       fixtureCompare({
@@ -103,13 +106,25 @@ describe('Acceptance - ember-cli-update', function() {
     });
   });
 
-  it('runs codemods', function() {
+  (shouldSkipCodemods ? it.skip : it)('runs codemods', function() {
     this.timeout(5 * 60 * 1000);
 
-    return merge({
+    let {
+      ps,
+      promise
+    } = merge({
       fixturesPath: 'test/fixtures/merge/my-app',
       runCodemods: true
-    }).then(({
+    });
+
+    ps.stdout.on('data', data => {
+      let str = data.toString();
+      if (str.includes('These codemods apply to your project.')) {
+        ps.stdin.write('a\n');
+      }
+    });
+
+    return promise.then(({
       status
     }) => {
       // file is indeterminent between OS's, so ignore
@@ -133,7 +148,7 @@ describe('Acceptance - ember-cli-update', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       subDir: 'foo/bar'
-    }).then(({
+    }).promise.then(({
       status
     }) => {
       fixtureCompare({

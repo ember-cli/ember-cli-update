@@ -71,7 +71,16 @@ module.exports = function emberCliUpdate({
           return getDryRunCodemodStats(codemods);
         }
 
-        return runCodemods(codemods);
+        const inquirer = require('inquirer');
+
+        return inquirer.prompt([{
+          type: 'checkbox',
+          message: 'These codemods apply to your project. Select which one\'s to run.',
+          name: 'codemods',
+          choices: Object.keys(codemods)
+        }]).then(answers => {
+          return runCodemods(answers.codemods.map(codemod => codemods[codemod]));
+        });
       });
     }
 
