@@ -7,16 +7,15 @@ const runCodemods = require('../../src/run-codemods');
 
 describe('Unit - runCodemods', function() {
   let sandbox;
-  let getCodemods;
-  let npx;
+  let getApplicableCodemods;
+  let runCodemod;
   let run;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
 
-    getCodemods = sandbox.stub(utils, 'getCodemods');
-    sandbox.stub(utils, 'getNodeVersion').returns('4.0.0');
-    npx = sandbox.stub(utils, 'npx').resolves();
+    getApplicableCodemods = sandbox.stub(utils, 'getApplicableCodemods');
+    runCodemod = sandbox.stub(utils, 'runCodemod').resolves();
     run = sandbox.stub(utils, 'run').resolves();
   });
 
@@ -25,11 +24,8 @@ describe('Unit - runCodemods', function() {
   });
 
   it('works', function() {
-    getCodemods.resolves({
+    getApplicableCodemods.resolves({
       testCodemod: {
-        version: '0.0.1',
-        projectTypes: ['testProjectType'],
-        nodeVersion: '4.0.0',
         commands: [
           'test command'
         ]
@@ -40,83 +36,53 @@ describe('Unit - runCodemods', function() {
       projectType: 'testProjectType',
       startVersion: '0.0.1'
     }).then(() => {
-      expect(npx.args).to.deep.equal([
-        ['test command']
-      ]);
+      expect(getApplicableCodemods.args).to.deep.equal([[{
+        projectType: 'testProjectType',
+        startVersion: '0.0.1'
+      }]]);
+
+      expect(runCodemod.args).to.deep.equal([[{
+        commands: [
+          'test command'
+        ]
+      }]]);
+
+      expect(run.calledOnce, 'stages files').to.be.ok;
     });
   });
 
   it('runs multiple commands sequentially', function() {
-    getCodemods.resolves({
-      testCodemod: {
-        version: '0.0.1',
-        projectTypes: ['testProjectType'],
-        nodeVersion: '4.0.0',
-        commands: [
-          'test command 1',
-          'test command 2'
-        ]
-      }
+    let testCodemod1 = {
+      commands: [
+        'test command 1'
+      ]
+    };
+    let testCodemod2 = {
+      commands: [
+        'test command 2'
+      ]
+    };
+    getApplicableCodemods.resolves({
+      testCodemod1,
+      testCodemod2
     });
 
-    let npx1 = npx.withArgs('test command 1').callsFake(() => {
+    let runCodemod1 = runCodemod.withArgs(testCodemod1).callsFake(() => {
       return Promise.resolve().then(() => {
-        expect(npx2.args).to.deep.equal([]);
+        expect(runCodemod2.args).to.deep.equal([]);
       });
     });
-    let npx2 = npx.withArgs('test command 2').callsFake(() => {
+    let runCodemod2 = runCodemod.withArgs(testCodemod2).callsFake(() => {
       return Promise.resolve().then(() => {
-        expect(npx1.args).to.deep.equal([['test command 1']]);
+        expect(runCodemod1.args).to.deep.equal([[testCodemod1]]);
       });
     });
-
-    return runCodemods({
-      projectType: 'testProjectType',
-      startVersion: '0.0.1'
-    }).then(() => {
-      expect(npx.args).to.deep.equal([
-        ['test command 1'],
-        ['test command 2']
-      ]);
-    });
-  });
-
-  it('stages files', function() {
-    getCodemods.resolves({});
 
     return runCodemods({}).then(() => {
-      expect(run.calledOnce).to.be.ok;
-    });
-  });
-
-  it('continues if one codemod errors', function() {
-    getCodemods.resolves({
-      testCodemod1: {
-        version: '0.0.1',
-        projectTypes: ['testProjectType'],
-        nodeVersion: '4.0.0',
-        commands: [
-          'test command 1'
-        ]
-      },
-      testCodemod2: {
-        version: '0.0.1',
-        projectTypes: ['testProjectType'],
-        nodeVersion: '4.0.0',
-        commands: [
-          'test command 2'
-        ]
-      }
-    });
-
-    npx.withArgs('test command 1').rejects();
-    let npx2 = npx.withArgs('test command 2').resolves();
-
-    return runCodemods({
-      projectType: 'testProjectType',
-      startVersion: '0.0.1'
-    }).then(() => {
-      expect(npx2.calledOnce).to.be.ok;
+      expect(runCodemod.args).to.deep.equal([
+        [testCodemod1],
+        [testCodemod2]
+      ]);
     });
   });
 });
