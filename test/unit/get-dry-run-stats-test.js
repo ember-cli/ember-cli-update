@@ -1,60 +1,16 @@
 'use strict';
 
 const expect = require('chai').expect;
-const sinon = require('sinon');
-const utils = require('../../src/utils');
 const getDryRunStats = require('../../src/get-dry-run-stats');
 
 describe('Unit - getDryRunStats', function() {
-  let sandbox;
-
-  beforeEach(function() {
-    sandbox = sinon.sandbox.create();
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-  });
-
-  it('gives versions', function() {
+  it('works', function() {
     return getDryRunStats({
       startVersion: '123',
       endVersion: '456'
     }).then(message => {
       expect(message).to.equal(
         'Would update from 123 to 456.'
-      );
-    });
-  });
-
-  it('gives codemods', function() {
-    sandbox.stub(utils, 'getCodemods').resolves({
-      testCodemod1: {
-        version: '0.0.1',
-        projectTypes: ['testProjectType'],
-        nodeVersion: '4.0.0'
-      },
-      testCodemod2: {
-        version: '0.0.1',
-        projectTypes: ['testProjectType'],
-        nodeVersion: '4.0.0'
-      },
-      testCodemod3: {
-        version: '0.0.2',
-        projectTypes: ['testProjectType'],
-        nodeVersion: '4.0.0'
-      }
-    });
-
-    sandbox.stub(utils, 'getNodeVersion').returns('4.0.0');
-
-    return getDryRunStats({
-      projectType: 'testProjectType',
-      startVersion: '0.0.1',
-      runCodemods: true
-    }).then(message => {
-      expect(message).to.equal(
-        'Would run the following codemods: testCodemod1, testCodemod2.'
       );
     });
   });
