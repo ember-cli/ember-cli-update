@@ -9,6 +9,7 @@ const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
 const getDryRunStats = require('./get-dry-run-stats');
+const getDryRunCodemodStats = require('./get-dry-run-codemod-stats');
 const runCodemods = require('./run-codemods');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
@@ -75,19 +76,24 @@ module.exports = function emberCliUpdate(options) {
     });
   }
 
-  if (dryRun) {
-    return getDryRunStats({
-      projectType,
-      startVersion,
-      endVersion,
-      runCodemods: _runCodemods
-    });
-  }
-
   if (_runCodemods) {
+    if (dryRun) {
+      return getDryRunCodemodStats({
+        projectType,
+        startVersion
+      });
+    }
+
     return runCodemods({
       projectType,
       startVersion
+    });
+  }
+
+  if (dryRun) {
+    return getDryRunStats({
+      startVersion,
+      endVersion
     });
   }
 
