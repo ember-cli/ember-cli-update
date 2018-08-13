@@ -10,6 +10,7 @@ const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
 const getDryRunStats = require('./get-dry-run-stats');
 const getDryRunCodemodStats = require('./get-dry-run-codemod-stats');
+const getApplicableCodemods = require('./get-applicable-codemods');
 const runCodemods = require('./run-codemods');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
@@ -77,16 +78,15 @@ module.exports = function emberCliUpdate(options) {
   }
 
   if (_runCodemods) {
-    if (dryRun) {
-      return getDryRunCodemodStats({
-        projectType,
-        startVersion
-      });
-    }
-
-    return runCodemods({
+    return getApplicableCodemods({
       projectType,
       startVersion
+    }).then(codemods => {
+      if (dryRun) {
+        return getDryRunCodemodStats(codemods);
+      }
+
+      return runCodemods(codemods);
     });
   }
 

@@ -50,6 +50,7 @@ describe('Integration - index', function() {
     let reset = options.reset;
     let compareOnly = options.compareOnly;
     let dryRun = options.dryRun;
+    let runCodemods = options.runCodemods;
     let listCodemods = options.listCodemods;
 
     buildTmp({
@@ -67,6 +68,7 @@ describe('Integration - index', function() {
       reset,
       compareOnly,
       dryRun,
+      runCodemods,
       listCodemods
     });
 
@@ -234,6 +236,21 @@ describe('Integration - index', function() {
       assertNoStaged(status);
 
       expect(result).to.equal('Would update from 2.11.1 to 3.2.0-beta.1.');
+    });
+  });
+
+  it('performs a codemod dry run', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/merge/my-app',
+      runCodemods: true,
+      dryRun: true
+    }).then(_result => {
+      let result = _result.result;
+      let status = _result.status;
+
+      assertNoStaged(status);
+
+      expect(result).to.equal('Would run the following codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod.');
     });
   });
 
