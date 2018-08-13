@@ -238,10 +238,6 @@ describe('Integration - index', function() {
   });
 
   it('lists codemods', function() {
-    sandbox.stub(utils, 'getCodemods').resolves({
-      foo: 'bar'
-    });
-
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       listCodemods: true
@@ -251,9 +247,7 @@ describe('Integration - index', function() {
 
       assertNoStaged(status);
 
-      expect(result).to.equal(JSON.stringify({
-        foo: 'bar'
-      }, null, 2));
+      expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
     });
   });
 });
