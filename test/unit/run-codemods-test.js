@@ -7,14 +7,12 @@ const runCodemods = require('../../src/run-codemods');
 
 describe('Unit - runCodemods', function() {
   let sandbox;
-  let getApplicableCodemods;
   let runCodemod;
   let run;
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
 
-    getApplicableCodemods = sandbox.stub(utils, 'getApplicableCodemods');
     runCodemod = sandbox.stub(utils, 'runCodemod').resolves();
     run = sandbox.stub(utils, 'run').resolves();
   });
@@ -24,23 +22,13 @@ describe('Unit - runCodemods', function() {
   });
 
   it('works', function() {
-    getApplicableCodemods.resolves({
+    return runCodemods({
       testCodemod: {
         commands: [
           'test command'
         ]
       }
-    });
-
-    return runCodemods({
-      projectType: 'testProjectType',
-      startVersion: '0.0.1'
     }).then(() => {
-      expect(getApplicableCodemods.args).to.deep.equal([[{
-        projectType: 'testProjectType',
-        startVersion: '0.0.1'
-      }]]);
-
       expect(runCodemod.args).to.deep.equal([[{
         commands: [
           'test command'
@@ -62,10 +50,6 @@ describe('Unit - runCodemods', function() {
         'test command 2'
       ]
     };
-    getApplicableCodemods.resolves({
-      testCodemod1,
-      testCodemod2
-    });
 
     let runCodemod1 = runCodemod.withArgs(testCodemod1).callsFake(() => {
       return Promise.resolve().then(() => {
@@ -78,7 +62,10 @@ describe('Unit - runCodemods', function() {
       });
     });
 
-    return runCodemods({}).then(() => {
+    return runCodemods({
+      testCodemod1,
+      testCodemod2
+    }).then(() => {
       expect(runCodemod.args).to.deep.equal([
         [testCodemod1],
         [testCodemod2]
