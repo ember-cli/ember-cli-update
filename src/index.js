@@ -27,103 +27,87 @@ module.exports = function emberCliUpdate(options) {
   let dryRun = options.dryRun;
   let listCodemods = options.listCodemods;
 
-  if (listCodemods) {
-    return utils.getCodemods().then(codemods => {
-      return JSON.stringify(codemods, null, 2);
-    });
-  }
-
-  let projectType;
-
-  try {
-    projectType = getProjectType('.');
-  } catch (err) {
-    return Promise.reject(err);
-  }
-
-  let packageVersion;
-
-  try {
-    packageVersion = getPackageVersion('.', projectType);
-  } catch (err) {
-    return Promise.reject(err);
-  }
-
-  let versions = getVersions(projectType);
-
-  let startVersion;
-  if (from) {
-    startVersion = getTagVersion(from, versions, projectType);
-  } else {
-    try {
-      startVersion = getProjectVersion(packageVersion, versions, projectType);
-    } catch (err) {
-      return Promise.reject(err);
+  return Promise.resolve().then(() => {
+    if (listCodemods) {
+      return utils.getCodemods().then(codemods => {
+        return JSON.stringify(codemods, null, 2);
+      });
     }
-  }
 
-  let endVersion = getTagVersion(to, versions, projectType);
+    let projectType = getProjectType('.');
+    let packageVersion = getPackageVersion('.', projectType);
+    let versions = getVersions(projectType);
 
-  let remoteUrl = getRemoteUrl(projectType);
+    let startVersion;
+    if (from) {
+      startVersion = getTagVersion(from, versions, projectType);
+    } else {
+      startVersion = getProjectVersion(packageVersion, versions, projectType);
+    }
 
-  let startTag = `v${startVersion}`;
-  let endTag = `v${endVersion}`;
+    let endVersion = getTagVersion(to, versions, projectType);
 
-  if (compareOnly) {
-    return compareVersions({
+    let remoteUrl = getRemoteUrl(projectType);
+
+    let startTag = `v${startVersion}`;
+    let endTag = `v${endVersion}`;
+
+    if (compareOnly) {
+      return compareVersions({
+        remoteUrl,
+        startTag,
+        endTag
+      });
+    }
+
+    if (_runCodemods) {
+      return getApplicableCodemods({
+        projectType,
+        startVersion
+      }).then(codemods => {
+        if (dryRun) {
+          return getDryRunCodemodStats(codemods);
+        }
+
+        return runCodemods(codemods);
+      });
+    }
+
+    if (dryRun) {
+      return getDryRunStats({
+        startVersion,
+        endVersion
+      });
+    }
+
+    let ignoredFiles;
+    if (!reset) {
+      ignoredFiles = ['package.json'];
+    } else {
+      ignoredFiles = [];
+    }
+
+    return gitDiffApply({
       remoteUrl,
       startTag,
-      endTag
-    });
-  }
-
-  if (_runCodemods) {
-    return getApplicableCodemods({
-      projectType,
-      startVersion
-    }).then(codemods => {
-      if (dryRun) {
-        return getDryRunCodemodStats(codemods);
+      endTag,
+      resolveConflicts,
+      ignoredFiles,
+      reset
+    }).then(results => {
+      if (reset) {
+        return;
       }
 
-      return runCodemods(codemods);
+      let myPackageJson = fs.readFileSync('package.json', 'utf8');
+      let fromPackageJson = results.from['package.json'];
+      let toPackageJson = results.to['package.json'];
+
+      let newPackageJson = mergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
+
+      fs.writeFileSync('package.json', newPackageJson);
+
+      run('git add package.json');
     });
-  }
-
-  if (dryRun) {
-    return getDryRunStats({
-      startVersion,
-      endVersion
-    });
-  }
-
-  let ignoredFiles;
-  if (!reset) {
-    ignoredFiles = ['package.json'];
-  } else {
-    ignoredFiles = [];
-  }
-
-  return gitDiffApply({
-    remoteUrl,
-    startTag,
-    endTag,
-    resolveConflicts,
-    ignoredFiles,
-    reset
-  }).then(results => {
-    if (reset) {
-      return;
-    }
-
-    let myPackageJson = fs.readFileSync('package.json', 'utf8');
-    let fromPackageJson = results.from['package.json'];
-    let toPackageJson = results.to['package.json'];
-
-    let newPackageJson = mergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
-
-    fs.writeFileSync('package.json', newPackageJson);
-
-    run('git add package.json');
   });
 };
