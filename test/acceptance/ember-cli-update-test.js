@@ -57,7 +57,7 @@ describe('Acceptance - ember-cli-update', function() {
       cwd: tmpPath,
       commitMessage,
       expect
-    });
+    }).promise;
   }
 
   function fixtureCompare(options) {
