@@ -66,9 +66,6 @@ describe('Acceptance - ember-cli-update', function() {
     let actual = tmpPath;
     let expected = mergeFixtures;
 
-    // file is indeterminent between OS's, so ignore
-    fs.removeSync(path.join(actual, 'MODULE_REPORT.md'));
-
     _fixtureCompare({
       expect,
       actual,
@@ -119,6 +116,9 @@ describe('Acceptance - ember-cli-update', function() {
       if (process.env.NODE_LTS) {
         mergeFixtures = 'test/fixtures/codemod/min-node/my-app';
       }
+
+      // file is indeterminent between OS's, so ignore
+      fs.removeSync(path.join(tmpPath, 'MODULE_REPORT.md'));
 
       fixtureCompare({
         mergeFixtures
