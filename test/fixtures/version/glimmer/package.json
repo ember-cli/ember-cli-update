@@ -1,6 +1,0 @@
-{
-  "devDependencies": {
-    "@glimmer/blueprint": "0.3",
-    "ember-cli": "2.11"
-  }
-}
