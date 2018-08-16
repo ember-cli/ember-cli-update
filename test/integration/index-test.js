@@ -111,7 +111,7 @@ describe('Integration - index', function() {
 
   it('handles non-ember-cli app', function() {
     return merge({
-      fixturesPath: 'test/fixtures/type/none'
+      fixturesPath: 'test/fixtures/package-json/non-ember-cli'
     }).then(({
       stderr
     }) => {
@@ -123,7 +123,7 @@ describe('Integration - index', function() {
 
   it('handles non-npm dir', function() {
     return merge({
-      fixturesPath: 'test/fixtures/no-package-json'
+      fixturesPath: 'test/fixtures/package-json/missing'
     }).then(({
       stderr
     }) => {
@@ -135,7 +135,7 @@ describe('Integration - index', function() {
 
   it('handles malformed package.json', function() {
     return merge({
-      fixturesPath: 'test/fixtures/malformed-package-json'
+      fixturesPath: 'test/fixtures/package-json/malformed'
     }).then(({
       stderr
     }) => {
