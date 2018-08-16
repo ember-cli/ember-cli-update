@@ -19,7 +19,5 @@ module.exports = function getRemoteUrl(projectType) {
       break;
   }
 
-  let remoteUrl = `https://github.com/${org}/${project}`;
-
-  return remoteUrl;
+  return `https://github.com/${org}/${project}`;
 };
