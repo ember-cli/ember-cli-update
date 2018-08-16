@@ -1,19 +1,19 @@
 'use strict';
 
-const expect = require('chai').expect;
-const AddonTestApp = require('ember-cli-addon-tests').AddonTestApp;
-const gitFixtures = require('git-fixtures');
+const { expect } = require('chai');
+const { AddonTestApp } = require('ember-cli-addon-tests');
+const {
+  gitInit,
+  commit: _commit,
+  postCommit,
+  processIo,
+  fixtureCompare: _fixtureCompare
+} = require('git-fixtures');
 const run = require('../../src/run');
-const assertions = require('../helpers/assertions');
-
-const gitInit = gitFixtures.gitInit;
-const _commit = gitFixtures.commit;
-const postCommit = gitFixtures.postCommit;
-const processIo = gitFixtures.processIo;
-const _fixtureCompare = gitFixtures.fixtureCompare;
-
-const assertNormalUpdate = assertions.assertNormalUpdate;
-const assertNoUnstaged = assertions.assertNoUnstaged;
+const {
+  assertNormalUpdate,
+  assertNoUnstaged
+} = require('../helpers/assertions');
 
 const commitMessage = 'add files';
 
@@ -75,9 +75,9 @@ describe('Acceptance | ember-addon', function() {
     });
   });
 
-  function fixtureCompare(options) {
-    let mergeFixtures = options.mergeFixtures;
-
+  function fixtureCompare({
+    mergeFixtures
+  }) {
     let actual = app.path;
     let expected = mergeFixtures;
 
@@ -98,9 +98,9 @@ describe('Acceptance | ember-addon', function() {
   }
 
   it('works', function() {
-    return merge().then(result => {
-      let status = result.status;
-
+    return merge().then(({
+      status
+    }) => {
       // remove addon because it's not in the fixtures
       app.editPackageJSON(pkg => {
         delete pkg.devDependencies['ember-cli-update'];

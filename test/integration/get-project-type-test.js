@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const getProjectType = require('../../src/get-project-type');
 
 describe('Integration - getProjectType', function() {

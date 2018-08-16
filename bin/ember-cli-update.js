@@ -4,9 +4,8 @@
 const emberCliUpdate = require('../src');
 const args = require('../src/args');
 
-const argv = require('yargs')
-  .options(args)
-  .argv;
+const { argv } = require('yargs')
+  .options(args);
 
 const from = argv['from'];
 const to = argv['to'];

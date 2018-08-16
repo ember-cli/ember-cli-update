@@ -3,10 +3,10 @@
 const utils = require('./utils');
 const semver = require('semver');
 
-module.exports = function getApplicableCodemods(options) {
-  let projectType = options.projectType;
-  let startVersion = options.startVersion;
-
+module.exports = function getApplicableCodemods({
+  projectType,
+  startVersion
+}) {
   let nodeVersion = utils.getNodeVersion();
 
   return utils.getCodemods().then(codemods => {

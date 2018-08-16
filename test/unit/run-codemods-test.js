@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const sinon = require('sinon');
 const utils = require('../../src/utils');
 const runCodemods = require('../../src/run-codemods');

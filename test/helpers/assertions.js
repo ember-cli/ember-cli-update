@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 module.exports.assertNormalUpdate = function(status) {
   // changed locally, no change upstream

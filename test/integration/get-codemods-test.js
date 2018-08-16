@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const getCodemods = require('../../src/get-codemods');
 
 describe('Integration - getCodemods', function() {

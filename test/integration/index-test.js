@@ -1,21 +1,21 @@
 'use strict';
 
 const path = require('path');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const tmp = require('tmp');
 const sinon = require('sinon');
-const gitFixtures = require('git-fixtures');
+const {
+  processExit,
+  fixtureCompare: _fixtureCompare
+} = require('git-fixtures');
 const isGitClean = require('git-diff-apply').isGitClean;
 const emberCliUpdate = require('../../src');
 const utils = require('../../src/utils');
 const buildTmp = require('../helpers/build-tmp');
-const assertions = require('../helpers/assertions');
-
-const processExit = gitFixtures.processExit;
-const _fixtureCompare = gitFixtures.fixtureCompare;
-
-const assertNoUnstaged = assertions.assertNoUnstaged;
-const assertNoStaged = assertions.assertNoStaged;
+const {
+  assertNoUnstaged,
+  assertNoStaged
+} = require('../helpers/assertions');
 
 const commitMessage = 'add files';
 
@@ -42,17 +42,17 @@ describe('Integration - index', function() {
     process.chdir(cwd);
   });
 
-  function merge(options) {
-    let fixturesPath = options.fixturesPath;
-    let dirty = options.dirty;
-    let from = options.from;
-    let to = options.to || '3.2.0-beta.1';
-    let reset = options.reset;
-    let compareOnly = options.compareOnly;
-    let dryRun = options.dryRun;
-    let runCodemods = options.runCodemods;
-    let listCodemods = options.listCodemods;
-
+  function merge({
+    fixturesPath,
+    dirty,
+    from,
+    to = '3.2.0-beta.1',
+    reset,
+    compareOnly,
+    dryRun,
+    runCodemods,
+    listCodemods
+  }) {
     buildTmp({
       fixturesPath,
       tmpPath,
@@ -80,9 +80,9 @@ describe('Integration - index', function() {
     });
   }
 
-  function fixtureCompare(options) {
-    let mergeFixtures = options.mergeFixtures;
-
+  function fixtureCompare({
+    mergeFixtures
+  }) {
     let actual = tmpPath;
     let expected = path.join(cwd, mergeFixtures);
 
@@ -97,10 +97,10 @@ describe('Integration - index', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       dirty: true
-    }).then(result => {
-      let status = result.status;
-      let stderr = result.stderr;
-
+    }).then(({
+      status,
+      stderr
+    }) => {
       expect(status).to.equal(`?? a-random-new-file
 `);
 
@@ -112,9 +112,9 @@ describe('Integration - index', function() {
   it('handles non-ember-cli app', function() {
     return merge({
       fixturesPath: 'test/fixtures/type/none'
-    }).then(result => {
-      let stderr = result.stderr;
-
+    }).then(({
+      stderr
+    }) => {
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('Ember CLI project type could not be determined');
@@ -124,9 +124,9 @@ describe('Integration - index', function() {
   it('handles non-npm dir', function() {
     return merge({
       fixturesPath: 'test/fixtures/no-package-json'
-    }).then(result => {
-      let stderr = result.stderr;
-
+    }).then(({
+      stderr
+    }) => {
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('No package.json was found in this directory');
@@ -136,9 +136,9 @@ describe('Integration - index', function() {
   it('handles malformed package.json', function() {
     return merge({
       fixturesPath: 'test/fixtures/malformed-package-json'
-    }).then(result => {
-      let stderr = result.stderr;
-
+    }).then(({
+      stderr
+    }) => {
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('The package.json is malformed');
@@ -150,9 +150,9 @@ describe('Integration - index', function() {
       fixturesPath: 'test/fixtures/local/glimmer-app',
       from: '0.5.0',
       to: '0.6.1'
-    }).then(result => {
-      let status = result.status;
-
+    }).then(({
+      status
+    }) => {
       fixtureCompare({
         mergeFixtures: 'test/fixtures/merge/glimmer-app'
       });
@@ -167,9 +167,9 @@ describe('Integration - index', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/glimmer-app',
       to: '0.6.1'
-    }).then(result => {
-      let stderr = result.stderr;
-
+    }).then(({
+      stderr
+    }) => {
       expect(isGitClean({ cwd: tmpPath })).to.be.ok;
 
       expect(stderr).to.contain('version cannot be determined');
@@ -180,9 +180,9 @@ describe('Integration - index', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       reset: true
-    }).then(result => {
-      let status = result.status;
-
+    }).then(({
+      status
+    }) => {
       fixtureCompare({
         mergeFixtures: 'test/fixtures/reset/my-app'
       });
@@ -199,10 +199,10 @@ describe('Integration - index', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       compareOnly: true
-    }).then(_result => {
-      let result = _result.result;
-      let status = _result.status;
-
+    }).then(({
+      result,
+      status
+    }) => {
       assertNoUnstaged(status);
 
       expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
@@ -229,10 +229,10 @@ describe('Integration - index', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       dryRun: true
-    }).then(_result => {
-      let result = _result.result;
-      let status = _result.status;
-
+    }).then(({
+      result,
+      status
+    }) => {
       assertNoStaged(status);
 
       expect(result).to.equal('Would update from 2.11.1 to 3.2.0-beta.1.');
@@ -244,10 +244,10 @@ describe('Integration - index', function() {
       fixturesPath: 'test/fixtures/merge/my-app',
       runCodemods: true,
       dryRun: true
-    }).then(_result => {
-      let result = _result.result;
-      let status = _result.status;
-
+    }).then(({
+      result,
+      status
+    }) => {
       assertNoStaged(status);
 
       expect(result).to.equal('Would run the following codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod.');
@@ -258,10 +258,10 @@ describe('Integration - index', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       listCodemods: true
-    }).then(_result => {
-      let result = _result.result;
-      let status = _result.status;
-
+    }).then(({
+      result,
+      status
+    }) => {
       assertNoStaged(status);
 
       expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');

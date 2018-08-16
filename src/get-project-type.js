@@ -20,7 +20,7 @@ module.exports = function getProjectType(projectPath) {
     throw 'The package.json is malformed';
   }
 
-  let keywords = packageJson.keywords;
+  let { keywords } = packageJson;
 
   let isAddon = keywords && keywords.indexOf('ember-addon') !== -1;
 
@@ -28,7 +28,7 @@ module.exports = function getProjectType(projectPath) {
     return 'addon';
   }
 
-  let devDependencies = packageJson.devDependencies;
+  let { devDependencies } = packageJson;
 
   if (devDependencies) {
     let isGlimmer = devDependencies['@glimmer/blueprint'];
