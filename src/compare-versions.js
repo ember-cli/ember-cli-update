@@ -2,11 +2,11 @@
 
 const utils = require('./utils');
 
-module.exports = function compareVersions(options) {
-  let remoteUrl = options.remoteUrl;
-  let startTag = options.startTag;
-  let endTag = options.endTag;
-
+module.exports = function compareVersions({
+  remoteUrl,
+  startTag,
+  endTag
+}) {
   let compareUrl = `${remoteUrl}/compare/${startTag}...${endTag}`;
 
   // even though this returns a promise, we don't want to use

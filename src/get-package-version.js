@@ -22,7 +22,7 @@ module.exports = function getPackageVersion(projectPath, projectType) {
 
   let packageVersion;
 
-  let devDependencies = packageJson.devDependencies;
+  let { devDependencies } = packageJson;
 
   if (devDependencies) {
     switch (projectType) {

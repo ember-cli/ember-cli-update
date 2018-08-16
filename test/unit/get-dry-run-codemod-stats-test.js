@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const getDryRunCodemodStats = require('../../src/get-dry-run-codemod-stats');
 
 describe('Unit - getDryRunCodemodStats', function() {

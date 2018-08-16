@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const sinon = require('sinon');
 const getVersions = require('../../src/get-versions');
 const utils = require('../../src/utils');
@@ -17,7 +17,7 @@ describe('Unit - getVersions', function() {
   });
 
   function createStub(versionsString) {
-    let run = utils.run;
+    let { run } = utils;
     return sandbox.stub(utils, 'run').callsFake(function(command) {
       if (command.indexOf('npm info') > -1) {
         return versionsString;

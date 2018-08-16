@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const getTagVersion = require('../../src/get-tag-version');
 const semver = require('semver');
 const sinon = require('sinon');

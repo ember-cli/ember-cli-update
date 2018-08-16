@@ -17,16 +17,16 @@ const gitDiffApply = require('git-diff-apply');
 const run = require('./run');
 const utils = require('./utils');
 
-module.exports = function emberCliUpdate(options) {
-  let from = options.from;
-  let to = options.to;
-  let resolveConflicts = options.resolveConflicts;
-  let _runCodemods = options.runCodemods;
-  let reset = options.reset;
-  let compareOnly = options.compareOnly;
-  let dryRun = options.dryRun;
-  let listCodemods = options.listCodemods;
-
+module.exports = function emberCliUpdate({
+  from,
+  to,
+  resolveConflicts,
+  runCodemods: _runCodemods,
+  reset,
+  compareOnly,
+  dryRun,
+  listCodemods
+}) {
   return Promise.resolve().then(() => {
     if (listCodemods) {
       return utils.getCodemods().then(codemods => {

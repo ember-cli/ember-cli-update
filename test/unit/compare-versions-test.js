@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const sinon = require('sinon');
 const compareVersions = require('../../src/compare-versions');
 const utils = require('../../src/utils');

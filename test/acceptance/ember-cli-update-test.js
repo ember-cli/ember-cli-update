@@ -2,18 +2,18 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const tmp = require('tmp');
-const gitFixtures = require('git-fixtures');
+const {
+  processBin,
+  fixtureCompare: _fixtureCompare
+} = require('git-fixtures');
 const buildTmp = require('../helpers/build-tmp');
-const assertions = require('../helpers/assertions');
-
-const processBin = gitFixtures.processBin;
-const _fixtureCompare = gitFixtures.fixtureCompare;
-
-const assertNormalUpdate = assertions.assertNormalUpdate;
-const assertNoUnstaged = assertions.assertNoUnstaged;
-const assertCodemodRan = assertions.assertCodemodRan;
+const {
+  assertNormalUpdate,
+  assertNoUnstaged,
+  assertCodemodRan
+} = require('../helpers/assertions');
 
 const commitMessage = 'add files';
 
@@ -26,11 +26,11 @@ describe('Acceptance - ember-cli-update', function() {
     tmpPath = tmp.dirSync().name;
   });
 
-  function merge(options) {
-    let fixturesPath = options.fixturesPath;
-    let runCodemods = options.runCodemods;
-    let subDir = options.subDir || '';
-
+  function merge({
+    fixturesPath,
+    runCodemods,
+    subDir = ''
+  }) {
     buildTmp({
       fixturesPath,
       tmpPath,
@@ -60,9 +60,9 @@ describe('Acceptance - ember-cli-update', function() {
     }).promise;
   }
 
-  function fixtureCompare(options) {
-    let mergeFixtures = options.mergeFixtures;
-
+  function fixtureCompare({
+    mergeFixtures
+  }) {
     let actual = tmpPath;
     let expected = mergeFixtures;
 
@@ -79,9 +79,9 @@ describe('Acceptance - ember-cli-update', function() {
   it('updates app', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app'
-    }).then(result => {
-      let status = result.status;
-
+    }).then(({
+      status
+    }) => {
       fixtureCompare({
         mergeFixtures: 'test/fixtures/merge/my-app'
       });
@@ -94,9 +94,9 @@ describe('Acceptance - ember-cli-update', function() {
   it('updates addon', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-addon'
-    }).then(result => {
-      let status = result.status;
-
+    }).then(({
+      status
+    }) => {
       fixtureCompare({
         mergeFixtures: 'test/fixtures/merge/my-addon'
       });
@@ -112,9 +112,9 @@ describe('Acceptance - ember-cli-update', function() {
     return merge({
       fixturesPath: 'test/fixtures/merge/my-app',
       runCodemods: true
-    }).then(result => {
-      let status = result.status;
-
+    }).then(({
+      status
+    }) => {
       let mergeFixtures = 'test/fixtures/codemod/latest-node/my-app';
       if (process.env.NODE_LTS) {
         mergeFixtures = 'test/fixtures/codemod/min-node/my-app';
@@ -133,9 +133,9 @@ describe('Acceptance - ember-cli-update', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       subDir: 'foo/bar'
-    }).then(result => {
-      let status = result.status;
-
+    }).then(({
+      status
+    }) => {
       fixtureCompare({
         mergeFixtures: 'test/fixtures/merge/my-app'
       });

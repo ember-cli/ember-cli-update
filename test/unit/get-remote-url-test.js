@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const getRemoteUrl = require('../../src/get-remote-url');
 
 describe('Unit - getRemoteUrl', function() {

@@ -1,6 +1,6 @@
 'use strict';
 
-const expect = require('chai').expect;
+const { expect } = require('chai');
 const getDryRunStats = require('../../src/get-dry-run-stats');
 
 describe('Unit - getDryRunStats', function() {
