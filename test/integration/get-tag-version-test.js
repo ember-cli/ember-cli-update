@@ -13,7 +13,7 @@ describe('Integration - getTagVersion', function() {
   let runSpy;
 
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
 
     runSpy = sandbox.spy(utils, 'run');
   });

@@ -11,7 +11,7 @@ describe('Unit - runCodemods', function() {
   let run;
 
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
 
     runCodemod = sandbox.stub(utils, 'runCodemod').resolves();
     run = sandbox.stub(utils, 'run').resolves();

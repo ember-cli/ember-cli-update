@@ -10,7 +10,7 @@ describe('Unit - runCodemod', function() {
   let npx;
 
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
 
     npx = sandbox.stub(utils, 'npx').resolves();
   });
