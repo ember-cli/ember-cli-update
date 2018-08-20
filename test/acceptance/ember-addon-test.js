@@ -9,7 +9,7 @@ const {
   processIo,
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
-const run = require('../../src/run');
+// const run = require('../../src/run');
 const {
   assertNormalUpdate,
   assertNoUnstaged
@@ -17,10 +17,10 @@ const {
 
 const commitMessage = 'add files';
 
-function resetAndClean(cwd) {
-  run('git reset --hard', { cwd });
-  run('git clean -f', { cwd });
-}
+// function resetAndClean(cwd) {
+//   run('git reset --hard', { cwd });
+//   run('git clean -f', { cwd });
+// }
 
 function commit(tmpPath) {
   gitInit({
@@ -55,11 +55,12 @@ describe('Acceptance | ember-addon', function() {
 
       commit(app.path);
 
-      return app.run('npm', 'install');
+      return app.run('npm', 'install', '--no-package-lock');
     }).then(() => {
       // get rid of package-lock.json
       // and reset line ending changes on Windows
-      resetAndClean(app.path);
+      // might not be needed because of --no-package-lock above
+      // resetAndClean(app.path);
 
       return app.startServer({
         command: 'update',
