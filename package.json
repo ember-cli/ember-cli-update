@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "debug": "^3.0.0",
-    "execa": "^0.10.0",
+    "execa": "^0.11.0",
     "git-diff-apply": "^0.9.3",
     "merge-package.json": "^2.0.0",
     "npx": "^10.0.1",
