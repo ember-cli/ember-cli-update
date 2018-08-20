@@ -10,7 +10,7 @@ describe('Unit - compareVersions', function() {
   let opn;
 
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
 
     opn = sandbox.stub(utils, 'opn');
   });

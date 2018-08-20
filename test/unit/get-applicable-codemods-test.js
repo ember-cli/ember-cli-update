@@ -11,7 +11,7 @@ describe('Unit - getApplicableCodemods', function() {
   let getNodeVersion;
 
   beforeEach(function() {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
 
     getCodemods = sandbox.stub(utils, 'getCodemods');
     getNodeVersion = sandbox.stub(utils, 'getNodeVersion');
