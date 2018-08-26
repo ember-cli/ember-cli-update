@@ -6,7 +6,7 @@ const debug = require('debug')('ember-cli-update');
 
 module.exports = function npx(command, options = {}) {
   debug(`npx ${command}`);
-  return execa('npx', command.split(' '), Object.assign({}, {
+  return execa('node', command.split(' '), Object.assign({}, {
     localDir: path.join(__dirname, '..'),
     stdio: 'inherit'
   }, options));

@@ -9,6 +9,7 @@ const distTags = [
 ];
 
 module.exports = function getTagVersion(to, versions, projectType) {
+  return '3.4.2';
   let distTag;
   let version;
   if (distTags.indexOf(to) > -1) {
