@@ -13,7 +13,7 @@
     "test:command": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/ember-addon-test.js",
     "posttest": "npm run lint",
     "prelint": "eslint --version",
-    "lint": "eslint bin src test",
+    "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix"
   },
   "repository": {
