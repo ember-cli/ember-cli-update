@@ -21,7 +21,7 @@ const commitMessage = 'add files';
 const shouldSkipCodemods = process.platform === 'linux' && semver.satisfies(semver.valid(process.version), '6');
 
 describe('Acceptance - ember-cli-update', function() {
-  this.timeout(30000);
+  this.timeout(30 * 1000);
 
   let tmpPath;
 

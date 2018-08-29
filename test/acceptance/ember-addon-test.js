@@ -38,7 +38,7 @@ function commit(tmpPath) {
 }
 
 describe('Acceptance | ember-addon', function() {
-  this.timeout(600000);
+  this.timeout(10 * 60 * 1000);
 
   let app;
 

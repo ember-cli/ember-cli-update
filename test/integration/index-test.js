@@ -20,7 +20,7 @@ const {
 const commitMessage = 'add files';
 
 describe('Integration - index', function() {
-  this.timeout(30000);
+  this.timeout(30 * 1000);
 
   let cwd;
   let sandbox;
