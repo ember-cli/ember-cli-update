@@ -17,6 +17,7 @@ const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const run = require('./run');
 const utils = require('./utils');
+const getStartAndEndCommands = require('./get-start-and-end-commands');
 
 module.exports = function emberCliUpdate({
   from,
@@ -26,7 +27,8 @@ module.exports = function emberCliUpdate({
   reset,
   compareOnly,
   dryRun,
-  listCodemods
+  listCodemods,
+  createCustomDiff
 }) {
   return Promise.resolve().then(() => {
     if (listCodemods) {
@@ -91,34 +93,53 @@ module.exports = function emberCliUpdate({
       });
     }
 
-    let ignoredFiles;
-    if (!reset) {
-      ignoredFiles = ['package.json'];
-    } else {
-      ignoredFiles = [];
-    }
+    let startCommand;
+    let endCommand;
 
-    return gitDiffApply({
-      remoteUrl,
-      startTag,
-      endTag,
-      resolveConflicts,
-      ignoredFiles,
-      reset
-    }).then(results => {
-      if (reset) {
-        return;
+    return Promise.resolve().then(() => {
+      if (createCustomDiff) {
+        return getStartAndEndCommands({
+          projectType,
+          startVersion,
+          endVersion
+        }).then(commands => {
+          startCommand = commands.startCommand;
+          endCommand = commands.endCommand;
+        });
+      }
+    }).then(() => {
+      let ignoredFiles;
+      if (!reset) {
+        ignoredFiles = ['package.json'];
+      } else {
+        ignoredFiles = [];
       }
 
-      let myPackageJson = fs.readFileSync('package.json', 'utf8');
-      let fromPackageJson = results.from['package.json'];
-      let toPackageJson = results.to['package.json'];
+      return gitDiffApply({
+        remoteUrl,
+        startTag,
+        endTag,
+        resolveConflicts,
+        ignoredFiles,
+        reset,
+        createCustomDiff,
+        startCommand,
+        endCommand
+      }).then(results => {
+        if (reset) {
+          return;
+        }
 
-      let newPackageJson = mergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
+        let myPackageJson = fs.readFileSync('package.json', 'utf8');
+        let fromPackageJson = results.from['package.json'];
+        let toPackageJson = results.to['package.json'];
 
-      fs.writeFileSync('package.json', newPackageJson);
+        let newPackageJson = mergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
 
-      run('git add package.json');
+        fs.writeFileSync('package.json', newPackageJson);
+
+        run('git add package.json');
+      });
     });
   });
 };
