@@ -32,7 +32,8 @@ describe('Acceptance - ember-cli-update', function() {
   function merge({
     fixturesPath,
     runCodemods,
-    subDir = ''
+    subDir = '',
+    createCustomDiff
   }) {
     buildTmp({
       fixturesPath,
@@ -52,6 +53,9 @@ describe('Acceptance - ember-cli-update', function() {
       args = [
         '--run-codemods'
       ];
+    }
+    if (createCustomDiff) {
+      args.push('--create-custom-diff');
     }
 
     return processBin({
@@ -148,6 +152,24 @@ describe('Acceptance - ember-cli-update', function() {
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
       subDir: 'foo/bar'
+    }).promise.then(({
+      status
+    }) => {
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/merge/my-app'
+      });
+
+      assertNormalUpdate(status);
+      assertNoUnstaged(status);
+    });
+  });
+
+  it('can create a personal diff instead of using an output repo', function() {
+    this.timeout(2 * 60 * 1000);
+
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      createCustomDiff: true
     }).promise.then(({
       status
     }) => {

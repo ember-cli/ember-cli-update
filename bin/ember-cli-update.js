@@ -15,6 +15,7 @@ const reset = argv['reset'];
 const compareOnly = argv['compare-only'];
 const dryRun = argv['dry-run'];
 const listCodemods = argv['list-codemods'];
+const createCustomDiff = argv['create-custom-diff'];
 
 // Displays a message on the terminal if a new version of the package is available.
 const updateNotifier = require('update-notifier');
@@ -39,7 +40,8 @@ emberCliUpdate({
   reset,
   compareOnly,
   dryRun,
-  listCodemods
+  listCodemods,
+  createCustomDiff
 }).then(message => {
   if (message) {
     console.log(message);
