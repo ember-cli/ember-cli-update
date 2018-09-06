@@ -48,7 +48,9 @@
   },
   "devDependencies": {
     "chai": "^4.1.0",
+    "cpr": "^3.0.1",
     "cross-env": "^5.0.1",
+    "denodeify": "^1.2.1",
     "ember-cli": "3.3.0",
     "ember-cli-addon-tests": "^0.11.0",
     "eslint": "^5.0.0",
