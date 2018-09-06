@@ -9,11 +9,13 @@ const {
   processIo,
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
-// const run = require('../../src/run');
+const run = require('../../src/run');
 const {
   assertNormalUpdate,
   assertNoUnstaged
 } = require('../helpers/assertions');
+const denodeify = require('denodeify');
+const cpr = denodeify(require('cpr'));
 
 const commitMessage = 'add files';
 
@@ -22,11 +24,23 @@ const commitMessage = 'add files';
 //   run('git clean -f', { cwd });
 // }
 
-function commit(tmpPath) {
+function reset(tmpPath) {
+  run('git rm -r .', { cwd: tmpPath });
+
+  return cpr('test/fixtures/local/my-app', tmpPath);
+}
+
+function init(tmpPath) {
   gitInit({
     cwd: tmpPath
   });
 
+  _commit({
+    cwd: tmpPath
+  });
+}
+
+function commit(tmpPath) {
   _commit({
     m: commitMessage,
     cwd: tmpPath
@@ -48,6 +62,11 @@ describe('Acceptance | ember-addon', function() {
     return app.create('my-app', {
       fixturesPath: 'test/fixtures/local',
       skipNpm: true
+    }).then(() => {
+      init(app.path);
+
+      // remove newer fixture files not present in older versions
+      return reset(app.path);
     }).then(() => {
       app.editPackageJSON(pkg => {
         pkg.devDependencies['ember-cli-update'] = '*';
