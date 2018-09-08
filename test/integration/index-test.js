@@ -2,7 +2,6 @@
 
 const path = require('path');
 const { expect } = require('chai');
-const tmp = require('tmp');
 const sinon = require('sinon');
 const {
   processExit,
@@ -32,8 +31,6 @@ describe('Integration - index', function() {
 
   beforeEach(function() {
     sandbox = sinon.createSandbox();
-
-    tmpPath = tmp.dirSync().name;
   });
 
   afterEach(function() {
@@ -54,9 +51,8 @@ describe('Integration - index', function() {
     listCodemods,
     createCustomDiff
   }) {
-    buildTmp({
+    tmpPath = buildTmp({
       fixturesPath,
-      tmpPath,
       commitMessage,
       dirty,
       npmInstall: createCustomDiff

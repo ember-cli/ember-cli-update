@@ -3,7 +3,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 const { expect } = require('chai');
-const tmp = require('tmp');
 const {
   processBin,
   fixtureCompare: _fixtureCompare
@@ -25,23 +24,16 @@ describe('Acceptance - ember-cli-update', function() {
 
   let tmpPath;
 
-  beforeEach(function() {
-    tmpPath = tmp.dirSync().name;
-  });
-
   function merge({
     fixturesPath,
     runCodemods,
     subDir = ''
   }) {
-    buildTmp({
+    tmpPath = buildTmp({
       fixturesPath,
-      tmpPath,
       commitMessage,
       subDir
     });
-
-    tmpPath = path.join(tmpPath, subDir);
 
     let args = [
       '--to',
