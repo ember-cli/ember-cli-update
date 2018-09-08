@@ -99,6 +99,7 @@ module.exports = function emberCliUpdate({
     return Promise.resolve().then(() => {
       if (createCustomDiff) {
         return getStartAndEndCommands({
+          projectName: packageJson.name,
           projectType,
           startVersion,
           endVersion
