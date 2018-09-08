@@ -26,6 +26,7 @@ module.exports = function getStartAndEndCommands({
       // projectName = 'my-app';
       // command = `new ${projectName} -b @glimmer/blueprint`;
       // break;
+      // ember-cli doesn't have a way to use non-latest blueprint versions
       throw 'cannot checkout older versions of glimmer blueprint';
   }
 
