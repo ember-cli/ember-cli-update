@@ -58,7 +58,8 @@ describe('Integration - index', function() {
       fixturesPath,
       tmpPath,
       commitMessage,
-      dirty
+      dirty,
+      npmInstall: createCustomDiff
     });
 
     process.chdir(tmpPath);

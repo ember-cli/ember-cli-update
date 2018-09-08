@@ -1,10 +1,11 @@
 'use strict';
 
 const path = require('path');
-const npx = require('./npx');
+const utils = require('./utils');
 const denodeify = require('denodeify');
 const tmpDir = denodeify(require('tmp').dir);
 const cpr = path.resolve(path.dirname(require.resolve('cpr')), '../bin/cpr');
+const resolve = denodeify(require('resolve'));
 
 module.exports = function getStartAndEndCommands({
   projectName,
@@ -27,19 +28,9 @@ module.exports = function getStartAndEndCommands({
       throw 'cannot checkout older versions of glimmer blueprint';
   }
 
-  function createCommand(version) {
-    return tmpDir().then(cwd => {
-      return npx(`-p ember-cli@${version} ember ${command} -sn -sg`, { cwd }).then(() => {
-        return path.resolve(cwd, projectName);
-      });
-    }).then(appPath => {
-      return `node ${cpr} ${appPath} .`;
-    });
-  }
-
   return Promise.all([
-    createCommand(startVersion),
-    createCommand(endVersion)
+    module.exports.createLocalCommand(projectName, command, startVersion),
+    module.exports.createRemoteCommand(projectName, command, endVersion)
   ]).then(([
     startCommand,
     endCommand
@@ -47,4 +38,40 @@ module.exports = function getStartAndEndCommands({
     startCommand,
     endCommand
   }));
+};
+
+function getCommand(cwd, projectName) {
+  let appPath = path.resolve(cwd, projectName);
+  return `node ${cpr} ${appPath} .`;
+}
+
+const options = '-sn -sg';
+
+module.exports.createLocalCommand = function createLocalCommand(projectName, command, version) {
+  return resolve('ember-cli', { basedir: process.cwd() }).then(emberCliPath => {
+    let emberCliRoot = path.resolve(path.dirname(emberCliPath), '../..');
+    let emberCliVersion = require(path.resolve(emberCliRoot, 'package.json')).version;
+    if (emberCliVersion !== version) {
+      // installed version is out-of-date
+      return module.exports.createRemoteCommand(projectName, command, version);
+    }
+    return tmpDir().then(cwd => {
+      utils.run(`node ${path.resolve(emberCliRoot, 'bin/ember')} ${command} ${options}`, { cwd });
+      return getCommand(cwd, projectName);
+    });
+  }).catch(err => {
+    if (err.code === 'MODULE_NOT_FOUND') {
+      // no node_modules
+      return module.exports.createRemoteCommand(projectName, command, version);
+    }
+    throw err;
+  });
+};
+
+module.exports.createRemoteCommand = function createRemoteCommand(projectName, command, version) {
+  return tmpDir().then(cwd => {
+    return utils.npx(`-p ember-cli@${version} ember ${command} ${options}`, { cwd }).then(() => {
+      return getCommand(cwd, projectName);
+    });
+  });
 };
