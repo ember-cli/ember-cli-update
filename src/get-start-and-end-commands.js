@@ -7,23 +7,20 @@ const tmpDir = denodeify(require('tmp').dir);
 const cpr = path.resolve(path.dirname(require.resolve('cpr')), '../bin/cpr');
 
 module.exports = function getStartAndEndCommands({
+  projectName,
   projectType,
   startVersion,
   endVersion
 }) {
-  let projectName;
   let command;
   switch (projectType) {
     case 'app':
-      projectName = 'my-app';
       command = `new ${projectName}`;
       break;
     case 'addon':
-      projectName = 'my-addon';
       command = `addon ${projectName}`;
       break;
     case 'glimmer':
-      // projectName = 'my-app';
       // command = `new ${projectName} -b @glimmer/blueprint`;
       // break;
       // ember-cli doesn't have a way to use non-latest blueprint versions

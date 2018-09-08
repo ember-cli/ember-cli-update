@@ -51,7 +51,8 @@ describe('Integration - index', function() {
     compareOnly,
     dryRun,
     runCodemods,
-    listCodemods
+    listCodemods,
+    createCustomDiff
   }) {
     buildTmp({
       fixturesPath,
@@ -69,7 +70,8 @@ describe('Integration - index', function() {
       compareOnly,
       dryRun,
       runCodemods,
-      listCodemods
+      listCodemods,
+      createCustomDiff
     });
 
     return processExit({
@@ -265,6 +267,23 @@ describe('Integration - index', function() {
       assertNoStaged(status);
 
       expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
+    });
+  });
+
+  it('can create a personal diff instead of using an output repo', function() {
+    this.timeout(2 * 60 * 1000);
+
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-custom-app',
+      createCustomDiff: true
+    }).then(({
+      status
+    }) => {
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/merge/my-custom-app'
+      });
+
+      assertNoUnstaged(status);
     });
   });
 });
