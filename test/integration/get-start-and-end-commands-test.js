@@ -1,7 +1,6 @@
 'use strict';
 
 const { expect } = require('chai');
-const tmp = require('tmp');
 const sinon = require('sinon');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
@@ -124,8 +123,6 @@ describe('Integration - getStartAndEndCommands', function() {
     });
 
     beforeEach(function() {
-      tmpPath = tmp.dirSync().name;
-
       runStub = sandbox.stub(utils, 'run');
     });
 
@@ -134,9 +131,8 @@ describe('Integration - getStartAndEndCommands', function() {
     });
 
     function buildTmp(options) {
-      _buildTmp(Object.assign({
-        fixturesPath: 'test/fixtures/local/my-custom-app',
-        tmpPath
+      tmpPath = _buildTmp(Object.assign({
+        fixturesPath: 'test/fixtures/local/my-custom-app'
       }, options));
 
       process.chdir(tmpPath);

@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
+const tmp = require('tmp');
 const {
   gitInit,
   commit,
@@ -11,12 +12,13 @@ const run = require('../../src/run');
 
 module.exports = function({
   fixturesPath,
-  tmpPath,
   commitMessage,
   dirty,
   subDir = '',
   npmInstall
 }) {
+  let tmpPath = tmp.dirSync().name;
+
   gitInit({
     cwd: tmpPath
   });
@@ -48,4 +50,6 @@ module.exports = function({
     cwd: tmpPath,
     dirty
   });
+
+  return tmpSubPath;
 };
