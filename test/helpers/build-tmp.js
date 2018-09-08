@@ -7,13 +7,15 @@ const {
   commit,
   postCommit
 } = require('git-fixtures');
+const run = require('../../src/run');
 
 module.exports = function({
   fixturesPath,
   tmpPath,
   commitMessage,
   dirty,
-  subDir = ''
+  subDir = '',
+  npmInstall
 }) {
   gitInit({
     cwd: tmpPath
@@ -24,6 +26,18 @@ module.exports = function({
   fs.ensureDirSync(tmpSubPath);
 
   fs.copySync(fixturesPath, tmpSubPath);
+
+  if (npmInstall) {
+    let version;
+    if (typeof npmInstall === 'string') {
+      version = `@${npmInstall}`;
+    } else {
+      version = '';
+    }
+    run(`npm install ember-cli${version} --no-save`, {
+      cwd: tmpSubPath
+    });
+  }
 
   commit({
     m: commitMessage,
