@@ -46,7 +46,6 @@ describe('Integration - index', function() {
     to = '3.2.0-beta.1',
     reset,
     compareOnly,
-    dryRun,
     statsOnly,
     runCodemods,
     listCodemods,
@@ -66,7 +65,6 @@ describe('Integration - index', function() {
       to,
       reset,
       compareOnly,
-      dryRun,
       statsOnly,
       runCodemods,
       listCodemods,
@@ -223,35 +221,6 @@ describe('Integration - index', function() {
       compareOnly: true
     }).then(() => {
       expect(opn.args[0][0]).to.equal('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v2.18.2');
-    });
-  });
-
-  it('performs a dry run', function() {
-    return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
-      dryRun: true
-    }).then(({
-      result,
-      status
-    }) => {
-      assertNoStaged(status);
-
-      expect(result).to.equal('Would update from 2.11.1 to 3.2.0-beta.1.');
-    });
-  });
-
-  it('performs a codemod dry run', function() {
-    return merge({
-      fixturesPath: 'test/fixtures/merge/my-app',
-      runCodemods: true,
-      dryRun: true
-    }).then(({
-      result,
-      status
-    }) => {
-      assertNoStaged(status);
-
-      expect(result).to.equal('Would run the following codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod.');
     });
   });
 

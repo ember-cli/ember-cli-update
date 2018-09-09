@@ -9,8 +9,6 @@ const getProjectVersion = require('./get-project-version');
 const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
-const getDryRunStats = require('./get-dry-run-stats');
-const getDryRunCodemodStats = require('./get-dry-run-codemod-stats');
 const formatStats = require('./format-stats');
 const getApplicableCodemods = require('./get-applicable-codemods');
 const runCodemods = require('./run-codemods');
@@ -27,7 +25,6 @@ module.exports = function emberCliUpdate({
   runCodemods: _runCodemods,
   reset,
   compareOnly,
-  dryRun,
   statsOnly,
   listCodemods,
   createCustomDiff
@@ -86,10 +83,6 @@ module.exports = function emberCliUpdate({
         projectType,
         startVersion
       }).then(codemods => {
-        if (dryRun) {
-          return getDryRunCodemodStats(codemods);
-        }
-
         const inquirer = require('inquirer');
 
         return inquirer.prompt([{
@@ -100,13 +93,6 @@ module.exports = function emberCliUpdate({
         }]).then(answers => {
           return runCodemods(answers.codemods.map(codemod => codemods[codemod]));
         });
-      });
-    }
-
-    if (dryRun) {
-      return getDryRunStats({
-        startVersion,
-        endVersion
       });
     }
 
