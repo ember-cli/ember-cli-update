@@ -24,10 +24,15 @@ before_install:
 script:
 - npm run $TEST_COMMAND
 jobs:
+  allow_failures:
+  - os: osx
   exclude:
   - node_js: '6'
     env: TEST_COMMAND=lint
   include:
+  - os: osx
+    node_js: node
+    env: TEST_COMMAND=test:both
   - stage: Deploy
     cache: ignore
     env: ignore
