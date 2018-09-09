@@ -11,6 +11,7 @@ const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
 const getDryRunStats = require('./get-dry-run-stats');
 const getDryRunCodemodStats = require('./get-dry-run-codemod-stats');
+const formatStats = require('./format-stats');
 const getApplicableCodemods = require('./get-applicable-codemods');
 const runCodemods = require('./run-codemods');
 const mergePackageJson = require('merge-package.json');
@@ -27,6 +28,7 @@ module.exports = function emberCliUpdate({
   reset,
   compareOnly,
   dryRun,
+  statsOnly,
   listCodemods,
   createCustomDiff
 }) {
@@ -61,6 +63,21 @@ module.exports = function emberCliUpdate({
         remoteUrl,
         startTag,
         endTag
+      });
+    }
+
+    if (statsOnly) {
+      return getApplicableCodemods({
+        projectType,
+        startVersion
+      }).then(codemods => {
+        return formatStats({
+          projectType,
+          startVersion,
+          endVersion,
+          remoteUrl,
+          codemods
+        });
       });
     }
 

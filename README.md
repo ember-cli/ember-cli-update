@@ -77,6 +77,7 @@ ember-cli-update --run-codemods
 | --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
 | --compare-only | Show the changes between different versions without updating | Boolean | | false |
 | --dry-run | Show what would happen without actually doing it | Boolean | | false |
+| --stats-only | Show all calculated values regarding your project | Boolean | | false |
 | --list-codemods | List available codemods | Boolean | | false |
 | --create-custom-diff | Create a personal diff instead of using an output repo | Boolean | | false |
 

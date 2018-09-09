@@ -33,6 +33,11 @@ module.exports = {
     default: false,
     description: 'Show what would happen without actually doing it'
   },
+  'stats-only': {
+    type: 'boolean',
+    default: false,
+    description: 'Show all calculated values regarding your project'
+  },
   'list-codemods': {
     type: 'boolean',
     default: false,
