@@ -47,6 +47,7 @@ describe('Integration - index', function() {
     reset,
     compareOnly,
     dryRun,
+    statsOnly,
     runCodemods,
     listCodemods,
     createCustomDiff
@@ -66,6 +67,7 @@ describe('Integration - index', function() {
       reset,
       compareOnly,
       dryRun,
+      statsOnly,
       runCodemods,
       listCodemods,
       createCustomDiff
@@ -250,6 +252,43 @@ describe('Integration - index', function() {
       assertNoStaged(status);
 
       expect(result).to.equal('Would run the following codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod.');
+    });
+  });
+
+  it('shows stats only', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/local/my-app',
+      statsOnly: true
+    }).then(({
+      result,
+      status
+    }) => {
+      assertNoStaged(status);
+
+      expect(result).to.equal(`project type: app
+from version: 2.11.1
+to version: 3.2.0-beta.1
+output repo: https://github.com/ember-cli/ember-new-output
+applicable codemods: `);
+    });
+  });
+
+  // this one can be removed once the above starts returning codemods
+  it('shows stats only - codemods', function() {
+    return merge({
+      fixturesPath: 'test/fixtures/codemod/min-node/my-app',
+      statsOnly: true
+    }).then(({
+      result,
+      status
+    }) => {
+      assertNoStaged(status);
+
+      expect(result).to.equal(`project type: app
+from version: 3.2.0-beta.1
+to version: 3.2.0-beta.1
+output repo: https://github.com/ember-cli/ember-new-output
+applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod`);
     });
   });
 

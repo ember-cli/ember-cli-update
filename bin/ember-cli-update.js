@@ -14,6 +14,7 @@ const runCodemods = argv['run-codemods'];
 const reset = argv['reset'];
 const compareOnly = argv['compare-only'];
 const dryRun = argv['dry-run'];
+const statsOnly = argv['stats-only'];
 const listCodemods = argv['list-codemods'];
 const createCustomDiff = argv['create-custom-diff'];
 
@@ -40,6 +41,7 @@ emberCliUpdate({
   reset,
   compareOnly,
   dryRun,
+  statsOnly,
   listCodemods,
   createCustomDiff
 }).then(message => {

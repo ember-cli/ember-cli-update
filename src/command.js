@@ -51,6 +51,12 @@ module.exports = {
       default: args['dry-run'].default
     },
     {
+      name: 'stats-only',
+      description: args['stats-only'].description,
+      type: Boolean,
+      default: args['stats-only'].default
+    },
+    {
       name: 'list-codemods',
       description: args['list-codemods'].description,
       type: Boolean,
