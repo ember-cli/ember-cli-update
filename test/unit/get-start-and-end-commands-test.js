@@ -1,10 +1,13 @@
 'use strict';
 
-const { expect } = require('chai');
+const chai = require('chai');
 const sinon = require('sinon');
+const path = require('path');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
-const _buildTmp = require('../helpers/build-tmp');
+
+chai.use(require('chai-as-promised'));
+const { expect } = chai;
 
 const {
   createRemoteCommand: _createRemoteCommand,
@@ -15,21 +18,27 @@ const projectName = 'my-custom-app';
 const command = 'test command';
 const remoteCommand = 'test remote command';
 const localCommand = 'test local command';
-const startVersion = '2.11.1';
-const endVersion = '0.0.0';
+const startVersion = '0.0.1';
+const endVersion = '0.0.2';
 
-describe('Integration - getStartAndEndCommands', function() {
-  this.timeout(60 * 1000);
-
+describe('Unit - getStartAndEndCommands', function() {
   let sandbox;
   let createRemoteCommandStub;
   let createLocalCommandStub;
+  let resolveStub;
+  let requireStub;
+  let runStub;
+  let npxStub;
 
   beforeEach(function() {
     sandbox = sinon.createSandbox();
 
     createLocalCommandStub = sandbox.stub(_getStartAndEndCommands, 'createLocalCommand').resolves(localCommand);
     createRemoteCommandStub = sandbox.stub(_getStartAndEndCommands, 'createRemoteCommand').resolves(remoteCommand);
+    resolveStub = sandbox.stub(utils, 'resolve').resolves('/path/to/lib/cli/index.js');
+    requireStub = sandbox.stub(utils, 'require').withArgs(path.resolve('/path/to/package.json'));
+    runStub = sandbox.stub(utils, 'run');
+    npxStub = sandbox.stub(utils, 'npx').resolves();
   });
 
   afterEach(function() {
@@ -92,21 +101,13 @@ describe('Integration - getStartAndEndCommands', function() {
   });
 
   describe('createRemoteCommand', function() {
-    let npxStub;
-
-    beforeEach(function() {
-      npxStub = sandbox.stub(utils, 'npx').resolves();
-    });
-
     function createRemoteCommand() {
       return _createRemoteCommand(projectName, command, endVersion);
     }
 
     it('works', function() {
       return createRemoteCommand().then(_command => {
-        let [arg] = npxStub.args[0];
-        expect(arg).to.contain(endVersion);
-        expect(arg).to.contain(command);
+        expect(npxStub.args[0][0]).to.contain(command).and.contain(endVersion);
 
         expect(_command).to.be.a('string');
       });
@@ -114,36 +115,12 @@ describe('Integration - getStartAndEndCommands', function() {
   });
 
   describe('createLocalCommand', function() {
-    let cwd;
-    let tmpPath;
-    let runStub;
-
-    before(function() {
-      cwd = process.cwd();
-    });
-
-    beforeEach(function() {
-      runStub = sandbox.stub(utils, 'run');
-    });
-
-    afterEach(function() {
-      process.chdir(cwd);
-    });
-
-    function buildTmp(options) {
-      tmpPath = _buildTmp(Object.assign({
-        fixturesPath: 'test/fixtures/local/my-custom-app'
-      }, options));
-
-      process.chdir(tmpPath);
-    }
-
     function createLocalCommand() {
       return _createLocalCommand(projectName, command, startVersion);
     }
 
     it('falls back to remote copy if ember-cli is missing', function() {
-      buildTmp();
+      resolveStub.rejects({ code: 'MODULE_NOT_FOUND' });
 
       return createLocalCommand().then(_command => {
         expect(runStub.called).to.not.be.ok;
@@ -156,9 +133,21 @@ describe('Integration - getStartAndEndCommands', function() {
       });
     });
 
+    it('throws if fails for another reason', function() {
+      resolveStub.rejects({ code: 'test code' });
+
+      return expect(createLocalCommand()).to.eventually.be.rejected
+        .and.have.property('code', 'test code')
+        .then(() => {
+          expect(runStub.called).to.not.be.ok;
+
+          expect(createRemoteCommandStub.called).to.not.be.ok;
+        });
+    });
+
     it('falls back to remote copy if ember-cli is wrong version', function() {
-      buildTmp({
-        npmInstall: 'latest'
+      requireStub.returns({
+        version: endVersion
       });
 
       return createLocalCommand().then(_command => {
@@ -173,14 +162,12 @@ describe('Integration - getStartAndEndCommands', function() {
     });
 
     it('uses local copy if ember-cli exists and same version', function() {
-      buildTmp({
-        npmInstall: true
+      requireStub.returns({
+        version: startVersion
       });
 
       return createLocalCommand().then(_command => {
-        let [arg] = runStub.args[0];
-        expect(arg).to.not.contain(startVersion);
-        expect(arg).to.contain(command);
+        expect(runStub.args[0][0]).to.contain(command).and.not.contain(startVersion);
 
         expect(createRemoteCommandStub.called).to.not.be.ok;
 

@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.0",
+    "chai-as-promised": "^7.1.1",
     "cpr": "^3.0.1",
     "cross-env": "^5.0.1",
     "ember-cli": "3.4.1",
