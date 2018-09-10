@@ -30,13 +30,7 @@ module.exports = function({
   fs.copySync(fixturesPath, tmpSubPath);
 
   if (npmInstall) {
-    let version;
-    if (typeof npmInstall === 'string') {
-      version = `@${npmInstall}`;
-    } else {
-      version = '';
-    }
-    run(`npm install ember-cli${version} --no-save`, {
+    run('npm install ember-cli --no-save', {
       cwd: tmpSubPath
     });
   }

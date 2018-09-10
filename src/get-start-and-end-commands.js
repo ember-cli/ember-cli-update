@@ -5,7 +5,6 @@ const utils = require('./utils');
 const denodeify = require('denodeify');
 const tmpDir = denodeify(require('tmp').dir);
 const cpr = path.resolve(path.dirname(require.resolve('cpr')), '../bin/cpr');
-const resolve = denodeify(require('resolve'));
 
 module.exports = function getStartAndEndCommands({
   projectName,
@@ -48,9 +47,9 @@ function getCommand(cwd, projectName) {
 const options = '-sn -sg';
 
 module.exports.createLocalCommand = function createLocalCommand(projectName, command, version) {
-  return resolve('ember-cli', { basedir: process.cwd() }).then(emberCliPath => {
+  return utils.resolve('ember-cli', { basedir: process.cwd() }).then(emberCliPath => {
     let emberCliRoot = path.resolve(path.dirname(emberCliPath), '../..');
-    let emberCliVersion = require(path.resolve(emberCliRoot, 'package.json')).version;
+    let emberCliVersion = utils.require(path.resolve(emberCliRoot, 'package.json')).version;
     if (emberCliVersion !== version) {
       // installed version is out-of-date
       return module.exports.createRemoteCommand(projectName, command, version);
