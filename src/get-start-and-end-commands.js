@@ -29,7 +29,7 @@ module.exports = function getStartAndEndCommands({
 
   return Promise.all([
     module.exports.createLocalCommand(projectName, command, startVersion),
-    module.exports.createRemoteCommand(projectName, command, endVersion)
+    module.exports.createGlobalCommand(projectName, command, endVersion)
   ]).then(([
     startCommand,
     endCommand
@@ -46,8 +46,13 @@ function getCommand(cwd, projectName) {
 
 const options = '-sn -sg';
 
-module.exports.createLocalCommand = function createLocalCommand(projectName, command, version) {
-  return utils.resolve('ember-cli', { basedir: process.cwd() }).then(emberCliPath => {
+function tryCreateLocalCommand({
+  basedir,
+  projectName,
+  command,
+  version
+}) {
+  return utils.resolve('ember-cli', { basedir }).then(emberCliPath => {
     let emberCliRoot = path.resolve(path.dirname(emberCliPath), '../..');
     let emberCliVersion = utils.require(path.resolve(emberCliRoot, 'package.json')).version;
     if (emberCliVersion !== version) {
@@ -61,6 +66,32 @@ module.exports.createLocalCommand = function createLocalCommand(projectName, com
   }).catch(err => {
     if (err.code === 'MODULE_NOT_FOUND') {
       // no node_modules
+      return module.exports.createRemoteCommand(projectName, command, version);
+    }
+    throw err;
+  });
+}
+
+module.exports.createLocalCommand = function createLocalCommand(projectName, command, version) {
+  return tryCreateLocalCommand({
+    basedir: process.cwd(),
+    projectName,
+    command,
+    version
+  });
+};
+
+module.exports.createGlobalCommand = function createGlobalCommand(projectName, command, version) {
+  return utils.which('ember').then(emberCliPath => {
+    return tryCreateLocalCommand({
+      basedir: path.resolve(path.dirname(emberCliPath), '../lib'),
+      projectName,
+      command,
+      version
+    });
+  }).catch(err => {
+    if (err.message === 'not found: ember') {
+      // not installed globally
       return module.exports.createRemoteCommand(projectName, command, version);
     }
     throw err;
