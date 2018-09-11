@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "cpr": "^3.0.1",
-    "debug": "^3.0.0",
+    "debug": "^4.0.0",
     "denodeify": "^1.2.1",
     "execa": "^1.0.0",
     "git-diff-apply": "^0.10.0",
