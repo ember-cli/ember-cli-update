@@ -56,7 +56,7 @@
     "chai-as-promised": "^7.1.1",
     "cpr": "^3.0.1",
     "cross-env": "^5.0.1",
-    "ember-cli": "3.4.3",
+    "ember-cli": "3.4.2",
     "ember-cli-addon-tests": "^0.11.0",
     "eslint": "^5.0.0",
     "eslint-config-sane": "^0.6.0",
