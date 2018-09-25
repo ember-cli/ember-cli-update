@@ -3,7 +3,7 @@ trigger:
 
 jobs:
 - job: Windows
-  timeoutInMinutes: 120
+  timeoutInMinutes: 360
   strategy:
     matrix:
       Node6:
@@ -42,7 +42,6 @@ jobs:
     condition: succeededOrFailed()
 
 - job: Linux
-  timeoutInMinutes: 120
   strategy:
     matrix:
       Node6:
