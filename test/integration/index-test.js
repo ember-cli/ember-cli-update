@@ -17,8 +17,10 @@ const {
   assertNoStaged
 } = require('../helpers/assertions');
 
+const winMod = process.platform === 'win32' ? 5 : 1;
+
 describe(function() {
-  this.timeout(30 * 1000);
+  this.timeout(30 * 1000 * winMod);
 
   let cwd;
   let sandbox;
@@ -272,7 +274,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
   });
 
   it('can create a personal diff instead of using an output repo', async function() {
-    this.timeout(2 * 60 * 1000);
+    this.timeout(2 * 60 * 1000 * winMod);
 
     let {
       status

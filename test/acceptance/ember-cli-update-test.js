@@ -15,8 +15,10 @@ const {
   assertCodemodRan
 } = require('../helpers/assertions');
 
+const winMod = process.platform === 'win32' ? 5 : 1;
+
 describe(function() {
-  this.timeout(30 * 1000);
+  this.timeout(30 * 1000 * winMod);
 
   let tmpPath;
 
@@ -97,7 +99,7 @@ describe(function() {
   });
 
   it('runs codemods', async function() {
-    this.timeout(5 * 60 * 1000);
+    this.timeout(5 * 60 * 1000 * winMod);
 
     let {
       ps,

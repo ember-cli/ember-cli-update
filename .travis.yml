@@ -39,6 +39,9 @@ jobs:
   - os: osx
     node_js: node
     env: TEST_COMMAND=test:both
+  - os: windows
+    node_js: node
+    env: TEST_COMMAND=test:both
   - stage: Deploy
     cache: ignore
     env: ignore
