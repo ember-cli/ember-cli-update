@@ -1,0 +1,80 @@
+trigger:
+- master
+
+jobs:
+- job: Windows
+  timeoutInMinutes: 360
+  strategy:
+    matrix:
+      Node6:
+        nodejs_version: "6"
+      Node8:
+        nodejs_version: "8"
+    maxParallel: 2
+  
+  pool:
+    vmImage: vs2017-win2016
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(nodejs_version)
+
+  - powershell: |
+      npm config set spin false
+      npm install
+    displayName: Install
+
+  - powershell: |
+      node --version
+      npm --version
+      npm run test:bin -- --reporter=xunit --reporter-options output=results-bin.xml
+      npm run test:command -- --reporter=xunit --reporter-options output=results-command.xml
+    displayName: Test
+    continueOnError: true
+
+  - task: PublishTestResults@2
+    displayName: Publish Tests Results
+    inputs:
+      testResultsFiles: 'results-*.xml'
+      testResultsFormat: XUnit
+      searchFolder: '$(Build.SourcesDirectory)'
+    condition: succeededOrFailed()
+
+- job: Linux
+  strategy:
+    matrix:
+      Node6:
+        nodejs_version: "6"
+      Node8:
+        nodejs_version: "8"
+    maxParallel: 2
+
+  pool:
+    vmImage: ubuntu-16.04
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: $(nodejs_version)
+
+  - bash: |
+      npm config set spin false
+      npm install
+    displayName: Install
+
+  - script: |
+      node --version
+      npm --version
+      npm run test:bin -- --reporter=xunit --reporter-options output=results-bin.xml
+      npm run test:command -- --reporter=xunit --reporter-options output=results-command.xml
+    displayName: Test
+    continueOnError: true
+
+  - task: PublishTestResults@2
+    displayName: Publish Tests Results
+    inputs:
+      testResultsFiles: 'results-*.xml'
+      testResultsFormat: XUnit
+      searchFolder: '$(Build.SourcesDirectory)'
+    condition: succeededOrFailed()
