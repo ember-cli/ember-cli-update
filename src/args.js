@@ -41,6 +41,6 @@ module.exports = {
   'create-custom-diff': {
     type: 'boolean',
     default: false,
-    description: 'Create a personal diff instead of using an output repo'
+    description: 'Create a personal diff using system .ember-cli'
   }
 };

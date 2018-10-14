@@ -78,7 +78,7 @@ ember-cli-update --run-codemods
 | --compare-only | Show the changes between different versions without updating | Boolean | | false |
 | --stats-only | Show all calculated values regarding your project | Boolean | | false |
 | --list-codemods | List available codemods | Boolean | | false |
-| --create-custom-diff | Create a personal diff instead of using an output repo | Boolean | | false |
+| --create-custom-diff | Create a personal diff using system .ember-cli | Boolean | | false |
 
 ## Power User Guide
 
