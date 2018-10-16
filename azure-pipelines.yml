@@ -31,6 +31,7 @@ jobs:
       call npm run test:bin -- --reporter=xunit --reporter-options output=results-bin.xml
     displayName: Test:bin
     continueOnError: true
+    enabled: false
 
   - script: |
       call npm run test:command -- --reporter=xunit --reporter-options output=results-command.xml
