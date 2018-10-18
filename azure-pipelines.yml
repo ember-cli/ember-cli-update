@@ -44,6 +44,7 @@ jobs:
       call npm run test:integration -- --reporter=xunit --reporter-options output=results-integration.xml
     displayName: Test:integration
     continueOnError: true
+    enabled: false
 
   - script: |
       call npm run test:unit -- --reporter=xunit --reporter-options output=results-unit.xml
