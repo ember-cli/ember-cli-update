@@ -7,6 +7,9 @@
     "ember-cli-update": "bin/ember-cli-update.js"
   },
   "scripts": {
+    "test:acceptance": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures mocha \"test/acceptance/**/!(ember-addon)-test.js\"",
+    "test:integration": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures mocha \"test/integration/**/!(ember-addon)-test.js\"",
+    "test:unit": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures mocha \"test/unit/**/!(ember-addon)-test.js\"",
     "test": "npm run test:both",
     "test:both": "npm run test:bin && npm run test:command",
     "test:bin": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures mocha \"test/!(fixtures)/**/!(ember-addon)-test.js\"",
