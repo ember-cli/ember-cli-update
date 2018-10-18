@@ -38,6 +38,7 @@ jobs:
       call npm run test:acceptance -- --reporter=xunit --reporter-options output=results-acceptance.xml
     displayName: Test:acceptance
     continueOnError: true
+    enabled: false
 
   - script: |
       call npm run test:integration -- --reporter=xunit --reporter-options output=results-integration.xml
