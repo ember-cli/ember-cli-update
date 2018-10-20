@@ -7,7 +7,7 @@ const {
   processExit,
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
-const isGitClean = require('git-diff-apply').isGitClean;
+const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
 const utils = require('../../src/utils');
 const buildTmp = require('../helpers/build-tmp');
