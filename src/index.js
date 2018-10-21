@@ -87,7 +87,7 @@ module.exports = function emberCliUpdate({
 
         return inquirer.prompt([{
           type: 'checkbox',
-          message: 'These codemods apply to your project. Select which one\'s to run.',
+          message: 'These codemods apply to your project. Select which ones to run.',
           name: 'codemods',
           choices: Object.keys(codemods)
         }]).then(answers => {
