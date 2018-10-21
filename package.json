@@ -39,7 +39,7 @@
     "debug": "^4.0.0",
     "denodeify": "^1.2.1",
     "execa": "^1.0.0",
-    "git-diff-apply": "^0.10.0",
+    "git-diff-apply": "kellyselden/git-diff-apply#ee5671ffda85533a4a99fc5f248c27641be4b0c7",
     "inquirer": "^6.1.0",
     "merge-package.json": "^2.0.0",
     "npx": "^10.0.1",
