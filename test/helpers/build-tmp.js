@@ -17,8 +17,8 @@ module.exports = function({
   subDir = '',
   npmInstall
 }) {
-  if (process.env.AGENT_TEMPDIRECTORY) {
-    let tmpPath = tmp.dirSync(dir=process.env.AGENT_TEMPDIRECTORY).name;
+  if (process.env.AGENT_BUILDDIRECTORY) {
+    let tmpPath = tmp.dirSync(dir=process.env.AGENT_BUILDDIRECTORY).name;
   } else {
     let tmpPath = tmp.dirSync().name;
   }
