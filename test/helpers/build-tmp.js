@@ -17,12 +17,13 @@ module.exports = function({
   subDir = '',
   npmInstall
 }) {
-  if (process.env.TF_BUILD) {
-    console.log("Detected Azure Pipelines, using Build.BinariesDirectory");
-    let tmpPath = tmp.dirSync({ dir: "d:\\" }).name;
+  let tmpPath;
+  if (process.env.AGENT_TEMPDIRECTORY) {
+    console.log("Detected Azure Pipelines, using agent temp dir");
+    tmpPath = tmp.dirSync({ dir: process.env.AGENT_TEMPDIRECTORY }).name;
   } else {
     console.log("Not using Azure Pipelines...");
-    let tmpPath = tmp.dirSync().name;
+    tmpPath = tmp.dirSync().name;
   }
 
   gitInit({
