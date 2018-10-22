@@ -17,7 +17,11 @@ module.exports = function({
   subDir = '',
   npmInstall
 }) {
-  let tmpPath = tmp.dirSync().name;
+  if (process.env.AGENT_TEMPDIRECTORY) {
+    let tmpPath = tmp.dirSync(dir=process.env.AGENT_TEMPDIRECTORY).name;
+  } else {
+    let tmpPath = tmp.dirSync().name;
+  }
 
   gitInit({
     cwd: tmpPath
