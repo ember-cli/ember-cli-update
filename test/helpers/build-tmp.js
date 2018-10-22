@@ -17,9 +17,9 @@ module.exports = function({
   subDir = '',
   npmInstall
 }) {
-  if (process.env.BUILD_BINARIESDIRECTORY) {
+  if (process.env.TF_BUILD) {
     console.log("Detected Azure Pipelines, using Build.BinariesDirectory");
-    let tmpPath = tmp.dirSync({ dir: process.env.BUILD_BINARIESDIRECTORY }).name;
+    let tmpPath = tmp.dirSync({ dir: "d:\\" }).name;
   } else {
     console.log("Not using Azure Pipelines...");
     let tmpPath = tmp.dirSync().name;
