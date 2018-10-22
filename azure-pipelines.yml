@@ -39,8 +39,8 @@ jobs:
     displayName: Test:acceptance
     continueOnError: true
   
-  - bash: |
-      cat C:\npm\cache\_logs\*.log
+  - script: |
+      more C:\npm\cache\_logs\*.log
     displayName: Show npm logs
     continueOnError: true
 
