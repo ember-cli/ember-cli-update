@@ -83,72 +83,72 @@ describe('Acceptance - ember-cli-update', function() {
     });
   });
 
-  it('updates addon', function() {
-    return merge({
-      fixturesPath: 'test/fixtures/local/my-addon'
-    }).promise.then(({
-      status
-    }) => {
-      fixtureCompare({
-        mergeFixtures: 'test/fixtures/merge/my-addon'
-      });
+  // it('updates addon', function() {
+  //   return merge({
+  //     fixturesPath: 'test/fixtures/local/my-addon'
+  //   }).promise.then(({
+  //     status
+  //   }) => {
+  //     fixtureCompare({
+  //       mergeFixtures: 'test/fixtures/merge/my-addon'
+  //     });
 
-      assertNormalUpdate(status);
-      assertNoUnstaged(status);
-    });
-  });
+  //     assertNormalUpdate(status);
+  //     assertNoUnstaged(status);
+  //   });
+  // });
 
-  (shouldSkipCodemods ? it.skip : it)('runs codemods', function() {
-    this.timeout(5 * 60 * 1000);
+  // (shouldSkipCodemods ? it.skip : it)('runs codemods', function() {
+  //   this.timeout(5 * 60 * 1000);
 
-    let {
-      ps,
-      promise
-    } = merge({
-      fixturesPath: 'test/fixtures/merge/my-app',
-      runCodemods: true
-    });
+  //   let {
+  //     ps,
+  //     promise
+  //   } = merge({
+  //     fixturesPath: 'test/fixtures/merge/my-app',
+  //     runCodemods: true
+  //   });
 
-    ps.stdout.on('data', data => {
-      let str = data.toString();
-      if (str.includes('These codemods apply to your project.')) {
-        ps.stdin.write('a\n');
-      }
-    });
+  //   ps.stdout.on('data', data => {
+  //     let str = data.toString();
+  //     if (str.includes('These codemods apply to your project.')) {
+  //       ps.stdin.write('a\n');
+  //     }
+  //   });
 
-    return promise.then(({
-      status
-    }) => {
-      // file is indeterminent between OS's, so ignore
-      fs.removeSync(path.join(tmpPath, 'MODULE_REPORT.md'));
+  //   return promise.then(({
+  //     status
+  //   }) => {
+  //     // file is indeterminent between OS's, so ignore
+  //     fs.removeSync(path.join(tmpPath, 'MODULE_REPORT.md'));
 
-      let mergeFixtures = 'test/fixtures/codemod/latest-node/my-app';
-      if (process.env.NODE_LTS) {
-        mergeFixtures = 'test/fixtures/codemod/min-node/my-app';
-      }
+  //     let mergeFixtures = 'test/fixtures/codemod/latest-node/my-app';
+  //     if (process.env.NODE_LTS) {
+  //       mergeFixtures = 'test/fixtures/codemod/min-node/my-app';
+  //     }
 
-      fixtureCompare({
-        mergeFixtures
-      });
+  //     fixtureCompare({
+  //       mergeFixtures
+  //     });
 
-      assertNoUnstaged(status);
-      assertCodemodRan(status);
-    });
-  });
+  //     assertNoUnstaged(status);
+  //     assertCodemodRan(status);
+  //   });
+  // });
 
-  it('scopes to sub dir if run from there', function() {
-    return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
-      subDir: 'foo/bar'
-    }).promise.then(({
-      status
-    }) => {
-      fixtureCompare({
-        mergeFixtures: 'test/fixtures/merge/my-app'
-      });
+  // it('scopes to sub dir if run from there', function() {
+  //   return merge({
+  //     fixturesPath: 'test/fixtures/local/my-app',
+  //     subDir: 'foo/bar'
+  //   }).promise.then(({
+  //     status
+  //   }) => {
+  //     fixtureCompare({
+  //       mergeFixtures: 'test/fixtures/merge/my-app'
+  //     });
 
-      assertNormalUpdate(status);
-      assertNoUnstaged(status);
-    });
-  });
+  //     assertNormalUpdate(status);
+  //     assertNoUnstaged(status);
+  //   });
+  // });
 });
