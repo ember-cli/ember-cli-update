@@ -276,7 +276,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
   });
 
   it('can create a personal diff instead of using an output repo', function() {
-    this.timeout(3 * 60 * 1000);
+    this.timeout(5 * 60 * 1000);
 
     return merge({
       fixturesPath: 'test/fixtures/local/my-custom-app',
