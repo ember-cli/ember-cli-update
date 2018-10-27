@@ -60,7 +60,7 @@
     "eslint": "^5.0.0",
     "eslint-config-sane": "^0.6.0",
     "eslint-plugin-mocha": "^5.0.0",
-    "eslint-plugin-node": "^7.0.0",
+    "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-prefer-let": "kellyselden/eslint-plugin-prefer-let#const-require",
     "fs-extra": "^7.0.0",
     "git-fixtures": "^0.12.0",
