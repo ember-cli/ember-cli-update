@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/ember-cli/ember-cli-update.svg?branch=master)](https://travis-ci.org/ember-cli/ember-cli-update)
 [![Build status](https://ci.appveyor.com/api/projects/status/iguxxyxkiu9kyeyo/branch/master?svg=true)](https://ci.appveyor.com/project/embercli/ember-cli-update/branch/master)
 
-Update Ember CLI Ember.js apps and addons (and Glimmer.js apps)
+Update [Ember CLI](https://ember-cli.com/) [Ember.js](https://www.emberjs.com/) apps and addons (and [Glimmer.js](https://glimmerjs.com/) apps)
 
 You can run this either as a global executable available to all projects or an Ember CLI command in a single project.
 
