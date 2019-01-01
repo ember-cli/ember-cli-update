@@ -10,13 +10,15 @@ const getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
 const formatStats = require('./format-stats');
-const getApplicableCodemods = require('./get-applicable-codemods');
+const getCodemods = require('boilerplate-update/src/get-codemods');
+const getApplicableCodemods = require('boilerplate-update/src/get-applicable-codemods');
 const runCodemods = require('boilerplate-update/src/run-codemods');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const run = require('./run');
-const utils = require('./utils');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
+
+const codemodsUrl = 'https://rawgit.com/ember-cli/ember-cli-update-codemods-manifest/v2/manifest.json';
 
 module.exports = function emberCliUpdate({
   from,
@@ -31,7 +33,7 @@ module.exports = function emberCliUpdate({
 }) {
   return Promise.resolve().then(() => {
     if (listCodemods) {
-      return utils.getCodemods().then(codemods => {
+      return getCodemods(codemodsUrl).then(codemods => {
         return JSON.stringify(codemods, null, 2);
       });
     }
@@ -65,6 +67,7 @@ module.exports = function emberCliUpdate({
 
     if (statsOnly) {
       return getApplicableCodemods({
+        url: codemodsUrl,
         projectType,
         startVersion
       }).then(codemods => {
@@ -80,6 +83,7 @@ module.exports = function emberCliUpdate({
 
     if (_runCodemods) {
       return getApplicableCodemods({
+        url: codemodsUrl,
         projectType,
         startVersion
       }).then(codemods => {
