@@ -18,7 +18,7 @@
         "${workspaceRoot}/test/!(fixtures)/**/*-test.js"
       ],
       "env": {
-        "DEBUG": "ember-cli-update,git-diff-apply,git-fixtures,ember-cli-addon-tests"
+        "DEBUG": "ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures,ember-cli-addon-tests"
       },
       "internalConsoleOptions": "openOnSessionStart"
     }

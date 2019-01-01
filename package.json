@@ -9,8 +9,8 @@
   "scripts": {
     "test": "npm run test:both",
     "test:both": "npm run test:bin && npm run test:command",
-    "test:bin": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures mocha \"test/!(fixtures)/**/!(ember-addon)-test.js\"",
-    "test:command": "cross-env DEBUG=ember-cli-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/ember-addon-test.js",
+    "test:bin": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures mocha \"test/!(fixtures)/**/!(ember-addon)-test.js\"",
+    "test:command": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/ember-addon-test.js",
     "posttest": "npm run lint",
     "prelint": "eslint --version",
     "lint": "eslint .",
@@ -35,6 +35,7 @@
     "node": ">=6"
   },
   "dependencies": {
+    "boilerplate-update": "^0.1.0",
     "cpr": "^3.0.1",
     "debug": "^4.0.0",
     "denodeify": "^1.2.1",
