@@ -40,7 +40,7 @@ module.exports = function getStartAndEndCommands({
 };
 
 function getCommand(cwd, projectName) {
-  let appPath = path.resolve(cwd, projectName);
+  let appPath = path.join(cwd, projectName);
   return `node ${cpr} ${appPath} .`;
 }
 
@@ -54,13 +54,13 @@ function tryCreateLocalCommand({
 }) {
   return utils.resolve('ember-cli', { basedir }).then(emberCliPath => {
     let emberCliRoot = path.resolve(path.dirname(emberCliPath), '../..');
-    let emberCliVersion = utils.require(path.resolve(emberCliRoot, 'package.json')).version;
+    let emberCliVersion = utils.require(path.join(emberCliRoot, 'package.json')).version;
     if (emberCliVersion !== version) {
       // installed version is out-of-date
       return module.exports.createRemoteCommand(projectName, command, version);
     }
     return tmpDir().then(cwd => {
-      utils.run(`node ${path.resolve(emberCliRoot, 'bin/ember')} ${command} ${options}`, { cwd });
+      utils.run(`node ${path.join(emberCliRoot, 'bin/ember')} ${command} ${options}`, { cwd });
       return getCommand(cwd, projectName);
     });
   }).catch(err => {
