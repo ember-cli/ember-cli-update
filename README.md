@@ -146,9 +146,9 @@ If you run into an error like `error: unrecognized input`, you may need to updat
 
 If you are getting an error or unexpected results, running the command with the debug flag:
 
-* Unix (global):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,git-diff-apply ember-cli-update`
-* Windows (global):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,git-diff-apply && ember-cli-update`
-* Unix (command):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,git-diff-apply ember update`
-* Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,git-diff-apply && ember update`
+* Unix (global):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,boilerplate-update,git-diff-apply ember-cli-update`
+* Windows (global):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,boilerplate-update,git-diff-apply && ember-cli-update`
+* Unix (command):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,boilerplate-update,git-diff-apply ember update`
+* Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,boilerplate-update,git-diff-apply && ember update`
 
 will give you more detailed logging.
