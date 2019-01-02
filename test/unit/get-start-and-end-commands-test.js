@@ -23,7 +23,7 @@ const globalCommand = 'test remote command';
 const startVersion = '0.0.1';
 const endVersion = '0.0.2';
 
-describe('Unit - getStartAndEndCommands', function() {
+describe.skip('Unit - getStartAndEndCommands', function() {
   let sandbox;
   let createRemoteCommandStub;
   let createLocalCommandStub;
