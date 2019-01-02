@@ -10,15 +10,15 @@ module.exports = function getStartAndEndCommands({
   startVersion,
   endVersion
 }) {
-  let options = '-sn -sg';
+  let options = `${projectName} -sn -sg`;
 
   let command;
   switch (projectType) {
     case 'app':
-      command = `new ${projectName} ${options}`;
+      command = `new ${options}`;
       break;
     case 'addon':
-      command = `addon ${projectName} ${options}`;
+      command = `addon ${options}`;
       break;
     case 'glimmer':
       // command = `new ${projectName} -b @glimmer/blueprint`;
