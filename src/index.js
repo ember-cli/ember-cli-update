@@ -6,7 +6,7 @@ const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
 const getVersions = require('./get-versions');
 const getProjectVersion = require('./get-project-version');
-const getTagVersion = require('./get-tag-version');
+const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
 const formatStats = require('./format-stats');
@@ -17,6 +17,7 @@ const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const run = require('./run');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
+const co = require('co');
 
 const codemodsUrl = 'https://rawgit.com/ember-cli/ember-cli-update-codemods-manifest/v2/manifest.json';
 
@@ -31,7 +32,7 @@ module.exports = function emberCliUpdate({
   listCodemods,
   createCustomDiff
 }) {
-  return Promise.resolve().then(() => {
+  return Promise.resolve().then(co.wrap(function*() {
     if (listCodemods) {
       return getCodemods(codemodsUrl).then(codemods => {
         return JSON.stringify(codemods, null, 2);
@@ -42,15 +43,16 @@ module.exports = function emberCliUpdate({
     let projectType = getProjectType(packageJson);
     let packageVersion = getPackageVersion(packageJson, projectType);
     let versions = getVersions(projectType);
+    let getTagVersion = _getTagVersion(versions, projectType);
 
     let startVersion;
     if (from) {
-      startVersion = getTagVersion(from, versions, projectType);
+      startVersion = yield getTagVersion(from);
     } else {
       startVersion = getProjectVersion(packageVersion, versions, projectType);
     }
 
-    let endVersion = getTagVersion(to, versions, projectType);
+    let endVersion = yield getTagVersion(to);
 
     let remoteUrl = getRemoteUrl(projectType);
 
@@ -138,5 +140,5 @@ module.exports = function emberCliUpdate({
         run('git add package.json');
       });
     });
-  });
+  }));
 };
