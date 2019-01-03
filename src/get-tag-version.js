@@ -1,44 +1,28 @@
 'use strict';
 
-const utils = require('./utils');
-const semver = require('semver');
+const _getTagVersion = require('boilerplate-update/src/get-tag-version');
 
-const distTags = [
-  'latest',
-  'beta'
-];
-
-module.exports = function getTagVersion(to, versions, projectType) {
-  let distTag;
-  let version;
-  if (distTags.indexOf(to) > -1) {
-    distTag = to;
-  } else {
-    version = to;
+module.exports = function getTagVersion(versions, projectType) {
+  let packageName;
+  switch (projectType) {
+    case 'app':
+    case 'addon':
+      packageName = 'ember-cli';
+      break;
+    case 'glimmer':
+      packageName = '@glimmer/blueprint';
+      break;
   }
 
-  if (version) {
-    let isAbsolute = semver.clean(version);
-    if (!isAbsolute) {
-      version = semver.maxSatisfying(versions, version);
-    }
-  } else {
-    let pkg;
-
-    switch (projectType) {
-      case 'app':
-      case 'addon':
-        pkg = 'ember-cli';
-        break;
-      case 'glimmer':
-        pkg = '@glimmer/blueprint';
-        break;
-    }
-
-    version = JSON.parse(
-      utils.run(`npm info ${pkg}@${distTag} version --json`)
-    );
-  }
-
-  return version;
+  return function getTagVersion(range) {
+    return _getTagVersion({
+      range,
+      versions,
+      packageName,
+      distTags: [
+        'latest',
+        'beta'
+      ]
+    });
+  };
 };
