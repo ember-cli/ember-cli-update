@@ -12,7 +12,7 @@ const compareVersions = require('./compare-versions');
 const formatStats = require('./format-stats');
 const getCodemods = require('boilerplate-update/src/get-codemods');
 const getApplicableCodemods = require('boilerplate-update/src/get-applicable-codemods');
-const runCodemods = require('boilerplate-update/src/run-codemods');
+const promptAndRunCodemods = require('boilerplate-update/src/prompt-and-run-codemods');
 const mergePackageJson = require('merge-package.json');
 const gitDiffApply = require('git-diff-apply');
 const run = require('./run');
@@ -82,21 +82,10 @@ module.exports = function emberCliUpdate({
     }
 
     if (_runCodemods) {
-      return getApplicableCodemods({
+      return promptAndRunCodemods({
         url: codemodsUrl,
         projectType,
         startVersion
-      }).then(codemods => {
-        const inquirer = require('inquirer');
-
-        return inquirer.prompt([{
-          type: 'checkbox',
-          message: 'These codemods apply to your project. Select which ones to run.',
-          name: 'codemods',
-          choices: Object.keys(codemods)
-        }]).then(answers => {
-          return runCodemods(answers.codemods.map(codemod => codemods[codemod]));
-        });
       });
     }
 
