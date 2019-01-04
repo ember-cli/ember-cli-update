@@ -20,7 +20,10 @@ module.exports = function getTagVersion(to, versions, projectType) {
   if (version) {
     let isAbsolute = semver.clean(version);
     if (!isAbsolute) {
-      version = semver.maxSatisfying(versions, version);
+      let _version = semver.maxSatisfying(versions, version);
+      if (_version) {
+        version = _version;
+      }
     }
   } else {
     let pkg;
