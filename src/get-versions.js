@@ -3,21 +3,17 @@
 const utils = require('./utils');
 
 module.exports = function getVersions(projectType) {
-  let pkg;
+  let packageName;
 
   switch (projectType) {
     case 'app':
     case 'addon':
-      pkg = 'ember-cli';
+      packageName = 'ember-cli';
       break;
     case 'glimmer':
-      pkg = '@glimmer/blueprint';
+      packageName = '@glimmer/blueprint';
       break;
   }
 
-  let versions = JSON.parse(
-    utils.run(`npm info ${pkg} versions --json`)
-  );
-
-  return versions;
+  return utils.getVersions(packageName);
 };
