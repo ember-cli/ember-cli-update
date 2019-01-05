@@ -2,6 +2,7 @@
 
 const path = require('path');
 const utils = require('./utils');
+const { spawn } = require('child_process');
 const _getStartAndEndCommands = require('boilerplate-update/src/get-start-and-end-commands');
 
 module.exports = function getStartAndEndCommands({
@@ -49,11 +50,20 @@ function createProjectFromCache(command) {
     options
   }) {
     return function createProject(cwd) {
-      utils.run(`node ${path.join(packageRoot, 'bin/ember')} ${command}`, { cwd });
+      let ps = spawn('node', [
+        path.join(packageRoot, 'bin/ember'),
+        ...command.split(' ')
+      ], {
+        cwd
+      });
 
-      return postCreateProject({
-        cwd,
-        options
+      return new Promise(resolve => {
+        ps.on('exit', resolve);
+      }).then(() => {
+        return postCreateProject({
+          cwd,
+          options
+        });
       });
     };
   };
