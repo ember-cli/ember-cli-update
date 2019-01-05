@@ -35,7 +35,7 @@
     "node": ">=6"
   },
   "dependencies": {
-    "boilerplate-update": "^0.6.0",
+    "boilerplate-update": "^0.7.0",
     "co": "^4.6.0",
     "debug": "^4.0.0",
     "git-diff-apply": "^0.10.2",
