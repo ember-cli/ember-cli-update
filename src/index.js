@@ -10,7 +10,7 @@ const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
 const formatStats = require('./format-stats');
-const getCodemods = require('boilerplate-update/src/get-codemods');
+const listCodemods = require('boilerplate-update/src/list-codemods');
 const getApplicableCodemods = require('boilerplate-update/src/get-applicable-codemods');
 const promptAndRunCodemods = require('boilerplate-update/src/prompt-and-run-codemods');
 const mergePackageJson = require('merge-package.json');
@@ -29,14 +29,12 @@ module.exports = function emberCliUpdate({
   reset,
   compareOnly,
   statsOnly,
-  listCodemods,
+  listCodemods: _listCodemods,
   createCustomDiff
 }) {
   return Promise.resolve().then(co.wrap(function*() {
-    if (listCodemods) {
-      return getCodemods(codemodsUrl).then(codemods => {
-        return JSON.stringify(codemods, null, 2);
-      });
+    if (_listCodemods) {
+      return listCodemods(codemodsUrl);
     }
 
     let packageJson = yield getPackageJson('.');
