@@ -24,6 +24,9 @@ before_install:
 - which npx
 # don't accidentally use the global npx
 - rm $(which npx)
+# sometimes this exists
+# https://travis-ci.org/ember-cli/ember-cli-update/jobs/475792468#L96
+- rm /usr/local/bin/npx || true
 # test that we can't find it
 - "! which npx"
 script:
