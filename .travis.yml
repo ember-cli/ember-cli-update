@@ -21,6 +21,11 @@ before_install:
     npm --version;
     export NODE_LTS="true";
   fi
+- which npx
+# don't accidentally use the global npx
+- rm $(which npx)
+# test that we can't find it
+- "! which npx"
 script:
 - npm run $TEST_COMMAND
 jobs:

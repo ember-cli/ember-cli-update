@@ -23,6 +23,12 @@ install:
         npm install -g npm@5
       }
   - RefreshEnv
+  - where npx
+  # don't accidentally use the global npx
+  - ps: rm "C:\Program Files (x86)\nodejs\npx*"
+  - ps: rm C:\Users\appveyor\AppData\Roaming\npm\npx*
+  # test that we can't find it
+  - ps: if (gcm npx) { exit }
   - npm install
 
 # Post-install test scripts.
