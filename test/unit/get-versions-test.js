@@ -2,67 +2,51 @@
 
 const { expect } = require('chai');
 const sinon = require('sinon');
+const co = require('co');
 const getVersions = require('../../src/get-versions');
 const utils = require('../../src/utils');
 
 describe('Unit - getVersions', function() {
   let sandbox;
+  let getVersionsStub;
 
   beforeEach(function() {
     sandbox = sinon.createSandbox();
+
+    getVersionsStub = sandbox.stub(utils, 'getVersions');
   });
 
   afterEach(function() {
     sandbox.restore();
   });
 
-  function createStub(versionsString) {
-    let { run } = utils;
-    return sandbox.stub(utils, 'run').callsFake(function(command) {
-      if (command.indexOf('npm info') > -1) {
-        return versionsString;
-      }
+  it('gets versions for ember app', co.wrap(function*() {
+    getVersionsStub.withArgs('ember-cli').resolves(['1']);
 
-      return run.apply(this, arguments);
-    });
-  }
-
-  it('gets versions for ember app', function() {
-    let versionsString = '["1"]';
-
-    let runStub = createStub(versionsString);
-
-    let versions = getVersions('app');
+    let versions = yield getVersions('app');
 
     expect(versions).to.deep.equal(['1']);
 
-    expect(runStub.calledOnce).to.be.ok;
-    expect(runStub.args[0][0]).to.contain('ember-cli');
-  });
+    expect(getVersionsStub.calledOnce).to.be.ok;
+  }));
 
-  it('gets versions for ember addon', function() {
-    let versionsString = '["2"]';
+  it('gets versions for ember addon', co.wrap(function*() {
+    getVersionsStub.withArgs('ember-cli').resolves(['2']);
 
-    let runStub = createStub(versionsString);
-
-    let versions = getVersions('addon');
+    let versions = yield getVersions('addon');
 
     expect(versions).to.deep.equal(['2']);
 
-    expect(runStub.calledOnce).to.be.ok;
-    expect(runStub.args[0][0]).to.contain('ember-cli');
-  });
+    expect(getVersionsStub.calledOnce).to.be.ok;
+  }));
 
-  it('gets versions for glimmer app', function() {
-    let versionsString = '["3"]';
+  it('gets versions for glimmer app', co.wrap(function*() {
+    getVersionsStub.withArgs('@glimmer/blueprint').resolves(['3']);
 
-    let runStub = sandbox.stub(utils, 'run').returns(versionsString);
-
-    let versions = getVersions('glimmer');
+    let versions = yield getVersions('glimmer');
 
     expect(versions).to.deep.equal(['3']);
 
-    expect(runStub.calledOnce).to.be.ok;
-    expect(runStub.args[0][0]).to.contain('@glimmer/blueprint');
-  });
+    expect(getVersionsStub.calledOnce).to.be.ok;
+  }));
 });

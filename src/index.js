@@ -1,7 +1,7 @@
 'use strict';
 
 const fs = require('fs');
-const getPackageJson = require('./get-package-json');
+const getPackageJson = require('boilerplate-update/src/get-package-json');
 const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
 const getVersions = require('./get-versions');
@@ -39,10 +39,10 @@ module.exports = function emberCliUpdate({
       });
     }
 
-    let packageJson = getPackageJson('.');
+    let packageJson = yield getPackageJson('.');
     let projectType = getProjectType(packageJson);
     let packageVersion = getPackageVersion(packageJson, projectType);
-    let versions = getVersions(projectType);
+    let versions = yield getVersions(projectType);
     let getTagVersion = _getTagVersion(versions, projectType);
 
     let startVersion;
