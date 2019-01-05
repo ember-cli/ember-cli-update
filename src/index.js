@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs');
 const getPackageJson = require('boilerplate-update/src/get-package-json');
 const getProjectType = require('./get-project-type');
 const getPackageVersion = require('./get-package-version');
@@ -13,9 +12,7 @@ const formatStats = require('./format-stats');
 const listCodemods = require('boilerplate-update/src/list-codemods');
 const getApplicableCodemods = require('boilerplate-update/src/get-applicable-codemods');
 const promptAndRunCodemods = require('boilerplate-update/src/prompt-and-run-codemods');
-const mergePackageJson = require('merge-package.json');
-const gitDiffApply = require('git-diff-apply');
-const run = require('./run');
+const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const co = require('co');
 
@@ -105,37 +102,15 @@ module.exports = function emberCliUpdate({
         });
       }
     }).then(() => {
-      let ignoredFiles;
-      if (!reset) {
-        ignoredFiles = ['package.json'];
-      } else {
-        ignoredFiles = [];
-      }
-
-      return gitDiffApply({
+      return boilerplateUpdate({
         remoteUrl,
         startTag,
         endTag,
         resolveConflicts,
-        ignoredFiles,
         reset,
         createCustomDiff,
         startCommand,
         endCommand
-      }).then(results => {
-        if (reset) {
-          return;
-        }
-
-        let myPackageJson = fs.readFileSync('package.json', 'utf8');
-        let fromPackageJson = results.from['package.json'];
-        let toPackageJson = results.to['package.json'];
-
-        let newPackageJson = mergePackageJson(myPackageJson, fromPackageJson, toPackageJson);
-
-        fs.writeFileSync('package.json', newPackageJson);
-
-        run('git add package.json');
       });
     });
   }));
