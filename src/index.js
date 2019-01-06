@@ -7,7 +7,6 @@ const getVersions = require('./get-versions');
 const getProjectVersion = require('./get-project-version');
 const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
-const compareVersions = require('./compare-versions');
 const listCodemods = require('boilerplate-update/src/list-codemods');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
@@ -48,17 +47,6 @@ module.exports = function emberCliUpdate({
 
     let remoteUrl = getRemoteUrl(projectType);
 
-    let startTag = `v${startVersion}`;
-    let endTag = `v${endVersion}`;
-
-    if (compareOnly) {
-      return compareVersions({
-        remoteUrl,
-        startTag,
-        endTag
-      });
-    }
-
     let customDiffOptions;
     if (createCustomDiff) {
       customDiffOptions = getStartAndEndCommands({
@@ -71,8 +59,7 @@ module.exports = function emberCliUpdate({
 
     return boilerplateUpdate({
       remoteUrl,
-      startTag,
-      endTag,
+      compareOnly,
       resolveConflicts,
       reset,
       statsOnly,
