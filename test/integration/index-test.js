@@ -9,7 +9,7 @@ const {
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
-const utils = require('../../src/utils');
+const utils = require('boilerplate-update/src/utils');
 const buildTmp = require('../helpers/build-tmp');
 const {
   assertNoUnstaged,
@@ -212,15 +212,19 @@ describe('Integration - index', function() {
   });
 
   it('resolves semver ranges', function() {
-    let opn = sandbox.stub(utils, 'opn');
-
     return merge({
       fixturesPath: 'test/fixtures/local/my-app',
-      from: '2.11',
+      from: '1.13',
       to: '^2',
-      compareOnly: true
-    }).then(() => {
-      expect(opn.args[0][0]).to.equal('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v2.18.2');
+      statsOnly: true
+    }).then(({
+      result
+    }) => {
+      expect(result).to.equal(`project type: app
+from version: 1.13.15
+to version: 2.18.2
+output repo: https://github.com/ember-cli/ember-new-output
+applicable codemods: `);
     });
   });
 
