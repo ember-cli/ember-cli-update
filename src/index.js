@@ -8,9 +8,7 @@ const getProjectVersion = require('./get-project-version');
 const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const compareVersions = require('./compare-versions');
-const formatStats = require('./format-stats');
 const listCodemods = require('boilerplate-update/src/list-codemods');
-const getApplicableCodemods = require('boilerplate-update/src/get-applicable-codemods');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const co = require('co');
@@ -61,22 +59,6 @@ module.exports = function emberCliUpdate({
       });
     }
 
-    if (statsOnly) {
-      return getApplicableCodemods({
-        url: codemodsUrl,
-        projectType,
-        startVersion
-      }).then(codemods => {
-        return formatStats({
-          projectType,
-          startVersion,
-          endVersion,
-          remoteUrl,
-          codemods
-        });
-      });
-    }
-
     let customDiffOptions;
     if (createCustomDiff) {
       customDiffOptions = getStartAndEndCommands({
@@ -93,10 +75,12 @@ module.exports = function emberCliUpdate({
       endTag,
       resolveConflicts,
       reset,
+      statsOnly,
       runCodemods,
       codemodsUrl,
       projectType,
       startVersion,
+      endVersion,
       createCustomDiff,
       customDiffOptions
     });
