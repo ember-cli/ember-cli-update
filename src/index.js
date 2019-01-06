@@ -11,7 +11,6 @@ const compareVersions = require('./compare-versions');
 const formatStats = require('./format-stats');
 const listCodemods = require('boilerplate-update/src/list-codemods');
 const getApplicableCodemods = require('boilerplate-update/src/get-applicable-codemods');
-const promptAndRunCodemods = require('boilerplate-update/src/prompt-and-run-codemods');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const co = require('co');
@@ -22,7 +21,7 @@ module.exports = function emberCliUpdate({
   from,
   to,
   resolveConflicts,
-  runCodemods: _runCodemods,
+  runCodemods,
   reset,
   compareOnly,
   statsOnly,
@@ -78,40 +77,28 @@ module.exports = function emberCliUpdate({
       });
     }
 
-    if (_runCodemods) {
-      return promptAndRunCodemods({
-        url: codemodsUrl,
+    let customDiffOptions;
+    if (createCustomDiff) {
+      customDiffOptions = getStartAndEndCommands({
+        projectName: packageJson.name,
         projectType,
-        startVersion
+        startVersion,
+        endVersion
       });
     }
 
-    let startCommand;
-    let endCommand;
-
-    return Promise.resolve().then(() => {
-      if (createCustomDiff) {
-        return getStartAndEndCommands({
-          projectName: packageJson.name,
-          projectType,
-          startVersion,
-          endVersion
-        }).then(commands => {
-          startCommand = commands.startCommand;
-          endCommand = commands.endCommand;
-        });
-      }
-    }).then(() => {
-      return boilerplateUpdate({
-        remoteUrl,
-        startTag,
-        endTag,
-        resolveConflicts,
-        reset,
-        createCustomDiff,
-        startCommand,
-        endCommand
-      });
+    return boilerplateUpdate({
+      remoteUrl,
+      startTag,
+      endTag,
+      resolveConflicts,
+      reset,
+      runCodemods,
+      codemodsUrl,
+      projectType,
+      startVersion,
+      createCustomDiff,
+      customDiffOptions
     });
   }));
 };

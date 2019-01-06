@@ -3,7 +3,6 @@
 const path = require('path');
 const utils = require('./utils');
 const { spawn } = require('child_process');
-const _getStartAndEndCommands = require('boilerplate-update/src/get-start-and-end-commands');
 
 module.exports = function getStartAndEndCommands({
   projectName,
@@ -28,7 +27,7 @@ module.exports = function getStartAndEndCommands({
       throw 'cannot checkout older versions of glimmer blueprint';
   }
 
-  return _getStartAndEndCommands({
+  return {
     projectName,
     projectType,
     packageName: 'ember-cli',
@@ -41,7 +40,7 @@ module.exports = function getStartAndEndCommands({
     endOptions: {
       packageVersion: endVersion
     }
-  });
+  };
 };
 
 function createProjectFromCache(command) {
