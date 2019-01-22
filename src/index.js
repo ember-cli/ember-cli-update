@@ -14,7 +14,7 @@ const co = require('co');
 
 const codemodsUrl = 'https://rawgit.com/ember-cli/ember-cli-update-codemods-manifest/v2/manifest.json';
 
-module.exports = function emberCliUpdate({
+module.exports = co.wrap(function* emberCliUpdate({
   from,
   to,
   resolveConflicts,
@@ -25,51 +25,49 @@ module.exports = function emberCliUpdate({
   listCodemods: _listCodemods,
   createCustomDiff
 }) {
-  return Promise.resolve().then(co.wrap(function*() {
-    if (_listCodemods) {
-      return listCodemods(codemodsUrl);
-    }
+  if (_listCodemods) {
+    return yield listCodemods(codemodsUrl);
+  }
 
-    let packageJson = yield getPackageJson('.');
-    let projectType = getProjectType(packageJson);
-    let packageVersion = getPackageVersion(packageJson, projectType);
-    let versions = yield getVersions(projectType);
-    let getTagVersion = _getTagVersion(versions, projectType);
+  let packageJson = yield getPackageJson('.');
+  let projectType = getProjectType(packageJson);
+  let packageVersion = getPackageVersion(packageJson, projectType);
+  let versions = yield getVersions(projectType);
+  let getTagVersion = _getTagVersion(versions, projectType);
 
-    let startVersion;
-    if (from) {
-      startVersion = yield getTagVersion(from);
-    } else {
-      startVersion = getProjectVersion(packageVersion, versions, projectType);
-    }
+  let startVersion;
+  if (from) {
+    startVersion = yield getTagVersion(from);
+  } else {
+    startVersion = getProjectVersion(packageVersion, versions, projectType);
+  }
 
-    let endVersion = yield getTagVersion(to);
+  let endVersion = yield getTagVersion(to);
 
-    let remoteUrl = getRemoteUrl(projectType);
+  let remoteUrl = getRemoteUrl(projectType);
 
-    let customDiffOptions;
-    if (createCustomDiff) {
-      customDiffOptions = getStartAndEndCommands({
-        projectName: packageJson.name,
-        projectType,
-        startVersion,
-        endVersion
-      });
-    }
-
-    return boilerplateUpdate({
-      remoteUrl,
-      compareOnly,
-      resolveConflicts,
-      reset,
-      statsOnly,
-      runCodemods,
-      codemodsUrl,
+  let customDiffOptions;
+  if (createCustomDiff) {
+    customDiffOptions = getStartAndEndCommands({
+      projectName: packageJson.name,
       projectType,
       startVersion,
-      endVersion,
-      createCustomDiff,
-      customDiffOptions
+      endVersion
     });
-  }));
-};
+  }
+
+  return yield boilerplateUpdate({
+    remoteUrl,
+    compareOnly,
+    resolveConflicts,
+    reset,
+    statsOnly,
+    runCodemods,
+    codemodsUrl,
+    projectType,
+    startVersion,
+    endVersion,
+    createCustomDiff,
+    customDiffOptions
+  });
+});
