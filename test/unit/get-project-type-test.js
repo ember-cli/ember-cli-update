@@ -3,7 +3,7 @@
 const { expect } = require('chai');
 const getProjectType = require('../../src/get-project-type');
 
-describe('Integration - getProjectType', function() {
+describe('Unit - getProjectType', function() {
   it('throws if not found', function() {
     let packageJson = {};
 
