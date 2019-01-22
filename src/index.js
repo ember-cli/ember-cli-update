@@ -29,7 +29,7 @@ module.exports = co.wrap(function* emberCliUpdate({
     return yield listCodemods(codemodsUrl);
   }
 
-  let packageJson = yield getPackageJson('.');
+  let packageJson = yield getPackageJson();
   let projectType = getProjectType(packageJson);
   let packageVersion = getPackageVersion(packageJson, projectType);
   let versions = yield getVersions(projectType);
