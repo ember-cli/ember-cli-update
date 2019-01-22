@@ -3,7 +3,7 @@
 const { expect } = require('chai');
 const getPackageVersion = require('../../src/get-package-version');
 
-describe('Integration - getPackageVersion', function() {
+describe('Unit - getPackageVersion', function() {
   it('throws if no devDependencies', function() {
     let packageJson = {};
 
