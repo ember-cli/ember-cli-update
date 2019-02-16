@@ -23,7 +23,8 @@ module.exports = co.wrap(function* emberCliUpdate({
   compareOnly,
   statsOnly,
   listCodemods: _listCodemods,
-  createCustomDiff
+  createCustomDiff,
+  wasRunAsExecutable
 }) {
   if (_listCodemods) {
     return yield listCodemods(codemodsUrl);
@@ -56,7 +57,7 @@ module.exports = co.wrap(function* emberCliUpdate({
     });
   }
 
-  return yield boilerplateUpdate({
+  return yield (yield boilerplateUpdate({
     remoteUrl,
     compareOnly,
     resolveConflicts,
@@ -68,6 +69,7 @@ module.exports = co.wrap(function* emberCliUpdate({
     startVersion,
     endVersion,
     createCustomDiff,
-    customDiffOptions
-  });
+    customDiffOptions,
+    wasRunAsExecutable
+  })).promise;
 });
