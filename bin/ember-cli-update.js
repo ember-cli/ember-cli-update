@@ -41,7 +41,8 @@ emberCliUpdate({
   compareOnly,
   statsOnly,
   listCodemods,
-  createCustomDiff
+  createCustomDiff,
+  wasRunAsExecutable: true
 }).then(message => {
   if (message) {
     console.log(message);
