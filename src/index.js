@@ -12,7 +12,7 @@ const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const co = require('co');
 
-const codemodsUrl = 'https://rawgit.com/ember-cli/ember-cli-update-codemods-manifest/v2/manifest.json';
+const codemodsUrl = 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v2/manifest.json';
 
 module.exports = co.wrap(function* emberCliUpdate({
   from,
