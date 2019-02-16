@@ -29,7 +29,7 @@ install:
   - ps: rm C:\Users\appveyor\AppData\Roaming\npm\npx*
   # test that we can't find it
   - ps: if (gcm npx) { exit }
-  - npm install
+  - npm ci
 
 # Post-install test scripts.
 test_script:
