@@ -67,6 +67,7 @@ module.exports = co.wrap(function* emberCliUpdate({
     statsOnly,
     runCodemods,
     codemodsUrl,
+    packageJson,
     projectOptions,
     startVersion,
     endVersion,
