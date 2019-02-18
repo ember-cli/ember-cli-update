@@ -62,7 +62,7 @@ describe.skip(_getStartAndEndCommands, function() {
 
   it('works for app', function() {
     return getStartAndEndCommands({
-      projectType: 'app'
+      projectOptions: ['app']
     }).then(({
       startCommand,
       endCommand
@@ -81,7 +81,7 @@ describe.skip(_getStartAndEndCommands, function() {
 
   it('works for addon', function() {
     return getStartAndEndCommands({
-      projectType: 'addon'
+      projectOptions: ['addon']
     }).then(({
       startCommand,
       endCommand
@@ -100,7 +100,7 @@ describe.skip(_getStartAndEndCommands, function() {
 
   it('throws for glimmer', function() {
     expect(() => getStartAndEndCommands({
-      projectType: 'glimmer'
+      projectOptions: ['glimmer']
     })).to.throw('cannot checkout older versions of glimmer blueprint');
 
     expect(createLocalCommandStub.called).to.not.be.ok;

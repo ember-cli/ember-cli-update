@@ -5,10 +5,10 @@ const _getProjectVersion = require('boilerplate-update/src/get-project-version')
 
 const glimmerVersionCutoff = '0.6.3';
 
-module.exports = function getProjectVersion(packageVersion, versions, projectType) {
+module.exports = function getProjectVersion(packageVersion, versions, projectOptions) {
   let projectVersion = _getProjectVersion(packageVersion, versions);
 
-  if (projectType === 'glimmer' && semver.lt(projectVersion, glimmerVersionCutoff)) {
+  if (projectOptions.includes('glimmer') && semver.lt(projectVersion, glimmerVersionCutoff)) {
     throw `This Glimmer app was generated using a blueprint version older than v${glimmerVersionCutoff}, and therefore the version cannot be determined. Please use the "--from" option to indicate your starting version.`;
   }
 

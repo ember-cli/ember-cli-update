@@ -1,22 +1,18 @@
 'use strict';
 
-module.exports = function getRemoteUrl(projectType) {
+module.exports = function getRemoteUrl(projectOptions) {
   let org;
   let project;
 
-  switch (projectType) {
-    case 'app':
-      org = 'ember-cli';
-      project = 'ember-new-output';
-      break;
-    case 'addon':
-      org = 'ember-cli';
-      project = 'ember-addon-output';
-      break;
-    case 'glimmer':
-      org = 'glimmerjs';
-      project = 'glimmer-blueprint-output';
-      break;
+  if (projectOptions.includes('app')) {
+    org = 'ember-cli';
+    project = 'ember-new-output';
+  } else if (projectOptions.includes('addon')) {
+    org = 'ember-cli';
+    project = 'ember-addon-output';
+  } else if (projectOptions.includes('glimmer')) {
+    org = 'glimmerjs';
+    project = 'glimmer-blueprint-output';
   }
 
   return `https://github.com/${org}/${project}`;

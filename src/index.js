@@ -3,7 +3,7 @@
 const co = require('co');
 const utils = require('./utils');
 const getPackageJson = require('boilerplate-update/src/get-package-json');
-const getProjectType = require('./get-project-type');
+const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
@@ -13,7 +13,7 @@ const listCodemods = require('boilerplate-update/src/list-codemods');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 
-const codemodsUrl = 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v2/manifest.json';
+const codemodsUrl = 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json';
 
 module.exports = co.wrap(function* emberCliUpdate({
   from,
@@ -32,8 +32,8 @@ module.exports = co.wrap(function* emberCliUpdate({
   }
 
   let packageJson = yield getPackageJson();
-  let projectType = getProjectType(packageJson);
-  let packageName = getPackageName(projectType);
+  let projectOptions = getProjectOptions(packageJson);
+  let packageName = getPackageName(projectOptions);
   let packageVersion = getPackageVersion(packageJson, packageName);
   let versions = yield utils.getVersions(packageName);
   let getTagVersion = _getTagVersion(versions, packageName);
@@ -42,18 +42,18 @@ module.exports = co.wrap(function* emberCliUpdate({
   if (from) {
     startVersion = yield getTagVersion(from);
   } else {
-    startVersion = getProjectVersion(packageVersion, versions, projectType);
+    startVersion = getProjectVersion(packageVersion, versions, projectOptions);
   }
 
   let endVersion = yield getTagVersion(to);
 
-  let remoteUrl = getRemoteUrl(projectType);
+  let remoteUrl = getRemoteUrl(projectOptions);
 
   let customDiffOptions;
   if (createCustomDiff) {
     customDiffOptions = getStartAndEndCommands({
       projectName: packageJson.name,
-      projectType,
+      projectOptions,
       startVersion,
       endVersion
     });
@@ -67,7 +67,7 @@ module.exports = co.wrap(function* emberCliUpdate({
     statsOnly,
     runCodemods,
     codemodsUrl,
-    projectType,
+    projectOptions,
     startVersion,
     endVersion,
     createCustomDiff,

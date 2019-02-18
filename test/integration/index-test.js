@@ -221,7 +221,7 @@ describe(function() {
     }).then(({
       result
     }) => {
-      expect(result).to.equal(`project type: app
+      expect(result).to.equal(`project options: app
 from version: 1.13.15
 to version: 2.18.2
 output repo: https://github.com/ember-cli/ember-new-output
@@ -239,7 +239,7 @@ applicable codemods: `);
     }) => {
       assertNoStaged(status);
 
-      expect(result).to.equal(`project type: app
+      expect(result).to.equal(`project options: app
 from version: 2.11.1
 to version: 3.2.0-beta.1
 output repo: https://github.com/ember-cli/ember-new-output
@@ -258,7 +258,7 @@ applicable codemods: `);
     }) => {
       assertNoStaged(status);
 
-      expect(result).to.equal(`project type: app
+      expect(result).to.equal(`project options: app
 from version: 3.2.0-beta.1
 to version: 3.2.0-beta.1
 output repo: https://github.com/ember-cli/ember-new-output
