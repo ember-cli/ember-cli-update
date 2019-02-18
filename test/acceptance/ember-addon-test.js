@@ -1,5 +1,6 @@
 'use strict';
 
+const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const { AddonTestApp } = require('ember-cli-addon-tests');
 const {
@@ -51,7 +52,7 @@ function commit(tmpPath) {
   });
 }
 
-describe('Acceptance | ember-addon', function() {
+describe(function() {
   this.timeout(10 * 60 * 1000);
 
   let app;

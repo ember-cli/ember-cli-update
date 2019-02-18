@@ -1,9 +1,10 @@
 'use strict';
 
+const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const getProjectVersion = require('../../src/get-project-version');
 
-describe('Unit - getProjectVersion', function() {
+describe(getProjectVersion, function() {
   it('throws if glimmer and < 0.6.3', function() {
     expect(() => getProjectVersion(
       '0.3',
