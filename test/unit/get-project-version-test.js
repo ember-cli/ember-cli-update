@@ -11,7 +11,7 @@ describe(getProjectVersion, function() {
       [
         '0.3.1'
       ],
-      'glimmer'
+      ['glimmer']
     )).to.throw('version cannot be determined');
   });
 
@@ -21,7 +21,7 @@ describe(getProjectVersion, function() {
       [
         '0.6.3'
       ],
-      'glimmer'
+      ['glimmer']
     )).to.equal('0.6.3');
   });
 });

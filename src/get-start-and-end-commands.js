@@ -6,30 +6,27 @@ const { spawn } = require('child_process');
 
 module.exports = function getStartAndEndCommands({
   projectName,
-  projectType,
+  projectOptions,
   startVersion,
   endVersion
 }) {
   let options = '-sn -sg';
 
   let command;
-  switch (projectType) {
-    case 'app':
-      command = `new ${projectName} ${options}`;
-      break;
-    case 'addon':
-      command = `addon ${projectName} ${options}`;
-      break;
-    case 'glimmer':
-      // command = `new ${projectName} -b @glimmer/blueprint ${options}`;
-      // break;
-      // ember-cli doesn't have a way to use non-latest blueprint versions
-      throw 'cannot checkout older versions of glimmer blueprint';
+  if (projectOptions.includes('app')) {
+    command = `new ${projectName} ${options}`;
+  } else if (projectOptions.includes('addon')) {
+    command = `addon ${projectName} ${options}`;
+  } else if (projectOptions.includes('glimmer')) {
+    // command = `new ${projectName} -b @glimmer/blueprint ${options}`;
+    // break;
+    // ember-cli doesn't have a way to use non-latest blueprint versions
+    throw 'cannot checkout older versions of glimmer blueprint';
   }
 
   return {
     projectName,
-    projectType,
+    projectOptions,
     packageName: 'ember-cli',
     commandName: 'ember',
     createProjectFromCache: createProjectFromCache(command),

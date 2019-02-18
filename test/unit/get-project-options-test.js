@@ -2,14 +2,14 @@
 
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
-const getProjectType = require('../../src/get-project-type');
+const getProjectOptions = require('../../src/get-project-options');
 
-describe(getProjectType, function() {
+describe(getProjectOptions, function() {
   it('throws if not found', function() {
     let packageJson = {};
 
     expect(() => {
-      getProjectType(packageJson);
+      getProjectOptions(packageJson);
     }).to.throw('Ember CLI project type could not be determined');
   });
 
@@ -20,7 +20,7 @@ describe(getProjectType, function() {
       }
     };
 
-    expect(getProjectType(packageJson)).to.equal('app');
+    expect(getProjectOptions(packageJson)).to.deep.equal(['app']);
   });
 
   it('detects ember addon', function() {
@@ -33,7 +33,7 @@ describe(getProjectType, function() {
       }
     };
 
-    expect(getProjectType(packageJson)).to.equal('addon');
+    expect(getProjectOptions(packageJson)).to.deep.equal(['addon']);
   });
 
   it('detects glimmer app', function() {
@@ -43,6 +43,6 @@ describe(getProjectType, function() {
       }
     };
 
-    expect(getProjectType(packageJson)).to.equal('glimmer');
+    expect(getProjectOptions(packageJson)).to.deep.equal(['glimmer']);
   });
 });

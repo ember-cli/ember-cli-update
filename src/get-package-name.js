@@ -1,15 +1,11 @@
 'use strict';
 
-module.exports = function getPackageName(projectType) {
+module.exports = function getPackageName(projectOptions) {
   let packageName;
-  switch (projectType) {
-    case 'app':
-    case 'addon':
-      packageName = 'ember-cli';
-      break;
-    case 'glimmer':
-      packageName = '@glimmer/blueprint';
-      break;
+  if (projectOptions.includes('app') || projectOptions.includes('addon')) {
+    packageName = 'ember-cli';
+  } else if (projectOptions.includes('glimmer')) {
+    packageName = '@glimmer/blueprint';
   }
 
   return packageName;
