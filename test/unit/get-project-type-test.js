@@ -1,9 +1,10 @@
 'use strict';
 
+const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const getProjectType = require('../../src/get-project-type');
 
-describe('Unit - getProjectType', function() {
+describe(getProjectType, function() {
   it('throws if not found', function() {
     let packageJson = {};
 

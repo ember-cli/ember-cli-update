@@ -1,5 +1,6 @@
 'use strict';
 
+const { describe, it } = require('../helpers/mocha');
 const chai = require('chai');
 const sinon = require('sinon');
 const path = require('path');
@@ -23,7 +24,7 @@ const globalCommand = 'test remote command';
 const startVersion = '0.0.1';
 const endVersion = '0.0.2';
 
-describe.skip('Unit - getStartAndEndCommands', function() {
+describe.skip(_getStartAndEndCommands, function() {
   let sandbox;
   let createRemoteCommandStub;
   let createLocalCommandStub;

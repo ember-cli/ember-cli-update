@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const {
@@ -18,7 +19,7 @@ const {
 
 const commitMessage = 'add files';
 
-describe('Integration - index', function() {
+describe(function() {
   this.timeout(30 * 1000);
 
   let cwd;

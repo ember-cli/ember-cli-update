@@ -1,9 +1,10 @@
 'use strict';
 
+const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const getPackageVersion = require('../../src/get-package-version');
 
-describe('Unit - getPackageVersion', function() {
+describe(getPackageVersion, function() {
   it('throws if no devDependencies', function() {
     let packageJson = {};
 

@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const {
   processBin,
@@ -19,7 +20,7 @@ const commitMessage = 'add files';
 
 const shouldSkipCodemods = process.platform === 'linux' && semver.satisfies(semver.valid(process.version), '6');
 
-describe('Acceptance - ember-cli-update', function() {
+describe(function() {
   this.timeout(30 * 1000);
 
   let tmpPath;

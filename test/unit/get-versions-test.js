@@ -1,12 +1,13 @@
 'use strict';
 
+const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const co = require('co');
 const getVersions = require('../../src/get-versions');
 const utils = require('../../src/utils');
 
-describe('Unit - getVersions', function() {
+describe(getVersions, function() {
   let sandbox;
   let getVersionsStub;
 
