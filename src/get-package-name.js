@@ -1,10 +1,7 @@
 'use strict';
 
-const utils = require('./utils');
-
-module.exports = function getVersions(projectType) {
+module.exports = function getPackageName(projectType) {
   let packageName;
-
   switch (projectType) {
     case 'app':
     case 'addon':
@@ -15,5 +12,5 @@ module.exports = function getVersions(projectType) {
       break;
   }
 
-  return utils.getVersions(packageName);
+  return packageName;
 };
