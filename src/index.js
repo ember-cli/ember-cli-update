@@ -1,16 +1,17 @@
 'use strict';
 
+const co = require('co');
+const utils = require('./utils');
 const getPackageJson = require('boilerplate-update/src/get-package-json');
 const getProjectType = require('./get-project-type');
+const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
-const getVersions = require('./get-versions');
 const getProjectVersion = require('./get-project-version');
 const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const listCodemods = require('boilerplate-update/src/list-codemods');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
-const co = require('co');
 
 const codemodsUrl = 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v2/manifest.json';
 
@@ -32,9 +33,10 @@ module.exports = co.wrap(function* emberCliUpdate({
 
   let packageJson = yield getPackageJson();
   let projectType = getProjectType(packageJson);
-  let packageVersion = getPackageVersion(packageJson, projectType);
-  let versions = yield getVersions(projectType);
-  let getTagVersion = _getTagVersion(versions, projectType);
+  let packageName = getPackageName(projectType);
+  let packageVersion = getPackageVersion(packageJson, packageName);
+  let versions = yield utils.getVersions(packageName);
+  let getTagVersion = _getTagVersion(versions, packageName);
 
   let startVersion;
   if (from) {

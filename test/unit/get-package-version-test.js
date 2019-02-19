@@ -5,62 +5,31 @@ const { expect } = require('chai');
 const getPackageVersion = require('../../src/get-package-version');
 
 describe(getPackageVersion, function() {
-  it('throws if no devDependencies', function() {
+  it('throws if no packages', function() {
     let packageJson = {};
 
     expect(() => {
-      getPackageVersion(packageJson);
+      getPackageVersion(packageJson, 'test-package-name');
     }).to.throw('Ember CLI blueprint version could not be determined');
   });
 
-  it('throws if no ember-cli for app type', function() {
+  it('throws if no package', function() {
     let packageJson = {
       devDependencies: {}
     };
 
     expect(() => {
-      getPackageVersion(packageJson, 'app');
+      getPackageVersion(packageJson, 'test-package-name');
     }).to.throw('Ember CLI blueprint version could not be determined');
   });
 
-  it('throws if no ember-cli for addon type', function() {
-    let packageJson = {
-      devDependencies: {}
-    };
-
-    expect(() => {
-      getPackageVersion(packageJson, 'addon');
-    }).to.throw('Ember CLI blueprint version could not be determined');
-  });
-
-  it('works for app type', function() {
+  it('gets version', function() {
     let packageJson = {
       devDependencies: {
-        'ember-cli': '2.11'
+        'test-package-name': '2.11'
       }
     };
 
-    expect(getPackageVersion(packageJson, 'app')).to.equal('2.11');
-  });
-
-  it('works for addon type', function() {
-    let packageJson = {
-      devDependencies: {
-        'ember-cli': '2.11'
-      }
-    };
-
-    expect(getPackageVersion(packageJson, 'addon')).to.equal('2.11');
-  });
-
-  it('works for glimmer type', function() {
-    let packageJson = {
-      devDependencies: {
-        '@glimmer/blueprint': '0.3',
-        'ember-cli': '2.11'
-      }
-    };
-
-    expect(getPackageVersion(packageJson, 'glimmer')).to.equal('0.3');
+    expect(getPackageVersion(packageJson, 'test-package-name')).to.equal('2.11');
   });
 });
