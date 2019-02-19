@@ -61,7 +61,7 @@
     "git-diff-apply": "^0.13.0",
     "git-fixtures": "^0.12.0",
     "mocha": "^6.0.0",
-    "mocha-helpers": "^1.1.1",
+    "mocha-helpers": "^1.2.1",
     "renovate-config-standard": "^1.0.0",
     "sinon": "^7.0.0",
     "tmp": "0.0.33"
