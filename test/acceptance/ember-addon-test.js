@@ -28,7 +28,7 @@ const commitMessage = 'add files';
 function reset(tmpPath) {
   run('git rm -r .', { cwd: tmpPath });
 
-  return cpr('test/fixtures/local/my-app', tmpPath);
+  return cpr('test/fixtures/app/local/my-app', tmpPath);
 }
 
 function init(tmpPath) {
@@ -61,7 +61,7 @@ describe(function() {
     app = new AddonTestApp();
 
     return app.create('my-app', {
-      fixturesPath: 'test/fixtures/local',
+      fixturesPath: 'test/fixtures/app/local',
       skipNpm: true
     }).then(() => {
       init(app.path);
@@ -128,7 +128,7 @@ describe(function() {
       });
 
       fixtureCompare({
-        mergeFixtures: 'test/fixtures/merge/my-app'
+        mergeFixtures: 'test/fixtures/app/merge/my-app'
       });
 
       assertNormalUpdate(status);

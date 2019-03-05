@@ -4,20 +4,19 @@ const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('chai');
 const sinon = require('sinon');
+const co = require('co');
 const {
+  buildTmp,
   processExit,
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
 const utils = require('boilerplate-update/src/utils');
-const buildTmp = require('../helpers/build-tmp');
 const {
   assertNoUnstaged,
   assertNoStaged
 } = require('../helpers/assertions');
-
-const commitMessage = 'add files';
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -40,7 +39,7 @@ describe(function() {
     process.chdir(cwd);
   });
 
-  function merge({
+  let merge = co.wrap(function* merge({
     fixturesPath,
     dirty,
     from,
@@ -50,13 +49,13 @@ describe(function() {
     statsOnly,
     runCodemods,
     listCodemods,
-    createCustomDiff
+    createCustomDiff,
+    commitMessage
   }) {
-    tmpPath = buildTmp({
+    tmpPath = yield buildTmp({
       fixturesPath,
       commitMessage,
-      dirty,
-      npmInstall: createCustomDiff
+      dirty
     });
 
     process.chdir(tmpPath);
@@ -78,7 +77,7 @@ describe(function() {
       commitMessage,
       expect
     });
-  }
+  });
 
   function fixtureCompare({
     mergeFixtures
@@ -95,7 +94,8 @@ describe(function() {
 
   it('handles dirty', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
       dirty: true
     }).then(({
       status,
@@ -111,7 +111,8 @@ describe(function() {
 
   it('handles non-ember-cli app', function() {
     return merge({
-      fixturesPath: 'test/fixtures/package-json/non-ember-cli'
+      fixturesPath: 'test/fixtures/package-json/non-ember-cli',
+      commitMessage: 'my-app'
     }).then(({
       stderr
     }) => {
@@ -123,7 +124,8 @@ describe(function() {
 
   it('handles non-npm dir', function() {
     return merge({
-      fixturesPath: 'test/fixtures/package-json/missing'
+      fixturesPath: 'test/fixtures/package-json/missing',
+      commitMessage: 'my-app'
     }).then(({
       stderr
     }) => {
@@ -135,7 +137,8 @@ describe(function() {
 
   it('handles malformed package.json', function() {
     return merge({
-      fixturesPath: 'test/fixtures/package-json/malformed'
+      fixturesPath: 'test/fixtures/package-json/malformed',
+      commitMessage: 'my-app'
     }).then(({
       stderr
     }) => {
@@ -147,14 +150,15 @@ describe(function() {
 
   it('updates glimmer app', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/glimmer-app',
+      fixturesPath: 'test/fixtures/glimmer/local',
+      commitMessage: 'glimmer-app',
       from: '0.5.0',
       to: '0.6.1'
     }).then(({
       status
     }) => {
       fixtureCompare({
-        mergeFixtures: 'test/fixtures/merge/glimmer-app'
+        mergeFixtures: 'test/fixtures/glimmer/merge/glimmer-app'
       });
 
       expect(status).to.match(/^M {2}src\/index\.ts$/m);
@@ -165,7 +169,8 @@ describe(function() {
 
   it('needs --from if glimmer app before 0.6.3', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/glimmer-app',
+      fixturesPath: 'test/fixtures/glimmer/local',
+      commitMessage: 'glimmer-app',
       to: '0.6.1'
     }).then(({
       stderr
@@ -178,13 +183,14 @@ describe(function() {
 
   it('resets app', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
       reset: true
     }).then(({
       status
     }) => {
       fixtureCompare({
-        mergeFixtures: 'test/fixtures/reset/my-app'
+        mergeFixtures: 'test/fixtures/app/reset/my-app'
       });
 
       expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
@@ -197,7 +203,8 @@ describe(function() {
     let opn = sandbox.stub(utils, 'opn');
 
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
       compareOnly: true
     }).then(({
       result,
@@ -214,7 +221,8 @@ describe(function() {
 
   it('resolves semver ranges', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
       from: '1.13',
       to: '^2',
       statsOnly: true
@@ -231,7 +239,8 @@ applicable codemods: `);
 
   it('shows stats only', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
       statsOnly: true
     }).then(({
       result,
@@ -250,7 +259,8 @@ applicable codemods: `);
   // this one can be removed once the above starts returning codemods
   it('shows stats only - codemods', function() {
     return merge({
-      fixturesPath: 'test/fixtures/codemod/min-node/my-app',
+      fixturesPath: 'test/fixtures/codemod/min-node',
+      commitMessage: 'my-app',
       statsOnly: true
     }).then(({
       result,
@@ -268,7 +278,8 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
   it('lists codemods', function() {
     return merge({
-      fixturesPath: 'test/fixtures/local/my-app',
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
       listCodemods: true
     }).then(({
       result,
@@ -284,13 +295,14 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
     this.timeout(2 * 60 * 1000);
 
     return merge({
-      fixturesPath: 'test/fixtures/local/my-custom-app',
+      fixturesPath: 'test/fixtures/custom/local',
+      commitMessage: 'my-custom-app',
       createCustomDiff: true
     }).then(({
       status
     }) => {
       fixtureCompare({
-        mergeFixtures: 'test/fixtures/merge/my-custom-app'
+        mergeFixtures: 'test/fixtures/custom/merge/my-custom-app'
       });
 
       assertNoUnstaged(status);
