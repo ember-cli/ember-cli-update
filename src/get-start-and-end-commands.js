@@ -5,7 +5,7 @@ const utils = require('./utils');
 const { spawn } = require('child_process');
 
 module.exports = function getStartAndEndCommands({
-  projectName,
+  packageJson: { name: projectName },
   projectOptions,
   startVersion,
   endVersion
