@@ -2,6 +2,7 @@
 
 module.exports = function getProjectOptions({
   keywords,
+  dependencies,
   devDependencies
 }) {
   let isAddon = keywords && keywords.indexOf('ember-addon') !== -1;
@@ -10,14 +11,16 @@ module.exports = function getProjectOptions({
     return ['addon'];
   }
 
-  if (devDependencies) {
-    let isGlimmer = devDependencies['@glimmer/blueprint'];
+  if (dependencies || devDependencies) {
+    let allDeps = Object.assign({}, dependencies, devDependencies);
+
+    let isGlimmer = allDeps['@glimmer/blueprint'];
 
     if (isGlimmer) {
       return ['glimmer'];
     }
 
-    let isApp = devDependencies['ember-cli'];
+    let isApp = allDeps['ember-cli'];
 
     if (isApp) {
       return ['app'];
