@@ -11,20 +11,18 @@ module.exports = function getProjectOptions({
     return ['addon'];
   }
 
-  if (dependencies || devDependencies) {
-    let allDeps = Object.assign({}, dependencies, devDependencies);
+  let allDeps = Object.assign({}, dependencies, devDependencies);
 
-    let isGlimmer = allDeps['@glimmer/blueprint'];
+  let isGlimmer = allDeps['@glimmer/blueprint'];
 
-    if (isGlimmer) {
-      return ['glimmer'];
-    }
+  if (isGlimmer) {
+    return ['glimmer'];
+  }
 
-    let isApp = allDeps['ember-cli'];
+  let isApp = allDeps['ember-cli'];
 
-    if (isApp) {
-      return ['app'];
-    }
+  if (isApp) {
+    return ['app'];
   }
 
   throw 'Ember CLI project type could not be determined';
