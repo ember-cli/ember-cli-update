@@ -13,7 +13,7 @@ describe(getProjectOptions, function() {
     }).to.throw('Ember CLI project type could not be determined');
   });
 
-  it('detects ember app', function() {
+  it('detects ember app with ember-cli as a devDependency', function() {
     let packageJson = {
       devDependencies: {
         'ember-cli': '2.11'
@@ -23,7 +23,17 @@ describe(getProjectOptions, function() {
     expect(getProjectOptions(packageJson)).to.deep.equal(['app']);
   });
 
-  it('detects ember addon', function() {
+  it('detects ember app with ember-cli as a dependency', function() {
+    let packageJson = {
+      dependencies: {
+        'ember-cli': '2.11'
+      }
+    };
+
+    expect(getProjectOptions(packageJson)).to.deep.equal(['app']);
+  });
+
+  it('detects ember addon with ember-cli as a devDependency', function() {
     let packageJson = {
       keywords: [
         'ember-addon'
@@ -36,9 +46,32 @@ describe(getProjectOptions, function() {
     expect(getProjectOptions(packageJson)).to.deep.equal(['addon']);
   });
 
-  it('detects glimmer app', function() {
+  it('detects ember addon with ember-cli as a dependency', function() {
+    let packageJson = {
+      keywords: [
+        'ember-addon'
+      ],
+      dependencies: {
+        'ember-cli': '2.11'
+      }
+    };
+
+    expect(getProjectOptions(packageJson)).to.deep.equal(['addon']);
+  });
+
+  it('detects glimmer app with glimmer as a devDependency', function() {
     let packageJson = {
       devDependencies: {
+        '@glimmer/blueprint': '0.3'
+      }
+    };
+
+    expect(getProjectOptions(packageJson)).to.deep.equal(['glimmer']);
+  });
+
+  it('detects glimmer app with glimmer as a dependency', function() {
+    let packageJson = {
+      dependencies: {
         '@glimmer/blueprint': '0.3'
       }
     };
