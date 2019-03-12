@@ -1,13 +1,12 @@
 'use strict';
 
 module.exports = function getPackageVersion({
+  dependencies,
   devDependencies
 }, packageName) {
-  let packageVersion;
+  let allDeps = Object.assign({}, dependencies, devDependencies);
 
-  if (devDependencies) {
-    packageVersion = devDependencies[packageName];
-  }
+  let packageVersion = allDeps[packageName];
 
   if (!packageVersion) {
     throw 'Ember CLI blueprint version could not be determined';
