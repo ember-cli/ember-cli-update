@@ -229,7 +229,7 @@ describe(function() {
     }).then(({
       result
     }) => {
-      expect(result).to.equal(`project options: app
+      expect(result).to.equal(`project options: app, welcome
 from version: 1.13.15
 to version: 2.18.2
 output repo: https://github.com/ember-cli/ember-new-output
@@ -239,8 +239,9 @@ applicable codemods: `);
 
   it('shows stats only', function() {
     return merge({
-      fixturesPath: 'test/fixtures/app/local',
+      fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app',
+      to: '3.3.0',
       statsOnly: true
     }).then(({
       result,
@@ -248,29 +249,9 @@ applicable codemods: `);
     }) => {
       assertNoStaged(status);
 
-      expect(result).to.equal(`project options: app
-from version: 2.11.1
-to version: 3.2.0-beta.1
-output repo: https://github.com/ember-cli/ember-new-output
-applicable codemods: `);
-    });
-  });
-
-  // this one can be removed once the above starts returning codemods
-  it('shows stats only - codemods', function() {
-    return merge({
-      fixturesPath: 'test/fixtures/codemod/min-node',
-      commitMessage: 'my-app',
-      statsOnly: true
-    }).then(({
-      result,
-      status
-    }) => {
-      assertNoStaged(status);
-
-      expect(result).to.equal(`project options: app
+      expect(result).to.equal(`project options: app, welcome
 from version: 3.2.0-beta.1
-to version: 3.2.0-beta.1
+to version: 3.3.0
 output repo: https://github.com/ember-cli/ember-new-output
 applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod`);
     });
