@@ -1,14 +1,11 @@
 'use strict';
 
 const { describe, it } = require('../helpers/mocha');
-const chai = require('chai');
+const { expect } = require('../helpers/chai');
 const sinon = require('sinon');
 const path = require('path');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
-
-chai.use(require('chai-as-promised'));
-const { expect } = chai;
 
 const {
   createRemoteCommand: _createRemoteCommand,

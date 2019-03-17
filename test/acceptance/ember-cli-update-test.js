@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
-const { expect } = require('chai');
+const { expect } = require('../helpers/chai');
 const co = require('co');
 const {
   buildTmp,
