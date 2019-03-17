@@ -1,7 +1,7 @@
 'use strict';
 
 const { describe, it } = require('../helpers/mocha');
-const { expect } = require('chai');
+const { expect } = require('../helpers/chai');
 const { AddonTestApp } = require('ember-cli-addon-tests');
 const {
   gitInit,

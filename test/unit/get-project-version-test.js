@@ -1,7 +1,7 @@
 'use strict';
 
 const { describe, it } = require('../helpers/mocha');
-const { expect } = require('chai');
+const { expect } = require('../helpers/chai');
 const getProjectVersion = require('../../src/get-project-version');
 
 describe(getProjectVersion, function() {
