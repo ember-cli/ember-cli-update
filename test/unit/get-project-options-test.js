@@ -33,6 +33,16 @@ describe(getProjectOptions, function() {
     expect(getProjectOptions(packageJson)).to.deep.equal(['app']);
   });
 
+  it('detects ember app with ember-cli as an empty string', function() {
+    let packageJson = {
+      devDependencies: {
+        'ember-cli': ''
+      }
+    };
+
+    expect(getProjectOptions(packageJson)).to.deep.equal(['app']);
+  });
+
   it('detects ember addon with ember-cli as a devDependency', function() {
     let packageJson = {
       keywords: [
@@ -59,6 +69,19 @@ describe(getProjectOptions, function() {
     expect(getProjectOptions(packageJson)).to.deep.equal(['addon']);
   });
 
+  it('detects ember addon with ember-cli as an empty string', function() {
+    let packageJson = {
+      keywords: [
+        'ember-addon'
+      ],
+      devDependencies: {
+        'ember-cli': ''
+      }
+    };
+
+    expect(getProjectOptions(packageJson)).to.deep.equal(['addon']);
+  });
+
   it('detects glimmer app with glimmer as a devDependency', function() {
     let packageJson = {
       devDependencies: {
@@ -73,6 +96,16 @@ describe(getProjectOptions, function() {
     let packageJson = {
       dependencies: {
         '@glimmer/blueprint': '0.3'
+      }
+    };
+
+    expect(getProjectOptions(packageJson)).to.deep.equal(['glimmer']);
+  });
+
+  it('detects glimmer app with glimmer as an empty string', function() {
+    let packageJson = {
+      devDependencies: {
+        '@glimmer/blueprint': ''
       }
     };
 
