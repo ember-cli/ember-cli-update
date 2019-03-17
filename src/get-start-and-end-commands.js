@@ -12,6 +12,14 @@ module.exports = function getStartAndEndCommands({
 }) {
   let options = '-sn -sg';
 
+  if (projectOptions.includes('yarn')) {
+    options += ' --yarn';
+  }
+
+  if (!projectOptions.includes('welcome')) {
+    options += ' --no-welcome';
+  }
+
   let command;
   if (projectOptions.includes('app')) {
     command = `new ${projectName} ${options}`;
