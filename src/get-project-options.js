@@ -45,7 +45,7 @@ module.exports = co.wrap(function* getProjectOptions({
 
   let isYarn;
   try {
-    yield fs.lstat(path.join(cwd, 'yarn.lock'));
+    yield fs.access(path.join(cwd, 'yarn.lock'), fs.constants.F_OK);
     isYarn = true;
   } catch (err) {} // eslint-disable-line no-empty
 
