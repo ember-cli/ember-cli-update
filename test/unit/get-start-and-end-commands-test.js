@@ -81,7 +81,7 @@ describe(_getStartAndEndCommands, function() {
     expect(spawnStub.args).to.deep.equal([[
       'node',
       [
-        path.normalize(`${packageRoot}/bin/${commandName}`),
+        path.normalize(`${packageRoot}/bin/ember`),
         'new',
         projectName,
         '-sn',
@@ -116,11 +116,13 @@ describe(_getStartAndEndCommands, function() {
 
   describe('options', function() {
     let processOptions = co.wrap(function*(projectOptions) {
-      let { createProjectFromCache } = getStartAndEndCommands({
+      let options = getStartAndEndCommands({
         projectOptions
       });
 
-      let createProject = createProjectFromCache({
+      expect(options.projectOptions).to.deep.equal(projectOptions);
+
+      let createProject = options.createProjectFromCache({
         packageRoot,
         options: {
           projectName
