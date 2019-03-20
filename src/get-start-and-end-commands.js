@@ -2,7 +2,6 @@
 
 const path = require('path');
 const utils = require('./utils');
-const { spawn } = require('child_process');
 
 module.exports = function getStartAndEndCommands({
   packageJson: { name: projectName },
@@ -54,15 +53,11 @@ function createProjectFromCache(command) {
     options
   }) {
     return function createProject(cwd) {
-      let ps = spawn('node', [
+      return utils.spawn('node', [
         path.join(packageRoot, 'bin/ember'),
         ...command.split(' ')
       ], {
         cwd
-      });
-
-      return new Promise(resolve => {
-        ps.on('exit', resolve);
       }).then(() => {
         return postCreateProject({
           cwd,
