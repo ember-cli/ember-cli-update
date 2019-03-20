@@ -4,45 +4,30 @@ const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const sinon = require('sinon');
 const path = require('path');
+const co = require('co');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
 
-const {
-  createRemoteCommand: _createRemoteCommand,
-  createLocalCommand: _createLocalCommand,
-  createGlobalCommand: _createGlobalCommand
-} = _getStartAndEndCommands;
-
 const projectName = 'my-custom-app';
-const command = 'test command';
-const remoteCommand = 'test remote command';
-const localCommand = 'test local command';
-const globalCommand = 'test remote command';
 const startVersion = '0.0.1';
 const endVersion = '0.0.2';
+const packageRoot = '/test/package/root';
+const packageVersion = startVersion;
+const cwd = '/test/cwd';
+const packageName = 'ember-cli';
+const commandName = 'ember';
+const projectPath = path.normalize(`${cwd}/${projectName}`);
 
-describe.skip(_getStartAndEndCommands, function() {
+describe(_getStartAndEndCommands, function() {
   let sandbox;
-  let createRemoteCommandStub;
-  let createLocalCommandStub;
-  let createGlobalCommandStub;
-  let whichStub;
-  let resolveStub;
-  let requireStub;
-  let runStub;
   let npxStub;
+  let spawnStub;
 
   beforeEach(function() {
     sandbox = sinon.createSandbox();
 
-    createLocalCommandStub = sandbox.stub(_getStartAndEndCommands, 'createLocalCommand').resolves(localCommand);
-    createRemoteCommandStub = sandbox.stub(_getStartAndEndCommands, 'createRemoteCommand').resolves(remoteCommand);
-    createGlobalCommandStub = sandbox.stub(_getStartAndEndCommands, 'createGlobalCommand').resolves(globalCommand);
-    whichStub = sandbox.stub(utils, 'which').resolves('/path/to/bin/ember');
-    resolveStub = sandbox.stub(utils, 'resolve');
-    requireStub = sandbox.stub(utils, 'require').withArgs(path.resolve('/path/to/package.json'));
-    runStub = sandbox.stub(utils, 'run');
     npxStub = sandbox.stub(utils, 'npx').resolves();
+    spawnStub = sandbox.stub(utils, 'spawn').resolves();
   });
 
   afterEach(function() {
@@ -51,201 +36,129 @@ describe.skip(_getStartAndEndCommands, function() {
 
   function getStartAndEndCommands(options) {
     return _getStartAndEndCommands(Object.assign({
-      projectName,
+      packageJson: { name: projectName },
+      projectOptions: ['app'],
       startVersion,
       endVersion
     }, options));
   }
 
-  it('works for app', function() {
-    return getStartAndEndCommands({
-      projectOptions: ['app']
-    }).then(({
-      startCommand,
-      endCommand
-    }) => {
-      expect(createLocalCommandStub.args).to.deep.equal([
-        [projectName, `new ${projectName}`, startVersion]
-      ]);
-      expect(createGlobalCommandStub.args).to.deep.equal([
-        [projectName, `new ${projectName}`, endVersion]
-      ]);
+  it('returns an options object', function() {
+    let options = getStartAndEndCommands();
 
-      expect(startCommand).to.be.a('string');
-      expect(endCommand).to.be.a('string');
+    expect(options.createProjectFromCache).to.be.a('function');
+    expect(options.createProjectFromRemote).to.be.a('function');
+
+    delete options.createProjectFromCache;
+    delete options.createProjectFromRemote;
+
+    expect(options).to.deep.equal({
+      projectName,
+      projectOptions: ['app'],
+      packageName,
+      commandName,
+      startOptions: {
+        packageVersion: startVersion
+      },
+      endOptions: {
+        packageVersion: endVersion
+      }
     });
   });
 
-  it('works for addon', function() {
-    return getStartAndEndCommands({
-      projectOptions: ['addon']
-    }).then(({
-      startCommand,
-      endCommand
-    }) => {
-      expect(createLocalCommandStub.args).to.deep.equal([
-        [projectName, `addon ${projectName}`, startVersion]
-      ]);
-      expect(createGlobalCommandStub.args).to.deep.equal([
-        [projectName, `addon ${projectName}`, endVersion]
-      ]);
+  it('can create a project from cache', co.wrap(function*() {
+    let { createProjectFromCache } = getStartAndEndCommands();
 
-      expect(startCommand).to.be.a('string');
-      expect(endCommand).to.be.a('string');
-    });
-  });
-
-  it('throws for glimmer', function() {
-    expect(() => getStartAndEndCommands({
-      projectOptions: ['glimmer']
-    })).to.throw('cannot checkout older versions of glimmer blueprint');
-
-    expect(createLocalCommandStub.called).to.not.be.ok;
-    expect(createGlobalCommandStub.called).to.not.be.ok;
-  });
-
-  describe('createRemoteCommand', function() {
-    function createRemoteCommand() {
-      return _createRemoteCommand(projectName, command, endVersion);
-    }
-
-    it('works', function() {
-      return createRemoteCommand().then(_command => {
-        expect(npxStub.args[0][0]).to.contain(command).and.contain(endVersion);
-
-        expect(_command).to.be.a('string');
-      });
-    });
-  });
-
-  describe('createLocalCommand', function() {
-    function createLocalCommand() {
-      return _createLocalCommand(projectName, command, startVersion);
-    }
-
-    it('falls back to remote copy if ember-cli is missing', function() {
-      resolveStub.rejects({ code: 'MODULE_NOT_FOUND' });
-
-      return createLocalCommand().then(_command => {
-        expect(runStub.called).to.not.be.ok;
-
-        expect(createRemoteCommandStub.args).to.deep.equal([
-          [projectName, command, startVersion]
-        ]);
-
-        expect(_command).to.be.a('string');
-      });
+    let createProject = createProjectFromCache({
+      packageRoot,
+      options: {
+        projectName
+      }
     });
 
-    it('throws if fails for another reason', function() {
-      resolveStub.rejects({ code: 'test code' });
+    expect(yield createProject(cwd)).to.equal(projectPath);
 
-      return expect(createLocalCommand()).to.eventually.be.rejected
-        .and.have.property('code', 'test code')
-        .then(() => {
-          expect(runStub.called).to.not.be.ok;
+    expect(spawnStub.args).to.deep.equal([[
+      'node',
+      [
+        path.normalize(`${packageRoot}/bin/${commandName}`),
+        'new',
+        projectName,
+        '-sn',
+        '-sg',
+        '--no-welcome'
+      ],
+      {
+        cwd
+      }
+    ]]);
+  }));
 
-          expect(createRemoteCommandStub.called).to.not.be.ok;
-        });
+  it('can create a project from remote', co.wrap(function*() {
+    let { createProjectFromRemote } = getStartAndEndCommands();
+
+    let createProject = createProjectFromRemote({
+      options: {
+        projectName,
+        packageVersion
+      }
     });
 
-    it('falls back to remote copy if ember-cli is wrong version', function() {
-      resolveStub.withArgs('ember-cli', { basedir: process.cwd() })
-        .resolves('/path/to/lib/cli/index.js');
-      requireStub.returns({
-        version: endVersion
+    expect(yield createProject(cwd)).to.equal(projectPath);
+
+    expect(npxStub.args).to.deep.equal([[
+      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg --no-welcome`,
+      {
+        cwd
+      }
+    ]]);
+  }));
+
+  describe('options', function() {
+    let processOptions = co.wrap(function*(projectOptions) {
+      let { createProjectFromCache } = getStartAndEndCommands({
+        projectOptions
       });
 
-      return createLocalCommand().then(_command => {
-        expect(runStub.called).to.not.be.ok;
-
-        expect(createRemoteCommandStub.args).to.deep.equal([
-          [projectName, command, startVersion]
-        ]);
-
-        expect(_command).to.be.a('string');
+      let createProject = createProjectFromCache({
+        packageRoot,
+        options: {
+          projectName
+        }
       });
+
+      yield createProject(cwd);
+
+      return spawnStub.args[0][1];
     });
 
-    it('uses local copy if ember-cli exists and same version', function() {
-      resolveStub.withArgs('ember-cli', { basedir: process.cwd() })
-        .resolves('/path/to/lib/cli/index.js');
-      requireStub.returns({
-        version: startVersion
-      });
+    it('can create an app', co.wrap(function*() {
+      expect(yield processOptions(['app'])).to.include('new');
+    }));
 
-      return createLocalCommand().then(_command => {
-        expect(runStub.args[0][0]).to.contain(command).and.not.contain(startVersion);
+    it('can create an addon', co.wrap(function*() {
+      expect(yield processOptions(['addon'])).to.include('addon');
+    }));
 
-        expect(createRemoteCommandStub.called).to.not.be.ok;
+    it('cannot create a glimmer app', co.wrap(function*() {
+      yield expect(processOptions(['glimmer']))
+        .to.eventually.be.rejectedWith('cannot checkout older versions of glimmer blueprint');
+    }));
 
-        expect(_command).to.be.a('string');
-      });
-    });
-  });
+    it('can create an app with the --no-welcome option', co.wrap(function*() {
+      expect(yield processOptions(['app'])).to.include('--no-welcome');
+    }));
 
-  describe('createGlobalCommand', function() {
-    function createGlobalCommand() {
-      return _createGlobalCommand(projectName, command, endVersion);
-    }
+    it('can create an app without the --no-welcome option', co.wrap(function*() {
+      expect(yield processOptions(['app', 'welcome'])).to.not.include('--no-welcome');
+    }));
 
-    it('falls back to remote copy if ember-cli is missing', function() {
-      whichStub.rejects({ message: 'not found: ember' });
+    it('can create an app without the yarn option', co.wrap(function*() {
+      expect(yield processOptions(['app'])).to.not.include('--yarn');
+    }));
 
-      return createGlobalCommand().then(_command => {
-        expect(runStub.called).to.not.be.ok;
-
-        expect(createRemoteCommandStub.args).to.deep.equal([
-          [projectName, command, endVersion]
-        ]);
-
-        expect(_command).to.be.a('string');
-      });
-    });
-
-    it('throws if fails for another reason', function() {
-      whichStub.rejects({ message: 'test message' });
-
-      return expect(createGlobalCommand()).to.eventually.be.rejectedWith('test message')
-        .then(() => {
-          expect(runStub.called).to.not.be.ok;
-
-          expect(createRemoteCommandStub.called).to.not.be.ok;
-        });
-    });
-
-    it('falls back to remote copy if ember-cli is wrong version', function() {
-      resolveStub.withArgs('ember-cli', { basedir: path.resolve('/path/to/lib') })
-        .resolves('/path/to/lib/cli/index.js');
-      requireStub.returns({
-        version: startVersion
-      });
-
-      return createGlobalCommand().then(_command => {
-        expect(runStub.called).to.not.be.ok;
-
-        expect(createRemoteCommandStub.args).to.deep.equal([
-          [projectName, command, endVersion]
-        ]);
-
-        expect(_command).to.be.a('string');
-      });
-    });
-
-    it('uses local copy if ember-cli exists and same version', function() {
-      resolveStub.withArgs('ember-cli', { basedir: path.resolve('/path/to/lib') })
-        .resolves('/path/to/lib/cli/index.js');
-      requireStub.returns({
-        version: endVersion
-      });
-
-      return createGlobalCommand().then(_command => {
-        expect(runStub.args[0][0]).to.contain(command).and.not.contain(endVersion);
-
-        expect(createRemoteCommandStub.called).to.not.be.ok;
-
-        expect(_command).to.be.a('string');
-      });
-    });
+    it('can create an app with the yarn option', co.wrap(function*() {
+      expect(yield processOptions(['app', 'yarn'])).to.include('--yarn');
+    }));
   });
 });
