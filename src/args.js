@@ -39,6 +39,7 @@ module.exports = {
     description: 'List available codemods'
   },
   'create-custom-diff': {
+    alias: ['ccd'],
     type: 'boolean',
     default: false,
     description: 'Create a personal diff using system .ember-cli'
