@@ -26,7 +26,6 @@ module.exports = function getStartAndEndCommands({
     command = `addon ${projectName} ${options}`;
   } else if (projectOptions.includes('glimmer')) {
     // command = `new ${projectName} -b @glimmer/blueprint ${options}`;
-    // break;
     // ember-cli doesn't have a way to use non-latest blueprint versions
     throw 'cannot checkout older versions of glimmer blueprint';
   }
