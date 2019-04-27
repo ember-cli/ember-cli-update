@@ -1,6 +1,6 @@
 environment:
   matrix:
-    - nodejs_version: "6"
+    - nodejs_version: "8"
     - nodejs_version: ""
 
 branches:
@@ -16,7 +16,7 @@ install:
   - ps: Install-Product node $env:nodejs_version
   - npm config set spin false
   - ps: >-
-      if ($env:nodejs_version -eq "6") {
+      if ($env:nodejs_version -eq "8") {
         npm install -g npm@5
         [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
       } else {
