@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-- '6'
+- '8'
 - node
 branches:
   only:
@@ -16,9 +16,7 @@ env:
 - TEST_COMMAND=lint
 before_install:
 - npm config set spin false
-- if [ "$TRAVIS_NODE_VERSION" = "6" ]; then
-    npm install -g npm@5;
-    npm --version;
+- if [ "$TRAVIS_NODE_VERSION" = "8" ]; then
     export NODE_LTS="true";
   fi
 - which npx
@@ -35,7 +33,7 @@ jobs:
   allow_failures:
   - os: osx
   exclude:
-  - node_js: '6'
+  - node_js: '8'
     env: TEST_COMMAND=lint
   include:
   - os: osx
