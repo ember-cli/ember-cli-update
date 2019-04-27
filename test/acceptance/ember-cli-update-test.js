@@ -15,9 +15,6 @@ const {
   assertNoUnstaged,
   assertCodemodRan
 } = require('../helpers/assertions');
-const semver = require('semver');
-
-const shouldSkipCodemods = process.platform === 'linux' && semver.satisfies(semver.valid(process.version), '6');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -100,7 +97,7 @@ describe(function() {
     assertNoUnstaged(status);
   }));
 
-  (shouldSkipCodemods ? it.skip : it)('runs codemods', co.wrap(function*() {
+  it('runs codemods', co.wrap(function*() {
     this.timeout(5 * 60 * 1000);
 
     let {
