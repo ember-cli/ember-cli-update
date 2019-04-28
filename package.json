@@ -64,7 +64,8 @@
     "mocha": "^6.0.0",
     "mocha-helpers": "^1.2.1",
     "renovate-config-standard": "^2.0.0",
-    "sinon": "^7.0.0"
+    "sinon": "^7.0.0",
+    "sinon-chai": "^3.3.0"
   },
   "ember-addon": {
     "main": "src/ember-addon.js"
