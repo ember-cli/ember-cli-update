@@ -214,8 +214,7 @@ describe(function() {
 
       expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
 
-      expect(opn.calledOnce).to.be.ok;
-      expect(opn.args[0][0]).to.equal('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.2.0-beta.1');
+      expect(opn).to.have.been.calledOnceWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.2.0-beta.1');
     });
   });
 
