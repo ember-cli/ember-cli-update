@@ -65,8 +65,8 @@ module.exports = {
     }
   ],
 
-  run(options) {
+  async run(options) {
     options.wasRunAsExecutable = true;
-    return emberCliUpdate(options);
+    await emberCliUpdate(options);
   }
 };

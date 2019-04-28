@@ -4,7 +4,6 @@ const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const sinon = require('sinon');
 const path = require('path');
-const co = require('co');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
 
@@ -66,7 +65,7 @@ describe(_getStartAndEndCommands, function() {
     });
   });
 
-  it('can create a project from cache', co.wrap(function*() {
+  it('can create a project from cache', async function() {
     let { createProjectFromCache } = getStartAndEndCommands();
 
     let createProject = createProjectFromCache({
@@ -76,7 +75,7 @@ describe(_getStartAndEndCommands, function() {
       }
     });
 
-    expect(yield createProject(cwd)).to.equal(projectPath);
+    expect(await createProject(cwd)).to.equal(projectPath);
 
     expect(spawnStub.args).to.deep.equal([[
       'node',
@@ -92,9 +91,9 @@ describe(_getStartAndEndCommands, function() {
         cwd
       }
     ]]);
-  }));
+  });
 
-  it('can create a project from remote', co.wrap(function*() {
+  it('can create a project from remote', async function() {
     let { createProjectFromRemote } = getStartAndEndCommands();
 
     let createProject = createProjectFromRemote({
@@ -104,7 +103,7 @@ describe(_getStartAndEndCommands, function() {
       }
     });
 
-    expect(yield createProject(cwd)).to.equal(projectPath);
+    expect(await createProject(cwd)).to.equal(projectPath);
 
     expect(npxStub.args).to.deep.equal([[
       `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg --no-welcome`,
@@ -112,10 +111,10 @@ describe(_getStartAndEndCommands, function() {
         cwd
       }
     ]]);
-  }));
+  });
 
   describe('options', function() {
-    let processOptions = co.wrap(function*(projectOptions) {
+    async function processOptions(projectOptions) {
       let options = getStartAndEndCommands({
         projectOptions
       });
@@ -129,38 +128,38 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
-      yield createProject(cwd);
+      await createProject(cwd);
 
       return spawnStub.args[0][1];
+    }
+
+    it('can create an app', async function() {
+      expect(await processOptions(['app'])).to.include('new');
     });
 
-    it('can create an app', co.wrap(function*() {
-      expect(yield processOptions(['app'])).to.include('new');
-    }));
+    it('can create an addon', async function() {
+      expect(await processOptions(['addon'])).to.include('addon');
+    });
 
-    it('can create an addon', co.wrap(function*() {
-      expect(yield processOptions(['addon'])).to.include('addon');
-    }));
-
-    it('cannot create a glimmer app', co.wrap(function*() {
-      yield expect(processOptions(['glimmer']))
+    it('cannot create a glimmer app', async function() {
+      await expect(processOptions(['glimmer']))
         .to.eventually.be.rejectedWith('cannot checkout older versions of glimmer blueprint');
-    }));
+    });
 
-    it('can create an app with the --no-welcome option', co.wrap(function*() {
-      expect(yield processOptions(['app'])).to.include('--no-welcome');
-    }));
+    it('can create an app with the --no-welcome option', async function() {
+      expect(await processOptions(['app'])).to.include('--no-welcome');
+    });
 
-    it('can create an app without the --no-welcome option', co.wrap(function*() {
-      expect(yield processOptions(['app', 'welcome'])).to.not.include('--no-welcome');
-    }));
+    it('can create an app without the --no-welcome option', async function() {
+      expect(await processOptions(['app', 'welcome'])).to.not.include('--no-welcome');
+    });
 
-    it('can create an app without the yarn option', co.wrap(function*() {
-      expect(yield processOptions(['app'])).to.not.include('--yarn');
-    }));
+    it('can create an app without the yarn option', async function() {
+      expect(await processOptions(['app'])).to.not.include('--yarn');
+    });
 
-    it('can create an app with the yarn option', co.wrap(function*() {
-      expect(yield processOptions(['app', 'yarn'])).to.include('--yarn');
-    }));
+    it('can create an app with the yarn option', async function() {
+      expect(await processOptions(['app', 'yarn'])).to.include('--yarn');
+    });
   });
 });

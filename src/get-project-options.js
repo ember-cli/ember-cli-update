@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const co = require('co');
 const fs = require('fs-extra');
 
 function getProjectType(checkForDep, keywords) {
@@ -26,7 +25,7 @@ function getProjectType(checkForDep, keywords) {
   throw 'Ember CLI project type could not be determined';
 }
 
-module.exports = co.wrap(function* getProjectOptions({
+module.exports = async function getProjectOptions({
   keywords,
   dependencies,
   devDependencies
@@ -45,7 +44,7 @@ module.exports = co.wrap(function* getProjectOptions({
 
   let isYarn;
   try {
-    yield fs.access(path.join(cwd, 'yarn.lock'), fs.constants.F_OK);
+    await fs.access(path.join(cwd, 'yarn.lock'), fs.constants.F_OK);
     isYarn = true;
   } catch (err) {} // eslint-disable-line no-empty
 
@@ -60,4 +59,4 @@ module.exports = co.wrap(function* getProjectOptions({
   }
 
   return options;
-});
+};

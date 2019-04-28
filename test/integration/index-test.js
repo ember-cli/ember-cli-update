@@ -4,7 +4,6 @@ const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const sinon = require('sinon');
-const co = require('co');
 const {
   buildTmp,
   processExit,
@@ -39,7 +38,7 @@ describe(function() {
     process.chdir(cwd);
   });
 
-  let merge = co.wrap(function* merge({
+  async function merge({
     fixturesPath,
     dirty,
     from,
@@ -52,7 +51,7 @@ describe(function() {
     createCustomDiff,
     commitMessage
   }) {
-    tmpPath = yield buildTmp({
+    tmpPath = await buildTmp({
       fixturesPath,
       commitMessage,
       dirty
@@ -71,13 +70,13 @@ describe(function() {
       createCustomDiff
     });
 
-    return processExit({
+    return await processExit({
       promise,
       cwd: tmpPath,
       commitMessage,
       expect
     });
-  });
+  }
 
   function fixtureCompare({
     mergeFixtures
@@ -92,201 +91,201 @@ describe(function() {
     });
   }
 
-  it('handles dirty', function() {
-    return merge({
+  it('handles dirty', async function() {
+    let {
+      status,
+      stderr
+    } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       dirty: true
-    }).then(({
-      status,
-      stderr
-    }) => {
-      expect(status).to.equal(`?? a-random-new-file
+    });
+
+    expect(status).to.equal(`?? a-random-new-file
 `);
 
-      expect(stderr).to.contain('You must start with a clean working directory');
-      expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
-    });
+    expect(stderr).to.contain('You must start with a clean working directory');
+    expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
   });
 
-  it('handles non-ember-cli app', function() {
-    return merge({
+  it('handles non-ember-cli app', async function() {
+    let {
+      stderr
+    } = await merge({
       fixturesPath: 'test/fixtures/package-json/non-ember-cli',
       commitMessage: 'my-app'
-    }).then(({
-      stderr
-    }) => {
-      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
-
-      expect(stderr).to.contain('Ember CLI project type could not be determined');
     });
+
+    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+    expect(stderr).to.contain('Ember CLI project type could not be determined');
   });
 
-  it('handles non-npm dir', function() {
-    return merge({
+  it('handles non-npm dir', async function() {
+    let {
+      stderr
+    } = await merge({
       fixturesPath: 'test/fixtures/package-json/missing',
       commitMessage: 'my-app'
-    }).then(({
-      stderr
-    }) => {
-      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
-
-      expect(stderr).to.contain('No package.json was found in this directory');
     });
+
+    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+    expect(stderr).to.contain('No package.json was found in this directory');
   });
 
-  it('handles malformed package.json', function() {
-    return merge({
+  it('handles malformed package.json', async function() {
+    let {
+      stderr
+    } = await merge({
       fixturesPath: 'test/fixtures/package-json/malformed',
       commitMessage: 'my-app'
-    }).then(({
-      stderr
-    }) => {
-      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
-
-      expect(stderr).to.contain('The package.json is malformed');
     });
+
+    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+    expect(stderr).to.contain('The package.json is malformed');
   });
 
-  it('updates glimmer app', function() {
-    return merge({
+  it('updates glimmer app', async function() {
+    let {
+      status
+    } = await merge({
       fixturesPath: 'test/fixtures/glimmer/local',
       commitMessage: 'glimmer-app',
       from: '0.5.0',
       to: '0.6.1'
-    }).then(({
-      status
-    }) => {
-      fixtureCompare({
-        mergeFixtures: 'test/fixtures/glimmer/merge/glimmer-app'
-      });
-
-      expect(status).to.match(/^M {2}src\/index\.ts$/m);
-
-      assertNoUnstaged(status);
     });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/glimmer/merge/glimmer-app'
+    });
+
+    expect(status).to.match(/^M {2}src\/index\.ts$/m);
+
+    assertNoUnstaged(status);
   });
 
-  it('needs --from if glimmer app before 0.6.3', function() {
-    return merge({
+  it('needs --from if glimmer app before 0.6.3', async function() {
+    let {
+      stderr
+    } = await merge({
       fixturesPath: 'test/fixtures/glimmer/local',
       commitMessage: 'glimmer-app',
       to: '0.6.1'
-    }).then(({
-      stderr
-    }) => {
-      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
-
-      expect(stderr).to.contain('version cannot be determined');
     });
+
+    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+    expect(stderr).to.contain('version cannot be determined');
   });
 
-  it('resets app', function() {
-    return merge({
+  it('resets app', async function() {
+    let {
+      status
+    } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       reset: true
-    }).then(({
-      status
-    }) => {
-      fixtureCompare({
-        mergeFixtures: 'test/fixtures/app/reset/my-app'
-      });
-
-      expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
-
-      assertNoStaged(status);
     });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/reset/my-app'
+    });
+
+    expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
+
+    assertNoStaged(status);
   });
 
-  it('opens compare url', function() {
+  it('opens compare url', async function() {
     let opn = sandbox.stub(utils, 'opn');
 
-    return merge({
+    let {
+      result,
+      status
+    } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       compareOnly: true
-    }).then(({
-      result,
-      status
-    }) => {
-      assertNoUnstaged(status);
-
-      expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
-
-      expect(opn).to.have.been.calledOnce
-        .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.2.0-beta.1');
     });
+
+    assertNoUnstaged(status);
+
+    expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
+
+    expect(opn).to.have.been.calledOnce
+      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.2.0-beta.1');
   });
 
-  it('resolves semver ranges', function() {
-    return merge({
+  it('resolves semver ranges', async function() {
+    let {
+      result
+    } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       from: '1.13',
       to: '^2',
       statsOnly: true
-    }).then(({
-      result
-    }) => {
-      expect(result).to.equal(`project options: app, welcome
+    });
+
+    expect(result).to.equal(`project options: app, welcome
 from version: 1.13.15
 to version: 2.18.2
 output repo: https://github.com/ember-cli/ember-new-output
 applicable codemods: `);
-    });
   });
 
-  it('shows stats only', function() {
-    return merge({
+  it('shows stats only', async function() {
+    let {
+      result,
+      status
+    } = await merge({
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app',
       to: '3.3.0',
       statsOnly: true
-    }).then(({
-      result,
-      status
-    }) => {
-      assertNoStaged(status);
+    });
 
-      expect(result).to.equal(`project options: app, welcome
+    assertNoStaged(status);
+
+    expect(result).to.equal(`project options: app, welcome
 from version: 3.2.0-beta.1
 to version: 3.3.0
 output repo: https://github.com/ember-cli/ember-new-output
 applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod`);
-    });
   });
 
-  it('lists codemods', function() {
-    return merge({
+  it('lists codemods', async function() {
+    let {
+      result,
+      status
+    } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       listCodemods: true
-    }).then(({
-      result,
-      status
-    }) => {
-      assertNoStaged(status);
-
-      expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
     });
+
+    assertNoStaged(status);
+
+    expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
   });
 
-  it('can create a personal diff instead of using an output repo', function() {
+  it('can create a personal diff instead of using an output repo', async function() {
     this.timeout(2 * 60 * 1000);
 
-    return merge({
+    let {
+      status
+    } = await merge({
       fixturesPath: 'test/fixtures/custom/local',
       commitMessage: 'my-custom-app',
       createCustomDiff: true
-    }).then(({
-      status
-    }) => {
-      fixtureCompare({
-        mergeFixtures: 'test/fixtures/custom/merge/my-custom-app'
-      });
-
-      assertNoUnstaged(status);
     });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/custom/merge/my-custom-app'
+    });
+
+    assertNoUnstaged(status);
   });
 });
