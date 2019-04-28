@@ -32,19 +32,24 @@ updateNotifier({
   }
 }).notify();
 
-emberCliUpdate({
-  from,
-  to,
-  resolveConflicts,
-  runCodemods,
-  reset,
-  compareOnly,
-  statsOnly,
-  listCodemods,
-  createCustomDiff,
-  wasRunAsExecutable: true
-}).then(message => {
-  if (message) {
-    console.log(message);
+(async() => {
+  try {
+    let message = await emberCliUpdate({
+      from,
+      to,
+      resolveConflicts,
+      runCodemods,
+      reset,
+      compareOnly,
+      statsOnly,
+      listCodemods,
+      createCustomDiff,
+      wasRunAsExecutable: true
+    });
+    if (message) {
+      console.log(message);
+    }
+  } catch (err) {
+    console.error(err);
   }
-}).catch(console.error);
+})();

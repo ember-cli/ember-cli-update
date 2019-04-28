@@ -4,7 +4,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const co = require('co');
 const {
   buildTmp,
   processBin,
@@ -21,13 +20,13 @@ describe(function() {
 
   let tmpPath;
 
-  let merge = co.wrap(function* merge({
+  async function merge({
     fixturesPath,
     runCodemods,
     subDir = '',
     commitMessage
   }) {
-    tmpPath = yield buildTmp({
+    tmpPath = await buildTmp({
       fixturesPath,
       subDir
     });
@@ -43,14 +42,14 @@ describe(function() {
       ];
     }
 
-    return processBin({
+    return await processBin({
       binFile: 'ember-cli-update',
       args,
       cwd: tmpPath,
       commitMessage,
       expect
     });
-  });
+  }
 
   function fixtureCompare({
     mergeFixtures
@@ -65,10 +64,10 @@ describe(function() {
     });
   }
 
-  it('updates app', co.wrap(function*() {
+  it('updates app', async function() {
     let {
       status
-    } = yield (yield merge({
+    } = await (await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app'
     })).promise;
@@ -79,12 +78,12 @@ describe(function() {
 
     assertNormalUpdate(status);
     assertNoUnstaged(status);
-  }));
+  });
 
-  it('updates addon', co.wrap(function*() {
+  it('updates addon', async function() {
     let {
       status
-    } = yield (yield merge({
+    } = await (await merge({
       fixturesPath: 'test/fixtures/addon/local',
       commitMessage: 'my-addon'
     })).promise;
@@ -95,15 +94,15 @@ describe(function() {
 
     assertNormalUpdate(status);
     assertNoUnstaged(status);
-  }));
+  });
 
-  it('runs codemods', co.wrap(function*() {
+  it('runs codemods', async function() {
     this.timeout(5 * 60 * 1000);
 
     let {
       ps,
       promise
-    } = yield merge({
+    } = await merge({
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app',
       runCodemods: true
@@ -118,7 +117,7 @@ describe(function() {
 
     let {
       status
-    } = yield promise;
+    } = await promise;
 
     // file is indeterminent between OS's, so ignore
     fs.removeSync(path.join(tmpPath, 'MODULE_REPORT.md'));
@@ -134,12 +133,12 @@ describe(function() {
 
     assertNoUnstaged(status);
     assertCodemodRan(status);
-  }));
+  });
 
-  it('scopes to sub dir if run from there', co.wrap(function*() {
+  it('scopes to sub dir if run from there', async function() {
     let {
       status
-    } = yield (yield merge({
+    } = await (await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       subDir: 'foo/bar'
@@ -151,5 +150,5 @@ describe(function() {
 
     assertNormalUpdate(status);
     assertNoUnstaged(status);
-  }));
+  });
 });

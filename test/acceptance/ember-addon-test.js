@@ -20,15 +20,10 @@ const cpr = denodeify(require('cpr'));
 
 const commitMessage = 'add files';
 
-// function resetAndClean(cwd) {
-//   run('git reset --hard', { cwd });
-//   run('git clean -f', { cwd });
-// }
+async function reset(tmpPath) {
+  await run('git rm -r .', { cwd: tmpPath });
 
-function reset(tmpPath) {
-  run('git rm -r .', { cwd: tmpPath });
-
-  return cpr('test/fixtures/app/local/my-app', tmpPath);
+  await cpr('test/fixtures/app/local/my-app', tmpPath);
 }
 
 function init(tmpPath) {
@@ -57,42 +52,37 @@ describe(function() {
 
   let app;
 
-  beforeEach(function() {
+  beforeEach(async function() {
     app = new AddonTestApp();
 
-    return app.create('my-app', {
+    await app.create('my-app', {
       fixturesPath: 'test/fixtures/app/local',
       skipNpm: true
-    }).then(() => {
-      init(app.path);
+    });
 
-      // remove newer fixture files not present in older versions
-      return reset(app.path);
-    }).then(() => {
-      app.editPackageJSON(pkg => {
-        pkg.devDependencies['ember-cli-update'] = '*';
-      });
+    init(app.path);
 
-      commit(app.path);
+    // remove newer fixture files not present in older versions
+    await reset(app.path);
 
-      return app.run('npm', 'install', '--no-package-lock');
-    }).then(() => {
-      // get rid of package-lock.json
-      // and reset line ending changes on Windows
-      // might not be needed because of --no-package-lock above
-      // resetAndClean(app.path);
+    app.editPackageJSON(pkg => {
+      pkg.devDependencies['ember-cli-update'] = '*';
+    });
 
-      return app.startServer({
-        command: 'update',
-        additionalArguments: [
-          '--to',
-          '3.2.0-beta.1',
-          '--resolve-conflicts'
-        ],
-        detectServerStart() {
-          return true;
-        }
-      });
+    commit(app.path);
+
+    await app.run('npm', 'install', '--no-package-lock');
+
+    await app.startServer({
+      command: 'update',
+      additionalArguments: [
+        '--to',
+        '3.2.0-beta.1',
+        '--resolve-conflicts'
+      ],
+      detectServerStart() {
+        return true;
+      }
     });
   });
 
@@ -109,8 +99,8 @@ describe(function() {
     });
   }
 
-  function merge() {
-    return processIo({
+  async function merge() {
+    return await processIo({
       ps: app.server,
       cwd: app.path,
       commitMessage,
@@ -118,21 +108,21 @@ describe(function() {
     });
   }
 
-  it('works', function() {
-    return merge().then(({
+  it('works', async function() {
+    let {
       status
-    }) => {
-      // remove addon because it's not in the fixtures
-      app.editPackageJSON(pkg => {
-        delete pkg.devDependencies['ember-cli-update'];
-      });
+    } = await merge();
 
-      fixtureCompare({
-        mergeFixtures: 'test/fixtures/app/merge/my-app'
-      });
-
-      assertNormalUpdate(status);
-      assertNoUnstaged(status);
+    // remove addon because it's not in the fixtures
+    app.editPackageJSON(pkg => {
+      delete pkg.devDependencies['ember-cli-update'];
     });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/merge/my-app'
+    });
+
+    assertNormalUpdate(status);
+    assertNoUnstaged(status);
   });
 });

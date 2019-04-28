@@ -51,17 +51,17 @@ function createProjectFromCache(command) {
     packageRoot,
     options
   }) {
-    return function createProject(cwd) {
-      return utils.spawn('node', [
+    return async function createProject(cwd) {
+      await utils.spawn('node', [
         path.join(packageRoot, 'bin/ember'),
         ...command.split(' ')
       ], {
         cwd
-      }).then(() => {
-        return postCreateProject({
-          cwd,
-          options
-        });
+      });
+
+      return postCreateProject({
+        cwd,
+        options
       });
     };
   };
@@ -71,12 +71,12 @@ function createProjectFromRemote(command) {
   return function createProjectFromRemote({
     options
   }) {
-    return function createProject(cwd) {
-      return utils.npx(`-p ember-cli@${options.packageVersion} ember ${command}`, { cwd }).then(() => {
-        return postCreateProject({
-          cwd,
-          options
-        });
+    return async function createProject(cwd) {
+      await utils.npx(`-p ember-cli@${options.packageVersion} ember ${command}`, { cwd });
+
+      return postCreateProject({
+        cwd,
+        options
       });
     };
   };
@@ -88,5 +88,5 @@ function postCreateProject({
     projectName
   }
 }) {
-  return Promise.resolve(path.join(cwd, projectName));
+  return path.join(cwd, projectName);
 }

@@ -2,10 +2,10 @@
 
 module.exports.npx = require('boilerplate-update/src/npx');
 
-module.exports.spawn = function spawn() {
+module.exports.spawn = async function spawn() {
   let ps = require('child_process').spawn(...arguments);
 
-  return new Promise((resolve, reject) => {
+  await new Promise((resolve, reject) => {
     ps.on('error', reject);
     ps.on('exit', resolve);
   });
