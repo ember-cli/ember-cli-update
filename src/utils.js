@@ -1,6 +1,5 @@
 'use strict';
 
-module.exports.run = require('./run');
 module.exports.npx = require('boilerplate-update/src/npx');
 
 module.exports.spawn = function spawn() {
