@@ -1,10 +1,10 @@
 'use strict';
 
 const co = require('co');
-const utils = require('./utils');
 const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
+const getVersions = require('boilerplate-update/src/get-versions');
 const getProjectVersion = require('./get-project-version');
 const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
@@ -31,7 +31,7 @@ module.exports = co.wrap(function* emberCliUpdate({
     }) {
       let packageName = getPackageName(projectOptions);
       let packageVersion = getPackageVersion(packageJson, packageName);
-      let versions = yield utils.getVersions(packageName);
+      let versions = yield getVersions(packageName);
       let getTagVersion = _getTagVersion(versions, packageName);
 
       let startVersion;
