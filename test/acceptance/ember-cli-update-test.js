@@ -22,6 +22,7 @@ describe(function() {
 
   async function merge({
     fixturesPath,
+    to = '3.2.0-beta.1',
     runCodemods,
     subDir = '',
     commitMessage
@@ -32,8 +33,7 @@ describe(function() {
     });
 
     let args = [
-      '--to',
-      '3.2.0-beta.1',
+      `--to=${to}`,
       '--resolve-conflicts'
     ];
     if (runCodemods) {
