@@ -1,7 +1,7 @@
 'use strict';
 
-const denodeify = require('denodeify');
-const exec = denodeify(require('child_process').exec);
+const { promisify } = require('util');
+const exec = promisify(require('child_process').exec);
 const debug = require('debug')('ember-cli-update');
 
 module.exports = async function run(command, options) {

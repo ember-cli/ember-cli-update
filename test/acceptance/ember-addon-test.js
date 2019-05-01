@@ -15,8 +15,8 @@ const {
   assertNormalUpdate,
   assertNoUnstaged
 } = require('../helpers/assertions');
-const denodeify = require('denodeify');
-const cpr = denodeify(require('cpr'));
+const { promisify } = require('util');
+const cpr = promisify(require('cpr'));
 
 const commitMessage = 'add files';
 
