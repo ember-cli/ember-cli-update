@@ -6,7 +6,7 @@ const debug = require('debug')('ember-cli-update');
 
 module.exports = async function run(command, options) {
   debug(command);
-  let result = (await exec(command, options)).toString();
-  debug(result);
-  return result;
+  let { stdout } = await exec(command, options);
+  debug(stdout);
+  return stdout;
 };
