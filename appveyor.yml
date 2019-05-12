@@ -25,7 +25,7 @@ install:
   - ps: rm "C:\Program Files (x86)\nodejs\npx*"
   - ps: rm C:\Users\appveyor\AppData\Roaming\npm\npx*
   # test that we can't find it
-  - ps: if (gcm npx) { exit }
+  - ps: if (gcm npx -errorAction SilentlyContinue) { exit }
   - npm ci
 
 # Post-install test scripts.
