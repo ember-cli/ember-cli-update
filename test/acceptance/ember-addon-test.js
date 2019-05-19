@@ -26,23 +26,23 @@ async function reset(tmpPath) {
   await cpr('test/fixtures/app/local/my-app', tmpPath);
 }
 
-function init(tmpPath) {
-  gitInit({
+async function init(tmpPath) {
+  await gitInit({
     cwd: tmpPath
   });
 
-  _commit({
+  await _commit({
     cwd: tmpPath
   });
 }
 
-function commit(tmpPath) {
-  _commit({
+async function commit(tmpPath) {
+  await _commit({
     m: commitMessage,
     cwd: tmpPath
   });
 
-  postCommit({
+  await postCommit({
     cwd: tmpPath
   });
 }
@@ -60,7 +60,7 @@ describe(function() {
       skipNpm: true
     });
 
-    init(app.path);
+    await init(app.path);
 
     // remove newer fixture files not present in older versions
     await reset(app.path);
@@ -69,7 +69,7 @@ describe(function() {
       pkg.devDependencies['ember-cli-update'] = '*';
     });
 
-    commit(app.path);
+    await commit(app.path);
 
     await app.run('npm', 'install', '--no-package-lock');
 

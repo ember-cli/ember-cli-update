@@ -42,7 +42,7 @@ describe(function() {
       ];
     }
 
-    return await processBin({
+    return processBin({
       binFile: 'ember-cli-update',
       args,
       cwd: tmpPath,
@@ -120,7 +120,7 @@ describe(function() {
     } = await promise;
 
     // file is indeterminent between OS's, so ignore
-    fs.removeSync(path.join(tmpPath, 'MODULE_REPORT.md'));
+    await fs.remove(path.join(tmpPath, 'MODULE_REPORT.md'));
 
     let mergeFixtures = 'test/fixtures/codemod/latest-node/my-app';
     if (process.env.NODE_LTS) {
