@@ -10,7 +10,7 @@ const {
   processIo,
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
-const run = require('../../src/run');
+const { run } = require('git-diff-apply');
 const {
   assertNormalUpdate,
   assertNoUnstaged
