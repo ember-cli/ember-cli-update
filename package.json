@@ -52,7 +52,7 @@
     "cross-env": "^5.0.1",
     "ember-cli": "3.10.1",
     "ember-cli-addon-tests": "^0.11.0",
-    "eslint": "^5.0.0",
+    "eslint": "^6.0.0",
     "eslint-config-sane": "^0.7.0",
     "eslint-plugin-mocha": "^5.0.0",
     "eslint-plugin-node": "^9.0.0",
