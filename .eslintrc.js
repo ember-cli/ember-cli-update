@@ -28,11 +28,15 @@ module.exports = {
       plugins: [
         'mocha'
       ],
+      extends: [
+        'plugin:mocha/recommended'
+      ],
       env: {
         mocha: true
       },
       rules: {
-        'mocha/no-exclusive-tests': 'error'
+        'mocha/no-setup-in-describe': 'off',
+        'mocha/no-hooks-for-single-case': 'off'
       }
     }
   ]
