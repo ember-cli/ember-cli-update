@@ -35,6 +35,10 @@
   "engines": {
     "node": ">=8"
   },
+  "files": [
+    "bin",
+    "src"
+  ],
   "dependencies": {
     "boilerplate-update": "^0.22.0",
     "debug": "^4.1.1",
