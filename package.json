@@ -55,7 +55,7 @@
     "cpr": "^3.0.1",
     "cross-env": "^5.0.1",
     "ember-cli": "3.11.0",
-    "ember-cli-addon-tests": "0.11.0",
+    "ember-cli-addon-tests": "0.11.1",
     "eslint": "^6.1.0",
     "eslint-config-sane": "0.8.5",
     "eslint-config-sane-node": "0.2.2",
