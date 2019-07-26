@@ -195,7 +195,7 @@ All blueprints are up-to-date!`;
     statsOnly,
     listCodemods,
     runCodemods,
-    codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
+    codemodsUrl: 'https://raw.githubusercontent.com/rajasegar/ember-cli-update-codemods-manifest/ember-angle-brackets-codemod/manifest.json',
     createCustomDiff,
     ignoredFiles: [await getBlueprintFilePath(cwd)],
     wasRunAsExecutable
