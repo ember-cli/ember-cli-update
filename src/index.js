@@ -54,7 +54,7 @@ module.exports = async function emberCliUpdate({
     statsOnly,
     listCodemods,
     runCodemods,
-    codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
+    codemodsUrl: 'https://raw.githubusercontent.com/rajasegar/ember-cli-update-codemods-manifest/es5-getter-new-syntax/manifest.json',
     createCustomDiff,
     customDiffOptions: getStartAndEndCommands,
     wasRunAsExecutable
