@@ -261,7 +261,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       result,
       status
     } = await merge({
-      fixturesPath: 'test/fixtures/app/local',
+      fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
       listCodemods: true
     });

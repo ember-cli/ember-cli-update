@@ -103,7 +103,7 @@ describe(function() {
       ps,
       promise
     } = await merge({
-      fixturesPath: 'test/fixtures/app/merge',
+      fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
       runCodemods: true
     });
