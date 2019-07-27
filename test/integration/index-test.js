@@ -268,6 +268,8 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
     assertNoStaged(status);
 
+    // I'm not asserting the entire list because it can be different
+    // depending on which node version the tests are running under.
     expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
   });
 
