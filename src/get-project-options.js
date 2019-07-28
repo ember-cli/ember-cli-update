@@ -46,7 +46,7 @@ module.exports = async function getProjectOptions({
   try {
     await fs.access(path.join(cwd, 'yarn.lock'), fs.constants.F_OK);
     isYarn = true;
-  } catch (err) {} // eslint-disable-line no-empty
+  } catch (err) {}
 
   if (isYarn) {
     options.push('yarn');
