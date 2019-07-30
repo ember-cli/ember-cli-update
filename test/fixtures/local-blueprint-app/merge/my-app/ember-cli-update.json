@@ -1,0 +1,15 @@
+{
+  "blueprints": [
+    {
+      "name": "ember-cli-update-git-blueprint-test",
+      "location": "../local-blueprint",
+      "version": "0.0.2",
+      "isPartial": false
+    },
+    {
+      "name": "unused-partial-blueprint-test",
+      "version": "0.0.1",
+      "isPartial": true
+    }
+  ]
+}

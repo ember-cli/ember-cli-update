@@ -9,8 +9,10 @@ const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
+const parseBlueprint = require('./parse-blueprint');
 
 module.exports = async function emberCliUpdate({
+  blueprint,
   from,
   to,
   resolveConflicts,
@@ -22,16 +24,41 @@ module.exports = async function emberCliUpdate({
   createCustomDiff,
   wasRunAsExecutable
 }) {
+  if (blueprint) {
+    if (!from) {
+      throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+    }
+
+    createCustomDiff = true;
+  }
+
   return await (await boilerplateUpdate({
-    projectOptions: ({ packageJson }) => getProjectOptions(packageJson),
+    projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),
     mergeOptions: async function mergeOptions({
       packageJson,
       projectOptions
     }) {
-      let packageName = getPackageName(projectOptions);
-      let packageVersion = getPackageVersion(packageJson, packageName);
-      let versions = await getVersions(packageName);
-      let getTagVersion = _getTagVersion(versions, packageName);
+      let packageName;
+      let packageVersion;
+      let versions;
+      let parsedBlueprint;
+      let blueprintUrl;
+
+      if (blueprint) {
+        parsedBlueprint = await parseBlueprint(blueprint);
+        packageName = parsedBlueprint.name;
+        blueprintUrl = parsedBlueprint.url;
+        packageVersion = from;
+      } else {
+        packageName = getPackageName(projectOptions);
+        packageVersion = getPackageVersion(packageJson, packageName);
+      }
+
+      if (!blueprintUrl) {
+        versions = await getVersions(packageName);
+      }
+
+      let getTagVersion = _getTagVersion(versions, packageName, blueprintUrl);
 
       let startVersion;
       if (from) {
@@ -42,9 +69,21 @@ module.exports = async function emberCliUpdate({
 
       let endVersion = await getTagVersion(to);
 
+      let customDiffOptions;
+      if (createCustomDiff) {
+        customDiffOptions = getStartAndEndCommands({
+          packageJson,
+          projectOptions,
+          startVersion,
+          endVersion,
+          blueprint: parsedBlueprint
+        });
+      }
+
       return {
         startVersion,
-        endVersion
+        endVersion,
+        customDiffOptions
       };
     },
     remoteUrl: ({ projectOptions }) => getRemoteUrl(projectOptions),
@@ -56,7 +95,6 @@ module.exports = async function emberCliUpdate({
     runCodemods,
     codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
     createCustomDiff,
-    customDiffOptions: getStartAndEndCommands,
     wasRunAsExecutable
   })).promise;
 };

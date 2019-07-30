@@ -15,18 +15,23 @@ const packageVersion = startVersion;
 const cwd = '/test/cwd';
 const packageName = 'ember-cli';
 const commandName = 'ember';
+const blueprint = 'test-blueprint';
+const blueprintUrl = 'http://test-blueprint.com';
+const blueprintPath = '/path/to/blueprint';
 const projectPath = path.normalize(`${cwd}/${projectName}`);
 
 describe(_getStartAndEndCommands, function() {
   let sandbox;
   let npxStub;
   let spawnStub;
+  let downloadBlueprintStub;
 
   beforeEach(function() {
     sandbox = sinon.createSandbox();
 
     npxStub = sandbox.stub(utils, 'npx').resolves();
     spawnStub = sandbox.stub(utils, 'spawn').resolves();
+    downloadBlueprintStub = sandbox.stub(utils, 'downloadBlueprint');
   });
 
   afterEach(function() {
@@ -38,7 +43,8 @@ describe(_getStartAndEndCommands, function() {
       packageJson: { name: projectName },
       projectOptions: ['app'],
       startVersion,
-      endVersion
+      endVersion,
+      blueprint
     }, options));
   }
 
@@ -56,6 +62,7 @@ describe(_getStartAndEndCommands, function() {
       projectOptions: ['app'],
       packageName,
       commandName,
+      blueprint,
       startOptions: {
         packageVersion: startVersion
       },
@@ -99,7 +106,8 @@ describe(_getStartAndEndCommands, function() {
     let createProject = createProjectFromRemote({
       options: {
         projectName,
-        packageVersion
+        packageVersion,
+        blueprint: undefined
       }
     });
 
@@ -107,6 +115,32 @@ describe(_getStartAndEndCommands, function() {
 
     expect(npxStub.args).to.deep.equal([[
       `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg --no-welcome`,
+      {
+        cwd
+      }
+    ]]);
+  });
+
+  it('can create a project from a custom blueprint', async function() {
+    let { createProjectFromRemote } = getStartAndEndCommands();
+
+    let createProject = createProjectFromRemote({
+      options: {
+        projectName,
+        packageVersion,
+        blueprint: {
+          name: blueprint,
+          url: blueprintUrl
+        }
+      }
+    });
+
+    downloadBlueprintStub.resolves({ path: blueprintPath });
+
+    expect(await createProject(cwd)).to.equal(projectPath);
+
+    expect(npxStub.args).to.deep.equal([[
+      `${packageName} new ${projectName} -sn -sg --no-welcome -b ${blueprintPath}`,
       {
         cwd
       }

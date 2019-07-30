@@ -7,7 +7,8 @@ module.exports = function getStartAndEndCommands({
   packageJson: { name: projectName },
   projectOptions,
   startVersion,
-  endVersion
+  endVersion,
+  blueprint
 }) {
   let options = '-sn -sg';
 
@@ -20,12 +21,11 @@ module.exports = function getStartAndEndCommands({
   }
 
   let command;
-  if (projectOptions.includes('app')) {
+  if (projectOptions.includes('app') || projectOptions.includes('blueprint')) {
     command = `new ${projectName} ${options}`;
   } else if (projectOptions.includes('addon')) {
     command = `addon ${projectName} ${options}`;
   } else if (projectOptions.includes('glimmer')) {
-    // command = `new ${projectName} -b @glimmer/blueprint ${options}`;
     // ember-cli doesn't have a way to use non-latest blueprint versions
     throw 'cannot checkout older versions of glimmer blueprint';
   }
@@ -35,6 +35,10 @@ module.exports = function getStartAndEndCommands({
     projectOptions,
     packageName: 'ember-cli',
     commandName: 'ember',
+    blueprint,
+    // `createProjectFromCache` no longer works with blueprints.
+    // It will look for an `ember-cli` version with the same
+    // version as the blueprint.
     createProjectFromCache: createProjectFromCache(command),
     createProjectFromRemote: createProjectFromRemote(command),
     startOptions: {
@@ -72,7 +76,21 @@ function createProjectFromRemote(command) {
     options
   }) {
     return async function createProject(cwd) {
-      await utils.npx(`-p ember-cli@${options.packageVersion} ember ${command}`, { cwd });
+      let npxCommand;
+      if (options.blueprint) {
+        let blueprint = await utils.downloadBlueprint(
+          options.blueprint.name,
+          options.blueprint.url,
+          options.packageVersion
+        );
+
+        npxCommand = `ember-cli ${command} -b ${blueprint.path}`;
+        // npxCommand = `-p github:ember-cli/ember-cli#cfb9780 ember ${command} -b ${options.blueprint.name}@${options.packageVersion}`;
+      } else {
+        npxCommand = `-p ember-cli@${options.packageVersion} ember ${command}`;
+      }
+
+      await utils.npx(npxCommand, { cwd });
 
       return postCreateProject({
         cwd,

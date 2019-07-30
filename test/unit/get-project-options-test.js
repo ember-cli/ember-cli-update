@@ -8,6 +8,7 @@ const _getProjectOptions = require('../../src/get-project-options');
 describe(_getProjectOptions, function() {
   let cwd;
   let packageJson;
+  let blueprint;
 
   before(function() {
     cwd = process.cwd();
@@ -15,6 +16,8 @@ describe(_getProjectOptions, function() {
 
   beforeEach(function() {
     packageJson = {};
+
+    blueprint = null;
   });
 
   afterEach(function() {
@@ -22,7 +25,7 @@ describe(_getProjectOptions, function() {
   });
 
   function getProjectOptions() {
-    return _getProjectOptions(packageJson);
+    return _getProjectOptions(packageJson, blueprint);
   }
 
   it('throws if not found', async function() {
@@ -150,5 +153,11 @@ describe(_getProjectOptions, function() {
     process.chdir(path.resolve(__dirname, '../fixtures/options/yarn'));
 
     expect(await getProjectOptions()).to.deep.equal(['app', 'yarn']);
+  });
+
+  it('detects blueprint', async function() {
+    blueprint = 'test-blueprint';
+
+    expect(await getProjectOptions()).to.deep.equal(['blueprint']);
   });
 });
