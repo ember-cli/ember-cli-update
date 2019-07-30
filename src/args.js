@@ -1,4 +1,9 @@
 module.exports = {
+  'blueprint': {
+    alias: ['b'],
+    type: 'string',
+    description: 'Provide a custom blueprint for use in the update'
+  },
   'from': {
     type: 'string',
     description: 'Use a starting version that is different than what is in your package.json ("2.9.1")'

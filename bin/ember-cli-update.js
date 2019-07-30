@@ -7,6 +7,7 @@ const args = require('../src/args');
 const { argv } = require('yargs')
   .options(args);
 
+const blueprint = argv['blueprint'];
 const from = argv['from'];
 const to = argv['to'];
 const resolveConflicts = argv['resolve-conflicts'];
@@ -35,6 +36,7 @@ updateNotifier({
 (async() => {
   try {
     let message = await emberCliUpdate({
+      blueprint,
       from,
       to,
       resolveConflicts,

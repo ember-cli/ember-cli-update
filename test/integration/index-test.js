@@ -16,6 +16,9 @@ const {
   assertNoUnstaged,
   assertNoStaged
 } = require('../helpers/assertions');
+const { initBlueprint } = require('../helpers/blueprint');
+
+const toDefault = require('../../src/args').to.default;
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -41,6 +44,7 @@ describe(function() {
   async function merge({
     fixturesPath,
     dirty,
+    blueprint,
     from,
     to = '3.2.0-beta.1',
     reset,
@@ -49,7 +53,8 @@ describe(function() {
     runCodemods,
     listCodemods,
     createCustomDiff,
-    commitMessage
+    commitMessage,
+    beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
       fixturesPath,
@@ -57,9 +62,12 @@ describe(function() {
       dirty
     });
 
+    await beforeMerge();
+
     process.chdir(tmpPath);
 
     let promise = emberCliUpdate({
+      blueprint,
       from,
       to,
       reset,
@@ -289,5 +297,105 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
     });
 
     assertNoUnstaged(status);
+  });
+
+  describe('blueprints', function() {
+    this.timeout(3 * 60 * 1000);
+
+    it('throws if missing --from', async function() {
+      let {
+        name
+      } = require('../fixtures/npm-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+
+      let promise = merge({
+        fixturesPath: 'test/fixtures/npm-blueprint-app/local',
+        commitMessage: 'my-app',
+        blueprint: name
+      });
+
+      expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+
+      await expect(promise).to.eventually.be.rejectedWith('A custom blueprint cannot detect --from. You must supply it.');
+    });
+
+    it('can use a local blueprint', async function() {
+      let {
+        location,
+        version: from
+      } = require('../fixtures/local-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+
+      let {
+        version: to
+      } = require('../fixtures/local-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
+
+      let {
+        status
+      } = await merge({
+        fixturesPath: 'test/fixtures/local-blueprint-app/local',
+        commitMessage: 'my-app',
+        blueprint: location,
+        from,
+        to,
+        async beforeMerge() {
+          await initBlueprint('test/fixtures/local-blueprint', location);
+        }
+      });
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/local-blueprint-app/merge/my-app'
+      });
+
+      assertNoUnstaged(status);
+    });
+
+    it('can use a remote blueprint', async function() {
+      let {
+        location,
+        version: from
+      } = require('../fixtures/remote-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+
+      let {
+        version: to
+      } = require('../fixtures/remote-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
+
+      let {
+        status
+      } = await merge({
+        fixturesPath: 'test/fixtures/remote-blueprint-app/local',
+        commitMessage: 'my-app',
+        blueprint: location,
+        from,
+        to
+      });
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/remote-blueprint-app/merge/my-app'
+      });
+
+      assertNoUnstaged(status);
+    });
+
+    it('can use an npm blueprint', async function() {
+      let {
+        name,
+        version: from
+      } = require('../fixtures/npm-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+
+      let {
+        status
+      } = await merge({
+        fixturesPath: 'test/fixtures/npm-blueprint-app/local',
+        commitMessage: 'my-app',
+        blueprint: name,
+        from,
+        to: toDefault
+      });
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/npm-blueprint-app/merge/my-app'
+      });
+
+      assertNoUnstaged(status);
+    });
   });
 });

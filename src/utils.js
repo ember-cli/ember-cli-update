@@ -10,3 +10,5 @@ module.exports.spawn = async function spawn() {
     ps.on('exit', resolve);
   });
 };
+
+module.exports.downloadBlueprint = require('./download-blueprint');

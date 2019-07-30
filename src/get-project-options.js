@@ -29,7 +29,11 @@ module.exports = async function getProjectOptions({
   keywords,
   dependencies,
   devDependencies
-}) {
+}, blueprint) {
+  if (blueprint) {
+    return ['blueprint'];
+  }
+
   let allDeps = Object.assign({}, dependencies, devDependencies);
 
   function checkForDep(packageName) {

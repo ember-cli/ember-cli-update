@@ -10,6 +10,12 @@ module.exports = {
 
   availableOptions: [
     {
+      name: 'blueprint',
+      aliases: args['blueprint'].alias,
+      description: args['blueprint'].description,
+      type: String
+    },
+    {
       name: 'from',
       description: args['from'].description,
       type: String
