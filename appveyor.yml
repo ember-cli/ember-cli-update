@@ -1,7 +1,6 @@
 environment:
   matrix:
     - nodejs_version: "8"
-    - nodejs_version: ""
 
 branches:
   only:
@@ -32,7 +31,7 @@ install:
 test_script:
   - node --version
   - npm --version
-  - npm run test:both
+  - npm run test:slow
 
 # http://help.appveyor.com/discussions/questions/1310-delete-cache
 cache:
