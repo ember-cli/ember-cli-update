@@ -14,6 +14,7 @@ const {
   assertNoUnstaged,
   assertCodemodRan
 } = require('../helpers/assertions');
+const { initBlueprint } = require('../helpers/blueprint');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -25,12 +26,15 @@ describe(function() {
     to = '3.2.0-beta.1',
     runCodemods,
     subDir = '',
-    commitMessage
+    commitMessage,
+    beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
       fixturesPath,
       subDir
     });
+
+    await beforeMerge();
 
     let args = [
       `--to=${to}`,
@@ -149,6 +153,49 @@ describe(function() {
     });
 
     assertNormalUpdate(status);
+    assertNoUnstaged(status);
+  });
+
+  it('can pick from multiple blueprints', async function() {
+    this.timeout(3 * 60 * 1000);
+
+    let {
+      location
+    } = require('../fixtures/local-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+
+    let {
+      version: to
+    } = require('../fixtures/local-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
+
+    let {
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/local-blueprint-app/local',
+      commitMessage: 'my-app',
+      to,
+      async beforeMerge() {
+        await initBlueprint('test/fixtures/local-blueprint', location);
+      }
+    });
+
+    ps.stdout.on('data', data => {
+      let str = data.toString();
+      if (str.includes('Multiple blueprint updates have been found.')) {
+        ps.stdin.write('\n');
+      }
+    });
+
+    let {
+      status
+    } = await promise;
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/local-blueprint-app/merge/my-app'
+    });
+
+    expect(status).to.match(/^M {2}.*ember-cli-update\.json$/m);
+
     assertNoUnstaged(status);
   });
 });

@@ -17,7 +17,7 @@ describe(_getProjectOptions, function() {
   beforeEach(function() {
     packageJson = {};
 
-    blueprint = null;
+    blueprint = { name: 'ember-cli' };
   });
 
   afterEach(function() {
@@ -156,7 +156,7 @@ describe(_getProjectOptions, function() {
   });
 
   it('detects blueprint', async function() {
-    blueprint = 'test-blueprint';
+    blueprint = {};
 
     expect(await getProjectOptions()).to.deep.equal(['blueprint']);
   });

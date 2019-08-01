@@ -1,0 +1,9 @@
+{
+  "blueprints": [
+    {
+      "name": "ember-cli-update-git-blueprint-test",
+      "location": "../legacy-blueprint",
+      "version": "0.0.2"
+    }
+  ]
+}

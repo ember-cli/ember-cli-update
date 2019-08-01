@@ -16,7 +16,6 @@ const cwd = '/test/cwd';
 const packageName = 'ember-cli';
 const commandName = 'ember';
 const blueprint = 'test-blueprint';
-const blueprintUrl = 'http://test-blueprint.com';
 const blueprintPath = '/path/to/blueprint';
 const projectPath = path.normalize(`${cwd}/${projectName}`);
 
@@ -24,14 +23,12 @@ describe(_getStartAndEndCommands, function() {
   let sandbox;
   let npxStub;
   let spawnStub;
-  let downloadBlueprintStub;
 
   beforeEach(function() {
     sandbox = sinon.createSandbox();
 
     npxStub = sandbox.stub(utils, 'npx').resolves();
     spawnStub = sandbox.stub(utils, 'spawn').resolves();
-    downloadBlueprintStub = sandbox.stub(utils, 'downloadBlueprint');
   });
 
   afterEach(function() {
@@ -44,7 +41,8 @@ describe(_getStartAndEndCommands, function() {
       projectOptions: ['app'],
       startVersion,
       endVersion,
-      blueprint
+      startBlueprint: { name: 'ember-cli' },
+      endBlueprint: { name: 'ember-cli' }
     }, options));
   }
 
@@ -62,12 +60,13 @@ describe(_getStartAndEndCommands, function() {
       projectOptions: ['app'],
       packageName,
       commandName,
-      blueprint,
       startOptions: {
-        packageVersion: startVersion
+        packageVersion: startVersion,
+        blueprint: { name: 'ember-cli' }
       },
       endOptions: {
-        packageVersion: endVersion
+        packageVersion: endVersion,
+        blueprint: { name: 'ember-cli' }
       }
     });
   });
@@ -107,7 +106,7 @@ describe(_getStartAndEndCommands, function() {
       options: {
         projectName,
         packageVersion,
-        blueprint: undefined
+        blueprint: { name: 'ember-cli' }
       }
     });
 
@@ -130,12 +129,10 @@ describe(_getStartAndEndCommands, function() {
         packageVersion,
         blueprint: {
           name: blueprint,
-          url: blueprintUrl
+          path: blueprintPath
         }
       }
     });
-
-    downloadBlueprintStub.resolves({ path: blueprintPath });
 
     expect(await createProject(cwd)).to.equal(projectPath);
 
