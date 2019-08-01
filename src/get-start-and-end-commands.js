@@ -8,7 +8,8 @@ module.exports = function getStartAndEndCommands({
   projectOptions,
   startVersion,
   endVersion,
-  blueprint
+  startBlueprint,
+  endBlueprint
 }) {
   let options = '-sn -sg';
 
@@ -35,17 +36,18 @@ module.exports = function getStartAndEndCommands({
     projectOptions,
     packageName: 'ember-cli',
     commandName: 'ember',
-    blueprint,
     // `createProjectFromCache` no longer works with blueprints.
     // It will look for an `ember-cli` version with the same
     // version as the blueprint.
     createProjectFromCache: createProjectFromCache(command),
     createProjectFromRemote: createProjectFromRemote(command),
     startOptions: {
-      packageVersion: startVersion
+      packageVersion: startVersion,
+      blueprint: startBlueprint
     },
     endOptions: {
-      packageVersion: endVersion
+      packageVersion: endVersion,
+      blueprint: endBlueprint
     }
   };
 };
@@ -77,14 +79,8 @@ function createProjectFromRemote(command) {
   }) {
     return async function createProject(cwd) {
       let npxCommand;
-      if (options.blueprint) {
-        let blueprint = await utils.downloadBlueprint(
-          options.blueprint.name,
-          options.blueprint.url,
-          options.packageVersion
-        );
-
-        npxCommand = `ember-cli ${command} -b ${blueprint.path}`;
+      if (options.blueprint.name !== 'ember-cli') {
+        npxCommand = `ember-cli ${command} -b ${options.blueprint.path}`;
         // npxCommand = `-p github:ember-cli/ember-cli#cfb9780 ember ${command} -b ${options.blueprint.name}@${options.packageVersion}`;
       } else {
         npxCommand = `-p ember-cli@${options.packageVersion} ember ${command}`;

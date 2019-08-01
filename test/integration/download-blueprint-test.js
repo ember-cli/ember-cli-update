@@ -26,7 +26,7 @@ describe(downloadBlueprint, function() {
 
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
-    expect(require(path.join(blueprint.path, 'package')).version).to.equal(range);
+    expect(blueprint.version).to.equal(range);
   });
 
   it('downloads urls', async function() {
@@ -40,7 +40,7 @@ describe(downloadBlueprint, function() {
 
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
-    expect(require(path.join(blueprint.path, 'package')).version).to.equal(range);
+    expect(blueprint.version).to.equal(range);
   });
 
   it('downloads npm packages', async function() {
@@ -53,6 +53,6 @@ describe(downloadBlueprint, function() {
 
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
-    expect(require(path.join(blueprint.path, 'package')).version).to.equal(range);
+    expect(blueprint.version).to.equal(range);
   });
 });

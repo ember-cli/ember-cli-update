@@ -10,6 +10,8 @@ module.exports = {
     es6: true
   },
   rules: {
+    // https://github.com/eslint/eslint/issues/11899
+    'require-atomic-updates': 'off'
   },
   overrides: [
     {
