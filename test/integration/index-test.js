@@ -282,7 +282,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
   });
 
   it('can create a personal diff instead of using an output repo', async function() {
-    this.timeout(2 * 60 * 1000);
+    this.timeout(3 * 60 * 1000);
 
     let {
       status
