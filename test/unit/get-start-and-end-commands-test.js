@@ -23,6 +23,9 @@ describe(_getStartAndEndCommands, function() {
   let sandbox;
   let npxStub;
   let spawnStub;
+  let readdirStub;
+  let installAddonBlueprintStub;
+  let createEmptyCommitStub;
   let appendNodeModulesIgnoreStub;
 
   beforeEach(function() {
@@ -30,6 +33,9 @@ describe(_getStartAndEndCommands, function() {
 
     npxStub = sandbox.stub(utils, 'npx').resolves();
     spawnStub = sandbox.stub(utils, 'spawn').resolves();
+    readdirStub = sandbox.stub(utils, 'readdir').resolves(['foo']);
+    installAddonBlueprintStub = sandbox.stub(_getStartAndEndCommands, 'installAddonBlueprint').resolves();
+    createEmptyCommitStub = sandbox.stub(_getStartAndEndCommands, 'createEmptyCommit').resolves();
     appendNodeModulesIgnoreStub = sandbox.stub(_getStartAndEndCommands, 'appendNodeModulesIgnore').resolves();
   });
 
@@ -173,6 +179,129 @@ describe(_getStartAndEndCommands, function() {
           cwd
         }
       ]]);
+
+      expect(installAddonBlueprintStub).to.not.be.called;
+
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
+        cwd,
+        projectName
+      }]]);
+    });
+
+    it('can install an addon blueprint', async function() {
+      let { createProjectFromRemote } = getStartAndEndCommands({
+        projectOptions: ['blueprint'],
+        startBlueprint: { name: blueprint }
+      });
+
+      readdirStub.resolves([]);
+
+      let createProject = createProjectFromRemote({
+        options: {
+          projectName,
+          packageVersion,
+          blueprint: {
+            name: blueprint,
+            path: blueprintPath
+          }
+        }
+      });
+
+      expect(await createProject(cwd)).to.equal(projectPath);
+
+      expect(installAddonBlueprintStub.args).to.deep.equal([[{
+        cwd,
+        projectName,
+        command: `new ${projectName} -sn -sg`,
+        blueprintPath
+      }]]);
+
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
+        cwd,
+        projectName
+      }]]);
+    });
+  });
+
+  describe('init blueprint', function() {
+    it('can create the initial empty commit', async function() {
+      let { createProjectFromRemote } = getStartAndEndCommands({
+        projectOptions: ['blueprint'],
+        startBlueprint: null
+      });
+
+      let createProject = createProjectFromRemote({
+        options: {
+          projectName
+        }
+      });
+
+      expect(await createProject(cwd)).to.equal(projectPath);
+
+      expect(createEmptyCommitStub.args).to.deep.equal([[{
+        cwd,
+        projectName
+      }]]);
+    });
+
+    it('can use the default blueprint', async function() {
+      let { createProjectFromRemote } = getStartAndEndCommands({
+        projectOptions: ['blueprint'],
+        startBlueprint: null
+      });
+
+      let createProject = createProjectFromRemote({
+        options: {
+          projectName,
+          packageVersion,
+          blueprint: {
+            name: 'ember-cli',
+            path: blueprintPath
+          }
+        }
+      });
+
+      expect(await createProject(cwd)).to.equal(projectPath);
+
+      expect(npxStub.args).to.deep.equal([[
+        `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg`,
+        {
+          cwd
+        }
+      ]]);
+
+      expect(installAddonBlueprintStub).to.not.be.called;
+
+      expect(appendNodeModulesIgnoreStub).to.not.be.called;
+    });
+
+    it('can use a custom blueprint', async function() {
+      let { createProjectFromRemote } = getStartAndEndCommands({
+        projectOptions: ['blueprint'],
+        startBlueprint: null
+      });
+
+      let createProject = createProjectFromRemote({
+        options: {
+          projectName,
+          packageVersion,
+          blueprint: {
+            name: blueprint,
+            path: blueprintPath
+          }
+        }
+      });
+
+      expect(await createProject(cwd)).to.equal(projectPath);
+
+      expect(npxStub.args).to.deep.equal([[
+        `${packageName} new ${projectName} -sn -sg -b ${blueprintPath}`,
+        {
+          cwd
+        }
+      ]]);
+
+      expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
         cwd,

@@ -13,8 +13,10 @@ const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprint = require('./parse-blueprint');
 const downloadBlueprint = require('./download-blueprint');
+const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
+const saveDefaultBlueprint = require('./save-default-blueprint');
 
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
@@ -35,20 +37,31 @@ module.exports = async function emberCliUpdate({
 
   let cwd = process.cwd();
 
+  let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
+
   let blueprint;
 
   if (_blueprint) {
-    if (!from) {
-      throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+    blueprint = await parseBlueprint(_blueprint);
+
+    if (from) {
+      blueprint.version = from;
+    } else {
+      let { blueprints } = emberCliUpdateJson;
+      let existingBlueprint = blueprints.find(b => b.name === _blueprint);
+      if (existingBlueprint) {
+        blueprint.location = existingBlueprint.location;
+        blueprint.version = existingBlueprint.version;
+      }
     }
 
-    blueprint = await parseBlueprint(_blueprint);
-    blueprint.version = from;
+    if (!blueprint.version) {
+      throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+    }
   } else {
-    let { blueprints } = await loadSafeBlueprintFile(cwd);
+    let { blueprints } = emberCliUpdateJson;
 
-    let completeBlueprints = blueprints.filter(blueprint => !blueprint.isPartial);
-    if (!completeBlueprints.length) {
+    if (!blueprints.length) {
       blueprints.splice(0, 0, defaultBlueprint);
     }
 
@@ -64,10 +77,10 @@ module.exports = async function emberCliUpdate({
     } else {
       blueprint = blueprints[0];
     }
+  }
 
-    if (blueprint.location) {
-      blueprint.url = (await parseBlueprint(blueprint.location)).url;
-    }
+  if (blueprint && !blueprint.url && blueprint.location) {
+    blueprint.url = (await parseBlueprint(blueprint.location)).url;
   }
 
   let isCustomBlueprint = blueprint.name !== defaultBlueprint.name;
@@ -146,18 +159,38 @@ module.exports = async function emberCliUpdate({
     wasRunAsExecutable
   })).promise;
 
-  let { blueprints } = await loadSafeBlueprintFile(cwd);
+  if (_blueprint) {
+    let emberCliUpdateJson = await loadBlueprintFile(cwd);
 
-  let existingBlueprint = blueprints.find(b => b.name === blueprint.name);
+    if (!emberCliUpdateJson && blueprint.name !== defaultBlueprint.name) {
+      await saveDefaultBlueprint({
+        cwd,
+        defaultBlueprint
+      });
+    }
 
-  if (existingBlueprint) {
     await saveBlueprint({
       cwd,
       name: blueprint.name,
+      location: blueprint.location,
       version: endVersion
     });
 
     await run('git add ember-cli-update.json');
+  } else {
+    let { blueprints } = await loadSafeBlueprintFile(cwd);
+
+    let existingBlueprint = blueprints.find(b => b.name === blueprint.name);
+
+    if (existingBlueprint) {
+      await saveBlueprint({
+        cwd,
+        name: blueprint.name,
+        version: endVersion
+      });
+
+      await run('git add ember-cli-update.json');
+    }
   }
 
   return result;

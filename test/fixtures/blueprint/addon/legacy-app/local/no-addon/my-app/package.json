@@ -1,0 +1,8 @@
+{
+  "name": "my-app",
+  "version": "0.0.0",
+  "description": "",
+  "devDependencies": {
+    "ember-cli": ""
+  }
+}

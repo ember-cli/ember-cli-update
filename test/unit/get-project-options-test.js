@@ -160,4 +160,14 @@ describe(_getProjectOptions, function() {
 
     expect(await getProjectOptions()).to.deep.equal(['blueprint']);
   });
+
+  it('can run without blueprint', async function() {
+    packageJson = {
+      devDependencies: {
+        'ember-cli': '2.11'
+      }
+    };
+
+    expect(await _getProjectOptions(packageJson)).to.deep.equal(['app']);
+  });
 });

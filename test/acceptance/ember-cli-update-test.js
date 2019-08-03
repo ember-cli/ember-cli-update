@@ -12,9 +12,13 @@ const {
 const {
   assertNormalUpdate,
   assertNoUnstaged,
+  assertNoStaged,
   assertCodemodRan
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
+const run = require('../../src/run');
+
+const toDefault = require('../../src/args').to.default;
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -27,6 +31,10 @@ describe(function() {
     runCodemods,
     subDir = '',
     commitMessage,
+    init,
+    blueprint,
+    install,
+    addon,
     beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
@@ -43,6 +51,18 @@ describe(function() {
     if (runCodemods) {
       args = [
         '--run-codemods'
+      ];
+    }
+    if (init) {
+      args = [
+        'init',
+        `-b=${blueprint}`
+      ];
+    }
+    if (install) {
+      args = [
+        'install',
+        addon
       ];
     }
 
@@ -194,5 +214,62 @@ describe(function() {
     expect(status).to.match(/^M {2}.*ember-cli-update\.json$/m);
 
     assertNoUnstaged(status);
+  });
+
+  it('can init a custom blueprint', async function() {
+    this.timeout(3 * 60 * 1000);
+
+    let {
+      location
+    } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/ember-cli-update').blueprints[0];
+
+    let {
+      status
+    } = await (await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/legacy-app/local',
+      commitMessage: 'my-app',
+      init: true,
+      blueprint: location,
+      to: toDefault,
+      async beforeMerge() {
+        await initBlueprint('test/fixtures/blueprint/app/legacy', location);
+      }
+    })).promise;
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/merge/my-app'
+    });
+
+    assertNoUnstaged(status);
+  });
+
+  it('can install an addon with a default blueprint and no state file', async function() {
+    this.timeout(3 * 60 * 1000);
+
+    let {
+      location
+    } = require('../fixtures/blueprint/addon/legacy-app/merge/ideal/my-app/ember-cli-update').blueprints[0];
+
+    let {
+      status
+    } = await (await merge({
+      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
+      commitMessage: 'my-app',
+      install: true,
+      addon: location,
+      async beforeMerge() {
+        await initBlueprint('test/fixtures/blueprint/addon/legacy', location);
+
+        await run('npm install', { cwd: tmpPath });
+      }
+    })).promise;
+
+    await fs.remove(path.join(tmpPath, 'package-lock.json'));
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/no-state-file/my-app'
+    });
+
+    assertNoStaged(status);
   });
 });
