@@ -15,6 +15,7 @@ describe(parseBlueprint, function() {
 
     expect(parsedBlueprint).to.deep.equal({
       name: undefined,
+      location: blueprint,
       url: `git+file://${toPosixAbsolutePath(path.join(process.cwd(), blueprint))}`
     });
   });
@@ -26,6 +27,7 @@ describe(parseBlueprint, function() {
 
     expect(parsedBlueprint).to.deep.equal({
       name: undefined,
+      location: blueprint,
       url: blueprint
     });
   });
@@ -37,6 +39,7 @@ describe(parseBlueprint, function() {
 
     expect(parsedBlueprint).to.deep.equal({
       name: 'test-blueprint',
+      location: undefined,
       url: undefined
     });
   });

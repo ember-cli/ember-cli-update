@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
+const run = require('./run');
 const utils = require('./utils');
 
 const nodeModulesIgnore = `
@@ -23,7 +24,7 @@ module.exports = function getStartAndEndCommands({
     options += ' --yarn';
   }
 
-  if (!projectOptions.includes('welcome') && !projectOptions.includes('blueprint')) {
+  if (!projectOptions.includes('welcome') && startBlueprint && startBlueprint.name === 'ember-cli') {
     options += ' --no-welcome';
   }
 
@@ -40,14 +41,14 @@ module.exports = function getStartAndEndCommands({
   return {
     projectName,
     projectOptions,
-    ...projectOptions.includes('blueprint') ? {} : {
+    ...endBlueprint.name === 'ember-cli' ? {
       packageName: 'ember-cli',
       commandName: 'ember',
       // `createProjectFromCache` no longer works with custom blueprints.
       // It would look for an `ember-cli` version with the same version
       // as the blueprint.
       createProjectFromCache: createProjectFromCache(command)
-    },
+    } : {},
     createProjectFromRemote: createProjectFromRemote(command),
     startOptions: {
       packageVersion: startVersion,
@@ -86,16 +87,36 @@ function createProjectFromRemote(command) {
     options
   }) {
     return async function createProject(cwd) {
-      if (options.blueprint.name !== 'ember-cli') {
-        await utils.npx(`ember-cli ${command} -b ${options.blueprint.path}`, { cwd });
-        // await utils.npx(`-p github:ember-cli/ember-cli#cfb9780 ember ${command} -b ${options.blueprint.name}@${options.packageVersion}`, { cwd });
+      if (options.blueprint) {
+        if (options.blueprint.name !== 'ember-cli') {
+          await utils.npx(`ember-cli ${command} -b ${options.blueprint.path}`, { cwd });
+          // await utils.npx(`-p github:ember-cli/ember-cli#cfb9780 ember ${command} -b ${options.blueprint.name}@${options.packageVersion}`, { cwd });
 
-        await module.exports.appendNodeModulesIgnore({
+          // This means it's not a full app blueprint, but a default blueprint of an addon.
+          // There may be a faster way to detect this.
+          let files = await utils.readdir(path.join(cwd, options.projectName));
+          if (!files.length) {
+            await module.exports.installAddonBlueprint({
+              cwd,
+              projectName: options.projectName,
+              command,
+              blueprintPath: options.blueprint.path
+            });
+          }
+
+          await module.exports.appendNodeModulesIgnore({
+            cwd,
+            projectName: options.projectName
+          });
+        } else {
+          await utils.npx(`-p ember-cli@${options.packageVersion} ember ${command}`, { cwd });
+        }
+      } else {
+        // We are doing a blueprint init, and need an empty first commit.
+        await module.exports.createEmptyCommit({
           cwd,
           projectName: options.projectName
         });
-      } else {
-        await utils.npx(`-p ember-cli@${options.packageVersion} ember ${command}`, { cwd });
       }
 
       return postCreateProject({
@@ -114,6 +135,35 @@ function postCreateProject({
 }) {
   return path.join(cwd, projectName);
 }
+
+module.exports.installAddonBlueprint = async function installAddonBlueprint({
+  cwd,
+  projectName,
+  command,
+  blueprintPath
+}) {
+  await fs.remove(path.join(cwd, projectName));
+
+  await utils.npx(`ember-cli ${command}`, { cwd });
+
+  await run('npm install', { cwd: path.join(cwd, projectName) });
+
+  await utils.npx(`--no-install ember install ${blueprintPath}`, { cwd: path.join(cwd, projectName) });
+
+  await fs.remove(path.join(cwd, projectName, 'package-lock.json'));
+};
+
+module.exports.createEmptyCommit = async function createEmptyCommit({
+  cwd,
+  projectName
+}) {
+  await fs.mkdir(path.join(cwd, projectName));
+  await fs.writeFile(path.join(cwd, projectName, 'package.json'), '{}');
+  await appendNodeModulesIgnore({
+    cwd,
+    projectName
+  });
+};
 
 async function appendNodeModulesIgnore({
   cwd,

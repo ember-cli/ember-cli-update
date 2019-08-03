@@ -30,7 +30,7 @@ module.exports = async function getProjectOptions({
   dependencies,
   devDependencies
 }, blueprint) {
-  if (blueprint.name !== 'ember-cli') {
+  if (blueprint && blueprint.name !== 'ember-cli') {
     return ['blueprint'];
   }
 
