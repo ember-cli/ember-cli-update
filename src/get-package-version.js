@@ -8,7 +8,7 @@ module.exports = function getPackageVersion({
 
   let packageVersion = allDeps[packageName];
 
-  if (!packageVersion) {
+  if (packageVersion === undefined) {
     throw 'Ember CLI blueprint version could not be determined';
   }
 
