@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs-extra');
 const inquirer = require('inquirer');
 const run = require('./run');
 const getProjectOptions = require('./get-project-options');
@@ -14,6 +13,8 @@ const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprint = require('./parse-blueprint');
 const downloadBlueprint = require('./download-blueprint');
+const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
+const saveBlueprint = require('./save-blueprint');
 
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
@@ -42,17 +43,7 @@ module.exports = async function emberCliUpdate({
     blueprint = await parseBlueprint(_blueprint);
     blueprint.version = from;
   } else {
-    let emberCliUpdateJson;
-    try {
-      emberCliUpdateJson = await fs.readJson('ember-cli-update.json');
-    } catch (err) {}
-
-    let blueprints;
-    if (emberCliUpdateJson) {
-      blueprints = emberCliUpdateJson.blueprints;
-    } else {
-      blueprints = [];
-    }
+    let { blueprints } = await loadSafeBlueprintFile(process.cwd());
 
     let completeBlueprints = blueprints.filter(blueprint => !blueprint.isPartial);
     if (!completeBlueprints.length) {
@@ -153,25 +144,18 @@ module.exports = async function emberCliUpdate({
     wasRunAsExecutable
   })).promise;
 
-  if (isCustomBlueprint) {
-    let emberCliUpdateJson;
-    try {
-      emberCliUpdateJson = await fs.readJson('ember-cli-update.json');
-    } catch (err) {}
+  let emberCliUpdateJson = await loadSafeBlueprintFile(process.cwd());
 
-    if (emberCliUpdateJson) {
-      let { blueprints } = emberCliUpdateJson;
-      blueprint = blueprints.find(b => b.name === blueprint.name);
+  let existingBlueprint = emberCliUpdateJson.blueprints.find(b => b.name === blueprint.name);
 
-      if (blueprint.version !== endVersion) {
-        blueprint.version = endVersion;
-        await fs.writeJSON('ember-cli-update.json', emberCliUpdateJson, {
-          spaces: 2,
-          EOL: require('os').EOL
-        });
-        await run('git add ember-cli-update.json');
-      }
-    }
+  if (existingBlueprint) {
+    await saveBlueprint({
+      cwd: process.cwd(),
+      name: blueprint.name,
+      version: endVersion
+    });
+
+    await run('git add ember-cli-update.json');
   }
 
   return result;
