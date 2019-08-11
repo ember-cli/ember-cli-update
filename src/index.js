@@ -32,8 +32,6 @@ module.exports = async function emberCliUpdate({
     name: 'ember-cli'
   };
 
-  let ignoredFiles = [];
-
   let blueprint;
 
   if (_blueprint) {
@@ -51,8 +49,6 @@ module.exports = async function emberCliUpdate({
 
     let blueprints;
     if (emberCliUpdateJson) {
-      ignoredFiles.push('ember-cli-update.json');
-
       blueprints = emberCliUpdateJson.blueprints;
     } else {
       blueprints = [];
@@ -153,7 +149,7 @@ module.exports = async function emberCliUpdate({
     runCodemods,
     codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
     createCustomDiff,
-    ignoredFiles,
+    ignoredFiles: ['ember-cli-update.json'],
     wasRunAsExecutable
   })).promise;
 
