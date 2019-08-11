@@ -32,6 +32,7 @@ describe(getPackageVersion, function() {
 
     expect(getPackageVersion(packageJson, 'test-package-name')).to.equal('2.11');
   });
+
   it('gets version as devDependency', function() {
     let packageJson = {
       devDependencies: {
@@ -40,5 +41,15 @@ describe(getPackageVersion, function() {
     };
 
     expect(getPackageVersion(packageJson, 'test-package-name')).to.equal('2.11');
+  });
+
+  it('doesn\'t throw if empty string', function() {
+    let packageJson = {
+      dependencies: {
+        'test-package-name': ''
+      }
+    };
+
+    expect(getPackageVersion(packageJson, 'test-package-name')).to.equal('');
   });
 });
