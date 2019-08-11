@@ -304,14 +304,10 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
     describe('--blueprint', function() {
       it('throws if missing --from', async function() {
-        let {
-          name
-        } = require('../fixtures/npm-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
-
         let promise = merge({
-          fixturesPath: 'test/fixtures/npm-blueprint-app/local',
+          fixturesPath: 'test/fixtures/app/local',
           commitMessage: 'my-app',
-          blueprint: name
+          blueprint: 'test-blueprint'
         });
 
         expect(isGitClean({ cwd: tmpPath })).to.be.ok;
