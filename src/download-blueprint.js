@@ -7,10 +7,12 @@ const npa = require('npm-package-arg');
 const run = require('./run');
 
 async function downloadBlueprint(name, url, range) {
-  if (url) {
-    url += `#semver:${range}`;
-  } else {
+  if (!range) {
+    url = name;
+  } else if (!url) {
     url = `${name}@${range}`;
+  } else {
+    url += `#semver:${range}`;
   }
   let newTmpDir = await tmpDir();
   let output = await run(`npm install ${url}`, { cwd: newTmpDir });
