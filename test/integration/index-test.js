@@ -18,8 +18,6 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 
-const toDefault = require('../../src/args').to.default;
-
 describe(function() {
   this.timeout(30 * 1000);
 
@@ -373,7 +371,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         } = await merge({
           fixturesPath: 'test/fixtures/npm-blueprint-app/local',
           commitMessage: 'my-app',
-          to: toDefault
+          to: null
         });
 
         fixtureCompare({

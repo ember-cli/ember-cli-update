@@ -16,7 +16,7 @@ describe(downloadBlueprint, function() {
       name,
       location,
       version: range
-    } = require('../fixtures/local-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/local-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
 
     let blueprintPath = await initBlueprint('test/fixtures/local-blueprint', location);
 
@@ -34,7 +34,7 @@ describe(downloadBlueprint, function() {
       name,
       location: url,
       version: range
-    } = require('../fixtures/remote-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/remote-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
 
     let blueprint = await downloadBlueprint(null, url, range);
 
@@ -47,9 +47,22 @@ describe(downloadBlueprint, function() {
     let {
       name,
       version: range
-    } = require('../fixtures/npm-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/npm-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
 
     let blueprint = await downloadBlueprint(name, null, range);
+
+    expect(blueprint.name).to.equal(name);
+    expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
+    expect(blueprint.version).to.equal(range);
+  });
+
+  it('downloads npm packages without a range', async function() {
+    let {
+      name,
+      version: range
+    } = require('../fixtures/npm-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
+
+    let blueprint = await downloadBlueprint(name, null, null);
 
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
