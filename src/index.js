@@ -16,7 +16,7 @@ const parseBlueprint = require('./parse-blueprint');
 const downloadBlueprint = require('./download-blueprint');
 
 module.exports = async function emberCliUpdate({
-  blueprint,
+  blueprint: _blueprint,
   from,
   to,
   resolveConflicts,
@@ -34,12 +34,14 @@ module.exports = async function emberCliUpdate({
 
   let ignoredFiles = [];
 
-  if (blueprint) {
+  let blueprint;
+
+  if (_blueprint) {
     if (!from) {
       throw new Error('A custom blueprint cannot detect --from. You must supply it.');
     }
 
-    blueprint = await parseBlueprint(blueprint);
+    blueprint = await parseBlueprint(_blueprint);
     blueprint.version = from;
   } else {
     let emberCliUpdateJson;
