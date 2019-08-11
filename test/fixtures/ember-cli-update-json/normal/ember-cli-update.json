@@ -1,0 +1,8 @@
+{
+  "blueprints": [
+    {
+      "name": "test-blueprint",
+      "version": "0.0.1"
+    }
+  ]
+}
