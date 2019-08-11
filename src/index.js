@@ -111,7 +111,7 @@ module.exports = async function emberCliUpdate({
 
         let versions = await getVersions(packageName);
 
-        let getTagVersion = _getTagVersion(versions, packageName, blueprint.url);
+        let getTagVersion = _getTagVersion(versions, packageName);
 
         if (from) {
           startVersion = await getTagVersion(from);
