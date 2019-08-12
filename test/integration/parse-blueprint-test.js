@@ -9,7 +9,7 @@ const { toPosixAbsolutePath } = parseBlueprint;
 
 describe(parseBlueprint, function() {
   it('detects local paths', async function() {
-    let blueprint = 'test/fixtures/local-blueprint';
+    let blueprint = 'test/fixtures/blueprint/app/local';
 
     let parsedBlueprint = await parseBlueprint(blueprint);
 
