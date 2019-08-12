@@ -161,21 +161,21 @@ describe(function() {
 
     let {
       location
-    } = require('../fixtures/local-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/app/local-app/local/my-app/ember-cli-update').blueprints[0];
 
     let {
       version: to
-    } = require('../fixtures/local-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[0];
 
     let {
       ps,
       promise
     } = await merge({
-      fixturesPath: 'test/fixtures/local-blueprint-app/local',
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       to,
       async beforeMerge() {
-        await initBlueprint('test/fixtures/local-blueprint', location);
+        await initBlueprint('test/fixtures/blueprint/app/local', location);
       }
     });
 
@@ -191,7 +191,7 @@ describe(function() {
     } = await promise;
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/local-blueprint-app/merge/my-app'
+      mergeFixtures: 'test/fixtures/blueprint/app/local-app/merge/my-app'
     });
 
     expect(status).to.match(/^M {2}.*ember-cli-update\.json$/m);

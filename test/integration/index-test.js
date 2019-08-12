@@ -317,27 +317,27 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           location,
           version: from
-        } = require('../fixtures/legacy-blueprint-app/local/my-app/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/app/legacy-app/local/my-app/ember-cli-update').blueprints[0];
 
         let {
           version: to
-        } = require('../fixtures/legacy-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/ember-cli-update').blueprints[0];
 
         let {
           status
         } = await merge({
-          fixturesPath: 'test/fixtures/legacy-blueprint-app/local',
+          fixturesPath: 'test/fixtures/blueprint/app/legacy-app/local',
           commitMessage: 'my-app',
           blueprint: location,
           from,
           to,
           async beforeMerge() {
-            await initBlueprint('test/fixtures/legacy-blueprint', location);
+            await initBlueprint('test/fixtures/blueprint/app/legacy', location);
           }
         });
 
         fixtureCompare({
-          mergeFixtures: 'test/fixtures/legacy-blueprint-app/merge/my-app'
+          mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/merge/my-app'
         });
 
         assertNoUnstaged(status);
@@ -348,18 +348,18 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       it('can update a remote blueprint', async function() {
         let {
           version: to
-        } = require('../fixtures/remote-blueprint-app/merge/my-app/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/app/remote-app/merge/my-app/ember-cli-update').blueprints[0];
 
         let {
           status
         } = await merge({
-          fixturesPath: 'test/fixtures/remote-blueprint-app/local',
+          fixturesPath: 'test/fixtures/blueprint/app/remote-app/local',
           commitMessage: 'my-app',
           to
         });
 
         fixtureCompare({
-          mergeFixtures: 'test/fixtures/remote-blueprint-app/merge/my-app'
+          mergeFixtures: 'test/fixtures/blueprint/app/remote-app/merge/my-app'
         });
 
         assertNoUnstaged(status);
@@ -369,13 +369,13 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           status
         } = await merge({
-          fixturesPath: 'test/fixtures/npm-blueprint-app/local',
+          fixturesPath: 'test/fixtures/blueprint/app/npm-app/local',
           commitMessage: 'my-app',
           to: null
         });
 
         fixtureCompare({
-          mergeFixtures: 'test/fixtures/npm-blueprint-app/merge/my-app'
+          mergeFixtures: 'test/fixtures/blueprint/app/npm-app/merge/my-app'
         });
 
         assertNoUnstaged(status);
