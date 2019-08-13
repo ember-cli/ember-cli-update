@@ -64,7 +64,7 @@
     "eslint": "^6.1.0",
     "eslint-config-sane": "0.8.5",
     "eslint-config-sane-node": "0.2.2",
-    "eslint-plugin-json-files": "0.6.2",
+    "eslint-plugin-json-files": "0.7.0",
     "eslint-plugin-mocha": "^6.0.0",
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-prefer-let": "^1.0.1",
