@@ -11,6 +11,11 @@ const downloadBlueprint = require('../../src/download-blueprint');
 describe(downloadBlueprint, function() {
   this.timeout(10 * 1000);
 
+  it('throws if missing a range', async function() {
+    await expect(downloadBlueprint('test-name', 'test-url', null))
+      .to.eventually.be.rejectedWith('Missing a range when downloading blueprint');
+  });
+
   it('downloads local paths as urls', async function() {
     let {
       name,
@@ -50,19 +55,6 @@ describe(downloadBlueprint, function() {
     } = require('../fixtures/blueprint/app/npm-app/merge/my-app/ember-cli-update').blueprints[0];
 
     let blueprint = await downloadBlueprint(name, null, range);
-
-    expect(blueprint.name).to.equal(name);
-    expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
-    expect(blueprint.version).to.equal(range);
-  });
-
-  it('downloads npm packages without a range', async function() {
-    let {
-      name,
-      version: range
-    } = require('../fixtures/blueprint/app/npm-app/merge/my-app/ember-cli-update').blueprints[0];
-
-    let blueprint = await downloadBlueprint(name, null, null);
 
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
