@@ -144,9 +144,9 @@ module.exports = async function emberCliUpdate({
     wasRunAsExecutable
   })).promise;
 
-  let emberCliUpdateJson = await loadSafeBlueprintFile(process.cwd());
+  let { blueprints } = await loadSafeBlueprintFile(process.cwd());
 
-  let existingBlueprint = emberCliUpdateJson.blueprints.find(b => b.name === blueprint.name);
+  let existingBlueprint = blueprints.find(b => b.name === blueprint.name);
 
   if (existingBlueprint) {
     await saveBlueprint({
