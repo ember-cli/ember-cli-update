@@ -74,7 +74,7 @@ ember-cli-update --run-codemods
 |---|---|---|---|---|
 | --blueprint | Provide a custom blueprint for use in the update | String | "@glimmer/blueprint" "git+https://git@github.com/tildeio/libkit.git" "../blueprint" | |
 | --from | Use a starting version that is different than what is in your package.json | String | "2.9.1" | |
-| --to | Update to a version that isn\'t latest | String | "2.14.1" "~2.15" "latest" "beta" | "latest" |
+| --to | Update to a version that isn\'t latest | String | "2.14.1" "~2.15" "latest" "beta" | "*" |
 | --resolve-conflicts | Automatically run git mergetool if conflicts found | Boolean | | false |
 | --run-codemods | Run codemods to help update your code | Boolean | | false |
 | --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
