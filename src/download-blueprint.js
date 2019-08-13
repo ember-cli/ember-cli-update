@@ -8,12 +8,15 @@ const run = require('./run');
 
 async function downloadBlueprint(name, url, range) {
   if (!range) {
-    url = name;
-  } else if (!url) {
+    throw new Error('Missing a range when downloading blueprint');
+  }
+
+  if (!url) {
     url = `${name}@${range}`;
   } else {
     url += `#semver:${range}`;
   }
+
   let newTmpDir = await tmpDir();
   let output = await run(`npm install ${url}`, { cwd: newTmpDir });
   // if (!name) {
@@ -25,6 +28,7 @@ async function downloadBlueprint(name, url, range) {
   let version = parsed.rawSpec;
   let _path = path.join(newTmpDir, 'node_modules', name);
   // let version = require(path.join(_path, 'package')).version;
+
   return {
     name,
     path: _path,
