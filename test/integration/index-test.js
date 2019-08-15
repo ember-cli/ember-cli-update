@@ -300,7 +300,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
   });
 
   describe('blueprints', function() {
-    this.timeout(5 * 60 * 1000);
+    this.timeout(10 * 60 * 1000);
 
     describe('--blueprint', function() {
       it('throws if missing --from', async function() {
