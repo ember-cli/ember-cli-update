@@ -120,28 +120,53 @@ describe(_getStartAndEndCommands, function() {
     ]]);
   });
 
-  it('can create a project from a custom blueprint', async function() {
-    let { createProjectFromRemote } = getStartAndEndCommands();
+  describe('custom blueprint', function() {
+    it('returns an options object', async function() {
+      let options = getStartAndEndCommands({
+        projectOptions: ['blueprint']
+      });
 
-    let createProject = createProjectFromRemote({
-      options: {
+      expect(options.createProjectFromRemote).to.be.a('function');
+
+      delete options.createProjectFromRemote;
+
+      expect(options).to.deep.equal({
         projectName,
-        packageVersion,
-        blueprint: {
-          name: blueprint,
-          path: blueprintPath
+        projectOptions: ['blueprint'],
+        startOptions: {
+          packageVersion: startVersion,
+          blueprint: { name: 'ember-cli' }
+        },
+        endOptions: {
+          packageVersion: endVersion,
+          blueprint: { name: 'ember-cli' }
         }
-      }
+      });
     });
 
-    expect(await createProject(cwd)).to.equal(projectPath);
+    it('can create a project from remote', async function() {
+      let { createProjectFromRemote } = getStartAndEndCommands();
 
-    expect(npxStub.args).to.deep.equal([[
-      `${packageName} new ${projectName} -sn -sg --no-welcome -b ${blueprintPath}`,
-      {
-        cwd
-      }
-    ]]);
+      let createProject = createProjectFromRemote({
+        options: {
+          projectName,
+          packageVersion,
+          blueprint: {
+            name: blueprint,
+            path: blueprintPath
+          }
+        }
+      });
+
+      expect(await createProject(cwd)).to.equal(projectPath);
+
+      expect(npxStub.args).to.deep.equal([[
+        `${packageName} new ${projectName} -sn -sg --no-welcome -b ${blueprintPath}`,
+        {
+          cwd
+        }
+      ]]);
+    });
   });
 
   describe('options', function() {

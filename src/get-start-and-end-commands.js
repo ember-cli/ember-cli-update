@@ -34,12 +34,14 @@ module.exports = function getStartAndEndCommands({
   return {
     projectName,
     projectOptions,
-    packageName: 'ember-cli',
-    commandName: 'ember',
-    // `createProjectFromCache` no longer works with blueprints.
-    // It will look for an `ember-cli` version with the same
-    // version as the blueprint.
-    createProjectFromCache: createProjectFromCache(command),
+    ...projectOptions.includes('blueprint') ? {} : {
+      packageName: 'ember-cli',
+      commandName: 'ember',
+      // `createProjectFromCache` no longer works with blueprints.
+      // It would look for an `ember-cli` version with the same
+      // version as the blueprint.
+      createProjectFromCache: createProjectFromCache(command)
+    },
     createProjectFromRemote: createProjectFromRemote(command),
     startOptions: {
       packageVersion: startVersion,
