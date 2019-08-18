@@ -1,10 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 
-const args = require('../src/args');
-
 require('yargs')
-  .options(args)
   .commandDir('commands')
   .argv;
 

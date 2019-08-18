@@ -1,8 +1,11 @@
 'use strict';
 
+const args = require('../../src/args');
 const emberCliUpdate = require('../../src');
 
 module.exports.command = '$0';
+
+module.exports.builder = args;
 
 module.exports.handler = async function handler(argv) {
   let blueprint = argv['blueprint'];
