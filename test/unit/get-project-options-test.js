@@ -155,7 +155,7 @@ describe(_getProjectOptions, function() {
     expect(await getProjectOptions()).to.deep.equal(['app', 'yarn']);
   });
 
-  it('detects blueprint', async function() {
+  it('detects custom blueprint', async function() {
     blueprint = {};
 
     expect(await getProjectOptions()).to.deep.equal(['blueprint']);
