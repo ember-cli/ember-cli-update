@@ -160,10 +160,7 @@ describe(function() {
     this.timeout(3 * 60 * 1000);
 
     let {
-      location
-    } = require('../fixtures/blueprint/app/local-app/local/my-app/ember-cli-update').blueprints[0];
-
-    let {
+      location,
       version: to
     } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[0];
 
