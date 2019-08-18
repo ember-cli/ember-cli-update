@@ -8,6 +8,7 @@
     "ecu": "bin/ember-cli-update.js"
   },
   "scripts": {
+    "start": "bin/ember-cli-update.js",
     "test": "npm run test:both",
     "test:both": "npm run test:bin && npm run test:command",
     "test:bin": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures mocha \"test/!(fixtures)/**/!(ember-addon)-test.js\"",
