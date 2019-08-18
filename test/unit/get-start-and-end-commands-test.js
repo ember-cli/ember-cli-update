@@ -147,7 +147,10 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can create a project from remote', async function() {
-      let { createProjectFromRemote } = getStartAndEndCommands();
+      let { createProjectFromRemote } = getStartAndEndCommands({
+        projectOptions: ['blueprint'],
+        startBlueprint: { name: blueprint }
+      });
 
       let createProject = createProjectFromRemote({
         options: {
@@ -163,7 +166,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `${packageName} new ${projectName} -sn -sg --no-welcome -b ${blueprintPath}`,
+        `${packageName} new ${projectName} -sn -sg -b ${blueprintPath}`,
         {
           cwd
         }

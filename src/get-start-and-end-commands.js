@@ -17,7 +17,7 @@ module.exports = function getStartAndEndCommands({
     options += ' --yarn';
   }
 
-  if (!projectOptions.includes('welcome')) {
+  if (!projectOptions.includes('welcome') && !projectOptions.includes('blueprint')) {
     options += ' --no-welcome';
   }
 
