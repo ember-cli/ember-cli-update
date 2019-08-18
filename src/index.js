@@ -33,6 +33,8 @@ module.exports = async function emberCliUpdate({
     name: 'ember-cli'
   };
 
+  let cwd = process.cwd();
+
   let blueprint;
 
   if (_blueprint) {
@@ -43,7 +45,7 @@ module.exports = async function emberCliUpdate({
     blueprint = await parseBlueprint(_blueprint);
     blueprint.version = from;
   } else {
-    let { blueprints } = await loadSafeBlueprintFile(process.cwd());
+    let { blueprints } = await loadSafeBlueprintFile(cwd);
 
     let completeBlueprints = blueprints.filter(blueprint => !blueprint.isPartial);
     if (!completeBlueprints.length) {
@@ -144,13 +146,13 @@ module.exports = async function emberCliUpdate({
     wasRunAsExecutable
   })).promise;
 
-  let { blueprints } = await loadSafeBlueprintFile(process.cwd());
+  let { blueprints } = await loadSafeBlueprintFile(cwd);
 
   let existingBlueprint = blueprints.find(b => b.name === blueprint.name);
 
   if (existingBlueprint) {
     await saveBlueprint({
-      cwd: process.cwd(),
+      cwd,
       name: blueprint.name,
       version: endVersion
     });
