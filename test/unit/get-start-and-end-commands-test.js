@@ -123,7 +123,9 @@ describe(_getStartAndEndCommands, function() {
   describe('custom blueprint', function() {
     it('returns an options object', async function() {
       let options = getStartAndEndCommands({
-        projectOptions: ['blueprint']
+        projectOptions: ['blueprint'],
+        startBlueprint: { name: blueprint },
+        endBlueprint: { name: blueprint }
       });
 
       expect(options.createProjectFromRemote).to.be.a('function');
@@ -135,11 +137,11 @@ describe(_getStartAndEndCommands, function() {
         projectOptions: ['blueprint'],
         startOptions: {
           packageVersion: startVersion,
-          blueprint: { name: 'ember-cli' }
+          blueprint: { name: blueprint }
         },
         endOptions: {
           packageVersion: endVersion,
-          blueprint: { name: 'ember-cli' }
+          blueprint: { name: blueprint }
         }
       });
     });
