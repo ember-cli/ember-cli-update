@@ -23,12 +23,14 @@ describe(_getStartAndEndCommands, function() {
   let sandbox;
   let npxStub;
   let spawnStub;
+  let appendNodeModulesIgnoreStub;
 
   beforeEach(function() {
     sandbox = sinon.createSandbox();
 
     npxStub = sandbox.stub(utils, 'npx').resolves();
     spawnStub = sandbox.stub(utils, 'spawn').resolves();
+    appendNodeModulesIgnoreStub = sandbox.stub(_getStartAndEndCommands, 'appendNodeModulesIgnore').resolves();
   });
 
   afterEach(function() {
@@ -171,6 +173,11 @@ describe(_getStartAndEndCommands, function() {
           cwd
         }
       ]]);
+
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
+        cwd,
+        projectName
+      }]]);
     });
   });
 

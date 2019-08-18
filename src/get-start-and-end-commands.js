@@ -1,7 +1,13 @@
 'use strict';
 
 const path = require('path');
+const fs = require('fs-extra');
 const utils = require('./utils');
+
+const nodeModulesIgnore = `
+
+/node_modules/
+`;
 
 module.exports = function getStartAndEndCommands({
   packageJson: { name: projectName },
@@ -80,15 +86,17 @@ function createProjectFromRemote(command) {
     options
   }) {
     return async function createProject(cwd) {
-      let npxCommand;
       if (options.blueprint.name !== 'ember-cli') {
-        npxCommand = `ember-cli ${command} -b ${options.blueprint.path}`;
-        // npxCommand = `-p github:ember-cli/ember-cli#cfb9780 ember ${command} -b ${options.blueprint.name}@${options.packageVersion}`;
-      } else {
-        npxCommand = `-p ember-cli@${options.packageVersion} ember ${command}`;
-      }
+        await utils.npx(`ember-cli ${command} -b ${options.blueprint.path}`, { cwd });
+        // await utils.npx(`-p github:ember-cli/ember-cli#cfb9780 ember ${command} -b ${options.blueprint.name}@${options.packageVersion}`, { cwd });
 
-      await utils.npx(npxCommand, { cwd });
+        await module.exports.appendNodeModulesIgnore({
+          cwd,
+          projectName: options.projectName
+        });
+      } else {
+        await utils.npx(`-p ember-cli@${options.packageVersion} ember ${command}`, { cwd });
+      }
 
       return postCreateProject({
         cwd,
@@ -106,3 +114,21 @@ function postCreateProject({
 }) {
   return path.join(cwd, projectName);
 }
+
+async function appendNodeModulesIgnore({
+  cwd,
+  projectName
+}) {
+  let isIgnoringNodeModules;
+  let gitignore = '';
+  try {
+    gitignore = await fs.readFile(path.join(cwd, projectName, '.gitignore'), 'utf8');
+
+    isIgnoringNodeModules = /^\/?node_modules\/?$/m.test(gitignore);
+  } catch (err) {}
+  if (!isIgnoringNodeModules) {
+    await fs.writeFile(path.join(cwd, projectName, '.gitignore'), `${gitignore}${nodeModulesIgnore}`);
+  }
+}
+
+module.exports.appendNodeModulesIgnore = appendNodeModulesIgnore;
