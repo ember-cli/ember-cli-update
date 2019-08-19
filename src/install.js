@@ -20,6 +20,8 @@ module.exports = async function install({
 
   await utils.npx(`--no-install ember install ${addon}`);
 
+  // This can be optimized by going into the node_modules install location
+  // from above and grabbing it from there.
   let parsedBlueprint = await parseBlueprint(addon);
   let downloadedBlueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, toDefault);
 
