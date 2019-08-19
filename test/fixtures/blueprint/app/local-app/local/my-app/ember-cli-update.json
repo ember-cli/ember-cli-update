@@ -7,8 +7,8 @@
       "isPartial": false
     },
     {
-      "name": "unused-partial-blueprint-test",
-      "version": "0.0.1",
+      "name": "ember-cli-update-npm-blueprint-test",
+      "version": "0.0.5",
       "isPartial": true
     }
   ]

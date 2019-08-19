@@ -349,6 +349,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
     describe('ember-cli-update.json', function() {
       it('can update a remote blueprint', async function() {
         let {
+          name,
           version: to
         } = require('../fixtures/blueprint/app/remote-app/merge/my-app/ember-cli-update').blueprints[0];
 
@@ -357,6 +358,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         } = await merge({
           fixturesPath: 'test/fixtures/blueprint/app/remote-app/local',
           commitMessage: 'my-app',
+          blueprint: name,
           to
         });
 
@@ -369,10 +371,15 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
       it('can update an npm blueprint', async function() {
         let {
+          name
+        } = require('../fixtures/blueprint/app/npm-app/merge/my-app/ember-cli-update').blueprints[0];
+
+        let {
           status
         } = await merge({
           fixturesPath: 'test/fixtures/blueprint/app/npm-app/local',
           commitMessage: 'my-app',
+          blueprint: name,
           to: toDefault
         });
 
