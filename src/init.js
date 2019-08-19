@@ -27,9 +27,8 @@ module.exports = async function init({
   } else {
     parsedBlueprint = defaultBlueprint;
   }
-  parseBlueprint.version = to;
 
-  let downloadedBlueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, parseBlueprint.version);
+  let downloadedBlueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, to);
 
   let result = await (await boilerplateUpdate({
     projectOptions: ['blueprint'],
