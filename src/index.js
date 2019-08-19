@@ -17,6 +17,11 @@ const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
 const saveDefaultBlueprint = require('./save-default-blueprint');
+const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
+
+function formatBlueprintLine(blueprint) {
+  return `${blueprint.name}, current: ${blueprint.currentVersion}, latest: ${blueprint.latestVersion}`;
+}
 
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
@@ -62,20 +67,40 @@ module.exports = async function emberCliUpdate({
     let { blueprints } = emberCliUpdateJson;
 
     if (!blueprints.length) {
-      blueprints.splice(0, 0, defaultBlueprint);
-    }
+      blueprint = defaultBlueprint;
+    } else {
+      let blueprintUpdates = await checkForBlueprintUpdates(blueprints);
 
-    if (blueprints.length > 1) {
-      let answers = await inquirer.prompt([{
+      let areAllUpToDate = blueprintUpdates.every(blueprint => blueprint.isUpToDate);
+      if (areAllUpToDate) {
+        return `${blueprintUpdates.map(formatBlueprintLine).join(`
+`)}
+
+All blueprints are up-to-date!`;
+      }
+
+      let choicesByName = blueprintUpdates.reduce((choices, blueprint) => {
+        let name = formatBlueprintLine(blueprint);
+        choices[name] = {
+          realName: blueprint.name,
+          choice: {
+            name,
+            disabled: blueprint.isUpToDate
+          }
+        };
+        return choices;
+      }, {});
+
+      let answer = await inquirer.prompt([{
         type: 'list',
-        message: 'Multiple blueprint updates have been found. Which would you like to update?',
+        message: 'Blueprint updates have been found. Which one would you like to update?',
         name: 'blueprint',
-        choices: blueprints.map(blueprint => blueprint.name)
+        choices: Object.values(choicesByName).map(({ choice }) => choice)
       }]);
 
-      blueprint = blueprints.find(blueprint => blueprint.name === answers.blueprint);
-    } else {
-      blueprint = blueprints[0];
+      let { realName } = choicesByName[answer.blueprint];
+
+      blueprint = blueprints.find(blueprint => blueprint.name === realName);
     }
   }
 

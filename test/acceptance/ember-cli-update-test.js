@@ -204,7 +204,7 @@ describe(function() {
 
     ps.stdout.on('data', data => {
       let str = data.toString();
-      if (str.includes('Multiple blueprint updates have been found.')) {
+      if (str.includes('Blueprint updates have been found.')) {
         ps.stdin.write('\n');
       }
     });
