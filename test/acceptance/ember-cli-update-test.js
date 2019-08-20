@@ -35,6 +35,7 @@ describe(function() {
     blueprint,
     install,
     addon,
+    bootstrap,
     beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
@@ -63,6 +64,11 @@ describe(function() {
       args = [
         'install',
         addon
+      ];
+    }
+    if (bootstrap) {
+      args = [
+        'bootstrap'
       ];
     }
 
@@ -268,6 +274,27 @@ describe(function() {
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/no-state-file/my-app'
+    });
+
+    assertNoStaged(status);
+  });
+
+  it('can bootstrap the default blueprint', async function() {
+    let {
+      status
+    } = await (await merge({
+      fixturesPath: 'test/fixtures/app/merge',
+      commitMessage: 'my-app',
+      bootstrap: true
+    })).promise;
+
+    expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
+
+    await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/merge/my-app'
     });
 
     assertNoStaged(status);
