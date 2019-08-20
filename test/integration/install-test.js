@@ -4,7 +4,6 @@ const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const sinon = require('sinon');
 const {
   buildTmp,
   processExit,
@@ -21,26 +20,18 @@ describe(install, function() {
   this.timeout(3 * 60 * 1000);
 
   let cwd;
-  let sandbox;
   let tmpPath;
 
   before(function() {
     cwd = process.cwd();
   });
 
-  beforeEach(function() {
-    sandbox = sinon.createSandbox();
-  });
-
   afterEach(function() {
-    sandbox.restore();
-
     process.chdir(cwd);
   });
 
   async function merge({
     fixturesPath,
-    dirty,
     addon,
     commitMessage,
     beforeMerge = () => Promise.resolve(),
@@ -48,8 +39,7 @@ describe(install, function() {
   }) {
     tmpPath = await buildTmp({
       fixturesPath,
-      commitMessage,
-      dirty
+      commitMessage
     });
 
     await beforeMerge();
