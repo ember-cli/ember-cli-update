@@ -332,10 +332,6 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
       it('can update a legacy blueprint', async function() {
         let {
-          version: from
-        } = require('../fixtures/blueprint/app/legacy-app/local/my-app/ember-cli-update').blueprints[0];
-
-        let {
           location,
           version: to
         } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/ember-cli-update').blueprints[0];
@@ -346,7 +342,6 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
           fixturesPath: 'test/fixtures/blueprint/app/legacy-app/local',
           commitMessage: 'my-app',
           blueprint: location,
-          from,
           to,
           async beforeMerge() {
             await initBlueprint('test/fixtures/blueprint/app/legacy', location);

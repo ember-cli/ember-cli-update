@@ -6,12 +6,11 @@ const sinon = require('sinon');
 const path = require('path');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
+const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 
 const projectName = 'my-custom-app';
-const startVersion = '0.0.1';
-const endVersion = '0.0.2';
 const packageRoot = '/test/package/root';
-const packageVersion = startVersion;
+const packageVersion = '0.0.1';
 const cwd = '/test/cwd';
 const packageName = 'ember-cli';
 const commandName = 'ember';
@@ -46,9 +45,6 @@ describe(_getStartAndEndCommands, function() {
   function getStartAndEndCommands(options) {
     return _getStartAndEndCommands(Object.assign({
       packageJson: { name: projectName },
-      projectOptions: ['app'],
-      startVersion,
-      endVersion,
       startBlueprint: { name: 'ember-cli' },
       endBlueprint: { name: 'ember-cli' }
     }, options));
@@ -65,15 +61,12 @@ describe(_getStartAndEndCommands, function() {
 
     expect(options).to.deep.equal({
       projectName,
-      projectOptions: ['app'],
       packageName,
       commandName,
       startOptions: {
-        packageVersion: startVersion,
         blueprint: { name: 'ember-cli' }
       },
       endOptions: {
-        packageVersion: endVersion,
         blueprint: { name: 'ember-cli' }
       }
     });
@@ -85,7 +78,10 @@ describe(_getStartAndEndCommands, function() {
     let createProject = createProjectFromCache({
       packageRoot,
       options: {
-        projectName
+        projectName,
+        blueprint: loadSafeBlueprint({
+          name: 'ember-cli'
+        })
       }
     });
 
@@ -98,8 +94,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         projectName,
         '-sn',
-        '-sg',
-        '--no-welcome'
+        '-sg'
       ],
       {
         cwd
@@ -113,15 +108,17 @@ describe(_getStartAndEndCommands, function() {
     let createProject = createProjectFromRemote({
       options: {
         projectName,
-        packageVersion,
-        blueprint: { name: 'ember-cli' }
+        blueprint: loadSafeBlueprint({
+          name: 'ember-cli',
+          version: packageVersion
+        })
       }
     });
 
     expect(await createProject(cwd)).to.equal(projectPath);
 
     expect(npxStub.args).to.deep.equal([[
-      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg --no-welcome`,
+      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg`,
       {
         cwd
       }
@@ -131,7 +128,6 @@ describe(_getStartAndEndCommands, function() {
   describe('custom blueprint', function() {
     it('returns an options object', async function() {
       let options = getStartAndEndCommands({
-        projectOptions: ['blueprint'],
         startBlueprint: { name: blueprint },
         endBlueprint: { name: blueprint }
       });
@@ -142,33 +138,26 @@ describe(_getStartAndEndCommands, function() {
 
       expect(options).to.deep.equal({
         projectName,
-        projectOptions: ['blueprint'],
         startOptions: {
-          packageVersion: startVersion,
           blueprint: { name: blueprint }
         },
         endOptions: {
-          packageVersion: endVersion,
           blueprint: { name: blueprint }
         }
       });
     });
 
     it('can create a project from remote', async function() {
-      let { createProjectFromRemote } = getStartAndEndCommands({
-        projectOptions: ['blueprint'],
-        startBlueprint: { name: blueprint },
-        endBlueprint: { name: blueprint }
-      });
+      let { createProjectFromRemote } = getStartAndEndCommands();
 
       let createProject = createProjectFromRemote({
         options: {
           projectName,
-          packageVersion,
-          blueprint: {
+          blueprint: loadSafeBlueprint({
             name: blueprint,
+            version: packageVersion,
             path: blueprintPath
-          }
+          })
         }
       });
 
@@ -190,22 +179,18 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can install an addon blueprint', async function() {
-      let { createProjectFromRemote } = getStartAndEndCommands({
-        projectOptions: ['blueprint'],
-        startBlueprint: { name: blueprint },
-        endBlueprint: { name: blueprint }
-      });
+      let { createProjectFromRemote } = getStartAndEndCommands();
 
       readdirStub.resolves([]);
 
       let createProject = createProjectFromRemote({
         options: {
           projectName,
-          packageVersion,
-          blueprint: {
+          blueprint: loadSafeBlueprint({
             name: blueprint,
+            version: packageVersion,
             path: blueprintPath
-          }
+          })
         }
       });
 
@@ -214,7 +199,6 @@ describe(_getStartAndEndCommands, function() {
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
         projectName,
-        command: `new ${projectName} -sn -sg`,
         blueprintPath
       }]]);
 
@@ -226,11 +210,53 @@ describe(_getStartAndEndCommands, function() {
   });
 
   describe('init blueprint', function() {
-    it('can create the initial empty commit', async function() {
-      let { createProjectFromRemote } = getStartAndEndCommands({
-        projectOptions: ['blueprint'],
+    it('returns an options object - default', function() {
+      let options = getStartAndEndCommands({
         startBlueprint: null
       });
+
+      expect(options.createProjectFromCache).to.be.a('function');
+      expect(options.createProjectFromRemote).to.be.a('function');
+
+      delete options.createProjectFromCache;
+      delete options.createProjectFromRemote;
+
+      expect(options).to.deep.equal({
+        projectName,
+        packageName,
+        commandName,
+        startOptions: {
+          blueprint: null
+        },
+        endOptions: {
+          blueprint: { name: 'ember-cli' }
+        }
+      });
+    });
+
+    it('returns an options object - custom', async function() {
+      let options = getStartAndEndCommands({
+        startBlueprint: null,
+        endBlueprint: { name: blueprint }
+      });
+
+      expect(options.createProjectFromRemote).to.be.a('function');
+
+      delete options.createProjectFromRemote;
+
+      expect(options).to.deep.equal({
+        projectName,
+        startOptions: {
+          blueprint: null
+        },
+        endOptions: {
+          blueprint: { name: blueprint }
+        }
+      });
+    });
+
+    it('can create the initial empty commit', async function() {
+      let { createProjectFromRemote } = getStartAndEndCommands();
 
       let createProject = createProjectFromRemote({
         options: {
@@ -247,19 +273,16 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can use the default blueprint', async function() {
-      let { createProjectFromRemote } = getStartAndEndCommands({
-        projectOptions: ['blueprint'],
-        startBlueprint: null
-      });
+      let { createProjectFromRemote } = getStartAndEndCommands();
 
       let createProject = createProjectFromRemote({
         options: {
           projectName,
-          packageVersion,
-          blueprint: {
+          blueprint: loadSafeBlueprint({
             name: 'ember-cli',
+            version: packageVersion,
             path: blueprintPath
-          }
+          })
         }
       });
 
@@ -278,19 +301,16 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can use a custom blueprint', async function() {
-      let { createProjectFromRemote } = getStartAndEndCommands({
-        projectOptions: ['blueprint'],
-        startBlueprint: null
-      });
+      let { createProjectFromRemote } = getStartAndEndCommands();
 
       let createProject = createProjectFromRemote({
         options: {
           projectName,
-          packageVersion,
-          blueprint: {
+          blueprint: loadSafeBlueprint({
             name: blueprint,
+            version: packageVersion,
             path: blueprintPath
-          }
+          })
         }
       });
 
@@ -313,17 +333,25 @@ describe(_getStartAndEndCommands, function() {
   });
 
   describe('options', function() {
-    async function processOptions(projectOptions) {
+    async function processBlueprint(blueprint) {
+      let defaultBlueprint = {
+        name: 'ember-cli',
+        ...blueprint
+      };
+
       let options = getStartAndEndCommands({
-        projectOptions
+        startBlueprint: defaultBlueprint,
+        endBlueprint: defaultBlueprint
       });
 
-      expect(options.projectOptions).to.deep.equal(projectOptions);
+      expect(options.startOptions.blueprint).to.deep.equal(defaultBlueprint);
+      expect(options.endOptions.blueprint).to.deep.equal(defaultBlueprint);
 
       let createProject = options.createProjectFromCache({
         packageRoot,
         options: {
-          projectName
+          projectName,
+          blueprint: loadSafeBlueprint(defaultBlueprint)
         }
       });
 
@@ -333,32 +361,27 @@ describe(_getStartAndEndCommands, function() {
     }
 
     it('can create an app', async function() {
-      expect(await processOptions(['app'])).to.include('new');
+      expect(await processBlueprint()).to.include('new');
     });
 
     it('can create an addon', async function() {
-      expect(await processOptions(['addon'])).to.include('addon');
-    });
-
-    it('cannot create a glimmer app', async function() {
-      await expect(processOptions(['glimmer']))
-        .to.eventually.be.rejectedWith('cannot checkout older versions of glimmer blueprint');
+      expect(await processBlueprint({ type: 'addon' })).to.include('addon');
     });
 
     it('can create an app with the --no-welcome option', async function() {
-      expect(await processOptions(['app'])).to.include('--no-welcome');
+      expect(await processBlueprint({ options: ['--no-welcome'] })).to.include('--no-welcome');
     });
 
     it('can create an app without the --no-welcome option', async function() {
-      expect(await processOptions(['app', 'welcome'])).to.not.include('--no-welcome');
+      expect(await processBlueprint()).to.not.include('--no-welcome');
     });
 
     it('can create an app without the yarn option', async function() {
-      expect(await processOptions(['app'])).to.not.include('--yarn');
+      expect(await processBlueprint()).to.not.include('--yarn');
     });
 
     it('can create an app with the yarn option', async function() {
-      expect(await processOptions(['app', 'yarn'])).to.include('--yarn');
+      expect(await processBlueprint({ options: ['--yarn'] })).to.include('--yarn');
     });
   });
 });

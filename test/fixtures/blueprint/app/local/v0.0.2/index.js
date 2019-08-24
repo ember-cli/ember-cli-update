@@ -7,7 +7,9 @@ module.exports = {
     return {
       name: options.entity.name,
       blueprintName: this.name,
-      blueprintVersion: require('./package').version
+      blueprintVersion: require('./package').version,
+      suppliedOption: options.suppliedOption,
+      unsuppliedOption: options.unsuppliedOption || 'bar'
     };
   }
 };

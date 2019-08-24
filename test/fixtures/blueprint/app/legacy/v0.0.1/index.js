@@ -5,7 +5,8 @@ module.exports = {
 
   locals(options) {
     return {
-      name: options.entity.name
+      name: options.entity.name,
+      customOption: options.customOption
     };
   }
 };

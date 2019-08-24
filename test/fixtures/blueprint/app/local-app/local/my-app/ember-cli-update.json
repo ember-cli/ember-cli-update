@@ -8,7 +8,11 @@
     {
       "name": "ember-cli-update-git-blueprint-test",
       "location": "../local-blueprint",
-      "version": "0.0.1"
+      "version": "0.0.1",
+      "options": [
+        "--supplied-option=foo",
+        "--unsupplied-option=bar"
+      ]
     }
   ]
 }

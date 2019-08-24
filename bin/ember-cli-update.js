@@ -3,6 +3,9 @@
 
 require('yargs')
   .commandDir('commands')
+  .parserConfiguration({
+    'populate--': true
+  })
   .argv;
 
 // Displays a message on the terminal if a new version of the package is available.

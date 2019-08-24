@@ -34,6 +34,7 @@ describe(init, function() {
     fixturesPath,
     blueprint,
     to = toDefault,
+    blueprintOptions,
     commitMessage,
     beforeMerge = () => Promise.resolve()
   }) {
@@ -48,7 +49,8 @@ describe(init, function() {
 
     let promise = init({
       blueprint,
-      to
+      to,
+      blueprintOptions
     });
 
     return await processExit({
@@ -83,6 +85,7 @@ describe(init, function() {
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       blueprint: location,
+      blueprintOptions: ['--supplied-option=foo'],
       async beforeMerge() {
         await initBlueprint('test/fixtures/blueprint/app/local', location);
       }

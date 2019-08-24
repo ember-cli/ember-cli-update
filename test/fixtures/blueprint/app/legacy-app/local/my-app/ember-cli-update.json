@@ -3,7 +3,10 @@
     {
       "name": "ember-cli-update-git-blueprint-test",
       "location": "../legacy-blueprint",
-      "version": "0.0.1"
+      "version": "0.0.1",
+      "options": [
+        "--custom-option=123"
+      ]
     }
   ]
 }
