@@ -1,5 +1,6 @@
 'use strict';
 
+const run = require('./run');
 const saveDefaultBlueprint = require('./save-default-blueprint');
 
 module.exports = async function bootstrap() {
@@ -13,4 +14,6 @@ module.exports = async function bootstrap() {
     cwd,
     defaultBlueprint
   });
+
+  await run('git add ember-cli-update.json');
 };
