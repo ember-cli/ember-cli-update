@@ -10,12 +10,9 @@ module.exports.handler = async function handler(argv) {
   let addon = argv['addon'];
 
   try {
-    let message = await install({
+    await install({
       addon
     });
-    if (message) {
-      console.log(message);
-    }
   } catch (err) {
     console.error(err);
   }
