@@ -1,13 +1,11 @@
 'use strict';
 
 module.exports = {
-  description: 'ember-cli-update-git-blueprint-test',
+  name: require('./package').name,
 
   locals(options) {
-    let name = options.entity.name;
-
     return {
-      name
+      name: options.entity.name
     };
   }
 };
