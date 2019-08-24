@@ -27,6 +27,7 @@ describe(function() {
 
   async function merge({
     fixturesPath,
+    from,
     to = '3.2.0-beta.1',
     runCodemods,
     subDir = '',
@@ -36,6 +37,7 @@ describe(function() {
     install,
     addon,
     bootstrap,
+    save,
     beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
@@ -69,6 +71,13 @@ describe(function() {
     if (bootstrap) {
       args = [
         'bootstrap'
+      ];
+    }
+    if (save) {
+      args = [
+        'save',
+        `-b=${blueprint}`,
+        `--from=${from}`
       ];
     }
 
@@ -298,5 +307,35 @@ describe(function() {
     });
 
     assertNoStaged(status);
+  });
+
+  it('can save an old blueprint\'s state', async function() {
+    this.timeout(3 * 60 * 1000);
+
+    let {
+      name,
+      version: from
+    } = require('../fixtures/ember-cli-update-json/default/ember-cli-update').blueprints[0];
+
+    let {
+      status
+    } = await (await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
+      save: true,
+      blueprint: name,
+      from
+    })).promise;
+
+    assertNoUnstaged(status);
+
+    expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
+
+    await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/local/my-app'
+    });
   });
 });
