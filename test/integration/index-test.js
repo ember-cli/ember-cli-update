@@ -317,11 +317,11 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
       it('can update a legacy blueprint', async function() {
         let {
-          location,
           version: from
         } = require('../fixtures/blueprint/app/legacy-app/local/my-app/ember-cli-update').blueprints[0];
 
         let {
+          location,
           version: to
         } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/ember-cli-update').blueprints[0];
 
