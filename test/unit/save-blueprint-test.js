@@ -73,6 +73,24 @@ describe(_saveBlueprint, function() {
       }));
     });
 
+    it('saves with options', async function() {
+      await saveBlueprint({
+        name: 'test-blueprint',
+        version: '0.0.1',
+        options: ['test-option']
+      });
+
+      expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+        blueprints: [
+          {
+            name: 'test-blueprint',
+            version: '0.0.1',
+            options: ['test-option']
+          }
+        ]
+      }));
+    });
+
     it('saves partial', async function() {
       await saveBlueprint({
         name: 'test-blueprint',
@@ -169,6 +187,33 @@ describe(_saveBlueprint, function() {
             name: 'test-blueprint',
             location: '/foo/bar',
             version: '0.0.1'
+          }
+        ]
+      }));
+    });
+
+    it('saves with options', async function() {
+      loadSafeBlueprintFile.resolves({
+        blueprints: [
+          {
+            name: 'test-blueprint',
+            version: '0.0.0',
+            options: ['test-option']
+          }
+        ]
+      });
+
+      await saveBlueprint({
+        name: 'test-blueprint',
+        version: '0.0.1'
+      });
+
+      expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+        blueprints: [
+          {
+            name: 'test-blueprint',
+            version: '0.0.1',
+            options: ['test-option']
           }
         ]
       }));

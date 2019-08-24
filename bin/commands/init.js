@@ -19,6 +19,7 @@ module.exports.handler = async function handler(argv) {
   let to = argv['to'];
   let resolveConflicts = argv['resolve-conflicts'];
   let reset = argv['reset'];
+  let blueprintOptions = argv['--'] || [];
 
   try {
     let message = await init({
@@ -26,6 +27,7 @@ module.exports.handler = async function handler(argv) {
       to,
       resolveConflicts,
       reset,
+      blueprintOptions,
       wasRunAsExecutable: true
     });
     if (message) {

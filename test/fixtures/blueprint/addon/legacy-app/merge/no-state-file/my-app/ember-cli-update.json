@@ -2,7 +2,11 @@
   "blueprints": [
     {
       "name": "ember-cli",
-      "version": "0.0.0"
+      "type": "app",
+      "version": "0.0.0",
+      "options": [
+        "--no-welcome"
+      ]
     },
     {
       "name": "ember-cli-update-git-addon-test",

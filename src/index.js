@@ -18,6 +18,10 @@ const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
 const saveDefaultBlueprint = require('./save-default-blueprint');
 const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
+const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
+const loadSafeBlueprint = require('./load-safe-blueprint');
+
+const toDefault = require('./args').to.default;
 
 function formatBlueprintLine(blueprint) {
   return `${blueprint.name}, current: ${blueprint.currentVersion}, latest: ${blueprint.latestVersion}`;
@@ -49,15 +53,20 @@ module.exports = async function emberCliUpdate({
   if (_blueprint) {
     blueprint = await parseBlueprint(_blueprint);
 
+    let { name } = blueprint;
+    if (!name) {
+      let downloadedBlueprint = await downloadBlueprint(blueprint.name, blueprint.url, toDefault);
+      name = downloadedBlueprint.name;
+    }
+
+    let { blueprints } = emberCliUpdateJson;
+    let existingBlueprint = blueprints.find(b => b.name === name);
+    if (existingBlueprint) {
+      Object.assign(blueprint, existingBlueprint);
+    }
+
     if (from) {
       blueprint.version = from;
-    } else {
-      let { blueprints } = emberCliUpdateJson;
-      let existingBlueprint = blueprints.find(b => b.name === _blueprint);
-      if (existingBlueprint) {
-        blueprint.location = existingBlueprint.location;
-        blueprint.version = existingBlueprint.version;
-      }
     }
 
     if (!blueprint.version && !reset) {
@@ -122,18 +131,28 @@ All blueprints are up-to-date!`;
       packageJson,
       projectOptions
     }) {
+      if (createCustomDiff && projectOptions.includes('glimmer')) {
+        // ember-cli doesn't have a way to use non-latest blueprint versions
+        // TODO: The above is not true anymore. This can be fixed.
+        throw 'cannot checkout older versions of glimmer blueprint';
+      }
+
       let startVersion;
       let startBlueprint;
       let endBlueprint;
 
+      if (!isCustomBlueprint && createCustomDiff) {
+        blueprint = loadSafeDefaultBlueprint(projectOptions, blueprint.version);
+      } else {
+        blueprint = loadSafeBlueprint(blueprint);
+      }
+
       if (isCustomBlueprint) {
-        startBlueprint = await downloadBlueprint(blueprint.name, blueprint.url, blueprint.version);
-        endBlueprint = await downloadBlueprint(blueprint.name, blueprint.url, to);
+        startBlueprint = { ...blueprint, ...await downloadBlueprint(blueprint.name, blueprint.url, blueprint.version) };
+        endBlueprint = { ...blueprint, ...await downloadBlueprint(blueprint.name, blueprint.url, to) };
 
         startVersion = startBlueprint.version;
         endVersion = endBlueprint.version;
-
-        blueprint.name = startBlueprint.name;
       } else {
         let packageName = getPackageName(projectOptions);
         let packageVersion = getPackageVersion(packageJson, packageName);
@@ -150,16 +169,14 @@ All blueprints are up-to-date!`;
 
         endVersion = await getTagVersion(to);
 
-        startBlueprint = endBlueprint = blueprint;
+        startBlueprint = { ...blueprint, version: startVersion };
+        endBlueprint = { ...blueprint, version: endVersion };
       }
 
       let customDiffOptions;
       if (createCustomDiff) {
         customDiffOptions = getStartAndEndCommands({
           packageJson,
-          projectOptions,
-          startVersion,
-          endVersion,
           startBlueprint,
           endBlueprint
         });
