@@ -1,6 +1,4 @@
 {
   "name": "<%= name %>",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js"
+  "version": "0.0.0"
 }

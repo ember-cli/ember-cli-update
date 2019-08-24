@@ -1,12 +1,4 @@
 {
   "name": "ember-cli-update-git-blueprint-test",
-  "version": "0.0.2",
-  "description": "",
-  "main": "index.js",
-  "keywords": [
-    "ember-addon"
-  ],
-  "ember-addon": {
-    "main": "ember-addon-main.js"
-  }
+  "version": "0.0.2"
 }
