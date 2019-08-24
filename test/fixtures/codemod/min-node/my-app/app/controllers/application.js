@@ -4,6 +4,8 @@ import { assign } from '@ember/polyfills';
 import { map } from '@ember/object/computed';
 
 export default Controller.extend({
+  controllerProperty: 'test',
+
   fullName: computed('firstName', 'lastName', function() {
     return `${this.firstName} ${this.lastName}`;
   }),

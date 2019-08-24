@@ -3,6 +3,8 @@ import { merge } from '@ember/polyfills';
 import { map } from '@ember/object/computed';
 
 export default Ember.Controller.extend({
+  controllerProperty: 'test',
+
   fullName: computed(function() {
     return `${this.firstName} ${this.lastName}`;
   }).property('firstName', 'lastName'),

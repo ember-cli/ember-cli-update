@@ -146,8 +146,13 @@ describe(function() {
     } = await merge({
       fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
-      runCodemods: true
+      runCodemods: true,
+      async beforeMerge() {
+        await run('npm install', { cwd: tmpPath });
+      }
     });
+
+    ps.stdout.pipe(process.stdout);
 
     ps.stdout.on('data', data => {
       let str = data.toString();
@@ -160,8 +165,16 @@ describe(function() {
       status
     } = await promise;
 
+    assertNoUnstaged(status);
+    assertCodemodRan(status);
+
+    await fs.remove(path.join(tmpPath, 'package-lock.json'));
+
     // file is indeterminent between OS's, so ignore
     await fs.remove(path.join(tmpPath, 'MODULE_REPORT.md'));
+
+    // remove dist and node_modules before fixture compare
+    await run('git clean -fdX', { cwd: tmpPath });
 
     let mergeFixtures = 'test/fixtures/codemod/latest-node/my-app';
     if (process.env.NODE_LTS) {
@@ -171,9 +184,6 @@ describe(function() {
     fixtureCompare({
       mergeFixtures
     });
-
-    assertNoUnstaged(status);
-    assertCodemodRan(status);
   });
 
   it('scopes to sub dir if run from there', async function() {
