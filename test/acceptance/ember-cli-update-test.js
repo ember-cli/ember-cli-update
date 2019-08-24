@@ -297,6 +297,8 @@ describe(function() {
       bootstrap: true
     })).promise;
 
+    assertNoUnstaged(status);
+
     expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
       .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
 
@@ -305,8 +307,6 @@ describe(function() {
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/merge/my-app'
     });
-
-    assertNoStaged(status);
   });
 
   it('can save an old blueprint\'s state', async function() {
