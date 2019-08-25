@@ -1,7 +1,6 @@
 'use strict';
 
 const run = require('./run');
-const getRemoteUrl = require('./get-remote-url');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprint = require('./parse-blueprint');
@@ -32,7 +31,6 @@ module.exports = async function init({
 
   let result = await (await boilerplateUpdate({
     projectOptions: ['blueprint'],
-    remoteUrl: ({ projectOptions }) => getRemoteUrl(projectOptions),
     endVersion: downloadedBlueprint.version,
     resolveConflicts,
     reset,
