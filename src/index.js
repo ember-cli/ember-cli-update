@@ -132,8 +132,6 @@ All blueprints are up-to-date!`;
 
         startVersion = startBlueprint.version;
         endVersion = endBlueprint.version;
-
-        blueprint.name = startBlueprint.name;
       } else {
         let packageName = getPackageName(projectOptions);
         let packageVersion = getPackageVersion(packageJson, packageName);
