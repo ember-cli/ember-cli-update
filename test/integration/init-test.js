@@ -31,17 +31,9 @@ describe(init, function() {
 
   async function merge({
     fixturesPath,
-    blueprint,
-    from,
     to = '3.2.0-beta.1',
     reset,
-    compareOnly,
-    statsOnly,
-    runCodemods,
-    listCodemods,
-    createCustomDiff,
     commitMessage,
-    beforeMerge = () => Promise.resolve(),
     afterMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
@@ -49,20 +41,11 @@ describe(init, function() {
       commitMessage
     });
 
-    await beforeMerge();
-
     process.chdir(tmpPath);
 
     let promise = init({
-      blueprint,
-      from,
       to,
-      reset,
-      compareOnly,
-      statsOnly,
-      runCodemods,
-      listCodemods,
-      createCustomDiff
+      reset
     }).then(afterMerge);
 
     return await processExit({
