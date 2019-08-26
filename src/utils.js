@@ -15,4 +15,6 @@ module.exports.spawn = async function spawn() {
 };
 
 module.exports.downloadBlueprint = require('./download-blueprint');
+module.exports.loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 module.exports.saveBlueprint = require('./save-blueprint');
+module.exports.saveBlueprintFile = require('./save-blueprint-file');

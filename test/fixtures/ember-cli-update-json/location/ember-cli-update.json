@@ -1,9 +1,0 @@
-{
-  "blueprints": [
-    {
-      "name": "test-blueprint",
-      "location": "/foo/bar",
-      "version": "0.0.1"
-    }
-  ]
-}
