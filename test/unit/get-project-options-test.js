@@ -33,126 +33,161 @@ describe(_getProjectOptions, function() {
       .to.eventually.be.rejectedWith('Ember CLI project type could not be determined');
   });
 
-  it('detects ember app with ember-cli as a devDependency', async function() {
-    packageJson = {
-      devDependencies: {
-        'ember-cli': '2.11'
-      }
-    };
+  describe('app', function() {
+    it('detects ember app with ember-cli as a devDependency', async function() {
+      packageJson = {
+        devDependencies: {
+          'ember-cli': '2.11'
+        }
+      };
 
-    expect(await getProjectOptions()).to.deep.equal(['app']);
+      expect(await getProjectOptions()).to.deep.equal(['app']);
+    });
+
+    it('detects ember app with ember-cli as a dependency', async function() {
+      packageJson = {
+        dependencies: {
+          'ember-cli': '2.11'
+        }
+      };
+
+      expect(await getProjectOptions()).to.deep.equal(['app']);
+    });
+
+    it('detects ember app with ember-cli as an empty string', async function() {
+      packageJson = {
+        devDependencies: {
+          'ember-cli': ''
+        }
+      };
+
+      expect(await getProjectOptions()).to.deep.equal(['app']);
+    });
+
+    it('detects welcome option', async function() {
+      packageJson = {
+        devDependencies: {
+          'ember-cli': '2.11',
+          'ember-welcome-page': ''
+        }
+      };
+
+      expect(await getProjectOptions()).to.deep.equal(['app', 'welcome']);
+    });
+
+    it('detects yarn option', async function() {
+      packageJson = {
+        devDependencies: {
+          'ember-cli': '2.11'
+        }
+      };
+
+      process.chdir(path.resolve(__dirname, '../fixtures/options/yarn'));
+
+      expect(await getProjectOptions()).to.deep.equal(['app', 'yarn']);
+    });
   });
 
-  it('detects ember app with ember-cli as a dependency', async function() {
-    packageJson = {
-      dependencies: {
-        'ember-cli': '2.11'
-      }
-    };
+  describe('addon', function() {
+    it('detects ember addon with ember-cli as a devDependency', async function() {
+      packageJson = {
+        keywords: [
+          'ember-addon'
+        ],
+        devDependencies: {
+          'ember-cli': '2.11'
+        }
+      };
 
-    expect(await getProjectOptions()).to.deep.equal(['app']);
+      expect(await getProjectOptions()).to.deep.equal(['addon']);
+    });
+
+    it('detects ember addon with ember-cli as a dependency', async function() {
+      packageJson = {
+        keywords: [
+          'ember-addon'
+        ],
+        dependencies: {
+          'ember-cli': '2.11'
+        }
+      };
+
+      expect(await getProjectOptions()).to.deep.equal(['addon']);
+    });
+
+    it('detects ember addon with ember-cli as an empty string', async function() {
+      packageJson = {
+        keywords: [
+          'ember-addon'
+        ],
+        devDependencies: {
+          'ember-cli': ''
+        }
+      };
+
+      expect(await getProjectOptions()).to.deep.equal(['addon']);
+    });
+
+    it('detects welcome option', async function() {
+      packageJson = {
+        keywords: [
+          'ember-addon'
+        ],
+        devDependencies: {
+          'ember-cli': '2.11',
+          'ember-welcome-page': ''
+        }
+      };
+
+      expect(await getProjectOptions()).to.deep.equal(['addon', 'welcome']);
+    });
+
+    it('detects yarn option', async function() {
+      packageJson = {
+        keywords: [
+          'ember-addon'
+        ],
+        devDependencies: {
+          'ember-cli': '2.11'
+        }
+      };
+
+      process.chdir(path.resolve(__dirname, '../fixtures/options/yarn'));
+
+      expect(await getProjectOptions()).to.deep.equal(['addon', 'yarn']);
+    });
   });
 
-  it('detects ember app with ember-cli as an empty string', async function() {
-    packageJson = {
-      devDependencies: {
-        'ember-cli': ''
-      }
-    };
+  describe('glimmer', function() {
+    it('detects glimmer app with glimmer as a devDependency', async function() {
+      packageJson = {
+        devDependencies: {
+          '@glimmer/blueprint': '0.3'
+        }
+      };
 
-    expect(await getProjectOptions()).to.deep.equal(['app']);
-  });
+      expect(await getProjectOptions()).to.deep.equal(['glimmer']);
+    });
 
-  it('detects ember addon with ember-cli as a devDependency', async function() {
-    packageJson = {
-      keywords: [
-        'ember-addon'
-      ],
-      devDependencies: {
-        'ember-cli': '2.11'
-      }
-    };
+    it('detects glimmer app with glimmer as a dependency', async function() {
+      packageJson = {
+        dependencies: {
+          '@glimmer/blueprint': '0.3'
+        }
+      };
 
-    expect(await getProjectOptions()).to.deep.equal(['addon']);
-  });
+      expect(await getProjectOptions()).to.deep.equal(['glimmer']);
+    });
 
-  it('detects ember addon with ember-cli as a dependency', async function() {
-    packageJson = {
-      keywords: [
-        'ember-addon'
-      ],
-      dependencies: {
-        'ember-cli': '2.11'
-      }
-    };
+    it('detects glimmer app with glimmer as an empty string', async function() {
+      packageJson = {
+        devDependencies: {
+          '@glimmer/blueprint': ''
+        }
+      };
 
-    expect(await getProjectOptions()).to.deep.equal(['addon']);
-  });
-
-  it('detects ember addon with ember-cli as an empty string', async function() {
-    packageJson = {
-      keywords: [
-        'ember-addon'
-      ],
-      devDependencies: {
-        'ember-cli': ''
-      }
-    };
-
-    expect(await getProjectOptions()).to.deep.equal(['addon']);
-  });
-
-  it('detects glimmer app with glimmer as a devDependency', async function() {
-    packageJson = {
-      devDependencies: {
-        '@glimmer/blueprint': '0.3'
-      }
-    };
-
-    expect(await getProjectOptions()).to.deep.equal(['glimmer']);
-  });
-
-  it('detects glimmer app with glimmer as a dependency', async function() {
-    packageJson = {
-      dependencies: {
-        '@glimmer/blueprint': '0.3'
-      }
-    };
-
-    expect(await getProjectOptions()).to.deep.equal(['glimmer']);
-  });
-
-  it('detects glimmer app with glimmer as an empty string', async function() {
-    packageJson = {
-      devDependencies: {
-        '@glimmer/blueprint': ''
-      }
-    };
-
-    expect(await getProjectOptions()).to.deep.equal(['glimmer']);
-  });
-
-  it('detects welcome option', async function() {
-    packageJson = {
-      devDependencies: {
-        'ember-cli': '2.11',
-        'ember-welcome-page': ''
-      }
-    };
-
-    expect(await getProjectOptions()).to.deep.equal(['app', 'welcome']);
-  });
-
-  it('detects yarn option', async function() {
-    packageJson = {
-      devDependencies: {
-        'ember-cli': '2.11'
-      }
-    };
-
-    process.chdir(path.resolve(__dirname, '../fixtures/options/yarn'));
-
-    expect(await getProjectOptions()).to.deep.equal(['app', 'yarn']);
+      expect(await getProjectOptions()).to.deep.equal(['glimmer']);
+    });
   });
 
   it('detects custom blueprint', async function() {
