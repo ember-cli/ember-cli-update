@@ -12,7 +12,7 @@ module.exports = async function bootstrap() {
 
   await saveDefaultBlueprint({
     cwd,
-    defaultBlueprint
+    blueprint: defaultBlueprint
   });
 
   await run('git add ember-cli-update.json');
