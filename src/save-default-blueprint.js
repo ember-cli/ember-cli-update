@@ -9,7 +9,7 @@ const utils = require('./utils');
 
 async function saveDefaultBlueprint({
   cwd,
-  defaultBlueprint: { name }
+  blueprint: { name }
 }) {
   let packageJson = utils.require(path.join(cwd, 'package'));
 

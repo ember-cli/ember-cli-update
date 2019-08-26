@@ -30,7 +30,7 @@ module.exports = async function install({
   if (!emberCliUpdateJson && downloadedBlueprint.name !== defaultBlueprint.name) {
     await saveDefaultBlueprint({
       cwd,
-      defaultBlueprint
+      blueprint: defaultBlueprint
     });
   }
 

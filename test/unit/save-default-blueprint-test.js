@@ -42,7 +42,7 @@ describe(saveDefaultBlueprint, function() {
 
     await saveDefaultBlueprint({
       cwd: '/test/path',
-      defaultBlueprint: { name: 'ember-cli' }
+      blueprint: { name: 'ember-cli' }
     });
 
     expect(require).to.be.calledOnce;

@@ -190,7 +190,7 @@ All blueprints are up-to-date!`;
     if (!emberCliUpdateJson && blueprint.name !== defaultBlueprint.name) {
       await saveDefaultBlueprint({
         cwd,
-        defaultBlueprint
+        blueprint: defaultBlueprint
       });
     }
 
