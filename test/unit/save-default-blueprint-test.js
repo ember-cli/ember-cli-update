@@ -26,15 +26,15 @@ describe(saveDefaultBlueprint, function() {
   });
 
   it('saves blueprint', async function() {
-    require.withArgs(path.normalize('/test/path/package')).returns({
+    require = require.withArgs(path.normalize('/test/path/package')).returns({
       devDependencies: {
         'ember-cli': '0.0.1'
       }
     });
 
-    getVersions.withArgs('ember-cli').resolves(['0.0.1']);
+    getVersions = getVersions.withArgs('ember-cli').resolves(['0.0.1']);
 
-    saveBlueprint.withArgs({
+    saveBlueprint = saveBlueprint.withArgs({
       cwd: '/test/path',
       name: 'ember-cli',
       version: '0.0.1'
