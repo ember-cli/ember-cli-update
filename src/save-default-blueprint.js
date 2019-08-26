@@ -2,7 +2,6 @@
 
 const path = require('path');
 const getProjectOptions = require('./get-project-options');
-const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const utils = require('./utils');
@@ -15,7 +14,7 @@ async function saveDefaultBlueprint({
 
   let projectOptions = await getProjectOptions(packageJson);
 
-  let packageName = getPackageName(projectOptions);
+  let packageName = 'ember-cli';
   let packageVersion = getPackageVersion(packageJson, packageName);
 
   let versions = await utils.getVersions(packageName);
