@@ -22,7 +22,7 @@ function getProjectType(checkForDep, keywords) {
     return 'app';
   }
 
-  throw 'Ember CLI project type could not be determined';
+  throw new Error('Ember CLI project type could not be determined');
 }
 
 module.exports = async function getProjectOptions({
