@@ -117,16 +117,15 @@ describe(function() {
   });
 
   it('handles non-ember-cli app', async function() {
-    let {
-      stderr
-    } = await merge({
+    let promise = merge({
       fixturesPath: 'test/fixtures/package-json/non-ember-cli',
       commitMessage: 'my-app'
     });
 
-    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+    await expect(promise)
+      .to.eventually.be.rejectedWith('Ember CLI project type could not be determined');
 
-    expect(stderr).to.contain('Ember CLI project type could not be determined');
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
   });
 
   it('handles non-npm dir', async function() {
@@ -137,7 +136,7 @@ describe(function() {
       commitMessage: 'my-app'
     });
 
-    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(stderr).to.contain('No package.json was found in this directory');
   });
@@ -150,7 +149,7 @@ describe(function() {
       commitMessage: 'my-app'
     });
 
-    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(stderr).to.contain('The package.json is malformed');
   });
@@ -183,7 +182,7 @@ describe(function() {
       to: '0.6.1'
     });
 
-    expect(isGitClean({ cwd: tmpPath })).to.be.ok;
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(stderr).to.contain('version cannot be determined');
   });
@@ -310,9 +309,9 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
           blueprint: 'test-blueprint'
         });
 
-        expect(isGitClean({ cwd: tmpPath })).to.be.ok;
-
         await expect(promise).to.eventually.be.rejectedWith('A custom blueprint cannot detect --from. You must supply it.');
+
+        expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
       });
 
       it('can update a legacy blueprint', async function() {
