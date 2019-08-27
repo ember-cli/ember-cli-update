@@ -15,7 +15,7 @@ module.exports.builder = {
 module.exports.handler = async function handler(argv) {
   let blueprint = argv['blueprint'];
   let from = argv['from'];
-  let blueprintOptions = argv['--'] || [];
+  let blueprintOptions = argv._.slice(1);
 
   try {
     await save({
