@@ -46,9 +46,15 @@ describe(install, function() {
 
     process.chdir(tmpPath);
 
-    let promise = install({
-      addon
-    }).then(afterMerge);
+    let promise = (async() => {
+      let result = await install({
+        addon
+      });
+
+      await afterMerge();
+
+      return result;
+    })();
 
     return await processExit({
       promise,

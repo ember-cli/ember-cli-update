@@ -10,7 +10,6 @@ const {
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const init = require('../../src/init');
-const run = require('../../src/run');
 const {
   assertNoStaged
 } = require('../helpers/assertions');
@@ -43,10 +42,16 @@ describe(init, function() {
 
     process.chdir(tmpPath);
 
-    let promise = init({
-      to,
-      reset
-    }).then(afterMerge);
+    let promise = (async() => {
+      let result = await init({
+        to,
+        reset
+      });
+
+      await afterMerge();
+
+      return result;
+    })();
 
     return await processExit({
       promise,
@@ -78,9 +83,7 @@ describe(init, function() {
       reset: true,
       async afterMerge() {
         expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/ember-cli-update.json'));
-
-        await run('git rm --cached ember-cli-update.json', { cwd: tmpPath });
+          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/merge/ember-cli-update.json'));
 
         await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
       }
