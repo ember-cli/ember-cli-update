@@ -104,7 +104,7 @@ All blueprints are up-to-date!`;
     }
   }
 
-  if (blueprint && !blueprint.url && blueprint.location) {
+  if (!blueprint.url && blueprint.location) {
     blueprint.url = (await parseBlueprint(blueprint.location)).url;
   }
 
