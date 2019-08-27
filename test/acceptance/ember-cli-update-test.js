@@ -92,7 +92,7 @@ describe(function() {
     if (from) {
       args.push(`--from=${from}`);
     }
-    args = [...args, '--', ...blueprintOptions];
+    args = [...args, ...blueprintOptions];
 
     return processBin({
       binFile: 'ember-cli-update',
@@ -587,7 +587,6 @@ describe(function() {
         'save',
         `-b=${location}`,
         `--from=${partial}`,
-        '--',
         ...options
       ],
       cwd: tmpPath,
@@ -640,7 +639,6 @@ describe(function() {
         `-b=${location}`,
         `--from=${from}`,
         `--to=${to}`,
-        '--',
         ...options
       ],
       cwd: tmpPath,

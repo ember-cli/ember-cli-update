@@ -14,14 +14,12 @@ module.exports.builder = {
   reset: args['reset']
 };
 
-module.exports.blueprintOptionsDefault = [];
-
 module.exports.handler = async function handler(argv) {
   let blueprint = argv['blueprint'];
   let to = argv['to'];
   let resolveConflicts = argv['resolve-conflicts'];
   let reset = argv['reset'];
-  let blueprintOptions = argv['--'] || module.exports.blueprintOptionsDefault;
+  let blueprintOptions = argv._.slice(1);
 
   try {
     let message = await init({

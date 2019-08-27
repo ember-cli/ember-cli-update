@@ -17,16 +17,13 @@ const resolvePackage = require('./resolve-package');
 const {
   'to': { default: toDefault }
 } = require('./args');
-const {
-  blueprintOptionsDefault
-} = require('../bin/commands/init');
 
 module.exports = async function init({
   blueprint: _blueprint,
   to = toDefault,
   resolveConflicts,
   reset,
-  blueprintOptions = blueprintOptionsDefault,
+  blueprintOptions = [],
   wasRunAsExecutable
 }) {
   let cwd = process.cwd();
