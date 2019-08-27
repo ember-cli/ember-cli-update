@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
@@ -11,11 +10,14 @@ const {
 } = require('git-fixtures');
 const init = require('../../src/init');
 const {
-  assertNoStaged
+  assertNoUnstaged
 } = require('../helpers/assertions');
+const { initBlueprint } = require('../helpers/blueprint');
+
+const toDefault = require('../../src/args').to.default;
 
 describe(init, function() {
-  this.timeout(5 * 60 * 1000);
+  this.timeout(3 * 60 * 1000);
 
   let cwd;
   let tmpPath;
@@ -30,28 +32,24 @@ describe(init, function() {
 
   async function merge({
     fixturesPath,
-    to = '3.2.0-beta.1',
-    reset,
+    blueprint,
+    to = toDefault,
     commitMessage,
-    afterMerge = () => Promise.resolve()
+    beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
       fixturesPath,
       commitMessage
     });
 
+    await beforeMerge();
+
     process.chdir(tmpPath);
 
-    let promise = (async() => {
-      let result = await init({
-        to,
-        reset
-      });
-
-      await afterMerge();
-
-      return result;
-    })();
+    let promise = init({
+      blueprint,
+      to
+    });
 
     return await processExit({
       promise,
@@ -74,27 +72,26 @@ describe(init, function() {
     });
   }
 
-  it('can initialize the default blueprint', async function() {
+  it('can initialize a custom blueprint', async function() {
+    let {
+      location
+    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1];
+
     let {
       status
     } = await merge({
-      fixturesPath: 'test/fixtures/app/local',
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
-      reset: true,
-      async afterMerge() {
-        expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/ember-cli-update.json'));
-
-        await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+      blueprint: location,
+      async beforeMerge() {
+        await initBlueprint('test/fixtures/blueprint/app/local', location);
       }
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/app/reset/my-app'
+      mergeFixtures: 'test/fixtures/blueprint/app/local-app/merge/my-app'
     });
 
-    expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
-
-    assertNoStaged(status);
+    assertNoUnstaged(status);
   });
 });
