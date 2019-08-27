@@ -18,8 +18,6 @@ const {
 const { initBlueprint } = require('../helpers/blueprint');
 const run = require('../../src/run');
 
-const toDefault = require('../../src/args').to.default;
-
 describe(function() {
   this.timeout(30 * 1000);
 
@@ -33,6 +31,7 @@ describe(function() {
     subDir = '',
     commitMessage,
     init,
+    reset,
     blueprint,
     install,
     addon,
@@ -59,8 +58,11 @@ describe(function() {
     if (init) {
       args = [
         'init',
-        `-b=${blueprint}`
+        `--to=${to}`
       ];
+      if (reset) {
+        args.push('--reset');
+      }
     }
     if (install) {
       args = [
@@ -231,31 +233,30 @@ describe(function() {
     assertNoUnstaged(status);
   });
 
-  it('can init a custom blueprint', async function() {
-    this.timeout(3 * 60 * 1000);
-
-    let {
-      location
-    } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/ember-cli-update').blueprints[0];
+  it('can init the default blueprint', async function() {
+    this.timeout(5 * 60 * 1000);
 
     let {
       status
     } = await (await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/legacy-app/local',
+      fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       init: true,
-      blueprint: location,
-      to: toDefault,
-      async beforeMerge() {
-        await initBlueprint('test/fixtures/blueprint/app/legacy', location);
-      }
+      reset: true
     })).promise;
 
+    expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
+
+    await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/merge/my-app'
+      mergeFixtures: 'test/fixtures/app/reset/my-app'
     });
 
-    assertNoUnstaged(status);
+    expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
+
+    assertNoStaged(status);
   });
 
   it('can install an addon with a default blueprint and no state file', async function() {
