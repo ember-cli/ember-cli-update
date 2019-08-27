@@ -21,7 +21,7 @@ describe(downloadBlueprint, function() {
       name,
       location,
       version: range
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1];
 
     let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', location);
 
