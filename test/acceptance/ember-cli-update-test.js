@@ -300,7 +300,7 @@ describe(function() {
     assertNoUnstaged(status);
 
     expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/merge/ember-cli-update.json');
+      .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
 
     await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
 
@@ -315,7 +315,7 @@ describe(function() {
     let {
       name,
       version: from
-    } = require('../fixtures/ember-cli-update-json/default/merge/ember-cli-update').blueprints[0];
+    } = require('../fixtures/ember-cli-update-json/default/ember-cli-update').blueprints[0];
 
     let {
       status
@@ -330,7 +330,7 @@ describe(function() {
     assertNoUnstaged(status);
 
     expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/merge/ember-cli-update.json');
+      .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
 
     await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
 

@@ -206,7 +206,7 @@ describe(function() {
       blueprint: 'ember-cli',
       async afterMerge() {
         expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/merge/ember-cli-update.json'));
+          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/ember-cli-update.json'));
 
         await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
       }
