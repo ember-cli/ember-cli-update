@@ -16,7 +16,7 @@ describe(checkForBlueprintUpdates, function() {
 
   it('works', async function() {
     // out of date test
-    let localBlueprint = require('../fixtures/blueprint/app/local-app/local/my-app/ember-cli-update').blueprints[0];
+    let localBlueprint = require('../fixtures/blueprint/app/local-app/local/my-app/ember-cli-update').blueprints[1];
     let urlBlueprint = require('../fixtures/blueprint/app/remote-app/local/my-app/ember-cli-update').blueprints[0];
 
     // up to date test
@@ -36,7 +36,7 @@ describe(checkForBlueprintUpdates, function() {
       {
         name: localBlueprint.name,
         currentVersion: localBlueprint.version,
-        latestVersion: require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[0].version,
+        latestVersion: require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1].version,
         isUpToDate: false
       },
       {

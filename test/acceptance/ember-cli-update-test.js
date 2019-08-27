@@ -197,7 +197,7 @@ describe(function() {
     let {
       location,
       version: to
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1];
 
     let {
       ps,
@@ -214,7 +214,7 @@ describe(function() {
     ps.stdout.on('data', data => {
       let str = data.toString();
       if (str.includes('Blueprint updates have been found.')) {
-        ps.stdin.write('\n');
+        ps.stdin.write('\u001b[B\n');
       }
     });
 
