@@ -56,7 +56,9 @@ module.exports = async function init({
     version: blueprint.version
   });
 
-  await run('git add ember-cli-update.json');
+  if (!reset) {
+    await run('git add ember-cli-update.json');
+  }
 
   return result;
 };

@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
@@ -54,7 +55,8 @@ describe(function() {
     listCodemods,
     createCustomDiff,
     commitMessage,
-    beforeMerge = () => Promise.resolve()
+    beforeMerge = () => Promise.resolve(),
+    afterMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
       fixturesPath,
@@ -66,17 +68,23 @@ describe(function() {
 
     process.chdir(tmpPath);
 
-    let promise = emberCliUpdate({
-      blueprint,
-      from,
-      to,
-      reset,
-      compareOnly,
-      statsOnly,
-      runCodemods,
-      listCodemods,
-      createCustomDiff
-    });
+    let promise = (async() => {
+      let result = await emberCliUpdate({
+        blueprint,
+        from,
+        to,
+        reset,
+        compareOnly,
+        statsOnly,
+        runCodemods,
+        listCodemods,
+        createCustomDiff
+      });
+
+      await afterMerge();
+
+      return result;
+    })();
 
     return await processExit({
       promise,
@@ -193,7 +201,15 @@ describe(function() {
     } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
-      reset: true
+      reset: true,
+      // test the resetting logic of ember-cli-update.json
+      blueprint: 'ember-cli',
+      async afterMerge() {
+        expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
+          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/merge/ember-cli-update.json'));
+
+        await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+      }
     });
 
     fixtureCompare({

@@ -60,7 +60,7 @@ module.exports = async function emberCliUpdate({
       }
     }
 
-    if (!blueprint.version) {
+    if (!blueprint.version && !reset) {
       throw new Error('A custom blueprint cannot detect --from. You must supply it.');
     }
   } else {
@@ -201,7 +201,9 @@ All blueprints are up-to-date!`;
       version: endVersion
     });
 
-    await run('git add ember-cli-update.json');
+    if (!reset) {
+      await run('git add ember-cli-update.json');
+    }
   } else {
     let { blueprints } = await loadSafeBlueprintFile(cwd);
 
@@ -214,7 +216,9 @@ All blueprints are up-to-date!`;
         version: endVersion
       });
 
-      await run('git add ember-cli-update.json');
+      if (!reset) {
+        await run('git add ember-cli-update.json');
+      }
     }
   }
 
