@@ -25,9 +25,11 @@ module.exports = async function install({
   let parsedBlueprint = await parseBlueprint(addon);
   let blueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, toDefault);
 
+  let isCustomBlueprint = blueprint.name !== defaultBlueprint.name;
+
   let emberCliUpdateJson = await loadBlueprintFile(cwd);
 
-  if (!emberCliUpdateJson && blueprint.name !== defaultBlueprint.name) {
+  if (!emberCliUpdateJson && isCustomBlueprint) {
     await saveDefaultBlueprint({
       cwd,
       blueprint: defaultBlueprint

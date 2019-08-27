@@ -157,7 +157,8 @@ describe(_getStartAndEndCommands, function() {
     it('can create a project from remote', async function() {
       let { createProjectFromRemote } = getStartAndEndCommands({
         projectOptions: ['blueprint'],
-        startBlueprint: { name: blueprint }
+        startBlueprint: { name: blueprint },
+        endBlueprint: { name: blueprint }
       });
 
       let createProject = createProjectFromRemote({
@@ -191,7 +192,8 @@ describe(_getStartAndEndCommands, function() {
     it('can install an addon blueprint', async function() {
       let { createProjectFromRemote } = getStartAndEndCommands({
         projectOptions: ['blueprint'],
-        startBlueprint: { name: blueprint }
+        startBlueprint: { name: blueprint },
+        endBlueprint: { name: blueprint }
       });
 
       readdirStub.resolves([]);

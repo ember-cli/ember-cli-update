@@ -18,13 +18,15 @@ module.exports = function getStartAndEndCommands({
   startBlueprint,
   endBlueprint
 }) {
+  let isCustomBlueprint = endBlueprint.name !== 'ember-cli';
+
   let options = '-sn -sg';
 
   if (projectOptions.includes('yarn')) {
     options += ' --yarn';
   }
 
-  if (!projectOptions.includes('welcome') && startBlueprint && startBlueprint.name === 'ember-cli') {
+  if (!projectOptions.includes('welcome') && startBlueprint && !isCustomBlueprint) {
     options += ' --no-welcome';
   }
 
@@ -41,14 +43,14 @@ module.exports = function getStartAndEndCommands({
   return {
     projectName,
     projectOptions,
-    ...endBlueprint.name === 'ember-cli' ? {
+    ...isCustomBlueprint ? {} : {
       packageName: 'ember-cli',
       commandName: 'ember',
       // `createProjectFromCache` no longer works with custom blueprints.
       // It would look for an `ember-cli` version with the same version
       // as the blueprint.
       createProjectFromCache: createProjectFromCache(command)
-    } : {},
+    },
     createProjectFromRemote: createProjectFromRemote(command),
     startOptions: {
       packageVersion: startVersion,
