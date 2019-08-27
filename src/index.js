@@ -187,7 +187,7 @@ All blueprints are up-to-date!`;
   if (_blueprint) {
     let emberCliUpdateJson = await loadBlueprintFile(cwd);
 
-    if (!emberCliUpdateJson && blueprint.name !== defaultBlueprint.name) {
+    if (!emberCliUpdateJson && isCustomBlueprint) {
       await saveDefaultBlueprint({
         cwd,
         blueprint: defaultBlueprint
