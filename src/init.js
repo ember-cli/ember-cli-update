@@ -8,7 +8,7 @@ const downloadBlueprint = require('./download-blueprint');
 const saveBlueprint = require('./save-blueprint');
 
 module.exports = async function init({
-  blueprint,
+  blueprint: _blueprint,
   to,
   resolveConflicts,
   reset,
@@ -21,17 +21,17 @@ module.exports = async function init({
   let cwd = process.cwd();
 
   let parsedBlueprint;
-  if (blueprint) {
-    parsedBlueprint = await parseBlueprint(blueprint);
+  if (_blueprint) {
+    parsedBlueprint = await parseBlueprint(_blueprint);
   } else {
     parsedBlueprint = defaultBlueprint;
   }
 
-  let downloadedBlueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, to);
+  let blueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, to);
 
   let result = await (await boilerplateUpdate({
     projectOptions: ['blueprint'],
-    endVersion: downloadedBlueprint.version,
+    endVersion: blueprint.version,
     resolveConflicts,
     reset,
     createCustomDiff: true,
@@ -43,7 +43,7 @@ module.exports = async function init({
       packageJson,
       projectOptions,
       endVersion,
-      endBlueprint: downloadedBlueprint
+      endBlueprint: blueprint
     }),
     ignoredFiles: ['ember-cli-update.json'],
     wasRunAsExecutable
@@ -51,9 +51,9 @@ module.exports = async function init({
 
   await saveBlueprint({
     cwd,
-    name: downloadedBlueprint.name,
+    name: blueprint.name,
     location: parsedBlueprint.location,
-    version: downloadedBlueprint.version
+    version: blueprint.version
   });
 
   await run('git add ember-cli-update.json');

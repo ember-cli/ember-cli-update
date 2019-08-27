@@ -23,11 +23,11 @@ module.exports = async function install({
   // This can be optimized by going into the node_modules install location
   // from above and grabbing it from there.
   let parsedBlueprint = await parseBlueprint(addon);
-  let downloadedBlueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, toDefault);
+  let blueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, toDefault);
 
   let emberCliUpdateJson = await loadBlueprintFile(cwd);
 
-  if (!emberCliUpdateJson && downloadedBlueprint.name !== defaultBlueprint.name) {
+  if (!emberCliUpdateJson && blueprint.name !== defaultBlueprint.name) {
     await saveDefaultBlueprint({
       cwd,
       blueprint: defaultBlueprint
@@ -36,9 +36,9 @@ module.exports = async function install({
 
   await saveBlueprint({
     cwd,
-    name: downloadedBlueprint.name,
+    name: blueprint.name,
     location: parsedBlueprint.location,
-    version: downloadedBlueprint.version
+    version: blueprint.version
     // isPartial: true
   });
 };
