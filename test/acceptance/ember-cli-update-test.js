@@ -192,7 +192,7 @@ describe(function() {
   });
 
   it('can pick from multiple blueprints', async function() {
-    this.timeout(5 * 60 * 1000);
+    this.timeout(10 * 60 * 1000);
 
     let {
       location,
