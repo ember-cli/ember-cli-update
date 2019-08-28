@@ -187,19 +187,23 @@ All blueprints are up-to-date!`;
   if (_blueprint) {
     let emberCliUpdateJson = await loadBlueprintFile(cwd);
 
-    if (!emberCliUpdateJson && isCustomBlueprint) {
+    // If you don't have a state file, save the default blueprint,
+    // even if you are currently working on a custom blueprint.
+    if (!emberCliUpdateJson || !isCustomBlueprint) {
       await saveDefaultBlueprint({
         cwd,
         blueprint: defaultBlueprint
       });
     }
 
-    await saveBlueprint({
-      cwd,
-      name: blueprint.name,
-      location: blueprint.location,
-      version: endVersion
-    });
+    if (isCustomBlueprint) {
+      await saveBlueprint({
+        cwd,
+        name: blueprint.name,
+        location: blueprint.location,
+        version: endVersion
+      });
+    }
 
     if (!reset) {
       await run('git add ember-cli-update.json');
