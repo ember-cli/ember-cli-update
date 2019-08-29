@@ -6,7 +6,7 @@ const checkForBlueprintUpdates = require('../../src/check-for-blueprint-updates'
 const { initBlueprint } = require('../helpers/blueprint');
 
 describe(checkForBlueprintUpdates, function() {
-  this.timeout(30 * 1000);
+  this.timeout(60 * 1000);
 
   let cwd = process.cwd();
 
