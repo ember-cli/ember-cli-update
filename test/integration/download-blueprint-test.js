@@ -9,7 +9,7 @@ const parseBlueprint = require('../../src/parse-blueprint');
 const downloadBlueprint = require('../../src/download-blueprint');
 
 describe(downloadBlueprint, function() {
-  this.timeout(10 * 1000);
+  this.timeout(30 * 1000);
 
   it('throws if missing a range', async function() {
     await expect(downloadBlueprint('test-name', 'test-url', null))
