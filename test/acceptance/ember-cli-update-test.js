@@ -199,7 +199,7 @@ describe(function() {
     let {
       location,
       version: to
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1];
+    } = require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1];
 
     let {
       ps,
@@ -245,10 +245,10 @@ describe(function() {
       reset: true
     })).promise;
 
-    expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
+    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
 
-    await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+    await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/reset/my-app'
@@ -264,7 +264,7 @@ describe(function() {
 
     let {
       location
-    } = require('../fixtures/blueprint/addon/legacy-app/merge/ideal/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/addon/legacy-app/merge/ideal/my-app/config/ember-cli-update').blueprints[0];
 
     let {
       status
@@ -300,10 +300,10 @@ describe(function() {
 
     assertNoUnstaged(status);
 
-    expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/ember-cli-update.json');
+    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
 
-    await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+    await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/merge/my-app'
@@ -314,7 +314,7 @@ describe(function() {
     let {
       name,
       version: from
-    } = require('../fixtures/blueprint/app/npm-app/local/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/app/npm-app/local/my-app/config/ember-cli-update').blueprints[0];
 
     let {
       status
@@ -325,7 +325,7 @@ describe(function() {
       blueprint: name,
       from,
       async beforeMerge() {
-        await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+        await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
       }
     })).promise;
 

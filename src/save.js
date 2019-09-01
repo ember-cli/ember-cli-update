@@ -22,5 +22,5 @@ module.exports = async function save({
     version: downloadedBlueprint.version
   });
 
-  await run('git add ember-cli-update.json');
+  await run('git add config/ember-cli-update.json');
 };

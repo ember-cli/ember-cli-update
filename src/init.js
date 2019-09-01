@@ -59,7 +59,7 @@ module.exports = async function init({
         endBlueprint: blueprint
       });
     },
-    ignoredFiles: ['ember-cli-update.json'],
+    ignoredFiles: ['config/ember-cli-update.json'],
     wasRunAsExecutable
   })).promise;
 
@@ -78,7 +78,7 @@ module.exports = async function init({
   }
 
   if (!reset) {
-    await run('git add ember-cli-update.json');
+    await run('git add config/ember-cli-update.json');
   }
 
   return result;

@@ -205,10 +205,10 @@ describe(function() {
       // test the resetting logic of ember-cli-update.json
       blueprint: 'ember-cli',
       async afterMerge() {
-        expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/ember-cli-update.json'));
+        expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
+          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'));
 
-        await fs.remove(path.join(tmpPath, 'ember-cli-update.json'));
+        await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
       }
     });
 
@@ -334,7 +334,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           location,
           version: to
-        } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/config/ember-cli-update').blueprints[0];
 
         let {
           status
@@ -361,7 +361,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           name,
           version: to
-        } = require('../fixtures/blueprint/app/remote-app/merge/my-app/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update').blueprints[0];
 
         let {
           status
@@ -382,7 +382,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       it('can update an npm blueprint', async function() {
         let {
           name
-        } = require('../fixtures/blueprint/app/npm-app/merge/my-app/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update').blueprints[0];
 
         let {
           status
@@ -404,7 +404,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           name,
           location
-        } = require('../fixtures/blueprint/addon/legacy-app/local/ideal/my-app/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/addon/legacy-app/local/ideal/my-app/config/ember-cli-update').blueprints[0];
 
         let {
           status

@@ -5,7 +5,7 @@ const path = require('path');
 
 async function loadSafeBlueprintFile(cwd) {
   try {
-    return await fs.readJson(path.join(cwd, 'ember-cli-update.json'));
+    return await fs.readJson(path.join(cwd, 'config/ember-cli-update.json'));
   } catch (err) {}
 }
 
