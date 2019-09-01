@@ -7,7 +7,7 @@ async function loadSafeBlueprintFile(cwd) {
 
   if (!emberCliUpdateJson) {
     emberCliUpdateJson = {
-      schemaVersion: '1',
+      schemaVersion: '0',
       blueprints: []
     };
   }
