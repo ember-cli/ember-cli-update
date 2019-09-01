@@ -24,7 +24,7 @@ describe(saveBlueprintFile, function() {
       ]
     });
 
-    expect(path.join(tmpPath, 'ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/normal/ember-cli-update.json');
+    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/normal/config/ember-cli-update.json');
   });
 });

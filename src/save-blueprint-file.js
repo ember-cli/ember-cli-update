@@ -4,7 +4,11 @@ const fs = require('fs-extra');
 const path = require('path');
 
 async function saveBlueprintFile(cwd, emberCliUpdateJson) {
-  let emberCliUpdateJsonPath = path.join(cwd, 'ember-cli-update.json');
+  let configDir = path.join(cwd, 'config');
+
+  await fs.ensureDir(configDir);
+
+  let emberCliUpdateJsonPath = path.join(configDir, 'ember-cli-update.json');
 
   await fs.writeJson(emberCliUpdateJsonPath, emberCliUpdateJson, {
     spaces: 2,

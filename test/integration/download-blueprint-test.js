@@ -21,7 +21,7 @@ describe(downloadBlueprint, function() {
       name,
       location,
       version: range
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1];
+    } = require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1];
 
     let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', location);
 
@@ -39,7 +39,7 @@ describe(downloadBlueprint, function() {
       name,
       location: url,
       version: range
-    } = require('../fixtures/blueprint/app/remote-app/merge/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update').blueprints[0];
 
     let blueprint = await downloadBlueprint(null, url, range);
 
@@ -52,7 +52,7 @@ describe(downloadBlueprint, function() {
     let {
       name,
       version: range
-    } = require('../fixtures/blueprint/app/npm-app/merge/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update').blueprints[0];
 
     let blueprint = await downloadBlueprint(name, null, range);
 

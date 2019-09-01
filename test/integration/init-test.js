@@ -77,7 +77,7 @@ describe(init, function() {
   it('can initialize a custom blueprint', async function() {
     let {
       location
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1];
+    } = require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1];
 
     let {
       status

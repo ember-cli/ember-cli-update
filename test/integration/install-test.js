@@ -80,7 +80,7 @@ describe(install, function() {
   it('can install an addon with a default blueprint and a state file', async function() {
     let {
       location
-    } = require('../fixtures/blueprint/addon/legacy-app/merge/ideal/my-app/ember-cli-update').blueprints[0];
+    } = require('../fixtures/blueprint/addon/legacy-app/merge/ideal/my-app/config/ember-cli-update').blueprints[0];
 
     let {
       status

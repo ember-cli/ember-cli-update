@@ -16,11 +16,11 @@ describe(checkForBlueprintUpdates, function() {
 
   it('works', async function() {
     // out of date test
-    let localBlueprint = require('../fixtures/blueprint/app/local-app/local/my-app/ember-cli-update').blueprints[1];
-    let urlBlueprint = require('../fixtures/blueprint/app/remote-app/local/my-app/ember-cli-update').blueprints[0];
+    let localBlueprint = require('../fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update').blueprints[1];
+    let urlBlueprint = require('../fixtures/blueprint/app/remote-app/local/my-app/config/ember-cli-update').blueprints[0];
 
     // up to date test
-    let npmBlueprint = require('../fixtures/blueprint/app/npm-app/merge/my-app/ember-cli-update').blueprints[0];
+    let npmBlueprint = require('../fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update').blueprints[0];
 
     let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', localBlueprint.location);
 
@@ -36,13 +36,13 @@ describe(checkForBlueprintUpdates, function() {
       {
         name: localBlueprint.name,
         currentVersion: localBlueprint.version,
-        latestVersion: require('../fixtures/blueprint/app/local-app/merge/my-app/ember-cli-update').blueprints[1].version,
+        latestVersion: require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1].version,
         isUpToDate: false
       },
       {
         name: urlBlueprint.name,
         currentVersion: urlBlueprint.version,
-        latestVersion: require('../fixtures/blueprint/app/remote-app/merge/my-app/ember-cli-update').blueprints[0].version,
+        latestVersion: require('../fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update').blueprints[0].version,
         isUpToDate: false
       },
       {

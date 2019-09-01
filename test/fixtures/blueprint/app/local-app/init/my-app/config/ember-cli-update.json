@@ -3,7 +3,7 @@
   "blueprints": [
     {
       "name": "ember-cli-update-npm-blueprint-test",
-      "version": "0.0.9",
+      "version": "0.0.11",
       "isPartial": true
     }
   ]

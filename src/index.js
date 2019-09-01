@@ -197,7 +197,7 @@ All blueprints are up-to-date!`;
     runCodemods,
     codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
     createCustomDiff,
-    ignoredFiles: ['ember-cli-update.json'],
+    ignoredFiles: ['config/ember-cli-update.json'],
     wasRunAsExecutable
   })).promise;
 
@@ -223,7 +223,7 @@ All blueprints are up-to-date!`;
     }
 
     if (!reset) {
-      await run('git add ember-cli-update.json');
+      await run('git add config/ember-cli-update.json');
     }
   } else {
     let { blueprints } = await loadSafeBlueprintFile(cwd);
@@ -238,7 +238,7 @@ All blueprints are up-to-date!`;
       });
 
       if (!reset) {
-        await run('git add ember-cli-update.json');
+        await run('git add config/ember-cli-update.json');
       }
     }
   }
