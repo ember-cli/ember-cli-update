@@ -1,4 +1,5 @@
 {
+  "schemaVersion": "1",
   "blueprints": [
     {
       "name": "ember-cli-update-npm-blueprint-test",
