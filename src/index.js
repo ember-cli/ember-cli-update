@@ -1,7 +1,6 @@
 'use strict';
 
 const inquirer = require('inquirer');
-const run = require('./run');
 const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
@@ -20,6 +19,8 @@ const saveDefaultBlueprint = require('./save-default-blueprint');
 const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
 const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
+const stageBlueprintFile = require('./stage-blueprint-file');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 const toDefault = require('./args').to.default;
 
@@ -197,7 +198,7 @@ All blueprints are up-to-date!`;
     runCodemods,
     codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
     createCustomDiff,
-    ignoredFiles: ['config/ember-cli-update.json'],
+    ignoredFiles: [await getBlueprintFilePath(cwd)],
     wasRunAsExecutable
   })).promise;
 
@@ -223,7 +224,7 @@ All blueprints are up-to-date!`;
     }
 
     if (!reset) {
-      await run('git add config/ember-cli-update.json');
+      await stageBlueprintFile(cwd);
     }
   } else {
     let { blueprints } = await loadSafeBlueprintFile(cwd);
@@ -238,7 +239,7 @@ All blueprints are up-to-date!`;
       });
 
       if (!reset) {
-        await run('git add config/ember-cli-update.json');
+        await stageBlueprintFile(cwd);
       }
     }
   }

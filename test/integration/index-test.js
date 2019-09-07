@@ -334,7 +334,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           location,
           version: to
-        } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/config/ember-cli-update').blueprints[0];
+        } = require('../fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update').blueprints[0];
 
         let {
           status

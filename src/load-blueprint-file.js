@@ -1,11 +1,11 @@
 'use strict';
 
 const fs = require('fs-extra');
-const path = require('path');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 async function loadBlueprintFile(cwd) {
   try {
-    return await fs.readJson(path.join(cwd, 'config/ember-cli-update.json'));
+    return await fs.readJson(await getBlueprintFilePath(cwd));
   } catch (err) {}
 }
 

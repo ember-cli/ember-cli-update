@@ -2,13 +2,12 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 async function saveBlueprintFile(cwd, emberCliUpdateJson) {
-  let configDir = path.join(cwd, 'config');
+  let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
-  await fs.ensureDir(configDir);
-
-  let emberCliUpdateJsonPath = path.join(configDir, 'ember-cli-update.json');
+  await fs.ensureDir(path.dirname(emberCliUpdateJsonPath));
 
   await fs.writeJson(emberCliUpdateJsonPath, emberCliUpdateJson, {
     spaces: 2,
