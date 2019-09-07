@@ -1,6 +1,5 @@
 'use strict';
 
-const run = require('./run');
 const getProjectOptions = require('./get-project-options');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
@@ -10,6 +9,8 @@ const saveBlueprint = require('./save-blueprint');
 const saveDefaultBlueprint = require('./save-default-blueprint');
 const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
+const stageBlueprintFile = require('./stage-blueprint-file');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -59,7 +60,7 @@ module.exports = async function init({
         endBlueprint: blueprint
       });
     },
-    ignoredFiles: ['config/ember-cli-update.json'],
+    ignoredFiles: [await getBlueprintFilePath(cwd)],
     wasRunAsExecutable
   })).promise;
 
@@ -78,7 +79,7 @@ module.exports = async function init({
   }
 
   if (!reset) {
-    await run('git add config/ember-cli-update.json');
+    await stageBlueprintFile(cwd);
   }
 
   return result;
