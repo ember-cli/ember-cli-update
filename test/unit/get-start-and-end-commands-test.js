@@ -80,14 +80,14 @@ describe(_getStartAndEndCommands, function() {
           name: 'ember-cli',
           version: startVersion
         },
-        packageVersion: startVersion
+        packageRange: startVersion
       },
       endOptions: {
         blueprint: {
           name: 'ember-cli',
           version: endVersion
         },
-        packageVersion: endVersion
+        packageRange: endVersion
       }
     });
   });
@@ -114,6 +114,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         projectName,
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'app'
@@ -140,7 +141,7 @@ describe(_getStartAndEndCommands, function() {
     expect(await createProject(cwd)).to.equal(projectPath);
 
     expect(npxStub.args).to.deep.equal([[
-      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg -b app`,
+      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sb -sg -b app`,
       {
         cwd
       }
@@ -160,25 +161,29 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
+      expect(options.createProjectFromCache).to.be.a('function');
       expect(options.createProjectFromRemote).to.be.a('function');
 
+      delete options.createProjectFromCache;
       delete options.createProjectFromRemote;
 
       expect(options).to.deep.equal({
         projectName,
+        packageName,
+        commandName,
         startOptions: {
           blueprint: {
             name: blueprint,
             version: startVersion
           },
-          packageVersion: startVersion
+          packageRange: ''
         },
         endOptions: {
           blueprint: {
             name: blueprint,
             version: endVersion
           },
-          packageVersion: endVersion
+          packageRange: ''
         }
       });
     });
@@ -200,7 +205,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `${packageName} new ${projectName} -sn -sg -b ${blueprintPath}`,
+        `${packageName} new ${projectName} -sn -sb -sg -b ${blueprintPath}`,
         {
           cwd
         }
@@ -214,7 +219,33 @@ describe(_getStartAndEndCommands, function() {
       }]]);
     });
 
-    it('can install an addon blueprint', async function() {
+    it('can install an addon blueprint from cache', async function() {
+      let { createProjectFromCache } = getStartAndEndCommands();
+
+      readdirStub.resolves([]);
+
+      let createProject = createProjectFromCache({
+        packageRoot,
+        options: {
+          projectName,
+          blueprint: loadSafeBlueprint({
+            name: blueprint,
+            path: blueprintPath
+          })
+        }
+      });
+
+      expect(await createProject(cwd)).to.equal(projectPath);
+
+      expect(installAddonBlueprintStub.args).to.deep.equal([[{
+        cwd,
+        packageRoot,
+        projectName,
+        blueprintPath
+      }]]);
+    });
+
+    it('can install an addon blueprint from remote', async function() {
       let { createProjectFromRemote } = getStartAndEndCommands();
 
       readdirStub.resolves([]);
@@ -234,6 +265,7 @@ describe(_getStartAndEndCommands, function() {
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
+        packageRoot: undefined,
         projectName,
         blueprintPath
       }]]);
@@ -263,14 +295,14 @@ describe(_getStartAndEndCommands, function() {
         commandName,
         startOptions: {
           blueprint: null,
-          packageVersion: null
+          packageRange: null
         },
         endOptions: {
           blueprint: {
             name: 'ember-cli',
             version: endVersion
           },
-          packageVersion: endVersion
+          packageRange: endVersion
         }
       });
     });
@@ -284,22 +316,26 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
+      expect(options.createProjectFromCache).to.be.a('function');
       expect(options.createProjectFromRemote).to.be.a('function');
 
+      delete options.createProjectFromCache;
       delete options.createProjectFromRemote;
 
       expect(options).to.deep.equal({
         projectName,
+        packageName,
+        commandName,
         startOptions: {
           blueprint: null,
-          packageVersion: null
+          packageRange: ''
         },
         endOptions: {
           blueprint: {
             name: blueprint,
             version: endVersion
           },
-          packageVersion: endVersion
+          packageRange: ''
         }
       });
     });
@@ -338,7 +374,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg -b app`,
+        `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sb -sg -b app`,
         {
           cwd
         }
@@ -366,7 +402,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `${packageName} new ${projectName} -sn -sg -b ${blueprintPath}`,
+        `${packageName} new ${projectName} -sn -sb -sg -b ${blueprintPath}`,
         {
           cwd
         }
@@ -450,6 +486,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'app'
@@ -469,6 +506,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'addon'
@@ -488,6 +526,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         '/path/to/my-blueprint'
@@ -510,6 +549,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'app',
