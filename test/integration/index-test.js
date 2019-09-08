@@ -296,7 +296,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
     expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
   });
 
-  it('can create a personal diff instead of using an output repo', async function() {
+  it('can create a personal diff instead of using an output repo - app', async function() {
     this.timeout(3 * 60 * 1000);
 
     let {
@@ -309,6 +309,24 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/custom/merge/my-custom-app'
+    });
+
+    assertNoUnstaged(status);
+  });
+
+  it('can create a personal diff instead of using an output repo - addon', async function() {
+    this.timeout(3 * 60 * 1000);
+
+    let {
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/custom/addon/local',
+      commitMessage: 'my-custom-addon',
+      createCustomDiff: true
+    });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/custom/addon/merge/my-custom-addon'
     });
 
     assertNoUnstaged(status);
