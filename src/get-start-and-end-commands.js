@@ -38,39 +38,39 @@ module.exports = function getStartAndEndCommands({
   };
 };
 
-function buildCommand(projectName, blueprint) {
+function getArgs(projectName, blueprint) {
   let isCustomBlueprint = blueprint.name !== 'ember-cli';
 
-  let command = `new ${projectName} -sn -sg`;
-
-  let blueprintPath;
+  let _blueprint;
   if (isCustomBlueprint) {
-    blueprintPath = blueprint.path;
+    _blueprint = blueprint.path;
   } else if (blueprint.type === 'addon') {
-    blueprintPath = 'addon';
+    _blueprint = 'addon';
   } else {
-    blueprintPath = 'app';
+    _blueprint = 'app';
   }
 
-  command += ` -b ${blueprintPath}`;
-
-  if (blueprint.options.length) {
-    command += ` ${blueprint.options.join(' ')}`;
-  }
-
-  return command;
+  return [
+    'new',
+    projectName,
+    '-sn',
+    '-sg',
+    '-b',
+    _blueprint,
+    ...blueprint.options
+  ];
 }
 
 function createProjectFromCache({
   packageRoot,
   options
 }) {
-  let command = buildCommand(options.projectName, options.blueprint);
+  let args = getArgs(options.projectName, options.blueprint);
 
   return async function createProject(cwd) {
     await utils.spawn('node', [
       path.join(packageRoot, 'bin/ember'),
-      ...command.split(' ')
+      ...args
     ], {
       cwd
     });
@@ -87,7 +87,7 @@ function createProjectFromRemote({
 }) {
   return async function createProject(cwd) {
     if (options.blueprint) {
-      let command = buildCommand(options.projectName, options.blueprint);
+      let command = getArgs(options.projectName, options.blueprint).join(' ');
 
       let isCustomBlueprint = options.blueprint.name !== 'ember-cli';
 
@@ -146,7 +146,7 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
     name: 'ember-cli'
   };
 
-  let command = buildCommand(projectName, loadSafeBlueprint(defaultBlueprint));
+  let command = getArgs(projectName, loadSafeBlueprint(defaultBlueprint)).join(' ');
 
   await fs.remove(path.join(cwd, projectName));
 
@@ -188,4 +188,4 @@ async function appendNodeModulesIgnore({
 }
 
 module.exports.appendNodeModulesIgnore = appendNodeModulesIgnore;
-module.exports.buildCommand = buildCommand;
+module.exports.getArgs = getArgs;
