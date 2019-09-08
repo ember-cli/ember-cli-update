@@ -98,7 +98,9 @@ describe(_getStartAndEndCommands, function() {
         'new',
         projectName,
         '-sn',
-        '-sg'
+        '-sg',
+        '-b',
+        'app'
       ],
       {
         cwd
@@ -122,7 +124,7 @@ describe(_getStartAndEndCommands, function() {
     expect(await createProject(cwd)).to.equal(projectPath);
 
     expect(npxStub.args).to.deep.equal([[
-      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg`,
+      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg -b app`,
       {
         cwd
       }
@@ -293,7 +295,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg`,
+        `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg -b app`,
         {
           cwd
         }
@@ -401,7 +403,7 @@ describe(_getStartAndEndCommands, function() {
 
       let command = buildCommand(projectName, blueprint);
 
-      expect(command).to.equal('new my-project -sn -sg');
+      expect(command).to.equal('new my-project -sn -sg -b app');
     });
 
     it('works for default addon', function() {
@@ -413,7 +415,7 @@ describe(_getStartAndEndCommands, function() {
 
       let command = buildCommand(projectName, blueprint);
 
-      expect(command).to.equal('addon my-project -sn -sg');
+      expect(command).to.equal('new my-project -sn -sg -b addon');
     });
 
     it('works for custom app', function() {
@@ -440,7 +442,7 @@ describe(_getStartAndEndCommands, function() {
 
       let command = buildCommand(projectName, blueprint);
 
-      expect(command).to.equal('new my-project -sn -sg --my-option-1 --my-option-2');
+      expect(command).to.equal('new my-project -sn -sg -b app --my-option-1 --my-option-2');
     });
   });
 });

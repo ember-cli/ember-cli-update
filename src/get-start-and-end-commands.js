@@ -41,16 +41,18 @@ module.exports = function getStartAndEndCommands({
 function buildCommand(projectName, blueprint) {
   let isCustomBlueprint = blueprint.name !== 'ember-cli';
 
-  let command = 'new';
-  if (blueprint.type === 'addon') {
-    command = 'addon';
-  }
+  let command = `new ${projectName} -sn -sg`;
 
-  command += ` ${projectName} -sn -sg`;
-
+  let blueprintPath;
   if (isCustomBlueprint) {
-    command += ` -b ${blueprint.path}`;
+    blueprintPath = blueprint.path;
+  } else if (blueprint.type === 'addon') {
+    blueprintPath = 'addon';
+  } else {
+    blueprintPath = 'app';
   }
+
+  command += ` -b ${blueprintPath}`;
 
   if (blueprint.options.length) {
     command += ` ${blueprint.options.join(' ')}`;

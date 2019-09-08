@@ -98,7 +98,9 @@ describe(_loadSafeDefaultBlueprint, function() {
         name: 'ember-cli',
         type: 'addon',
         version,
-        options: []
+        options: [
+          '--no-welcome'
+        ]
       });
     });
 
@@ -112,7 +114,8 @@ describe(_loadSafeDefaultBlueprint, function() {
         type: 'addon',
         version,
         options: [
-          '--yarn'
+          '--yarn',
+          '--no-welcome'
         ]
       });
     });
