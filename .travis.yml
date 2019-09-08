@@ -13,7 +13,6 @@ cache:
 env:
 - TEST_COMMAND=test:fast
 - TEST_COMMAND=test:slow
-- TEST_COMMAND=lint
 before_install:
 - npm config set spin false
 - if [ "$TRAVIS_NODE_VERSION" = "8" ]; then
@@ -32,12 +31,10 @@ script:
 jobs:
   allow_failures:
   - os: osx
-  exclude:
-  - node_js: '8'
-    env: TEST_COMMAND=lint
   include:
+  - env: TEST_COMMAND=lint
+    before_install: ignore
   - os: osx
-    node_js: '8'
     env: TEST_COMMAND=test:slow
   - stage: Deploy
     cache: ignore
