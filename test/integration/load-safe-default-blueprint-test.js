@@ -22,61 +22,66 @@ describe(_loadSafeDefaultBlueprint, function() {
       projectOptions.push('app');
     });
 
-    it('npm, welcome', async function() {
-      projectOptions.push('welcome');
+    describe('welcome', function() {
+      beforeEach(function() {
+        projectOptions.push('welcome');
+      });
 
-      let blueprint = loadSafeDefaultBlueprint();
+      it('npm', async function() {
+        let blueprint = loadSafeDefaultBlueprint();
 
-      expect(blueprint).to.deep.equal({
-        name: 'ember-cli',
-        type: 'app',
-        version,
-        options: []
+        expect(blueprint).to.deep.equal({
+          name: 'ember-cli',
+          type: 'app',
+          version,
+          options: []
+        });
+      });
+
+      it('yarn', async function() {
+        projectOptions.push('yarn');
+
+        let blueprint = loadSafeDefaultBlueprint();
+
+        expect(blueprint).to.deep.equal({
+          name: 'ember-cli',
+          type: 'app',
+          version,
+          options: [
+            '--yarn'
+          ]
+        });
       });
     });
 
-    it('npm, no welcome', async function() {
-      let blueprint = loadSafeDefaultBlueprint();
+    describe('no welcome', function() {
+      it('npm', async function() {
+        let blueprint = loadSafeDefaultBlueprint();
 
-      expect(blueprint).to.deep.equal({
-        name: 'ember-cli',
-        type: 'app',
-        version,
-        options: [
-          '--no-welcome'
-        ]
+        expect(blueprint).to.deep.equal({
+          name: 'ember-cli',
+          type: 'app',
+          version,
+          options: [
+            '--no-welcome'
+          ]
+        });
       });
-    });
 
-    it('yarn, welcome', async function() {
-      projectOptions.push('yarn');
-      projectOptions.push('welcome');
+      it('yarn', async function() {
+        projectOptions.push('yarn');
 
-      let blueprint = loadSafeDefaultBlueprint();
+        let blueprint = loadSafeDefaultBlueprint();
 
-      expect(blueprint).to.deep.equal({
-        name: 'ember-cli',
-        type: 'app',
-        version,
-        options: [
-          '--yarn'
-        ]
-      });
-    });
-
-    it('yarn, no welcome', async function() {
-      projectOptions.push('yarn');
-
-      let blueprint = loadSafeDefaultBlueprint();
-
-      expect(blueprint).to.deep.equal({
-        name: 'ember-cli',
-        type: 'app',
-        version,
-        options: [
-          '--yarn',
-          '--no-welcome'
-        ]
+        expect(blueprint).to.deep.equal({
+          name: 'ember-cli',
+          type: 'app',
+          version,
+          options: [
+            '--yarn',
+            '--no-welcome'
+          ]
+        });
       });
     });
   });
@@ -86,9 +91,7 @@ describe(_loadSafeDefaultBlueprint, function() {
       projectOptions.push('addon');
     });
 
-    it('npm, welcome', async function() {
-      projectOptions.push('welcome');
-
+    it('npm', async function() {
       let blueprint = loadSafeDefaultBlueprint();
 
       expect(blueprint).to.deep.equal({
@@ -99,22 +102,8 @@ describe(_loadSafeDefaultBlueprint, function() {
       });
     });
 
-    it('npm, no welcome', async function() {
-      let blueprint = loadSafeDefaultBlueprint();
-
-      expect(blueprint).to.deep.equal({
-        name: 'ember-cli',
-        type: 'addon',
-        version,
-        options: [
-          '--no-welcome'
-        ]
-      });
-    });
-
-    it('yarn, welcome', async function() {
+    it('yarn', async function() {
       projectOptions.push('yarn');
-      projectOptions.push('welcome');
 
       let blueprint = loadSafeDefaultBlueprint();
 
@@ -124,22 +113,6 @@ describe(_loadSafeDefaultBlueprint, function() {
         version,
         options: [
           '--yarn'
-        ]
-      });
-    });
-
-    it('yarn, no welcome', async function() {
-      projectOptions.push('yarn');
-
-      let blueprint = loadSafeDefaultBlueprint();
-
-      expect(blueprint).to.deep.equal({
-        name: 'ember-cli',
-        type: 'addon',
-        version,
-        options: [
-          '--yarn',
-          '--no-welcome'
         ]
       });
     });

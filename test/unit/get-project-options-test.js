@@ -128,7 +128,7 @@ describe(_getProjectOptions, function() {
       expect(await getProjectOptions()).to.deep.equal(['addon']);
     });
 
-    it('detects welcome option', async function() {
+    it('doesn\'t detect welcome option', async function() {
       packageJson = {
         keywords: [
           'ember-addon'
@@ -139,7 +139,7 @@ describe(_getProjectOptions, function() {
         }
       };
 
-      expect(await getProjectOptions()).to.deep.equal(['addon', 'welcome']);
+      expect(await getProjectOptions()).to.deep.equal(['addon']);
     });
 
     it('detects yarn option', async function() {

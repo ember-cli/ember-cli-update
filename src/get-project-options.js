@@ -56,10 +56,13 @@ module.exports = async function getProjectOptions({
     options.push('yarn');
   }
 
-  let hasWelcome = checkForDep('ember-welcome-page');
+  // addons don't support the welcome option
+  if (projectType === 'app') {
+    let hasWelcome = checkForDep('ember-welcome-page');
 
-  if (hasWelcome) {
-    options.push('welcome');
+    if (hasWelcome) {
+      options.push('welcome');
+    }
   }
 
   return options;
