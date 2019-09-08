@@ -9,7 +9,7 @@ const utils = require('../../src/utils');
 const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 
 const {
-  buildCommand
+  getArgs
 } = _getStartAndEndCommands;
 
 const projectName = 'my-custom-app';
@@ -391,7 +391,7 @@ describe(_getStartAndEndCommands, function() {
     });
   });
 
-  describe(buildCommand, function() {
+  describe(getArgs, function() {
     let projectName = 'my-project';
 
     it('works for default app', function() {
@@ -401,9 +401,16 @@ describe(_getStartAndEndCommands, function() {
         options: []
       };
 
-      let command = buildCommand(projectName, blueprint);
+      let args = getArgs(projectName, blueprint);
 
-      expect(command).to.equal('new my-project -sn -sg -b app');
+      expect(args).to.deep.equal([
+        'new',
+        'my-project',
+        '-sn',
+        '-sg',
+        '-b',
+        'app'
+      ]);
     });
 
     it('works for default addon', function() {
@@ -413,9 +420,16 @@ describe(_getStartAndEndCommands, function() {
         options: []
       };
 
-      let command = buildCommand(projectName, blueprint);
+      let args = getArgs(projectName, blueprint);
 
-      expect(command).to.equal('new my-project -sn -sg -b addon');
+      expect(args).to.deep.equal([
+        'new',
+        'my-project',
+        '-sn',
+        '-sg',
+        '-b',
+        'addon'
+      ]);
     });
 
     it('works for custom app', function() {
@@ -425,9 +439,16 @@ describe(_getStartAndEndCommands, function() {
         options: []
       };
 
-      let command = buildCommand(projectName, blueprint);
+      let args = getArgs(projectName, blueprint);
 
-      expect(command).to.equal('new my-project -sn -sg -b /path/to/my-blueprint');
+      expect(args).to.deep.equal([
+        'new',
+        'my-project',
+        '-sn',
+        '-sg',
+        '-b',
+        '/path/to/my-blueprint'
+      ]);
     });
 
     it('handles options', function() {
@@ -440,9 +461,18 @@ describe(_getStartAndEndCommands, function() {
         ]
       };
 
-      let command = buildCommand(projectName, blueprint);
+      let args = getArgs(projectName, blueprint);
 
-      expect(command).to.equal('new my-project -sn -sg -b app --my-option-1 --my-option-2');
+      expect(args).to.deep.equal([
+        'new',
+        'my-project',
+        '-sn',
+        '-sg',
+        '-b',
+        'app',
+        '--my-option-1',
+        '--my-option-2'
+      ]);
     });
   });
 });
