@@ -8,6 +8,10 @@ const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
 const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 
+const {
+  buildCommand
+} = _getStartAndEndCommands;
+
 const projectName = 'my-custom-app';
 const packageRoot = '/test/package/root';
 const packageVersion = '0.0.1';
@@ -382,6 +386,61 @@ describe(_getStartAndEndCommands, function() {
 
     it('can create an app with the yarn option', async function() {
       expect(await processBlueprint({ options: ['--yarn'] })).to.include('--yarn');
+    });
+  });
+
+  describe(buildCommand, function() {
+    let projectName = 'my-project';
+
+    it('works for default app', function() {
+      let blueprint = {
+        name: 'ember-cli',
+        type: 'app',
+        options: []
+      };
+
+      let command = buildCommand(projectName, blueprint);
+
+      expect(command).to.equal('new my-project -sn -sg');
+    });
+
+    it('works for default addon', function() {
+      let blueprint = {
+        name: 'ember-cli',
+        type: 'addon',
+        options: []
+      };
+
+      let command = buildCommand(projectName, blueprint);
+
+      expect(command).to.equal('addon my-project -sn -sg');
+    });
+
+    it('works for custom app', function() {
+      let blueprint = {
+        name: 'my-blueprint',
+        path: '/path/to/my-blueprint',
+        options: []
+      };
+
+      let command = buildCommand(projectName, blueprint);
+
+      expect(command).to.equal('new my-project -sn -sg -b /path/to/my-blueprint');
+    });
+
+    it('handles options', function() {
+      let blueprint = {
+        name: 'ember-cli',
+        type: 'app',
+        options: [
+          '--my-option-1',
+          '--my-option-2'
+        ]
+      };
+
+      let command = buildCommand(projectName, blueprint);
+
+      expect(command).to.equal('new my-project -sn -sg --my-option-1 --my-option-2');
     });
   });
 });

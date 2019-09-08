@@ -186,3 +186,4 @@ async function appendNodeModulesIgnore({
 }
 
 module.exports.appendNodeModulesIgnore = appendNodeModulesIgnore;
+module.exports.buildCommand = buildCommand;
