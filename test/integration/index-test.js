@@ -302,13 +302,13 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
     let {
       status
     } = await merge({
-      fixturesPath: 'test/fixtures/custom/local',
+      fixturesPath: 'test/fixtures/custom/app/local',
       commitMessage: 'my-custom-app',
       createCustomDiff: true
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/custom/merge/my-custom-app'
+      mergeFixtures: 'test/fixtures/custom/app/merge/my-custom-app'
     });
 
     assertNoUnstaged(status);
