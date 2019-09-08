@@ -10,7 +10,7 @@ function loadSafeDefaultBlueprint(projectOptions, version) {
   if (projectOptions.includes('yarn')) {
     options.push('--yarn');
   }
-  if (!projectOptions.includes('welcome') && !projectOptions.includes('addon')) {
+  if (!projectOptions.includes('welcome') || projectOptions.includes('addon')) {
     options.push('--no-welcome');
   }
 
