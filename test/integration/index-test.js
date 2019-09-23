@@ -276,7 +276,7 @@ applicable codemods: `);
 from version: 3.2.0-beta.1
 to version: 3.3.0
 output repo: https://github.com/ember-cli/ember-new-output
-applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, qunit-dom-codemod`);
+applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, notify-property-change, qunit-dom-codemod`);
   });
 
   it('lists codemods', async function() {
