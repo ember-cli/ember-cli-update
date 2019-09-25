@@ -59,7 +59,7 @@
     "chai-string": "^1.5.0",
     "cpr": "^3.0.1",
     "cross-env": "^5.0.1",
-    "ember-cli": "3.12.0",
+    "ember-cli": "3.13.0",
     "ember-cli-addon-tests": "0.11.1",
     "eslint": "^6.1.0",
     "eslint-config-sane": "0.8.5",
