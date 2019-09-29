@@ -11,7 +11,6 @@ export default Controller.extend({
       this.doStuff(object);
       object.notifyPropertyChange('someProperty');
     },
-
     bar() {
       var a = { first: 'Yehuda' };
       var b = { last: 'Katz' };
