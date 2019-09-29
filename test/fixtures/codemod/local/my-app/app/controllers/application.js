@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { merge } from '@ember/polyfills';
 
 export default Ember.Controller.extend({
   actions: {
@@ -10,6 +11,12 @@ export default Ember.Controller.extend({
       object.propertyWillChange('someProperty');
       this.doStuff(object);
       object.propertyDidChange('someProperty');
+    },
+
+    bar() {
+      var a = { first: 'Yehuda' };
+      var b = { last: 'Katz' };
+      merge(a, b); // a == { first: 'Yehuda', last: 'Katz' }, b == { last: 'Katz' }
     }
   }
 });
