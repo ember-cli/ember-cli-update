@@ -14,9 +14,9 @@ export default Ember.Controller.extend({
     },
 
     bar() {
-      var a = { first: 'Yehuda' };
-      var b = { last: 'Katz' };
-      merge(a, b); // a == { first: 'Yehuda', last: 'Katz' }, b == { last: 'Katz' }
+      let a = { first: 'Yehuda' };
+      let b = { last: 'Katz' };
+      merge(a, b);
     }
   }
 });
