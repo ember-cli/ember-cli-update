@@ -5,7 +5,7 @@ require('yargs')
   .commandDir('commands')
   .parserConfiguration({
     'populate--': true,
-    'collect-unknown-options': true
+    'unknown-options-as-args': true
   })
   .argv;
 
