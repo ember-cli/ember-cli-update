@@ -419,6 +419,8 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       });
 
       it('can update a legacy addon blueprint', async function() {
+        this.timeout(15 * 60 * 1000);
+
         let {
           name,
           location
