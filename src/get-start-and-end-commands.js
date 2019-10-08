@@ -30,10 +30,16 @@ module.exports = function getStartAndEndCommands({
     },
     createProjectFromRemote,
     startOptions: {
-      blueprint: startBlueprint
+      blueprint: startBlueprint,
+
+      // for cache detection logic
+      packageVersion: startBlueprint && startBlueprint.version
     },
     endOptions: {
-      blueprint: endBlueprint
+      blueprint: endBlueprint,
+
+      // for cache detection logic
+      packageVersion: endBlueprint.version
     }
   };
 };
