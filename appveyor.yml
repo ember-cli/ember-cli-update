@@ -13,7 +13,8 @@ init:
 # Install scripts. (runs after repo cloning)
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm config set spin false
+  # for test cache hits
+  - npm i -g ember-cli@2.11.1
   - ps: >-
       if ($env:nodejs_version -eq "8") {
         [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
