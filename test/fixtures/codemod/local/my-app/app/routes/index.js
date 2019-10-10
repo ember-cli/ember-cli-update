@@ -6,6 +6,7 @@ export default Router.extend({
 
   willTransition(transition) {
     this._super(...arguments);
+
     if (!this.currentUser.isLoggedIn) {
       transition.abort();
       this.transitionTo('login');
@@ -14,6 +15,7 @@ export default Router.extend({
 
   didTransition(privateInfos) {
     this._super(...arguments);
+
     ga.send('pageView', {
       pageName: privateInfos.name
     });
