@@ -17,7 +17,7 @@ const { initBlueprint } = require('../helpers/blueprint');
 const toDefault = require('../../src/args').to.default;
 
 describe(init, function() {
-  this.timeout(3 * 60 * 1000);
+  this.timeout(5 * 60 * 1000);
 
   let cwd;
   let tmpPath;

@@ -13,8 +13,10 @@ const {
 } = _getStartAndEndCommands;
 
 const projectName = 'my-custom-app';
+const startVersion = '0.0.1';
+const endVersion = '0.0.2';
 const packageRoot = '/test/package/root';
-const packageVersion = '0.0.1';
+const packageVersion = startVersion;
 const cwd = '/test/cwd';
 const packageName = 'ember-cli';
 const commandName = 'ember';
@@ -49,8 +51,14 @@ describe(_getStartAndEndCommands, function() {
   function getStartAndEndCommands(options) {
     return _getStartAndEndCommands(Object.assign({
       packageJson: { name: projectName },
-      startBlueprint: { name: 'ember-cli' },
-      endBlueprint: { name: 'ember-cli' }
+      startBlueprint: {
+        name: 'ember-cli',
+        version: startVersion
+      },
+      endBlueprint: {
+        name: 'ember-cli',
+        version: endVersion
+      }
     }, options));
   }
 
@@ -68,10 +76,18 @@ describe(_getStartAndEndCommands, function() {
       packageName,
       commandName,
       startOptions: {
-        blueprint: { name: 'ember-cli' }
+        blueprint: {
+          name: 'ember-cli',
+          version: startVersion
+        },
+        packageRange: startVersion
       },
       endOptions: {
-        blueprint: { name: 'ember-cli' }
+        blueprint: {
+          name: 'ember-cli',
+          version: endVersion
+        },
+        packageRange: endVersion
       }
     });
   });
@@ -98,6 +114,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         projectName,
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'app'
@@ -124,7 +141,7 @@ describe(_getStartAndEndCommands, function() {
     expect(await createProject(cwd)).to.equal(projectPath);
 
     expect(npxStub.args).to.deep.equal([[
-      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg -b app`,
+      `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sb -sg -b app`,
       {
         cwd
       }
@@ -134,21 +151,39 @@ describe(_getStartAndEndCommands, function() {
   describe('custom blueprint', function() {
     it('returns an options object', async function() {
       let options = getStartAndEndCommands({
-        startBlueprint: { name: blueprint },
-        endBlueprint: { name: blueprint }
+        startBlueprint: {
+          name: blueprint,
+          version: startVersion
+        },
+        endBlueprint: {
+          name: blueprint,
+          version: endVersion
+        }
       });
 
+      expect(options.createProjectFromCache).to.be.a('function');
       expect(options.createProjectFromRemote).to.be.a('function');
 
+      delete options.createProjectFromCache;
       delete options.createProjectFromRemote;
 
       expect(options).to.deep.equal({
         projectName,
+        packageName,
+        commandName,
         startOptions: {
-          blueprint: { name: blueprint }
+          blueprint: {
+            name: blueprint,
+            version: startVersion
+          },
+          packageRange: ''
         },
         endOptions: {
-          blueprint: { name: blueprint }
+          blueprint: {
+            name: blueprint,
+            version: endVersion
+          },
+          packageRange: ''
         }
       });
     });
@@ -170,7 +205,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `${packageName} new ${projectName} -sn -sg -b ${blueprintPath}`,
+        `${packageName} new ${projectName} -sn -sb -sg -b ${blueprintPath}`,
         {
           cwd
         }
@@ -184,7 +219,33 @@ describe(_getStartAndEndCommands, function() {
       }]]);
     });
 
-    it('can install an addon blueprint', async function() {
+    it('can install an addon blueprint from cache', async function() {
+      let { createProjectFromCache } = getStartAndEndCommands();
+
+      readdirStub.resolves([]);
+
+      let createProject = createProjectFromCache({
+        packageRoot,
+        options: {
+          projectName,
+          blueprint: loadSafeBlueprint({
+            name: blueprint,
+            path: blueprintPath
+          })
+        }
+      });
+
+      expect(await createProject(cwd)).to.equal(projectPath);
+
+      expect(installAddonBlueprintStub.args).to.deep.equal([[{
+        cwd,
+        packageRoot,
+        projectName,
+        blueprintPath
+      }]]);
+    });
+
+    it('can install an addon blueprint from remote', async function() {
       let { createProjectFromRemote } = getStartAndEndCommands();
 
       readdirStub.resolves([]);
@@ -204,6 +265,7 @@ describe(_getStartAndEndCommands, function() {
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
+        packageRoot: undefined,
         projectName,
         blueprintPath
       }]]);
@@ -232,10 +294,15 @@ describe(_getStartAndEndCommands, function() {
         packageName,
         commandName,
         startOptions: {
-          blueprint: null
+          blueprint: null,
+          packageRange: null
         },
         endOptions: {
-          blueprint: { name: 'ember-cli' }
+          blueprint: {
+            name: 'ember-cli',
+            version: endVersion
+          },
+          packageRange: endVersion
         }
       });
     });
@@ -243,20 +310,32 @@ describe(_getStartAndEndCommands, function() {
     it('returns an options object - custom', async function() {
       let options = getStartAndEndCommands({
         startBlueprint: null,
-        endBlueprint: { name: blueprint }
+        endBlueprint: {
+          name: blueprint,
+          version: endVersion
+        }
       });
 
+      expect(options.createProjectFromCache).to.be.a('function');
       expect(options.createProjectFromRemote).to.be.a('function');
 
+      delete options.createProjectFromCache;
       delete options.createProjectFromRemote;
 
       expect(options).to.deep.equal({
         projectName,
+        packageName,
+        commandName,
         startOptions: {
-          blueprint: null
+          blueprint: null,
+          packageRange: ''
         },
         endOptions: {
-          blueprint: { name: blueprint }
+          blueprint: {
+            name: blueprint,
+            version: endVersion
+          },
+          packageRange: ''
         }
       });
     });
@@ -295,7 +374,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sg -b app`,
+        `-p ${packageName}@${packageVersion} ${commandName} new ${projectName} -sn -sb -sg -b app`,
         {
           cwd
         }
@@ -323,7 +402,7 @@ describe(_getStartAndEndCommands, function() {
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
-        `${packageName} new ${projectName} -sn -sg -b ${blueprintPath}`,
+        `${packageName} new ${projectName} -sn -sb -sg -b ${blueprintPath}`,
         {
           cwd
         }
@@ -407,6 +486,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'app'
@@ -426,6 +506,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'addon'
@@ -445,6 +526,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         '/path/to/my-blueprint'
@@ -467,6 +549,7 @@ describe(_getStartAndEndCommands, function() {
         'new',
         'my-project',
         '-sn',
+        '-sb',
         '-sg',
         '-b',
         'app',

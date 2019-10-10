@@ -297,7 +297,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
   });
 
   it('can create a personal diff instead of using an output repo - app', async function() {
-    this.timeout(3 * 60 * 1000);
+    this.timeout(5 * 60 * 1000);
 
     let {
       status
@@ -315,7 +315,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
   });
 
   it('can create a personal diff instead of using an output repo - addon', async function() {
-    this.timeout(3 * 60 * 1000);
+    this.timeout(5 * 60 * 1000);
 
     let {
       status
@@ -419,6 +419,8 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       });
 
       it('can update a legacy addon blueprint', async function() {
+        this.timeout(15 * 60 * 1000);
+
         let {
           name,
           location

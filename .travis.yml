@@ -14,7 +14,8 @@ env:
 - TEST_COMMAND=test:fast
 - TEST_COMMAND=test:slow
 before_install:
-- npm config set spin false
+# for test cache hits
+- npm i -g ember-cli@2.11.1
 - if [ "$TRAVIS_NODE_VERSION" = "8" ]; then
     export NODE_LTS="true";
   fi
