@@ -6,6 +6,7 @@ export default Router.extend({
 
   init() {
     this._super(...arguments);
+
     this.on('routeWillChange', transition => {
       if (!this.currentUser.isLoggedIn) {
         transition.abort();
