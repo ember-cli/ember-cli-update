@@ -15,7 +15,7 @@ export default Router.extend({
 
     this.on('routeDidChange', transition => {
       ga.send('pageView', {
-        pageName: transition.to.name
+        pageName: privateInfos.name
       });
     });
   }
