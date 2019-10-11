@@ -2,6 +2,10 @@ import Ember from 'ember';
 import { merge } from '@ember/polyfills';
 
 export default Ember.Controller.extend({
+  fullName: computed(function() {
+    return `${this.firstName} ${this.lastName}`;
+  }).property('firstName', 'lastName'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');
