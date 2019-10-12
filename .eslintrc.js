@@ -33,7 +33,8 @@ module.exports = {
       },
       rules: {
         'mocha/no-setup-in-describe': 'off',
-        'mocha/no-hooks-for-single-case': 'off'
+        'mocha/no-hooks-for-single-case': 'off',
+        'mocha/no-exclusive-tests': 'error'
       }
     }
   ]
