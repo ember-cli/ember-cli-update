@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
+const isDefaultBlueprint = require('./is-default-blueprint');
 
 function getProjectType(checkForDep, keywords) {
   let isAddon = keywords && keywords.indexOf('ember-addon') !== -1;
@@ -30,7 +31,7 @@ module.exports = async function getProjectOptions({
   dependencies,
   devDependencies
 }, blueprint) {
-  if (blueprint && blueprint.name !== 'ember-cli') {
+  if (blueprint && !isDefaultBlueprint(blueprint)) {
     return ['blueprint'];
   }
 

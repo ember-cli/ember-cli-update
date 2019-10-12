@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const run = require('./run');
 const utils = require('./utils');
 const loadSafeBlueprint = require('./load-safe-blueprint');
+const isDefaultBlueprint = require('./is-default-blueprint');
 
 const nodeModulesIgnore = `
 
@@ -16,7 +17,7 @@ module.exports = function getStartAndEndCommands({
   startBlueprint,
   endBlueprint
 }) {
-  let isCustomBlueprint = endBlueprint.name !== 'ember-cli';
+  let isCustomBlueprint = !isDefaultBlueprint(endBlueprint);
 
   let startRange;
   let endRange;
@@ -49,7 +50,7 @@ module.exports = function getStartAndEndCommands({
 };
 
 function getArgs(projectName, blueprint) {
-  let isCustomBlueprint = blueprint.name !== 'ember-cli';
+  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   let _blueprint;
   if (isCustomBlueprint) {
@@ -99,7 +100,7 @@ function createProjectFromCache({
         cwd
       });
 
-      let isCustomBlueprint = options.blueprint.name !== 'ember-cli';
+      let isCustomBlueprint = !isDefaultBlueprint(options.blueprint);
 
       if (isCustomBlueprint) {
         await postCreateCustomBlueprint({
@@ -130,7 +131,7 @@ function createProjectFromRemote({
     if (options.blueprint) {
       let command = getArgs(options.projectName, options.blueprint).join(' ');
 
-      let isCustomBlueprint = options.blueprint.name !== 'ember-cli';
+      let isCustomBlueprint = !isDefaultBlueprint(options.blueprint);
 
       if (isCustomBlueprint) {
         await utils.npx(`ember-cli ${command}`, { cwd });
