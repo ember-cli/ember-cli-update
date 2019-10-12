@@ -7,6 +7,7 @@ const path = require('path');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
 const loadSafeBlueprint = require('../../src/load-safe-blueprint');
+const loadSafeDefaultBlueprint = require('../../src/load-safe-default-blueprint');
 
 const {
   getArgs
@@ -23,6 +24,8 @@ const commandName = 'ember';
 const blueprint = 'test-blueprint';
 const blueprintPath = '/path/to/blueprint';
 const projectPath = path.normalize(`${cwd}/${projectName}`);
+const defaultStartBlueprint = loadSafeDefaultBlueprint([], startVersion);
+const defaultEndBlueprint = loadSafeDefaultBlueprint([], endVersion);
 
 describe(_getStartAndEndCommands, function() {
   let sandbox;
@@ -51,14 +54,8 @@ describe(_getStartAndEndCommands, function() {
   function getStartAndEndCommands(options) {
     return _getStartAndEndCommands(Object.assign({
       packageJson: { name: projectName },
-      startBlueprint: {
-        name: 'ember-cli',
-        version: startVersion
-      },
-      endBlueprint: {
-        name: 'ember-cli',
-        version: endVersion
-      }
+      startBlueprint: defaultStartBlueprint,
+      endBlueprint: defaultEndBlueprint
     }, options));
   }
 
@@ -76,17 +73,11 @@ describe(_getStartAndEndCommands, function() {
       packageName,
       commandName,
       startOptions: {
-        blueprint: {
-          name: 'ember-cli',
-          version: startVersion
-        },
+        blueprint: defaultStartBlueprint,
         packageRange: startVersion
       },
       endOptions: {
-        blueprint: {
-          name: 'ember-cli',
-          version: endVersion
-        },
+        blueprint: defaultEndBlueprint,
         packageRange: endVersion
       }
     });
@@ -99,9 +90,7 @@ describe(_getStartAndEndCommands, function() {
       packageRoot,
       options: {
         projectName,
-        blueprint: loadSafeBlueprint({
-          name: 'ember-cli'
-        })
+        blueprint: loadSafeDefaultBlueprint(['welcome'])
       }
     });
 
@@ -131,10 +120,7 @@ describe(_getStartAndEndCommands, function() {
     let createProject = createProjectFromRemote({
       options: {
         projectName,
-        blueprint: loadSafeBlueprint({
-          name: 'ember-cli',
-          version: packageVersion
-        })
+        blueprint: loadSafeDefaultBlueprint(['welcome'], packageVersion)
       }
     });
 
@@ -298,10 +284,7 @@ describe(_getStartAndEndCommands, function() {
           packageRange: null
         },
         endOptions: {
-          blueprint: {
-            name: 'ember-cli',
-            version: endVersion
-          },
+          blueprint: defaultEndBlueprint,
           packageRange: endVersion
         }
       });
@@ -363,11 +346,10 @@ describe(_getStartAndEndCommands, function() {
       let createProject = createProjectFromRemote({
         options: {
           projectName,
-          blueprint: loadSafeBlueprint({
-            name: 'ember-cli',
-            version: packageVersion,
+          blueprint: {
+            ...loadSafeDefaultBlueprint(['welcome'], packageVersion),
             path: blueprintPath
-          })
+          }
         }
       });
 
@@ -418,12 +400,7 @@ describe(_getStartAndEndCommands, function() {
   });
 
   describe('options', function() {
-    async function processBlueprint(blueprint) {
-      let defaultBlueprint = {
-        name: 'ember-cli',
-        ...blueprint
-      };
-
+    async function processBlueprint(defaultBlueprint = loadSafeDefaultBlueprint()) {
       let options = getStartAndEndCommands({
         startBlueprint: defaultBlueprint,
         endBlueprint: defaultBlueprint
@@ -456,7 +433,7 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can create an addon', async function() {
-      let args = await processBlueprint({ type: 'addon' });
+      let args = await processBlueprint(loadSafeDefaultBlueprint(['addon']));
 
       let i = args.indexOf('-b');
 
@@ -466,13 +443,13 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can create an app with the --no-welcome option', async function() {
-      let args = await processBlueprint({ options: ['--no-welcome'] });
+      let args = await processBlueprint();
 
       expect(args).to.include('--no-welcome');
     });
 
     it('can create an app without the --no-welcome option', async function() {
-      let args = await processBlueprint();
+      let args = await processBlueprint(loadSafeDefaultBlueprint(['welcome']));
 
       expect(args).to.not.include('--no-welcome');
     });
@@ -484,7 +461,7 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can create an app with the yarn option', async function() {
-      let args = await processBlueprint({ options: ['--yarn'] });
+      let args = await processBlueprint(loadSafeDefaultBlueprint(['yarn']));
 
       expect(args).to.include('--yarn');
     });
@@ -494,11 +471,7 @@ describe(_getStartAndEndCommands, function() {
     let projectName = 'my-project';
 
     it('works for default app', function() {
-      let blueprint = {
-        name: 'ember-cli',
-        type: 'app',
-        options: []
-      };
+      let blueprint = loadSafeDefaultBlueprint(['welcome']);
 
       let args = getArgs(projectName, blueprint);
 
@@ -514,11 +487,7 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('works for default addon', function() {
-      let blueprint = {
-        name: 'ember-cli',
-        type: 'addon',
-        options: []
-      };
+      let blueprint = loadSafeDefaultBlueprint(['addon']);
 
       let args = getArgs(projectName, blueprint);
 
@@ -529,16 +498,16 @@ describe(_getStartAndEndCommands, function() {
         '-sb',
         '-sg',
         '-b',
-        'addon'
+        'addon',
+        '--no-welcome'
       ]);
     });
 
     it('works for custom app', function() {
-      let blueprint = {
+      let blueprint = loadSafeBlueprint({
         name: 'my-blueprint',
-        path: '/path/to/my-blueprint',
-        options: []
-      };
+        path: '/path/to/my-blueprint'
+      });
 
       let args = getArgs(projectName, blueprint);
 
@@ -555,8 +524,7 @@ describe(_getStartAndEndCommands, function() {
 
     it('handles options', function() {
       let blueprint = {
-        name: 'ember-cli',
-        type: 'app',
+        ...loadSafeDefaultBlueprint(['welcome']),
         options: [
           '--my-option-1',
           '--my-option-2'

@@ -12,9 +12,7 @@ const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 
 module.exports = async function bootstrap() {
-  let defaultBlueprint = {
-    name: 'ember-cli'
-  };
+  let defaultBlueprint = loadSafeDefaultBlueprint();
 
   let cwd = process.cwd();
 

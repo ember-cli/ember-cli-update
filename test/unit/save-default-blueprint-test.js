@@ -6,6 +6,7 @@ const path = require('path');
 const sinon = require('sinon');
 const utils = require('../../src/utils');
 const saveDefaultBlueprint = require('../../src/save-default-blueprint');
+const loadSafeDefaultBlueprint = require('../../src/load-safe-default-blueprint');
 
 describe(saveDefaultBlueprint, function() {
   let sandbox;
@@ -44,7 +45,7 @@ describe(saveDefaultBlueprint, function() {
 
     await saveDefaultBlueprint({
       cwd: '/test/path',
-      blueprint: { name: 'ember-cli' }
+      blueprint: loadSafeDefaultBlueprint()
     });
 
     expect(require).to.be.calledOnce;

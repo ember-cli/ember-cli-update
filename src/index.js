@@ -41,9 +41,7 @@ module.exports = async function emberCliUpdate({
   createCustomDiff,
   wasRunAsExecutable
 }) {
-  let defaultBlueprint = {
-    name: 'ember-cli'
-  };
+  let defaultBlueprint = loadSafeDefaultBlueprint();
 
   let cwd = process.cwd();
 

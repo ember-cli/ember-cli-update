@@ -6,15 +6,14 @@ const downloadBlueprint = require('./download-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const saveDefaultBlueprint = require('./save-default-blueprint');
+const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 
 const toDefault = require('./args').to.default;
 
 module.exports = async function install({
   addon
 }) {
-  let defaultBlueprint = {
-    name: 'ember-cli'
-  };
+  let defaultBlueprint = loadSafeDefaultBlueprint();
 
   let cwd = process.cwd();
 
