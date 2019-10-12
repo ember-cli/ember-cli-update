@@ -446,27 +446,47 @@ describe(_getStartAndEndCommands, function() {
     }
 
     it('can create an app', async function() {
-      expect(await processBlueprint()).to.include('new');
+      let args = await processBlueprint();
+
+      let i = args.indexOf('-b');
+
+      expect(i).to.not.equal(-1);
+
+      expect(args[i + 1]).to.equal('app');
     });
 
     it('can create an addon', async function() {
-      expect(await processBlueprint({ type: 'addon' })).to.include('addon');
+      let args = await processBlueprint({ type: 'addon' });
+
+      let i = args.indexOf('-b');
+
+      expect(i).to.not.equal(-1);
+
+      expect(args[i + 1]).to.equal('addon');
     });
 
     it('can create an app with the --no-welcome option', async function() {
-      expect(await processBlueprint({ options: ['--no-welcome'] })).to.include('--no-welcome');
+      let args = await processBlueprint({ options: ['--no-welcome'] });
+
+      expect(args).to.include('--no-welcome');
     });
 
     it('can create an app without the --no-welcome option', async function() {
-      expect(await processBlueprint()).to.not.include('--no-welcome');
+      let args = await processBlueprint();
+
+      expect(args).to.not.include('--no-welcome');
     });
 
     it('can create an app without the yarn option', async function() {
-      expect(await processBlueprint()).to.not.include('--yarn');
+      let args = await processBlueprint();
+
+      expect(args).to.not.include('--yarn');
     });
 
     it('can create an app with the yarn option', async function() {
-      expect(await processBlueprint({ options: ['--yarn'] })).to.include('--yarn');
+      let args = await processBlueprint({ options: ['--yarn'] });
+
+      expect(args).to.include('--yarn');
     });
   });
 
