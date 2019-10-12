@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const run = require('./run');
 const utils = require('./utils');
 const loadSafeBlueprint = require('./load-safe-blueprint');
+const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 const isDefaultBlueprint = require('./is-default-blueprint');
 
 const nodeModulesIgnore = `
@@ -197,9 +198,7 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   projectName,
   blueprintPath
 }) {
-  let defaultBlueprint = {
-    name: 'ember-cli'
-  };
+  let defaultBlueprint = loadSafeDefaultBlueprint();
 
   let args = getArgs(projectName, loadSafeBlueprint(defaultBlueprint));
 

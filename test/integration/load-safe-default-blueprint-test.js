@@ -17,6 +17,19 @@ describe(_loadSafeDefaultBlueprint, function() {
     return _loadSafeDefaultBlueprint(projectOptions, version);
   }
 
+  it('returns blank blueprint if no params', async function() {
+    let blueprint = _loadSafeDefaultBlueprint();
+
+    expect(blueprint).to.deep.equal({
+      name: 'ember-cli',
+      type: 'app',
+      version: undefined,
+      options: [
+        '--no-welcome'
+      ]
+    });
+  });
+
   describe('app', function() {
     beforeEach(function() {
       projectOptions.push('app');

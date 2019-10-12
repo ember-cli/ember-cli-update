@@ -20,9 +20,7 @@ module.exports = async function init({
   blueprintOptions,
   wasRunAsExecutable
 }) {
-  let defaultBlueprint = {
-    name: 'ember-cli'
-  };
+  let defaultBlueprint = loadSafeDefaultBlueprint();
 
   let cwd = process.cwd();
 

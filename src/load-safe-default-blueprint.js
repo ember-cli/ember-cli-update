@@ -1,6 +1,6 @@
 'use strict';
 
-function loadSafeDefaultBlueprint(projectOptions, version) {
+function loadSafeDefaultBlueprint(projectOptions = [], version) {
   let type = 'app';
   if (projectOptions.includes('addon')) {
     type = 'addon';
@@ -11,6 +11,7 @@ function loadSafeDefaultBlueprint(projectOptions, version) {
     options.push('--yarn');
   }
   if (!projectOptions.includes('welcome') || projectOptions.includes('addon')) {
+    // Why do addons always have --no-welcome?
     options.push('--no-welcome');
   }
 
