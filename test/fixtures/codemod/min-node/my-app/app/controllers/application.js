@@ -3,6 +3,10 @@ import Ember from 'ember';
 import { assign } from '@ember/polyfills';
 
 export default Controller.extend({
+  fullName: computed('firstName', 'lastName', function() {
+    return `${this.firstName} ${this.lastName}`;
+  }),
+
   actions: {
     foo(object) {
       this.doStuff(object);
