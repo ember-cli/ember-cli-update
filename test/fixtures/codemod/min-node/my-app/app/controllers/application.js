@@ -7,6 +7,10 @@ export default Controller.extend({
     return `${this.firstName} ${this.lastName}`;
   }),
 
+  get fullName2() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+
   actions: {
     foo(object) {
       this.doStuff(object);

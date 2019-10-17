@@ -6,6 +6,10 @@ export default Ember.Controller.extend({
     return `${this.firstName} ${this.lastName}`;
   }).property('firstName', 'lastName'),
 
+  fullName2: computed(function() {
+    return `${this.firstName} ${this.lastName}`;
+  }).volatile('firstName', 'lastName'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');
