@@ -10,6 +10,10 @@ export default Ember.Controller.extend({
     return `${this.firstName} ${this.lastName}`;
   }).volatile('firstName', 'lastName'),
 
+  friendNames: map('friends', function(friend) {
+    return friend[this.nameKey];
+  }).property('nameKey'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');

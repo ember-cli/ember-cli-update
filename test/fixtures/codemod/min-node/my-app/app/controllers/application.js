@@ -11,6 +11,10 @@ export default Controller.extend({
     return `${this.firstName} ${this.lastName}`;
   },
 
+  friendNames: map('friends', ['nameKey'], function(friend) {
+    return friend[this.nameKey];
+  }),
+
   actions: {
     foo(object) {
       this.doStuff(object);
