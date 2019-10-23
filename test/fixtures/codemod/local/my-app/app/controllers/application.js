@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { merge } from '@ember/polyfills';
+import { map } from '@ember/object/computed';
 
 export default Ember.Controller.extend({
   fullName: computed(function() {

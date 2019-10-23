@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import Ember from 'ember';
 import { assign } from '@ember/polyfills';
+import { map } from '@ember/object/computed';
 
 export default Controller.extend({
   fullName: computed('firstName', 'lastName', function() {
