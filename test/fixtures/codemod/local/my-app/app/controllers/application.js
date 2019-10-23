@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { merge } from '@ember/polyfills';
+import { map } from '@ember/object/computed';
 
 export default Ember.Controller.extend({
   fullName: computed(function() {
@@ -9,6 +10,10 @@ export default Ember.Controller.extend({
   fullName2: computed(function() {
     return `${this.firstName} ${this.lastName}`;
   }).volatile('firstName', 'lastName'),
+
+  friendNames: map('friends', function(friend) {
+    return friend[this.nameKey];
+  }).property('nameKey'),
 
   actions: {
     foo(object) {

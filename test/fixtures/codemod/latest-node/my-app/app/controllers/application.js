@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import Ember from 'ember';
 import { assign } from '@ember/polyfills';
+import { map } from '@ember/object/computed';
 
 export default Controller.extend({
   fullName: computed('firstName', 'lastName', function() {
@@ -10,6 +11,10 @@ export default Controller.extend({
   get fullName2() {
     return `${this.firstName} ${this.lastName}`;
   },
+
+  friendNames: map('friends', ['nameKey'], function(friend) {
+    return friend[this.nameKey];
+  }),
 
   actions: {
     foo(object) {
