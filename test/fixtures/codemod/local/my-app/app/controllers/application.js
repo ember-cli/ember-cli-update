@@ -15,6 +15,10 @@ export default Ember.Controller.extend({
     return friend[this.nameKey];
   }).property('nameKey'),
 
+  valueObserver: function() {
+    // Executes whenever the "value" property changes
+  }.observes('value'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');
