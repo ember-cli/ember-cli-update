@@ -16,6 +16,10 @@ export default Controller.extend({
     return friend[this.nameKey];
   }),
 
+  valueObserver: observer('value', function() {
+    // Executes whenever the "value" property changes
+  }),
+
   actions: {
     foo(object) {
       this.doStuff(object);
