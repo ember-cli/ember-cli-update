@@ -15,6 +15,10 @@ export default Ember.Controller.extend({
     return friend[this.nameKey];
   }).property('nameKey'),
 
+  logCompleted: function() {
+    console.log('Job completed!');
+  }.on('completed'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');
