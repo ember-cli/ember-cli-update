@@ -15,6 +15,10 @@ export default Ember.Controller.extend({
     return friend[this.nameKey];
   }).property('nameKey'),
 
+  fullName3: function() {
+    return `${this.firstName} ${this.lastName}`;
+  }.computed('firstName', 'lastName'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');
