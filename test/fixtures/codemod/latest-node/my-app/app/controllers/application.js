@@ -1,3 +1,4 @@
+import { on } from '@ember/object/evented';
 import Controller from '@ember/controller';
 import Ember from 'ember';
 import { assign } from '@ember/polyfills';
@@ -14,6 +15,10 @@ export default Controller.extend({
 
   friendNames: map('friends', ['nameKey'], function(friend) {
     return friend[this.nameKey];
+  }),
+
+  logCompleted: on('completed', function() {
+    console.log('Job completed!');
   }),
 
   valueObserver: observer('value', function() {
