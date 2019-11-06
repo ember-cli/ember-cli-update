@@ -19,6 +19,10 @@ export default Ember.Controller.extend({
     console.log('Job completed!');
   }.on('completed'),
 
+  valueObserver: function() {
+    // Executes whenever the "value" property changes
+  }.observes('value'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');
