@@ -15,6 +15,10 @@ export default Ember.Controller.extend({
     return friend[this.nameKey];
   }).property('nameKey'),
 
+  logCompleted: function() {
+    console.log('Job completed!');
+  }.on('completed'),
+
   fullName3: function() {
     return `${this.firstName} ${this.lastName}`;
   }.computed('firstName', 'lastName'),
