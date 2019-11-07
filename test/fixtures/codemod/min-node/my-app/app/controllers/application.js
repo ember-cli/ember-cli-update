@@ -22,6 +22,10 @@ export default Controller.extend({
     console.log('Job completed!');
   }),
 
+  valueObserver: observer('value', function() {
+    // Executes whenever the "value" property changes
+  }),
+
   fullName3: computed('firstName', 'lastName', function() {
     return `${this.firstName} ${this.lastName}`;
   }),

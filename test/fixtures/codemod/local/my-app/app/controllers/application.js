@@ -19,6 +19,10 @@ export default Ember.Controller.extend({
     console.log('Job completed!');
   }.on('completed'),
 
+  valueObserver: function() {
+    // Executes whenever the "value" property changes
+  }.observes('value'),
+
   fullName3: function() {
     return `${this.firstName} ${this.lastName}`;
   }.computed('firstName', 'lastName'),
