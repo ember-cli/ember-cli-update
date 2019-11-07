@@ -1,3 +1,4 @@
+import { computed } from '@ember/object';
 import { on } from '@ember/object/evented';
 import Controller from '@ember/controller';
 import Ember from 'ember';
@@ -23,6 +24,10 @@ export default Controller.extend({
 
   valueObserver: observer('value', function() {
     // Executes whenever the "value" property changes
+  }),
+
+  fullName3: computed('firstName', 'lastName', function() {
+    return `${this.firstName} ${this.lastName}`;
   }),
 
   actions: {

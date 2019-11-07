@@ -23,6 +23,10 @@ export default Ember.Controller.extend({
     // Executes whenever the "value" property changes
   }.observes('value'),
 
+  fullName3: function() {
+    return `${this.firstName} ${this.lastName}`;
+  }.computed('firstName', 'lastName'),
+
   actions: {
     foo(object) {
       Ember.propertyWillChange(object, 'someProperty');
