@@ -19,7 +19,8 @@ function loadSafeDefaultBlueprint(projectOptions = [], version) {
     name: 'ember-cli',
     type,
     version,
-    options
+    options,
+    isBaseBlueprint: true
   };
 }
 

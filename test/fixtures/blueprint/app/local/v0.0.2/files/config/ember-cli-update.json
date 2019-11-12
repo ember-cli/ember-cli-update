@@ -4,11 +4,11 @@
       "name": "<%= blueprintName %>",
       "location": "../local-blueprint",
       "version": "<%= blueprintVersion %>",
+      "isBaseBlueprint": true,
       "options": [
         "--supplied-option=<%= suppliedOption %>",
         "--unsupplied-option=<%= unsuppliedOption %>"
-      ],
-      "isPartial": false
+      ]
     }
   ]
 }

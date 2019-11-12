@@ -31,6 +31,7 @@ async function saveDefaultBlueprint({
     name: blueprint.name,
     type: blueprint.type,
     version: blueprint.version,
+    isBaseBlueprint: true,
     options: blueprint.options
   });
 }

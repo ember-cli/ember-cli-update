@@ -9,7 +9,7 @@ async function saveBlueprint({
   location,
   version,
   options = [],
-  isPartial
+  isBaseBlueprint
 }) {
   let emberCliUpdateJson = await utils.loadSafeBlueprintFile(cwd);
 
@@ -31,12 +31,12 @@ async function saveBlueprint({
 
     savedBlueprint.version = version;
 
-    if (options.length) {
-      savedBlueprint.options = options;
+    if (isBaseBlueprint !== undefined) {
+      savedBlueprint.isBaseBlueprint = isBaseBlueprint;
     }
 
-    if (isPartial) {
-      savedBlueprint.isPartial = isPartial;
+    if (options.length) {
+      savedBlueprint.options = options;
     }
 
     blueprints.push(savedBlueprint);

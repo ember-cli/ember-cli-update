@@ -41,6 +41,5 @@ module.exports = async function install({
     name: blueprint.name,
     location: parsedBlueprint.location,
     version: blueprint.version
-    // isPartial: true
   });
 };
