@@ -40,6 +40,7 @@ describe(saveDefaultBlueprint, function() {
       name: 'ember-cli',
       type: 'app',
       version: '0.0.1',
+      isBaseBlueprint: true,
       options: ['--no-welcome']
     }).resolves();
 

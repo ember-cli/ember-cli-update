@@ -5,6 +5,7 @@
       "name": "ember-cli",
       "type": "app",
       "version": "0.0.0",
+      "isBaseBlueprint": true,
       "options": [
         "--no-welcome"
       ]

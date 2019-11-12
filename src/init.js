@@ -68,7 +68,8 @@ module.exports = async function init({
       cwd,
       name: blueprint.name,
       location: parsedBlueprint.location,
-      version: blueprint.version
+      version: blueprint.version,
+      isBaseBlueprint: true
     });
   } else {
     await saveDefaultBlueprint({

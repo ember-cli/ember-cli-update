@@ -24,6 +24,7 @@ describe(_loadSafeDefaultBlueprint, function() {
       name: 'ember-cli',
       type: 'app',
       version: undefined,
+      isBaseBlueprint: true,
       options: [
         '--no-welcome'
       ]
@@ -47,6 +48,7 @@ describe(_loadSafeDefaultBlueprint, function() {
           name: 'ember-cli',
           type: 'app',
           version,
+          isBaseBlueprint: true,
           options: []
         });
       });
@@ -60,6 +62,7 @@ describe(_loadSafeDefaultBlueprint, function() {
           name: 'ember-cli',
           type: 'app',
           version,
+          isBaseBlueprint: true,
           options: [
             '--yarn'
           ]
@@ -75,6 +78,7 @@ describe(_loadSafeDefaultBlueprint, function() {
           name: 'ember-cli',
           type: 'app',
           version,
+          isBaseBlueprint: true,
           options: [
             '--no-welcome'
           ]
@@ -90,6 +94,7 @@ describe(_loadSafeDefaultBlueprint, function() {
           name: 'ember-cli',
           type: 'app',
           version,
+          isBaseBlueprint: true,
           options: [
             '--yarn',
             '--no-welcome'
@@ -111,6 +116,7 @@ describe(_loadSafeDefaultBlueprint, function() {
         name: 'ember-cli',
         type: 'addon',
         version,
+        isBaseBlueprint: true,
         options: [
           '--no-welcome'
         ]
@@ -126,6 +132,7 @@ describe(_loadSafeDefaultBlueprint, function() {
         name: 'ember-cli',
         type: 'addon',
         version,
+        isBaseBlueprint: true,
         options: [
           '--yarn',
           '--no-welcome'

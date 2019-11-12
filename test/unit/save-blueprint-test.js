@@ -91,22 +91,58 @@ describe(_saveBlueprint, function() {
       }));
     });
 
-    it('saves partial', async function() {
-      await saveBlueprint({
-        name: 'test-blueprint',
-        version: '0.0.1',
-        isPartial: true
+    describe('isBaseBlueprint', function() {
+      it('saves true', async function() {
+        await saveBlueprint({
+          name: 'test-blueprint',
+          version: '0.0.1',
+          isBaseBlueprint: true
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.1',
+              isBaseBlueprint: true
+            }
+          ]
+        }));
       });
 
-      expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
-        blueprints: [
-          {
-            name: 'test-blueprint',
-            version: '0.0.1',
-            isPartial: true
-          }
-        ]
-      }));
+      it('saves false', async function() {
+        await saveBlueprint({
+          name: 'test-blueprint',
+          version: '0.0.1',
+          isBaseBlueprint: false
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.1',
+              isBaseBlueprint: false
+            }
+          ]
+        }));
+      });
+
+      it('ignores undefined', async function() {
+        await saveBlueprint({
+          name: 'test-blueprint',
+          version: '0.0.1'
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.1'
+            }
+          ]
+        }));
+      });
     });
 
     it('leaves other blueprints alone', async function() {
@@ -219,32 +255,88 @@ describe(_saveBlueprint, function() {
       }));
     });
 
-    it('saves partial', async function() {
-      loadSafeBlueprintFile.resolves({
-        blueprints: [
-          {
-            name: 'test-blueprint',
-            version: '0.0.0',
-            isPartial: true
-          }
-        ]
+    describe('isBaseBlueprint', function() {
+      it('saves true', async function() {
+        loadSafeBlueprintFile.resolves({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.0',
+              isBaseBlueprint: true
+            }
+          ]
+        });
+
+        await saveBlueprint({
+          cwd,
+          name: 'test-blueprint',
+          version: '0.0.1'
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.1',
+              isBaseBlueprint: true
+            }
+          ]
+        }));
       });
 
-      await saveBlueprint({
-        cwd,
-        name: 'test-blueprint',
-        version: '0.0.1'
+      it('saves false', async function() {
+        loadSafeBlueprintFile.resolves({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.0',
+              isBaseBlueprint: false
+            }
+          ]
+        });
+
+        await saveBlueprint({
+          cwd,
+          name: 'test-blueprint',
+          version: '0.0.1'
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.1',
+              isBaseBlueprint: false
+            }
+          ]
+        }));
       });
 
-      expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
-        blueprints: [
-          {
-            name: 'test-blueprint',
-            version: '0.0.1',
-            isPartial: true
-          }
-        ]
-      }));
+      it('ignores undefined', async function() {
+        loadSafeBlueprintFile.resolves({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.0'
+            }
+          ]
+        });
+
+        await saveBlueprint({
+          cwd,
+          name: 'test-blueprint',
+          version: '0.0.1'
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              name: 'test-blueprint',
+              version: '0.0.1'
+            }
+          ]
+        }));
+      });
     });
 
     it('leaves other blueprints alone', async function() {
