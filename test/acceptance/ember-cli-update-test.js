@@ -216,7 +216,9 @@ describe(function() {
     ps.stdout.on('data', data => {
       let str = data.toString();
       if (str.includes('Blueprint updates have been found.')) {
-        ps.stdin.write('\u001b[B\n');
+        let down = '\u001b[B';
+        let enter = '\n';
+        ps.stdin.write(`${down}${enter}`);
       }
     });
 
