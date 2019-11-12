@@ -138,7 +138,7 @@ describe(function() {
   });
 
   it('runs codemods', async function() {
-    this.timeout(20 * 60 * 1000);
+    this.timeout(30 * 60 * 1000);
 
     let {
       ps,
