@@ -11,6 +11,7 @@ const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const isDefaultBlueprint = require('./is-default-blueprint');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -35,7 +36,7 @@ module.exports = async function init({
 
   blueprint.options = blueprintOptions;
 
-  let isCustomBlueprint = blueprint.name !== defaultBlueprint.name;
+  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   let result = await (await boilerplateUpdate({
     projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),

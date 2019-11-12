@@ -21,6 +21,7 @@ const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const isDefaultBlueprint = require('./is-default-blueprint');
 
 const toDefault = require('./args').to.default;
 
@@ -116,7 +117,7 @@ All blueprints are up-to-date!`;
     blueprint.url = (await parseBlueprint(blueprint.location)).url;
   }
 
-  let isCustomBlueprint = blueprint.name !== defaultBlueprint.name;
+  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   if (isCustomBlueprint) {
     createCustomDiff = true;
