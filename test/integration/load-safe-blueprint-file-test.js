@@ -11,7 +11,7 @@ describe(loadSafeBlueprintFile, function() {
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 
     expect(emberCliUpdateJson).to.deep.equal({
-      schemaVersion: '0',
+      schemaVersion: 0,
       blueprints: []
     });
   });
