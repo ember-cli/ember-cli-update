@@ -13,6 +13,7 @@ const {
   assertNoUnstaged
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
+const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
 const toDefault = require('../../src/args').to.default;
 
@@ -77,7 +78,7 @@ describe(init, function() {
   it('can initialize a custom blueprint', async function() {
     let {
       location
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1];
 
     let {
       status

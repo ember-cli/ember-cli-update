@@ -22,7 +22,23 @@ describe(loadSafeBlueprintFile, function() {
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 
     expect(emberCliUpdateJson).to.deep.equal({
+      schemaVersion: 0,
       blueprints: []
+    });
+  });
+
+  it('flattens packages', async function() {
+    let dir = 'test/fixtures/ember-cli-update-json/normal';
+
+    let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
+
+    expect(emberCliUpdateJson).to.deep.equal({
+      schemaVersion: 0,
+      blueprints: [{
+        packageName: 'test-blueprint',
+        name: 'test-blueprint',
+        version: '0.0.1'
+      }]
     });
   });
 });

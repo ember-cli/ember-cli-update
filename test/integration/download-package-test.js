@@ -7,6 +7,7 @@ const { tmpdir } = require('os');
 const { initBlueprint } = require('../helpers/blueprint');
 const parseBlueprint = require('../../src/parse-blueprint');
 const downloadPackage = require('../../src/download-package');
+const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
 describe(downloadPackage, function() {
   this.timeout(30 * 1000);
@@ -21,7 +22,7 @@ describe(downloadPackage, function() {
       name,
       location,
       version: range
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1];
 
     let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', location);
 
@@ -39,7 +40,7 @@ describe(downloadPackage, function() {
       name,
       location: url,
       version: range
-    } = require('../fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update').blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app')).blueprints[0];
 
     let downloadedPackage = await downloadPackage(null, url, range);
 
@@ -52,7 +53,7 @@ describe(downloadPackage, function() {
     let {
       name,
       version: range
-    } = require('../fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update').blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app')).blueprints[0];
 
     let downloadedPackage = await downloadPackage(name, null, range);
 

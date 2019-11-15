@@ -1,20 +1,28 @@
 {
   "schemaVersion": 0,
-  "blueprints": [
+  "packages": [
     {
-      "packageName": "ember-cli-update-npm-blueprint-test",
       "name": "ember-cli-update-npm-blueprint-test",
-      "version": "0.0.11"
+      "blueprints": [
+        {
+          "name": "ember-cli-update-npm-blueprint-test",
+          "version": "0.0.11"
+        }
+      ]
     },
     {
-      "packageName": "ember-cli-update-git-blueprint-test",
       "name": "ember-cli-update-git-blueprint-test",
-      "location": "../local-blueprint",
-      "version": "0.0.2",
-      "isBaseBlueprint": true,
-      "options": [
-        "--supplied-option=foo",
-        "--unsupplied-option=bar"
+      "blueprints": [
+        {
+          "name": "ember-cli-update-git-blueprint-test",
+          "location": "../local-blueprint",
+          "version": "0.0.2",
+          "isBaseBlueprint": true,
+          "options": [
+            "--supplied-option=foo",
+            "--unsupplied-option=bar"
+          ]
+        }
       ]
     }
   ]

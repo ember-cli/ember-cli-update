@@ -16,6 +16,7 @@ describe(saveBlueprintFile, function() {
 
   it('works', async function() {
     await saveBlueprintFile(tmpPath, {
+      schemaVersion: 0,
       blueprints: [
         {
           packageName: 'test-blueprint',

@@ -1,11 +1,15 @@
 {
   "schemaVersion": 0,
-  "blueprints": [
+  "packages": [
     {
-      "packageName": "ember-cli-update-git-addon-test",
       "name": "ember-cli-update-git-addon-test",
-      "location": "../legacy-blueprint",
-      "version": "0.0.1"
+      "blueprints": [
+        {
+          "name": "ember-cli-update-git-addon-test",
+          "location": "../legacy-blueprint",
+          "version": "0.0.1"
+        }
+      ]
     }
   ]
 }

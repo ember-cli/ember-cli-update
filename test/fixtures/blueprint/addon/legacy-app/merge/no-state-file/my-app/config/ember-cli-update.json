@@ -1,21 +1,29 @@
 {
   "schemaVersion": 0,
-  "blueprints": [
+  "packages": [
     {
-      "packageName": "ember-cli",
       "name": "ember-cli",
-      "type": "app",
-      "version": "0.0.0",
-      "isBaseBlueprint": true,
-      "options": [
-        "--no-welcome"
+      "blueprints": [
+        {
+          "name": "ember-cli",
+          "type": "app",
+          "version": "0.0.0",
+          "isBaseBlueprint": true,
+          "options": [
+            "--no-welcome"
+          ]
+        }
       ]
     },
     {
-      "packageName": "ember-cli-update-git-addon-test",
       "name": "ember-cli-update-git-addon-test",
-      "location": "../legacy-blueprint",
-      "version": "0.0.2"
+      "blueprints": [
+        {
+          "name": "ember-cli-update-git-addon-test",
+          "location": "../legacy-blueprint",
+          "version": "0.0.2"
+        }
+      ]
     }
   ]
 }

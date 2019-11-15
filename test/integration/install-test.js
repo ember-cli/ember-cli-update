@@ -15,6 +15,7 @@ const {
   assertNoStaged
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
+const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
 describe(install, function() {
   this.timeout(3 * 60 * 1000);
@@ -80,7 +81,7 @@ describe(install, function() {
   it('can install an addon with a default blueprint and a state file', async function() {
     let {
       location
-    } = require('../fixtures/blueprint/addon/legacy-app/merge/ideal/my-app/config/ember-cli-update').blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[0];
 
     let {
       status
