@@ -17,6 +17,7 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const run = require('../../src/run');
+const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -226,7 +227,7 @@ describe(function() {
     let {
       location,
       version: to
-    } = require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1];
 
     let {
       ps,
@@ -293,7 +294,7 @@ describe(function() {
 
     let {
       location
-    } = require('../fixtures/blueprint/addon/legacy-app/merge/ideal/my-app/config/ember-cli-update').blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[0];
 
     let {
       status
@@ -343,7 +344,7 @@ describe(function() {
     let {
       name,
       version: from
-    } = require('../fixtures/blueprint/app/npm-app/local/my-app/config/ember-cli-update').blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/local/my-app')).blueprints[0];
 
     let {
       status

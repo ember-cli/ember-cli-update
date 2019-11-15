@@ -5,6 +5,27 @@ const path = require('path');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 async function saveBlueprintFile(cwd, emberCliUpdateJson) {
+  emberCliUpdateJson.packages = emberCliUpdateJson.blueprints.reduce((packages, blueprint) => {
+    let _package = packages.find(p => p.name === blueprint.packageName);
+
+    if (!_package) {
+      _package = {
+        name: blueprint.packageName,
+        blueprints: []
+      };
+
+      packages.push(_package);
+    }
+
+    _package.blueprints.push(blueprint);
+
+    delete blueprint.packageName;
+
+    return packages;
+  }, []);
+
+  delete emberCliUpdateJson.blueprints;
+
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
   await fs.ensureDir(path.dirname(emberCliUpdateJsonPath));

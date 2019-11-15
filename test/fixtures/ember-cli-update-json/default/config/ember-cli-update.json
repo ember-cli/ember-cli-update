@@ -1,12 +1,16 @@
 {
   "schemaVersion": 0,
-  "blueprints": [
+  "packages": [
     {
-      "packageName": "ember-cli",
       "name": "ember-cli",
-      "type": "app",
-      "version": "3.2.0-beta.1",
-      "isBaseBlueprint": true
+      "blueprints": [
+        {
+          "name": "ember-cli",
+          "type": "app",
+          "version": "3.2.0-beta.1",
+          "isBaseBlueprint": true
+        }
+      ]
     }
   ]
 }

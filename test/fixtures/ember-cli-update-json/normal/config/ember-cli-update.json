@@ -1,9 +1,14 @@
 {
-  "blueprints": [
+  "schemaVersion": 0,
+  "packages": [
     {
-      "packageName": "test-blueprint",
       "name": "test-blueprint",
-      "version": "0.0.1"
+      "blueprints": [
+        {
+          "name": "test-blueprint",
+          "version": "0.0.1"
+        }
+      ]
     }
   ]
 }
