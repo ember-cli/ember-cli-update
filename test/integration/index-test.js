@@ -52,6 +52,7 @@ describe(function() {
     compareOnly,
     statsOnly,
     runCodemods,
+    codemodsJson,
     listCodemods,
     createCustomDiff,
     commitMessage,
@@ -77,6 +78,7 @@ describe(function() {
         compareOnly,
         statsOnly,
         runCodemods,
+        codemodsJson,
         listCodemods,
         createCustomDiff
       });
@@ -294,6 +296,31 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
     // I'm not asserting the entire list because it can be different
     // depending on which node version the tests are running under.
     expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
+  });
+
+  it('accepts codemods via json string', async function() {
+    let {
+      result,
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/codemod/local',
+      commitMessage: 'my-app',
+      listCodemods: true,
+      codemodsJson: JSON.stringify({
+        'test-codemod-json': {
+          versions: {
+            lodash: '3.0.0'
+          },
+          projectOptions: ['test-project', 'unused'],
+          nodeVersion: '6.0.0',
+          commands: []
+        }
+      })
+    });
+
+    assertNoStaged(status);
+
+    expect(JSON.parse(result)).to.have.own.property('test-codemod-json');
   });
 
   it('can create a personal diff instead of using an output repo - app', async function() {

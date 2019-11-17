@@ -13,6 +13,7 @@ module.exports.handler = async function handler(argv) {
   let to = argv['to'];
   let resolveConflicts = argv['resolve-conflicts'];
   let runCodemods = argv['run-codemods'];
+  let codemodsJson = argv['codemods-json'];
   let reset = argv['reset'];
   let compareOnly = argv['compare-only'];
   let statsOnly = argv['stats-only'];
@@ -26,6 +27,7 @@ module.exports.handler = async function handler(argv) {
       to,
       resolveConflicts,
       runCodemods,
+      codemodsJson,
       reset,
       compareOnly,
       statsOnly,
