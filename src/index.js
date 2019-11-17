@@ -35,6 +35,7 @@ module.exports = async function emberCliUpdate({
   to,
   resolveConflicts,
   runCodemods,
+  codemodsJson,
   reset,
   compareOnly,
   statsOnly,
@@ -196,6 +197,7 @@ All blueprints are up-to-date!`;
     listCodemods,
     runCodemods,
     codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
+    codemodsJson,
     createCustomDiff,
     ignoredFiles: [await getBlueprintFilePath(cwd)],
     wasRunAsExecutable

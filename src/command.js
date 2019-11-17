@@ -39,6 +39,11 @@ module.exports = {
       default: args['run-codemods'].default
     },
     {
+      name: 'codemods-json',
+      description: args['codemods-json'].description,
+      type: String
+    },
+    {
       name: 'reset',
       description: args['reset'].description,
       type: Boolean,

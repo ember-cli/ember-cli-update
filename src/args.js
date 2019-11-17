@@ -23,6 +23,10 @@ module.exports = {
     default: false,
     description: 'Run codemods to help update your code'
   },
+  'codemods-json': {
+    type: 'string',
+    description: 'Supply your own codemods manifest via JSON'
+  },
   'reset': {
     type: 'boolean',
     default: false,
