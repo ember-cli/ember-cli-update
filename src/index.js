@@ -23,7 +23,10 @@ const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
 
-const toDefault = require('./args').to.default;
+const {
+  'to': { default: toDefault },
+  'codemods-url': { default: codemodsUrlDefault }
+} = require('./args');
 
 function formatBlueprintLine(blueprint) {
   return `${blueprint.name}, current: ${blueprint.currentVersion}, latest: ${blueprint.latestVersion}`;
@@ -35,6 +38,7 @@ module.exports = async function emberCliUpdate({
   to,
   resolveConflicts,
   runCodemods,
+  codemodsUrl = codemodsUrlDefault,
   codemodsJson,
   reset,
   compareOnly,
@@ -196,7 +200,7 @@ All blueprints are up-to-date!`;
     statsOnly,
     listCodemods,
     runCodemods,
-    codemodsUrl: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
+    codemodsUrl,
     codemodsJson,
     createCustomDiff,
     ignoredFiles: [await getBlueprintFilePath(cwd)],
