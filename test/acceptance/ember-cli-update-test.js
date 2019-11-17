@@ -138,7 +138,7 @@ describe(function() {
   });
 
   it('runs codemods', async function() {
-    this.timeout(30 * 60 * 1000);
+    this.timeout(5 * 60 * 1000);
 
     let {
       ps,
@@ -152,7 +152,7 @@ describe(function() {
     ps.stdout.on('data', data => {
       let str = data.toString();
       if (str.includes('These codemods apply to your project.')) {
-        ps.stdin.write('a\n');
+        ps.stdin.write(' \n');
       }
     });
 
