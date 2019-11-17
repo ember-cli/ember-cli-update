@@ -39,6 +39,12 @@ module.exports = {
       default: args['run-codemods'].default
     },
     {
+      name: 'codemods-url',
+      description: args['codemods-url'].description,
+      type: String,
+      default: args['codemods-url'].default
+    },
+    {
       name: 'codemods-json',
       description: args['codemods-json'].description,
       type: String
