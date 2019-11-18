@@ -149,6 +149,8 @@ describe(function() {
       runCodemods: true
     });
 
+    ps.stdout.pipe(process.stdout);
+
     ps.stdout.on('data', data => {
       let str = data.toString();
       if (str.includes('These codemods apply to your project.')) {
