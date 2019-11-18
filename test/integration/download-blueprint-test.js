@@ -29,6 +29,7 @@ describe(downloadBlueprint, function() {
 
     let blueprint = await downloadBlueprint(null, url, range);
 
+    expect(blueprint.packageName).to.equal(name);
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
     expect(blueprint.version).to.equal(range);
@@ -43,6 +44,7 @@ describe(downloadBlueprint, function() {
 
     let blueprint = await downloadBlueprint(null, url, range);
 
+    expect(blueprint.packageName).to.equal(name);
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
     expect(blueprint.version).to.equal(range);
@@ -56,6 +58,7 @@ describe(downloadBlueprint, function() {
 
     let blueprint = await downloadBlueprint(name, null, range);
 
+    expect(blueprint.packageName).to.equal(name);
     expect(blueprint.name).to.equal(name);
     expect(blueprint.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
     expect(blueprint.version).to.equal(range);

@@ -28,6 +28,7 @@ async function saveDefaultBlueprint({
 
   await utils.saveBlueprint({
     cwd,
+    packageName: blueprint.packageName,
     name: blueprint.name,
     type: blueprint.type,
     version: blueprint.version,

@@ -2,6 +2,7 @@
   "schemaVersion": 0,
   "blueprints": [
     {
+      "packageName": "ember-cli-update-npm-blueprint-test",
       "name": "ember-cli-update-npm-blueprint-test",
       "version": "0.0.11"
     }

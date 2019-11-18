@@ -4,6 +4,7 @@ const utils = require('./utils');
 
 async function saveBlueprint({
   cwd,
+  packageName,
   name,
   type,
   location,
@@ -14,10 +15,13 @@ async function saveBlueprint({
   let emberCliUpdateJson = await utils.loadSafeBlueprintFile(cwd);
 
   let { blueprints } = emberCliUpdateJson;
-  let savedBlueprint = blueprints.find(b => b.name === name);
+  let savedBlueprint = blueprints.find(b => {
+    return b.packageName === packageName && b.name === name;
+  });
 
   if (!savedBlueprint) {
     savedBlueprint = {
+      packageName,
       name
     };
 

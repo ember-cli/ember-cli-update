@@ -1,7 +1,7 @@
 'use strict';
 
-function isDefaultBlueprint(blueprint) {
-  return blueprint.name === 'ember-cli';
+function isDefaultBlueprint({ packageName, name }) {
+  return packageName === 'ember-cli' && name === 'ember-cli';
 }
 
 module.exports = isDefaultBlueprint;
