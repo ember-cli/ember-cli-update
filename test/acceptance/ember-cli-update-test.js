@@ -140,13 +140,27 @@ describe(function() {
   it('runs codemods', async function() {
     this.timeout(5 * 60 * 1000);
 
+    async function _merge(src, dest) {
+      await fs.copy(
+        path.resolve(__dirname, `../fixtures/codemod/codemods/ember-modules-codemod/${src}/my-app`),
+        dest,
+        {
+          overwrite: true,
+          recursive: true
+        }
+      );
+    }
+
     let {
       ps,
       promise
     } = await merge({
       fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
-      runCodemods: true
+      runCodemods: true,
+      async beforeMerge() {
+        await _merge('local', tmpPath);
+      }
     });
 
     ps.stdout.pipe(process.stdout);
@@ -168,10 +182,17 @@ describe(function() {
     // file is indeterminent between OS's, so ignore
     await fs.remove(path.join(tmpPath, 'MODULE_REPORT.md'));
 
-    let mergeFixtures = 'test/fixtures/codemod/latest-node/my-app';
+    let nodeVersion = 'latest-node';
     if (process.env.NODE_LTS) {
-      mergeFixtures = 'test/fixtures/codemod/min-node/my-app';
+      nodeVersion = 'min-node';
     }
+
+    let mergeFixtures = await buildTmp({
+      fixturesPath: 'test/fixtures/codemod/local',
+      noGit: true
+    });
+
+    await _merge(nodeVersion, mergeFixtures);
 
     fixtureCompare({
       mergeFixtures

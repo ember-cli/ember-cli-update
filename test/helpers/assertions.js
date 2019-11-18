@@ -25,5 +25,5 @@ module.exports.assertNoStaged = function(status) {
 };
 
 module.exports.assertCodemodRan = function(status) {
-  expect(status).to.match(/^M {2}.*app\/router\.js$/m);
+  expect(status).to.match(/^A {2}.*/m);
 };
