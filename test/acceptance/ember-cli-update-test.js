@@ -162,6 +162,9 @@ describe(function() {
       status
     } = await promise;
 
+    assertNoUnstaged(status);
+    assertCodemodRan(status);
+
     // file is indeterminent between OS's, so ignore
     await fs.remove(path.join(tmpPath, 'MODULE_REPORT.md'));
 
@@ -173,9 +176,6 @@ describe(function() {
     fixtureCompare({
       mergeFixtures
     });
-
-    assertNoUnstaged(status);
-    assertCodemodRan(status);
   });
 
   it('scopes to sub dir if run from there', async function() {
