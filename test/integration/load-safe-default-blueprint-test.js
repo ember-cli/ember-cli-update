@@ -21,6 +21,7 @@ describe(_loadSafeDefaultBlueprint, function() {
     let blueprint = _loadSafeDefaultBlueprint();
 
     expect(blueprint).to.deep.equal({
+      packageName: 'ember-cli',
       name: 'ember-cli',
       type: 'app',
       version: undefined,
@@ -45,6 +46,7 @@ describe(_loadSafeDefaultBlueprint, function() {
         let blueprint = loadSafeDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
+          packageName: 'ember-cli',
           name: 'ember-cli',
           type: 'app',
           version,
@@ -59,6 +61,7 @@ describe(_loadSafeDefaultBlueprint, function() {
         let blueprint = loadSafeDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
+          packageName: 'ember-cli',
           name: 'ember-cli',
           type: 'app',
           version,
@@ -75,6 +78,7 @@ describe(_loadSafeDefaultBlueprint, function() {
         let blueprint = loadSafeDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
+          packageName: 'ember-cli',
           name: 'ember-cli',
           type: 'app',
           version,
@@ -91,6 +95,7 @@ describe(_loadSafeDefaultBlueprint, function() {
         let blueprint = loadSafeDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
+          packageName: 'ember-cli',
           name: 'ember-cli',
           type: 'app',
           version,
@@ -113,6 +118,7 @@ describe(_loadSafeDefaultBlueprint, function() {
       let blueprint = loadSafeDefaultBlueprint();
 
       expect(blueprint).to.deep.equal({
+        packageName: 'ember-cli',
         name: 'ember-cli',
         type: 'addon',
         version,
@@ -129,6 +135,7 @@ describe(_loadSafeDefaultBlueprint, function() {
       let blueprint = loadSafeDefaultBlueprint();
 
       expect(blueprint).to.deep.equal({
+        packageName: 'ember-cli',
         name: 'ember-cli',
         type: 'addon',
         version,

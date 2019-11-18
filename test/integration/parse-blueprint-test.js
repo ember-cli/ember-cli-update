@@ -14,6 +14,7 @@ describe(parseBlueprint, function() {
     let parsedBlueprint = await parseBlueprint(blueprint);
 
     expect(parsedBlueprint).to.deep.equal({
+      packageName: undefined,
       name: undefined,
       location: blueprint,
       url: `git+file://${toPosixAbsolutePath(path.join(process.cwd(), blueprint))}`
@@ -26,6 +27,7 @@ describe(parseBlueprint, function() {
     let parsedBlueprint = await parseBlueprint(blueprint);
 
     expect(parsedBlueprint).to.deep.equal({
+      packageName: undefined,
       name: undefined,
       location: blueprint,
       url: blueprint
@@ -38,6 +40,7 @@ describe(parseBlueprint, function() {
     let parsedBlueprint = await parseBlueprint(blueprint);
 
     expect(parsedBlueprint).to.deep.equal({
+      packageName: 'test-blueprint',
       name: 'test-blueprint',
       location: undefined,
       url: undefined

@@ -17,7 +17,10 @@ describe(_getProjectOptions, function() {
   beforeEach(function() {
     packageJson = {};
 
-    blueprint = { name: 'ember-cli' };
+    blueprint = {
+      packageName: 'ember-cli',
+      name: 'ember-cli'
+    };
   });
 
   afterEach(function() {

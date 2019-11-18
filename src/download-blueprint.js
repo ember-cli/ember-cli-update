@@ -30,6 +30,7 @@ async function downloadBlueprint(name, url, range) {
   // let version = require(path.join(_path, 'package')).version;
 
   return {
+    packageName: name,
     name,
     path: _path,
     version

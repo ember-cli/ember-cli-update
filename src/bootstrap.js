@@ -27,13 +27,17 @@ module.exports = async function bootstrap() {
 
   let version = getProjectVersion(packageVersion, versions, projectOptions);
 
-  let blueprint = loadSafeBlueprint({ name: packageName });
+  let blueprint = loadSafeBlueprint({
+    packageName,
+    name: packageName
+  });
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   if (isCustomBlueprint) {
     await saveBlueprint({
       cwd,
+      packageName,
       name: packageName,
       version
     });
