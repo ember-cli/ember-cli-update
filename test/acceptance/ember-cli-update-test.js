@@ -151,12 +151,16 @@ describe(function() {
 
     ps.stdout.pipe(process.stdout);
 
-    ps.stdout.on('data', data => {
+    function stdoutData(data) {
       let str = data.toString();
       if (str.includes('These codemods apply to your project.')) {
         ps.stdin.write(' \n');
+
+        ps.stdout.removeListener('data', stdoutData);
       }
-    });
+    }
+
+    ps.stdout.on('data', stdoutData);
 
     let {
       status
