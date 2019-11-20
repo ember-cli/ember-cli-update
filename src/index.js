@@ -22,6 +22,7 @@ const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
+const findBlueprint = require('./find-blueprint');
 
 const {
   'to': { default: toDefault },
@@ -65,9 +66,7 @@ module.exports = async function emberCliUpdate({
     }
 
     let { blueprints } = emberCliUpdateJson;
-    let existingBlueprint = blueprints.find(b => {
-      return b.packageName === name && b.name === name;
-    });
+    let existingBlueprint = findBlueprint(blueprints, name, name);
     if (existingBlueprint) {
       Object.assign(blueprint, existingBlueprint);
     }
@@ -116,9 +115,7 @@ All blueprints are up-to-date!`;
 
       let { realName } = choicesByName[answer.blueprint];
 
-      blueprint = blueprints.find(b => {
-        return b.packageName === realName && b.name === realName;
-      });
+      blueprint = findBlueprint(blueprints, realName, realName);
     }
   }
 
@@ -239,9 +236,7 @@ All blueprints are up-to-date!`;
   } else {
     let { blueprints } = await loadSafeBlueprintFile(cwd);
 
-    let existingBlueprint = blueprints.find(b => {
-      return b.packageName === blueprint.packageName && b.name === blueprint.name;
-    });
+    let existingBlueprint = findBlueprint(blueprints, blueprint.packageName, blueprint.name);
 
     if (existingBlueprint) {
       await saveBlueprint({
