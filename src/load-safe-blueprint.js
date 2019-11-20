@@ -1,8 +1,12 @@
 'use strict';
 
+const Blueprint = require('./blueprint');
+
 function loadSafeBlueprint(blueprint) {
+  let _blueprint = new Blueprint();
+
   return {
-    options: [],
+    ..._blueprint,
     ...blueprint
   };
 }
