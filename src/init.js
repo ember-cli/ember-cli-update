@@ -4,7 +4,7 @@ const getProjectOptions = require('./get-project-options');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprint = require('./parse-blueprint');
-const downloadBlueprint = require('./download-blueprint');
+const downloadPackage = require('./download-package');
 const saveBlueprint = require('./save-blueprint');
 const saveDefaultBlueprint = require('./save-default-blueprint');
 const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
@@ -32,7 +32,12 @@ module.exports = async function init({
     parsedBlueprint = defaultBlueprint;
   }
 
-  let blueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, to);
+  let downloadedPackage = await downloadPackage(parsedBlueprint.name, parsedBlueprint.url, to);
+
+  let blueprint = {
+    packageName: downloadedPackage.name,
+    ...downloadedPackage
+  };
 
   blueprint.options = blueprintOptions;
 
