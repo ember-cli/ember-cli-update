@@ -37,12 +37,14 @@ describe(saveDefaultBlueprint, function() {
 
     saveBlueprint = saveBlueprint.withArgs({
       cwd: '/test/path',
-      packageName: 'ember-cli',
-      name: 'ember-cli',
-      type: 'app',
-      version: '0.0.1',
-      isBaseBlueprint: true,
-      options: ['--no-welcome']
+      blueprint: {
+        packageName: 'ember-cli',
+        name: 'ember-cli',
+        type: 'app',
+        version: '0.0.1',
+        isBaseBlueprint: true,
+        options: ['--no-welcome']
+      }
     }).resolves();
 
     await saveDefaultBlueprint({

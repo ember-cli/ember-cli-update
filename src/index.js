@@ -222,10 +222,12 @@ All blueprints are up-to-date!`;
     if (isCustomBlueprint) {
       await saveBlueprint({
         cwd,
-        packageName: blueprint.packageName,
-        name: blueprint.name,
-        location: blueprint.location,
-        version: endVersion
+        blueprint: {
+          packageName: blueprint.packageName,
+          name: blueprint.name,
+          location: blueprint.location,
+          version: endVersion
+        }
       });
     }
 
@@ -240,9 +242,11 @@ All blueprints are up-to-date!`;
     if (existingBlueprint) {
       await saveBlueprint({
         cwd,
-        packageName: blueprint.packageName,
-        name: blueprint.name,
-        version: endVersion
+        blueprint: {
+          packageName: blueprint.packageName,
+          name: blueprint.name,
+          version: endVersion
+        }
       });
 
       if (!reset) {
