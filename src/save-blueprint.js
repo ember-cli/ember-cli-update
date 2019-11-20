@@ -15,8 +15,7 @@ async function saveBlueprint({
 }) {
   let emberCliUpdateJson = await utils.loadSafeBlueprintFile(cwd);
 
-  let { blueprints } = emberCliUpdateJson;
-  let savedBlueprint = findBlueprint(blueprints, packageName, name);
+  let savedBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
 
   if (!savedBlueprint) {
     savedBlueprint = {
@@ -42,7 +41,7 @@ async function saveBlueprint({
       savedBlueprint.options = options;
     }
 
-    blueprints.push(savedBlueprint);
+    emberCliUpdateJson.blueprints.push(savedBlueprint);
   } else {
     savedBlueprint.version = version;
   }
