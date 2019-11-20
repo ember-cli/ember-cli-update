@@ -65,8 +65,7 @@ module.exports = async function emberCliUpdate({
       name = downloadedBlueprint.name;
     }
 
-    let { blueprints } = emberCliUpdateJson;
-    let existingBlueprint = findBlueprint(blueprints, name, name);
+    let existingBlueprint = findBlueprint(emberCliUpdateJson, name, name);
     if (existingBlueprint) {
       Object.assign(blueprint, existingBlueprint);
     }
@@ -115,7 +114,7 @@ All blueprints are up-to-date!`;
 
       let { realName } = choicesByName[answer.blueprint];
 
-      blueprint = findBlueprint(blueprints, realName, realName);
+      blueprint = findBlueprint(emberCliUpdateJson, realName, realName);
     }
   }
 
@@ -234,9 +233,9 @@ All blueprints are up-to-date!`;
       await stageBlueprintFile(cwd);
     }
   } else {
-    let { blueprints } = await loadSafeBlueprintFile(cwd);
+    let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
 
-    let existingBlueprint = findBlueprint(blueprints, blueprint.packageName, blueprint.name);
+    let existingBlueprint = findBlueprint(emberCliUpdateJson, blueprint.packageName, blueprint.name);
 
     if (existingBlueprint) {
       await saveBlueprint({
