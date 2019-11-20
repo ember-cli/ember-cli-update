@@ -1,28 +1,30 @@
 'use strict';
 
 const parseBlueprint = require('./parse-blueprint');
-const downloadBlueprint = require('./download-blueprint');
+const downloadPackage = require('./download-package');
 const saveBlueprint = require('./save-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 
 module.exports = async function save({
-  blueprint,
+  blueprint: _blueprint,
   from
 }) {
   let cwd = process.cwd();
 
-  let parsedBlueprint = await parseBlueprint(blueprint);
+  let parsedBlueprint = await parseBlueprint(_blueprint);
 
-  let downloadedBlueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, from);
+  let downloadedPackage = await downloadPackage(parsedBlueprint.name, parsedBlueprint.url, from);
+
+  let blueprint = {
+    packageName: downloadedPackage.name,
+    name: downloadedPackage.name,
+    location: parsedBlueprint.location,
+    version: downloadedPackage.version
+  };
 
   await saveBlueprint({
     cwd,
-    blueprint: {
-      packageName: downloadedBlueprint.packageName,
-      name: downloadedBlueprint.name,
-      location: parsedBlueprint.location,
-      version: downloadedBlueprint.version
-    }
+    blueprint
   });
 
   await stageBlueprintFile(cwd);

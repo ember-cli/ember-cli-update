@@ -6,7 +6,7 @@ const tmpDir = promisify(require('tmp').dir);
 const npa = require('npm-package-arg');
 const run = require('./run');
 
-async function downloadBlueprint(name, url, range) {
+async function downloadPackage(name, url, range) {
   if (!range) {
     throw new Error('Missing a range when downloading blueprint');
   }
@@ -30,11 +30,10 @@ async function downloadBlueprint(name, url, range) {
   // let version = require(path.join(_path, 'package')).version;
 
   return {
-    packageName: name,
     name,
     path: _path,
     version
   };
 }
 
-module.exports = downloadBlueprint;
+module.exports = downloadPackage;

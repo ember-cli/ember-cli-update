@@ -11,7 +11,7 @@ const getRemoteUrl = require('./get-remote-url');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprint = require('./parse-blueprint');
-const downloadBlueprint = require('./download-blueprint');
+const downloadPackage = require('./download-package');
 const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
@@ -61,8 +61,8 @@ module.exports = async function emberCliUpdate({
 
     let { name } = blueprint;
     if (!name) {
-      let downloadedBlueprint = await downloadBlueprint(null, blueprint.url, toDefault);
-      name = downloadedBlueprint.name;
+      let downloadedPackage = await downloadPackage(null, blueprint.url, toDefault);
+      name = downloadedPackage.name;
     }
 
     let existingBlueprint = findBlueprint(emberCliUpdateJson, name, name);
@@ -153,8 +153,8 @@ All blueprints are up-to-date!`;
       }
 
       if (isCustomBlueprint) {
-        startBlueprint = { ...blueprint, ...await downloadBlueprint(blueprint.name, blueprint.url, blueprint.version) };
-        endBlueprint = { ...blueprint, ...await downloadBlueprint(blueprint.name, blueprint.url, to) };
+        startBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, blueprint.url, blueprint.version) };
+        endBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, blueprint.url, to) };
 
         startVersion = startBlueprint.version;
         endVersion = endBlueprint.version;

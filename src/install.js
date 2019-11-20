@@ -2,7 +2,7 @@
 
 const utils = require('./utils');
 const parseBlueprint = require('./parse-blueprint');
-const downloadBlueprint = require('./download-blueprint');
+const downloadPackage = require('./download-package');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const saveDefaultBlueprint = require('./save-default-blueprint');
@@ -23,7 +23,14 @@ module.exports = async function install({
   // This can be optimized by going into the node_modules install location
   // from above and grabbing it from there.
   let parsedBlueprint = await parseBlueprint(addon);
-  let blueprint = await downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, toDefault);
+  let downloadedPackage = await downloadPackage(parsedBlueprint.name, parsedBlueprint.url, toDefault);
+
+  let blueprint = {
+    packageName: downloadedPackage.name,
+    name: downloadedPackage.name,
+    location: parsedBlueprint.location,
+    version: downloadedPackage.version
+  };
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
@@ -38,11 +45,6 @@ module.exports = async function install({
 
   await saveBlueprint({
     cwd,
-    blueprint: {
-      packageName: blueprint.packageName,
-      name: blueprint.name,
-      location: parsedBlueprint.location,
-      version: blueprint.version
-    }
+    blueprint
   });
 };

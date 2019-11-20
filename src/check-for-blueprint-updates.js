@@ -1,7 +1,7 @@
 'use strict';
 
 const parseBlueprint = require('./parse-blueprint');
-const downloadBlueprint = require('./download-blueprint');
+const downloadPackage = require('./download-package');
 
 const toDefault = require('./args').to.default;
 
@@ -13,8 +13,8 @@ async function checkForBlueprintUpdates(blueprints) {
       { version: currentVersion },
       { version: latestVersion }
     ] = await Promise.all([
-      downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, blueprint.version),
-      downloadBlueprint(parsedBlueprint.name, parsedBlueprint.url, toDefault)
+      downloadPackage(parsedBlueprint.name, parsedBlueprint.url, blueprint.version),
+      downloadPackage(parsedBlueprint.name, parsedBlueprint.url, toDefault)
     ]);
 
     return {
