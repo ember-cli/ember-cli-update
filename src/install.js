@@ -38,9 +38,11 @@ module.exports = async function install({
 
   await saveBlueprint({
     cwd,
-    packageName: blueprint.packageName,
-    name: blueprint.name,
-    location: parsedBlueprint.location,
-    version: blueprint.version
+    blueprint: {
+      packageName: blueprint.packageName,
+      name: blueprint.name,
+      location: parsedBlueprint.location,
+      version: blueprint.version
+    }
   });
 };

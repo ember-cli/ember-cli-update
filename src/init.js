@@ -66,11 +66,13 @@ module.exports = async function init({
   if (isCustomBlueprint) {
     await saveBlueprint({
       cwd,
-      packageName: blueprint.packageName,
-      name: blueprint.name,
-      location: parsedBlueprint.location,
-      version: blueprint.version,
-      isBaseBlueprint: true
+      blueprint: {
+        packageName: blueprint.packageName,
+        name: blueprint.name,
+        location: parsedBlueprint.location,
+        version: blueprint.version,
+        isBaseBlueprint: true
+      }
     });
   } else {
     await saveDefaultBlueprint({

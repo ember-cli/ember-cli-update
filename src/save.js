@@ -17,10 +17,12 @@ module.exports = async function save({
 
   await saveBlueprint({
     cwd,
-    packageName: downloadedBlueprint.packageName,
-    name: downloadedBlueprint.name,
-    location: parsedBlueprint.location,
-    version: downloadedBlueprint.version
+    blueprint: {
+      packageName: downloadedBlueprint.packageName,
+      name: downloadedBlueprint.name,
+      location: parsedBlueprint.location,
+      version: downloadedBlueprint.version
+    }
   });
 
   await stageBlueprintFile(cwd);

@@ -34,7 +34,7 @@ describe(_saveBlueprint, function() {
   async function saveBlueprint(blueprint) {
     await _saveBlueprint({
       cwd,
-      ...blueprint
+      blueprint
     });
   }
 

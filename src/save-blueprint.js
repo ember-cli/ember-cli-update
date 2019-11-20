@@ -3,15 +3,21 @@
 const utils = require('./utils');
 const findBlueprint = require('./find-blueprint');
 
+function addBlueprint(emberCliUpdateJson, blueprint) {
+  emberCliUpdateJson.blueprints.push(blueprint);
+}
+
 async function saveBlueprint({
   cwd,
-  packageName,
-  name,
-  type,
-  location,
-  version,
-  options = [],
-  isBaseBlueprint
+  blueprint: {
+    packageName,
+    name,
+    type,
+    location,
+    version,
+    options = [],
+    isBaseBlueprint
+  }
 }) {
   let emberCliUpdateJson = await utils.loadSafeBlueprintFile(cwd);
 
@@ -41,7 +47,7 @@ async function saveBlueprint({
       savedBlueprint.options = options;
     }
 
-    emberCliUpdateJson.blueprints.push(savedBlueprint);
+    addBlueprint(emberCliUpdateJson, savedBlueprint);
   } else {
     savedBlueprint.version = version;
   }
