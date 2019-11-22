@@ -52,8 +52,6 @@ module.exports = async function emberCliUpdate({
   createCustomDiff,
   wasRunAsExecutable
 }) {
-  let defaultBlueprint = loadSafeDefaultBlueprint();
-
   let cwd = process.cwd();
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
@@ -86,7 +84,7 @@ module.exports = async function emberCliUpdate({
     let { blueprints } = emberCliUpdateJson;
 
     if (!blueprints.length) {
-      blueprint = defaultBlueprint;
+      blueprint = loadSafeDefaultBlueprint();
     } else {
       let blueprintUpdates = await checkForBlueprintUpdates(blueprints);
 
@@ -219,20 +217,19 @@ All blueprints are up-to-date!`;
     // even if you are currently working on a custom blueprint.
     if (!emberCliUpdateJson || !isCustomBlueprint) {
       await saveDefaultBlueprint({
-        cwd,
-        blueprint: defaultBlueprint
+        cwd
       });
     }
 
     if (isCustomBlueprint) {
       await saveBlueprint({
         cwd,
-        blueprint: {
+        blueprint: loadSafeBlueprint({
           packageName: blueprint.packageName,
           name: blueprint.name,
           location: blueprint.location,
           version: endVersion
-        }
+        })
       });
     }
 
@@ -247,11 +244,11 @@ All blueprints are up-to-date!`;
     if (existingBlueprint) {
       await saveBlueprint({
         cwd,
-        blueprint: {
+        blueprint: loadSafeBlueprint({
           packageName: blueprint.packageName,
           name: blueprint.name,
           version: endVersion
-        }
+        })
       });
 
       if (!reset) {
