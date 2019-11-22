@@ -1,5 +1,6 @@
 'use strict';
 
+const loadSafeBlueprint = require('./load-safe-blueprint');
 const { defaultBlueprintName } = require('./constants');
 
 function loadSafeDefaultBlueprint(projectOptions = [], version) {
@@ -17,14 +18,14 @@ function loadSafeDefaultBlueprint(projectOptions = [], version) {
     options.push('--no-welcome');
   }
 
-  return {
+  return loadSafeBlueprint({
     packageName: defaultBlueprintName,
     name: defaultBlueprintName,
     type,
     version,
     options,
     isBaseBlueprint: true
-  };
+  });
 }
 
 module.exports = loadSafeDefaultBlueprint;

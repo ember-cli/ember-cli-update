@@ -11,7 +11,7 @@ async function saveDefaultBlueprint({
   cwd,
   blueprint
 }) {
-  if (!blueprint.version) {
+  if (!(blueprint && blueprint.version)) {
     let packageJson = utils.require(path.join(cwd, 'package'));
 
     let projectOptions = await getProjectOptions(packageJson);
@@ -28,14 +28,7 @@ async function saveDefaultBlueprint({
 
   await utils.saveBlueprint({
     cwd,
-    blueprint: {
-      packageName: blueprint.packageName,
-      name: blueprint.name,
-      type: blueprint.type,
-      version: blueprint.version,
-      isBaseBlueprint: true,
-      options: blueprint.options
-    }
+    blueprint
   });
 }
 

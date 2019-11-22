@@ -3,10 +3,10 @@
 const utils = require('./utils');
 const parseBlueprint = require('./parse-blueprint');
 const downloadPackage = require('./download-package');
+const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const saveDefaultBlueprint = require('./save-default-blueprint');
-const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
 const isDefaultBlueprint = require('./is-default-blueprint');
 
 const toDefault = require('./args').to.default;
@@ -14,8 +14,6 @@ const toDefault = require('./args').to.default;
 module.exports = async function install({
   addon
 }) {
-  let defaultBlueprint = loadSafeDefaultBlueprint();
-
   let cwd = process.cwd();
 
   await utils.npx(`--no-install ember install ${addon}`);
@@ -25,12 +23,12 @@ module.exports = async function install({
   let parsedBlueprint = await parseBlueprint(addon);
   let downloadedPackage = await downloadPackage(parsedBlueprint.name, parsedBlueprint.url, toDefault);
 
-  let blueprint = {
+  let blueprint = loadSafeBlueprint({
     packageName: downloadedPackage.name,
     name: downloadedPackage.name,
     location: parsedBlueprint.location,
     version: downloadedPackage.version
-  };
+  });
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
@@ -38,8 +36,7 @@ module.exports = async function install({
 
   if (!emberCliUpdateJson && isCustomBlueprint) {
     await saveDefaultBlueprint({
-      cwd,
-      blueprint: defaultBlueprint
+      cwd
     });
   }
 

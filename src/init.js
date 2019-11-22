@@ -12,6 +12,7 @@ const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
+const { defaultBlueprintName } = require('./constants');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -21,25 +22,31 @@ module.exports = async function init({
   blueprintOptions,
   wasRunAsExecutable
 }) {
-  let defaultBlueprint = loadSafeDefaultBlueprint();
-
   let cwd = process.cwd();
 
-  let parsedBlueprint;
+  let name;
+  let location;
+  let url;
   if (_blueprint) {
-    parsedBlueprint = await parseBlueprint(_blueprint);
+    let parsedBlueprint = await parseBlueprint(_blueprint);
+    name = parsedBlueprint.name;
+    location = parsedBlueprint.location;
+    url = parsedBlueprint.url;
   } else {
-    parsedBlueprint = defaultBlueprint;
+    name = defaultBlueprintName;
   }
 
-  let downloadedPackage = await downloadPackage(parsedBlueprint.name, parsedBlueprint.url, to);
+  let downloadedPackage = await downloadPackage(name, url, to);
 
-  let blueprint = {
+  let blueprint = loadSafeBlueprint({
     packageName: downloadedPackage.name,
-    ...downloadedPackage
-  };
-
-  blueprint.options = blueprintOptions;
+    name: downloadedPackage.name,
+    location,
+    path: downloadedPackage.path,
+    version: downloadedPackage.version,
+    isBaseBlueprint: true,
+    options: blueprintOptions
+  });
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
@@ -55,8 +62,6 @@ module.exports = async function init({
     }) => {
       if (!isCustomBlueprint) {
         blueprint = loadSafeDefaultBlueprint(projectOptions, blueprint.version);
-      } else {
-        blueprint = loadSafeBlueprint(blueprint);
       }
 
       return getStartAndEndCommands({
@@ -71,13 +76,7 @@ module.exports = async function init({
   if (isCustomBlueprint) {
     await saveBlueprint({
       cwd,
-      blueprint: {
-        packageName: blueprint.packageName,
-        name: blueprint.name,
-        location: parsedBlueprint.location,
-        version: blueprint.version,
-        isBaseBlueprint: true
-      }
+      blueprint
     });
   } else {
     await saveDefaultBlueprint({

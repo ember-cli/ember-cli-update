@@ -15,7 +15,7 @@ async function saveBlueprint({
     type,
     location,
     version,
-    options = [],
+    options,
     isBaseBlueprint
   }
 }) {

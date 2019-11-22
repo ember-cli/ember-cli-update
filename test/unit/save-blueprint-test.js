@@ -40,7 +40,8 @@ describe(_saveBlueprint, function() {
       await saveBlueprint({
         packageName: 'test-blueprint',
         name: 'test-blueprint',
-        version: '0.0.1'
+        version: '0.0.1',
+        options: []
       });
 
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
@@ -59,7 +60,8 @@ describe(_saveBlueprint, function() {
         packageName: 'test-blueprint',
         name: 'test-blueprint',
         location: '/foo/bar',
-        version: '0.0.1'
+        version: '0.0.1',
+        options: []
       });
 
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
@@ -100,7 +102,8 @@ describe(_saveBlueprint, function() {
           packageName: 'test-blueprint',
           name: 'test-blueprint',
           version: '0.0.1',
-          isBaseBlueprint: true
+          isBaseBlueprint: true,
+          options: []
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
@@ -120,7 +123,8 @@ describe(_saveBlueprint, function() {
           packageName: 'test-blueprint',
           name: 'test-blueprint',
           version: '0.0.1',
-          isBaseBlueprint: false
+          isBaseBlueprint: false,
+          options: []
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
@@ -139,7 +143,8 @@ describe(_saveBlueprint, function() {
         await saveBlueprint({
           packageName: 'test-blueprint',
           name: 'test-blueprint',
-          version: '0.0.1'
+          version: '0.0.1',
+          options: []
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
@@ -168,7 +173,8 @@ describe(_saveBlueprint, function() {
       await saveBlueprint({
         packageName: 'test-blueprint',
         name: 'test-blueprint',
-        version: '0.0.1'
+        version: '0.0.1',
+        options: []
       });
 
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
@@ -201,7 +207,8 @@ describe(_saveBlueprint, function() {
       await saveBlueprint({
         packageName: 'test-blueprint',
         name: 'test-blueprint',
-        version: '0.0.1'
+        version: '0.0.1',
+        options: []
       });
 
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
