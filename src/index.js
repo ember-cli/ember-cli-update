@@ -57,16 +57,16 @@ module.exports = async function emberCliUpdate({
   let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
 
   let blueprint;
-  let url;
+  let packageUrl;
   let isPersistedBlueprint;
 
   if (_blueprint) {
     let parsedBlueprint = await parseBlueprint(_blueprint);
-    url = parsedBlueprint.url;
+    packageUrl = parsedBlueprint.url;
 
     let { name } = parsedBlueprint;
     if (!name) {
-      let downloadedPackage = await downloadPackage(null, url, toDefault);
+      let downloadedPackage = await downloadPackage(null, packageUrl, toDefault);
       name = downloadedPackage.name;
     }
 
@@ -135,8 +135,8 @@ All blueprints are up-to-date!`;
     }
   }
 
-  if (blueprint.location && !url) {
-    url = (await parseBlueprint(blueprint.location)).url;
+  if (blueprint.location && !packageUrl) {
+    packageUrl = (await parseBlueprint(blueprint.location)).url;
   }
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
@@ -168,8 +168,8 @@ All blueprints are up-to-date!`;
       }
 
       if (isCustomBlueprint) {
-        startBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, url, blueprint.version) };
-        endBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, url, to) };
+        startBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, packageUrl, blueprint.version) };
+        endBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, packageUrl, to) };
 
         startVersion = startBlueprint.version;
         endVersion = endBlueprint.version;
