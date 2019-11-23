@@ -136,7 +136,8 @@ All blueprints are up-to-date!`;
   }
 
   if (blueprint.location && !packageUrl) {
-    packageUrl = (await parseBlueprint(blueprint.location)).url;
+    let parsedBlueprint = await parseBlueprint(blueprint.location);
+    packageUrl = parsedBlueprint.url;
   }
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
@@ -159,20 +160,29 @@ All blueprints are up-to-date!`;
         throw 'cannot checkout older versions of glimmer blueprint';
       }
 
-      let startVersion;
-      let endVersion;
       let startBlueprint;
 
       if (!isCustomBlueprint && createCustomDiff) {
         blueprint = loadSafeDefaultBlueprint(projectOptions, blueprint.version);
       }
 
-      if (isCustomBlueprint) {
-        startBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, packageUrl, blueprint.version) };
-        endBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, packageUrl, to) };
+      startBlueprint = { ...blueprint };
+      endBlueprint = { ...blueprint };
 
-        startVersion = startBlueprint.version;
-        endVersion = endBlueprint.version;
+      if (isCustomBlueprint) {
+        let [
+          startDownloadedPackage,
+          endDownloadedPackage
+        ] = await Promise.all([
+          downloadPackage(blueprint.name, packageUrl, blueprint.version),
+          downloadPackage(blueprint.name, packageUrl, to)
+        ]);
+
+        startBlueprint.path = startDownloadedPackage.path;
+        endBlueprint.path = endDownloadedPackage.path;
+
+        startBlueprint.version = startDownloadedPackage.version;
+        endBlueprint.version = endDownloadedPackage.version;
       } else {
         let packageName = getPackageName(projectOptions);
         let packageVersion = getPackageVersion(packageJson, packageName);
@@ -182,15 +192,12 @@ All blueprints are up-to-date!`;
         let getTagVersion = _getTagVersion(versions, packageName);
 
         if (from) {
-          startVersion = await getTagVersion(from);
+          startBlueprint.version = await getTagVersion(from);
         } else {
-          startVersion = getProjectVersion(packageVersion, versions, projectOptions);
+          startBlueprint.version = getProjectVersion(packageVersion, versions, projectOptions);
         }
 
-        endVersion = await getTagVersion(to);
-
-        startBlueprint = { ...blueprint, version: startVersion };
-        endBlueprint = { ...blueprint, version: endVersion };
+        endBlueprint.version = await getTagVersion(to);
       }
 
       let customDiffOptions;
@@ -203,8 +210,8 @@ All blueprints are up-to-date!`;
       }
 
       return {
-        startVersion,
-        endVersion,
+        startVersion: startBlueprint.version,
+        endVersion: endBlueprint.version,
         customDiffOptions
       };
     },
