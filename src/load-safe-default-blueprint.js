@@ -1,5 +1,7 @@
 'use strict';
 
+const { defaultBlueprintName } = require('./constants');
+
 function loadSafeDefaultBlueprint(projectOptions = [], version) {
   let type = 'app';
   if (projectOptions.includes('addon')) {
@@ -16,8 +18,8 @@ function loadSafeDefaultBlueprint(projectOptions = [], version) {
   }
 
   return {
-    packageName: 'ember-cli',
-    name: 'ember-cli',
+    packageName: defaultBlueprintName,
+    name: defaultBlueprintName,
     type,
     version,
     options,
