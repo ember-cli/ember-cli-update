@@ -57,20 +57,30 @@ module.exports = async function emberCliUpdate({
   let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
 
   let blueprint;
+  let url;
+  let existingBlueprint;
 
   if (_blueprint) {
-    blueprint = await parseBlueprint(_blueprint);
-    blueprint.packageName = blueprint.name;
+    let parsedBlueprint = await parseBlueprint(_blueprint);
+    url = parsedBlueprint.url;
 
-    let { name } = blueprint;
+    let { name } = parsedBlueprint;
     if (!name) {
-      let downloadedPackage = await downloadPackage(null, blueprint.url, toDefault);
+      let downloadedPackage = await downloadPackage(null, url, toDefault);
       name = downloadedPackage.name;
     }
 
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, name, name);
+    let packageName = name;
+
+    existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
     if (existingBlueprint) {
-      Object.assign(blueprint, existingBlueprint);
+      blueprint = loadSafeBlueprint(existingBlueprint);
+    } else {
+      blueprint = loadSafeBlueprint({
+        packageName,
+        name,
+        location: parsedBlueprint.location
+      });
     }
 
     if (from) {
@@ -117,12 +127,13 @@ All blueprints are up-to-date!`;
 
       let { blueprintUpdate } = choicesByName[answer.blueprint];
 
-      blueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
+      existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
+      blueprint = loadSafeBlueprint(existingBlueprint);
     }
   }
 
-  if (!blueprint.url && blueprint.location) {
-    blueprint.url = (await parseBlueprint(blueprint.location)).url;
+  if (blueprint.location && !url) {
+    url = (await parseBlueprint(blueprint.location)).url;
   }
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
@@ -151,13 +162,11 @@ All blueprints are up-to-date!`;
 
       if (!isCustomBlueprint && createCustomDiff) {
         blueprint = loadSafeDefaultBlueprint(projectOptions, blueprint.version);
-      } else {
-        blueprint = loadSafeBlueprint(blueprint);
       }
 
       if (isCustomBlueprint) {
-        startBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, blueprint.url, blueprint.version) };
-        endBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, blueprint.url, to) };
+        startBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, url, blueprint.version) };
+        endBlueprint = { ...blueprint, ...await downloadPackage(blueprint.name, url, to) };
 
         startVersion = startBlueprint.version;
         endVersion = endBlueprint.version;
@@ -236,24 +245,18 @@ All blueprints are up-to-date!`;
     if (!reset) {
       await stageBlueprintFile(cwd);
     }
-  } else {
-    let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
+  } else if (existingBlueprint) {
+    await saveBlueprint({
+      cwd,
+      blueprint: loadSafeBlueprint({
+        packageName: existingBlueprint.packageName,
+        name: existingBlueprint.name,
+        version: endVersion
+      })
+    });
 
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, blueprint.packageName, blueprint.name);
-
-    if (existingBlueprint) {
-      await saveBlueprint({
-        cwd,
-        blueprint: loadSafeBlueprint({
-          packageName: blueprint.packageName,
-          name: blueprint.name,
-          version: endVersion
-        })
-      });
-
-      if (!reset) {
-        await stageBlueprintFile(cwd);
-      }
+    if (!reset) {
+      await stageBlueprintFile(cwd);
     }
   }
 
