@@ -1,7 +1,9 @@
 'use strict';
 
+const { defaultBlueprintName } = require('./constants');
+
 function isDefaultBlueprint({ packageName, name }) {
-  return packageName === 'ember-cli' && name === 'ember-cli';
+  return packageName === defaultBlueprintName && name === defaultBlueprintName;
 }
 
 module.exports = isDefaultBlueprint;
