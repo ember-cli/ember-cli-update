@@ -9,18 +9,15 @@ const _saveBlueprint = require('../../src/save-blueprint');
 const cwd = process.cwd();
 
 describe(_saveBlueprint, function() {
-  let sandbox;
   let loadSafeBlueprintFile;
   let saveBlueprintFile;
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-
-    loadSafeBlueprintFile = sandbox.stub(utils, 'loadSafeBlueprintFile')
+    loadSafeBlueprintFile = sinon.stub(utils, 'loadSafeBlueprintFile')
       .withArgs(cwd).resolves({
         blueprints: []
       });
-    saveBlueprintFile = sandbox.stub(utils, 'saveBlueprintFile').resolves();
+    saveBlueprintFile = sinon.stub(utils, 'saveBlueprintFile').resolves();
   });
 
   afterEach(function() {
@@ -28,7 +25,7 @@ describe(_saveBlueprint, function() {
     expect(saveBlueprintFile).to.be.calledOnce;
     expect(saveBlueprintFile.args[0][0]).to.equal(cwd);
 
-    sandbox.restore();
+    sinon.restore();
   });
 
   async function saveBlueprint(blueprint) {

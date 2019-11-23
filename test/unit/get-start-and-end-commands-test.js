@@ -28,7 +28,6 @@ const defaultStartBlueprint = loadSafeDefaultBlueprint([], startVersion);
 const defaultEndBlueprint = loadSafeDefaultBlueprint([], endVersion);
 
 describe(_getStartAndEndCommands, function() {
-  let sandbox;
   let npxStub;
   let spawnStub;
   let readdirStub;
@@ -37,18 +36,16 @@ describe(_getStartAndEndCommands, function() {
   let appendNodeModulesIgnoreStub;
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-
-    npxStub = sandbox.stub(utils, 'npx').resolves();
-    spawnStub = sandbox.stub(utils, 'spawn').resolves();
-    readdirStub = sandbox.stub(utils, 'readdir').resolves(['foo']);
-    installAddonBlueprintStub = sandbox.stub(_getStartAndEndCommands, 'installAddonBlueprint').resolves();
-    createEmptyCommitStub = sandbox.stub(_getStartAndEndCommands, 'createEmptyCommit').resolves();
-    appendNodeModulesIgnoreStub = sandbox.stub(_getStartAndEndCommands, 'appendNodeModulesIgnore').resolves();
+    npxStub = sinon.stub(utils, 'npx').resolves();
+    spawnStub = sinon.stub(utils, 'spawn').resolves();
+    readdirStub = sinon.stub(utils, 'readdir').resolves(['foo']);
+    installAddonBlueprintStub = sinon.stub(_getStartAndEndCommands, 'installAddonBlueprint').resolves();
+    createEmptyCommitStub = sinon.stub(_getStartAndEndCommands, 'createEmptyCommit').resolves();
+    appendNodeModulesIgnoreStub = sinon.stub(_getStartAndEndCommands, 'appendNodeModulesIgnore').resolves();
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   function getStartAndEndCommands(options) {
