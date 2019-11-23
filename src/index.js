@@ -62,6 +62,7 @@ module.exports = async function emberCliUpdate({
 
   if (_blueprint) {
     blueprint = await parseBlueprint(_blueprint);
+    blueprint.packageName = blueprint.name;
 
     let { name } = blueprint;
     if (!name) {

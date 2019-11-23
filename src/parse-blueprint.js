@@ -34,7 +34,6 @@ async function parseBlueprint(blueprint) {
     }
   }
   return {
-    packageName: name,
     name,
     location,
     url
