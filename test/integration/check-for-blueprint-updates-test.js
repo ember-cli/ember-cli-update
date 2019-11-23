@@ -34,18 +34,21 @@ describe(checkForBlueprintUpdates, function() {
 
     expect(blueprintUpdates).to.deep.equal([
       {
+        packageName: localBlueprint.packageName,
         name: localBlueprint.name,
         currentVersion: localBlueprint.version,
         latestVersion: require('../fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update').blueprints[1].version,
         isUpToDate: false
       },
       {
+        packageName: urlBlueprint.packageName,
         name: urlBlueprint.name,
         currentVersion: urlBlueprint.version,
         latestVersion: require('../fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update').blueprints[0].version,
         isUpToDate: false
       },
       {
+        packageName: npmBlueprint.packageName,
         name: npmBlueprint.name,
         currentVersion: npmBlueprint.version,
         latestVersion: npmBlueprint.version,
