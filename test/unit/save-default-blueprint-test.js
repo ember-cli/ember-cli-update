@@ -9,21 +9,18 @@ const saveDefaultBlueprint = require('../../src/save-default-blueprint');
 const loadSafeDefaultBlueprint = require('../../src/load-safe-default-blueprint');
 
 describe(saveDefaultBlueprint, function() {
-  let sandbox;
   let require;
   let getVersions;
   let saveBlueprint;
 
   beforeEach(function() {
-    sandbox = sinon.createSandbox();
-
-    require = sandbox.stub(utils, 'require');
-    getVersions = sandbox.stub(utils, 'getVersions');
-    saveBlueprint = sandbox.stub(utils, 'saveBlueprint');
+    require = sinon.stub(utils, 'require');
+    getVersions = sinon.stub(utils, 'getVersions');
+    saveBlueprint = sinon.stub(utils, 'saveBlueprint');
   });
 
   afterEach(function() {
-    sandbox.restore();
+    sinon.restore();
   });
 
   it('saves blueprint', async function() {
