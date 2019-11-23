@@ -58,7 +58,7 @@ module.exports = async function emberCliUpdate({
 
   let blueprint;
   let url;
-  let existingBlueprint;
+  let isPersistedBlueprint;
 
   if (_blueprint) {
     let parsedBlueprint = await parseBlueprint(_blueprint);
@@ -72,8 +72,9 @@ module.exports = async function emberCliUpdate({
 
     let packageName = name;
 
-    existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
+    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
     if (existingBlueprint) {
+      isPersistedBlueprint = true;
       blueprint = loadSafeBlueprint(existingBlueprint);
     } else {
       blueprint = loadSafeBlueprint({
@@ -96,6 +97,8 @@ module.exports = async function emberCliUpdate({
     if (!blueprints.length) {
       blueprint = loadSafeDefaultBlueprint();
     } else {
+      isPersistedBlueprint = true;
+
       let blueprintUpdates = await checkForBlueprintUpdates(blueprints);
 
       let areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
@@ -127,7 +130,7 @@ All blueprints are up-to-date!`;
 
       let { blueprintUpdate } = choicesByName[answer.blueprint];
 
-      existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
+      let existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
       blueprint = loadSafeBlueprint(existingBlueprint);
     }
   }
@@ -142,7 +145,7 @@ All blueprints are up-to-date!`;
     createCustomDiff = true;
   }
 
-  let endVersion;
+  let endBlueprint;
 
   let result = await (await boilerplateUpdate({
     projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),
@@ -157,8 +160,8 @@ All blueprints are up-to-date!`;
       }
 
       let startVersion;
+      let endVersion;
       let startBlueprint;
-      let endBlueprint;
 
       if (!isCustomBlueprint && createCustomDiff) {
         blueprint = loadSafeDefaultBlueprint(projectOptions, blueprint.version);
@@ -233,26 +236,17 @@ All blueprints are up-to-date!`;
     if (isCustomBlueprint) {
       await saveBlueprint({
         cwd,
-        blueprint: loadSafeBlueprint({
-          packageName: blueprint.packageName,
-          name: blueprint.name,
-          location: blueprint.location,
-          version: endVersion
-        })
+        blueprint: endBlueprint
       });
     }
 
     if (!reset) {
       await stageBlueprintFile(cwd);
     }
-  } else if (existingBlueprint) {
+  } else if (isPersistedBlueprint) {
     await saveBlueprint({
       cwd,
-      blueprint: loadSafeBlueprint({
-        packageName: existingBlueprint.packageName,
-        name: existingBlueprint.name,
-        version: endVersion
-      })
+      blueprint: endBlueprint
     });
 
     if (!reset) {
