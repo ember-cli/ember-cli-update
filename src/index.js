@@ -29,8 +29,12 @@ const {
   'codemods-url': { default: codemodsUrlDefault }
 } = require('./args');
 
-function formatBlueprintLine(blueprint) {
-  return `${blueprint.name}, current: ${blueprint.currentVersion}, latest: ${blueprint.latestVersion}`;
+function formatBlueprintLine({
+  name,
+  currentVersion,
+  latestVersion
+}) {
+  return `${name}, current: ${currentVersion}, latest: ${latestVersion}`;
 }
 
 module.exports = async function emberCliUpdate({
@@ -85,7 +89,7 @@ module.exports = async function emberCliUpdate({
     } else {
       let blueprintUpdates = await checkForBlueprintUpdates(blueprints);
 
-      let areAllUpToDate = blueprintUpdates.every(blueprint => blueprint.isUpToDate);
+      let areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
       if (areAllUpToDate) {
         return `${blueprintUpdates.map(formatBlueprintLine).join(`
 `)}
@@ -93,13 +97,13 @@ module.exports = async function emberCliUpdate({
 All blueprints are up-to-date!`;
       }
 
-      let choicesByName = blueprintUpdates.reduce((choices, blueprint) => {
-        let name = formatBlueprintLine(blueprint);
+      let choicesByName = blueprintUpdates.reduce((choices, blueprintUpdate) => {
+        let name = formatBlueprintLine(blueprintUpdate);
         choices[name] = {
-          realName: blueprint.name,
+          blueprintUpdate,
           choice: {
             name,
-            disabled: blueprint.isUpToDate
+            disabled: blueprintUpdate.isUpToDate
           }
         };
         return choices;
@@ -112,9 +116,9 @@ All blueprints are up-to-date!`;
         choices: Object.values(choicesByName).map(({ choice }) => choice)
       }]);
 
-      let { realName } = choicesByName[answer.blueprint];
+      let { blueprintUpdate } = choicesByName[answer.blueprint];
 
-      blueprint = findBlueprint(emberCliUpdateJson, realName, realName);
+      blueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
     }
   }
 

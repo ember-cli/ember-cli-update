@@ -18,6 +18,7 @@ async function checkForBlueprintUpdates(blueprints) {
     ]);
 
     return {
+      packageName: blueprint.packageName,
       name: blueprint.name,
       currentVersion,
       latestVersion,
