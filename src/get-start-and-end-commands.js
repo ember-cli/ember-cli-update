@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const run = require('./run');
 const utils = require('./utils');
-const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const isDefaultBlueprint = require('./is-default-blueprint');
 
@@ -200,9 +199,11 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
 }) {
   let defaultBlueprint = loadDefaultBlueprint();
 
-  let args = getArgs(projectName, loadSafeBlueprint(defaultBlueprint));
+  let args = getArgs(projectName, defaultBlueprint);
 
-  await fs.remove(path.join(cwd, projectName));
+  let projectRoot = path.join(cwd, projectName);
+
+  await fs.remove(projectRoot);
 
   if (packageRoot) {
     await runEmberLocally({
@@ -216,11 +217,11 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
     await utils.npx(`ember-cli ${command}`, { cwd });
   }
 
-  await run('npm install', { cwd: path.join(cwd, projectName) });
+  await run('npm install', { cwd: projectRoot });
 
-  await utils.npx(`--no-install ember install ${blueprintPath}`, { cwd: path.join(cwd, projectName) });
+  await utils.npx(`--no-install ember install ${blueprintPath}`, { cwd: projectRoot });
 
-  await fs.remove(path.join(cwd, projectName, 'package-lock.json'));
+  await fs.remove(path.join(projectRoot, 'package-lock.json'));
 };
 
 module.exports.createEmptyCommit = async function createEmptyCommit({
