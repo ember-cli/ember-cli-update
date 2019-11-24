@@ -379,7 +379,6 @@ describe(_saveBlueprint, function() {
           });
 
           await saveBlueprint({
-            cwd,
             packageName: 'test-blueprint',
             name: 'test-blueprint',
             version: '0.0.1'
@@ -410,7 +409,6 @@ describe(_saveBlueprint, function() {
           });
 
           await saveBlueprint({
-            cwd,
             packageName: 'test-blueprint',
             name: 'test-blueprint',
             version: '0.0.1'
@@ -440,7 +438,6 @@ describe(_saveBlueprint, function() {
           });
 
           await saveBlueprint({
-            cwd,
             packageName: 'test-blueprint',
             name: 'test-blueprint',
             version: '0.0.1'
@@ -475,7 +472,6 @@ describe(_saveBlueprint, function() {
         });
 
         await saveBlueprint({
-          cwd,
           packageName: 'test-blueprint',
           name: 'test-blueprint',
           version: '0.0.1'
@@ -514,7 +510,6 @@ describe(_saveBlueprint, function() {
         });
 
         await saveBlueprint({
-          cwd,
           packageName: 'test-blueprint',
           name: 'test-blueprint',
           version: '0.0.1'
