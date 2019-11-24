@@ -6,8 +6,7 @@ const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprint = require('./parse-blueprint');
 const downloadPackage = require('./download-package');
 const saveBlueprint = require('./save-blueprint');
-const saveDefaultBlueprint = require('./save-default-blueprint');
-const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
+const loadDefaultBlueprint = require('./load-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
@@ -61,7 +60,7 @@ module.exports = async function init({
       projectOptions
     }) => {
       if (!isCustomBlueprint) {
-        blueprint = loadSafeDefaultBlueprint(projectOptions, blueprint.version);
+        blueprint = loadDefaultBlueprint(projectOptions, blueprint.version);
       }
 
       return getStartAndEndCommands({
@@ -73,17 +72,10 @@ module.exports = async function init({
     wasRunAsExecutable
   })).promise;
 
-  if (isCustomBlueprint) {
-    await saveBlueprint({
-      cwd,
-      blueprint
-    });
-  } else {
-    await saveDefaultBlueprint({
-      cwd,
-      blueprint
-    });
-  }
+  await saveBlueprint({
+    cwd,
+    blueprint
+  });
 
   if (!reset) {
     await stageBlueprintFile(cwd);

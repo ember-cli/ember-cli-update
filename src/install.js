@@ -6,7 +6,6 @@ const downloadPackage = require('./download-package');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
-const saveDefaultBlueprint = require('./save-default-blueprint');
 const isDefaultBlueprint = require('./is-default-blueprint');
 
 const toDefault = require('./args').to.default;
@@ -35,7 +34,7 @@ module.exports = async function install({
   let emberCliUpdateJson = await loadBlueprintFile(cwd);
 
   if (!emberCliUpdateJson && isCustomBlueprint) {
-    await saveDefaultBlueprint({
+    await saveBlueprint({
       cwd
     });
   }

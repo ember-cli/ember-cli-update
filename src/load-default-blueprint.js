@@ -3,7 +3,7 @@
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const { defaultBlueprintName } = require('./constants');
 
-function loadSafeDefaultBlueprint(projectOptions = [], version) {
+function loadDefaultBlueprint(projectOptions = [], version) {
   let type = 'app';
   if (projectOptions.includes('addon')) {
     type = 'addon';
@@ -28,4 +28,4 @@ function loadSafeDefaultBlueprint(projectOptions = [], version) {
   });
 }
 
-module.exports = loadSafeDefaultBlueprint;
+module.exports = loadDefaultBlueprint;

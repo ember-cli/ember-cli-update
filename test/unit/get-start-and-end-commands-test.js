@@ -7,7 +7,7 @@ const path = require('path');
 const _getStartAndEndCommands = require('../../src/get-start-and-end-commands');
 const utils = require('../../src/utils');
 const loadSafeBlueprint = require('../../src/load-safe-blueprint');
-const loadSafeDefaultBlueprint = require('../../src/load-safe-default-blueprint');
+const loadDefaultBlueprint = require('../../src/load-default-blueprint');
 
 const {
   getArgs
@@ -24,8 +24,8 @@ const commandName = 'ember';
 const blueprint = 'test-blueprint';
 const blueprintPath = '/path/to/blueprint';
 const projectPath = path.normalize(`${cwd}/${projectName}`);
-const defaultStartBlueprint = loadSafeDefaultBlueprint([], startVersion);
-const defaultEndBlueprint = loadSafeDefaultBlueprint([], endVersion);
+const defaultStartBlueprint = loadDefaultBlueprint([], startVersion);
+const defaultEndBlueprint = loadDefaultBlueprint([], endVersion);
 
 describe(_getStartAndEndCommands, function() {
   let npxStub;
@@ -87,7 +87,7 @@ describe(_getStartAndEndCommands, function() {
       packageRoot,
       options: {
         projectName,
-        blueprint: loadSafeDefaultBlueprint(['welcome'])
+        blueprint: loadDefaultBlueprint(['welcome'])
       }
     });
 
@@ -117,7 +117,7 @@ describe(_getStartAndEndCommands, function() {
     let createProject = createProjectFromRemote({
       options: {
         projectName,
-        blueprint: loadSafeDefaultBlueprint(['welcome'], packageVersion)
+        blueprint: loadDefaultBlueprint(['welcome'], packageVersion)
       }
     });
 
@@ -344,7 +344,7 @@ describe(_getStartAndEndCommands, function() {
         options: {
           projectName,
           blueprint: {
-            ...loadSafeDefaultBlueprint(['welcome'], packageVersion),
+            ...loadDefaultBlueprint(['welcome'], packageVersion),
             path: blueprintPath
           }
         }
@@ -397,7 +397,7 @@ describe(_getStartAndEndCommands, function() {
   });
 
   describe('options', function() {
-    async function processBlueprint(defaultBlueprint = loadSafeDefaultBlueprint()) {
+    async function processBlueprint(defaultBlueprint = loadDefaultBlueprint()) {
       let options = getStartAndEndCommands({
         startBlueprint: defaultBlueprint,
         endBlueprint: defaultBlueprint
@@ -430,7 +430,7 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can create an addon', async function() {
-      let args = await processBlueprint(loadSafeDefaultBlueprint(['addon']));
+      let args = await processBlueprint(loadDefaultBlueprint(['addon']));
 
       let i = args.indexOf('-b');
 
@@ -446,7 +446,7 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can create an app without the --no-welcome option', async function() {
-      let args = await processBlueprint(loadSafeDefaultBlueprint(['welcome']));
+      let args = await processBlueprint(loadDefaultBlueprint(['welcome']));
 
       expect(args).to.not.include('--no-welcome');
     });
@@ -458,7 +458,7 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('can create an app with the yarn option', async function() {
-      let args = await processBlueprint(loadSafeDefaultBlueprint(['yarn']));
+      let args = await processBlueprint(loadDefaultBlueprint(['yarn']));
 
       expect(args).to.include('--yarn');
     });
@@ -468,7 +468,7 @@ describe(_getStartAndEndCommands, function() {
     let projectName = 'my-project';
 
     it('works for default app', function() {
-      let blueprint = loadSafeDefaultBlueprint(['welcome']);
+      let blueprint = loadDefaultBlueprint(['welcome']);
 
       let args = getArgs(projectName, blueprint);
 
@@ -484,7 +484,7 @@ describe(_getStartAndEndCommands, function() {
     });
 
     it('works for default addon', function() {
-      let blueprint = loadSafeDefaultBlueprint(['addon']);
+      let blueprint = loadDefaultBlueprint(['addon']);
 
       let args = getArgs(projectName, blueprint);
 
@@ -521,7 +521,7 @@ describe(_getStartAndEndCommands, function() {
 
     it('handles options', function() {
       let blueprint = {
-        ...loadSafeDefaultBlueprint(['welcome']),
+        ...loadDefaultBlueprint(['welcome']),
         options: [
           '--my-option-1',
           '--my-option-2'

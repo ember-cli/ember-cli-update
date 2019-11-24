@@ -15,9 +15,8 @@ const downloadPackage = require('./download-package');
 const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
-const saveDefaultBlueprint = require('./save-default-blueprint');
 const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
-const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
+const loadDefaultBlueprint = require('./load-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
@@ -95,7 +94,7 @@ module.exports = async function emberCliUpdate({
     let { blueprints } = emberCliUpdateJson;
 
     if (!blueprints.length) {
-      blueprint = loadSafeDefaultBlueprint();
+      blueprint = loadDefaultBlueprint();
     } else {
       isPersistedBlueprint = true;
 
@@ -163,7 +162,7 @@ All blueprints are up-to-date!`;
       let startBlueprint;
 
       if (!isCustomBlueprint && createCustomDiff) {
-        blueprint = loadSafeDefaultBlueprint(projectOptions, blueprint.version);
+        blueprint = loadDefaultBlueprint(projectOptions, blueprint.version);
       }
 
       startBlueprint = { ...blueprint };
@@ -235,7 +234,7 @@ All blueprints are up-to-date!`;
     // If you don't have a state file, save the default blueprint,
     // even if you are currently working on a custom blueprint.
     if (!emberCliUpdateJson || !isCustomBlueprint) {
-      await saveDefaultBlueprint({
+      await saveBlueprint({
         cwd
       });
     }
