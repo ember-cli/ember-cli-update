@@ -2,23 +2,23 @@
 
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const _loadSafeDefaultBlueprint = require('../../src/load-safe-default-blueprint');
+const _loadDefaultBlueprint = require('../../src/load-default-blueprint');
 
 const version = '1.2.3';
 
-describe(_loadSafeDefaultBlueprint, function() {
+describe(_loadDefaultBlueprint, function() {
   let projectOptions;
 
   beforeEach(function() {
     projectOptions = [];
   });
 
-  function loadSafeDefaultBlueprint() {
-    return _loadSafeDefaultBlueprint(projectOptions, version);
+  function loadDefaultBlueprint() {
+    return _loadDefaultBlueprint(projectOptions, version);
   }
 
   it('returns blank blueprint if no params', async function() {
-    let blueprint = _loadSafeDefaultBlueprint();
+    let blueprint = _loadDefaultBlueprint();
 
     expect(blueprint).to.deep.equal({
       packageName: 'ember-cli',
@@ -43,7 +43,7 @@ describe(_loadSafeDefaultBlueprint, function() {
       });
 
       it('npm', async function() {
-        let blueprint = loadSafeDefaultBlueprint();
+        let blueprint = loadDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
@@ -58,7 +58,7 @@ describe(_loadSafeDefaultBlueprint, function() {
       it('yarn', async function() {
         projectOptions.push('yarn');
 
-        let blueprint = loadSafeDefaultBlueprint();
+        let blueprint = loadDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
@@ -75,7 +75,7 @@ describe(_loadSafeDefaultBlueprint, function() {
 
     describe('no welcome', function() {
       it('npm', async function() {
-        let blueprint = loadSafeDefaultBlueprint();
+        let blueprint = loadDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
@@ -92,7 +92,7 @@ describe(_loadSafeDefaultBlueprint, function() {
       it('yarn', async function() {
         projectOptions.push('yarn');
 
-        let blueprint = loadSafeDefaultBlueprint();
+        let blueprint = loadDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
@@ -115,7 +115,7 @@ describe(_loadSafeDefaultBlueprint, function() {
     });
 
     it('npm', async function() {
-      let blueprint = loadSafeDefaultBlueprint();
+      let blueprint = loadDefaultBlueprint();
 
       expect(blueprint).to.deep.equal({
         packageName: 'ember-cli',
@@ -132,7 +132,7 @@ describe(_loadSafeDefaultBlueprint, function() {
     it('yarn', async function() {
       projectOptions.push('yarn');
 
-      let blueprint = loadSafeDefaultBlueprint();
+      let blueprint = loadDefaultBlueprint();
 
       expect(blueprint).to.deep.equal({
         packageName: 'ember-cli',

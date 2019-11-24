@@ -6,10 +6,9 @@ const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
 const getVersions = require('boilerplate-update/src/get-versions');
 const getProjectVersion = require('./get-project-version');
-const saveDefaultBlueprint = require('./save-default-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
-const loadSafeDefaultBlueprint = require('./load-safe-default-blueprint');
+const loadDefaultBlueprint = require('./load-default-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const isDefaultBlueprint = require('./is-default-blueprint');
 
@@ -35,19 +34,14 @@ module.exports = async function bootstrap() {
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
-  if (isCustomBlueprint) {
-    await saveBlueprint({
-      cwd,
-      blueprint
-    });
-  } else {
-    let blueprint = loadSafeDefaultBlueprint(projectOptions, version);
-
-    await saveDefaultBlueprint({
-      cwd,
-      blueprint
-    });
+  if (!isCustomBlueprint) {
+    blueprint = loadDefaultBlueprint(projectOptions, version);
   }
+
+  await saveBlueprint({
+    cwd,
+    blueprint
+  });
 
   await stageBlueprintFile(cwd);
 };
