@@ -3,7 +3,7 @@
 const getProjectOptions = require('./get-project-options');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
-const parseBlueprint = require('./parse-blueprint');
+const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
 const saveBlueprint = require('./save-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
@@ -27,10 +27,10 @@ module.exports = async function init({
   let location;
   let url;
   if (_blueprint) {
-    let parsedBlueprint = await parseBlueprint(_blueprint);
-    name = parsedBlueprint.name;
-    location = parsedBlueprint.location;
-    url = parsedBlueprint.url;
+    let parsedPackage = await parseBlueprintPackage(_blueprint);
+    name = parsedPackage.name;
+    location = parsedPackage.location;
+    url = parsedPackage.url;
   } else {
     name = defaultBlueprintName;
   }

@@ -3,17 +3,17 @@
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const path = require('path');
-const parseBlueprint = require('../../src/parse-blueprint');
+const parseBlueprintPackage = require('../../src/parse-blueprint-package');
 
-const { toPosixAbsolutePath } = parseBlueprint;
+const { toPosixAbsolutePath } = parseBlueprintPackage;
 
-describe(parseBlueprint, function() {
+describe(parseBlueprintPackage, function() {
   it('detects local paths', async function() {
     let blueprint = 'test/fixtures/blueprint/app/local';
 
-    let parsedBlueprint = await parseBlueprint(blueprint);
+    let parsedPackage = await parseBlueprintPackage(blueprint);
 
-    expect(parsedBlueprint).to.deep.equal({
+    expect(parsedPackage).to.deep.equal({
       name: undefined,
       location: blueprint,
       url: `git+file://${toPosixAbsolutePath(path.join(process.cwd(), blueprint))}`
@@ -23,9 +23,9 @@ describe(parseBlueprint, function() {
   it('detects urls', async function() {
     let blueprint = 'http://test-blueprint.com';
 
-    let parsedBlueprint = await parseBlueprint(blueprint);
+    let parsedPackage = await parseBlueprintPackage(blueprint);
 
-    expect(parsedBlueprint).to.deep.equal({
+    expect(parsedPackage).to.deep.equal({
       name: undefined,
       location: blueprint,
       url: blueprint
@@ -35,9 +35,9 @@ describe(parseBlueprint, function() {
   it('detects npm packages', async function() {
     let blueprint = 'test-blueprint';
 
-    let parsedBlueprint = await parseBlueprint(blueprint);
+    let parsedPackage = await parseBlueprintPackage(blueprint);
 
-    expect(parsedBlueprint).to.deep.equal({
+    expect(parsedPackage).to.deep.equal({
       name: 'test-blueprint',
       location: undefined,
       url: undefined

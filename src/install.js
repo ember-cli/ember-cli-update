@@ -1,7 +1,7 @@
 'use strict';
 
 const utils = require('./utils');
-const parseBlueprint = require('./parse-blueprint');
+const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
@@ -19,13 +19,13 @@ module.exports = async function install({
 
   // This can be optimized by going into the node_modules install location
   // from above and grabbing it from there.
-  let parsedBlueprint = await parseBlueprint(addon);
-  let downloadedPackage = await downloadPackage(parsedBlueprint.name, parsedBlueprint.url, toDefault);
+  let parsedPackage = await parseBlueprintPackage(addon);
+  let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, toDefault);
 
   let blueprint = loadSafeBlueprint({
     packageName: downloadedPackage.name,
     name: downloadedPackage.name,
-    location: parsedBlueprint.location,
+    location: parsedPackage.location,
     version: downloadedPackage.version
   });
 

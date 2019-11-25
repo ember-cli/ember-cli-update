@@ -5,7 +5,7 @@ const { expect } = require('../helpers/chai');
 const path = require('path');
 const { tmpdir } = require('os');
 const { initBlueprint } = require('../helpers/blueprint');
-const parseBlueprint = require('../../src/parse-blueprint');
+const parseBlueprintPackage = require('../../src/parse-blueprint-package');
 const downloadPackage = require('../../src/download-package');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
@@ -26,7 +26,7 @@ describe(downloadPackage, function() {
 
     let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', location);
 
-    let { url } = await parseBlueprint(blueprintPath);
+    let { url } = await parseBlueprintPackage(blueprintPath);
 
     let downloadedPackage = await downloadPackage(null, url, range);
 
