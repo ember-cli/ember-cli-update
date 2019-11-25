@@ -19,7 +19,7 @@ describe(_getProjectOptions, function() {
 
     blueprint = {
       packageName: 'ember-cli',
-      name: 'ember-cli'
+      name: 'app'
     };
   });
 

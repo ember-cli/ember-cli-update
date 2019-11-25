@@ -7,11 +7,11 @@ const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
 const saveBlueprint = require('./save-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
+const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
-const { defaultBlueprintName } = require('./constants');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -23,23 +23,33 @@ module.exports = async function init({
 }) {
   let cwd = process.cwd();
 
+  let packageName;
   let name;
   let location;
   let url;
   if (_blueprint) {
     let parsedPackage = await parseBlueprintPackage(_blueprint);
-    name = parsedPackage.name;
+    packageName = parsedPackage.name;
     location = parsedPackage.location;
     url = parsedPackage.url;
   } else {
-    name = defaultBlueprintName;
+    let defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
+    packageName = defaultBlueprint.packageName;
+    name = defaultBlueprint.name;
   }
 
-  let downloadedPackage = await downloadPackage(name, url, to);
+  let downloadedPackage = await downloadPackage(packageName, url, to);
+  packageName = downloadedPackage.name;
+
+  // could be "app" or "addon" already
+  // don't want to overwrite with "ember-cli"
+  if (!name) {
+    name = downloadedPackage.name;
+  }
 
   let blueprint = loadSafeBlueprint({
-    packageName: downloadedPackage.name,
-    name: downloadedPackage.name,
+    packageName,
+    name,
     location,
     path: downloadedPackage.path,
     version: downloadedPackage.version,

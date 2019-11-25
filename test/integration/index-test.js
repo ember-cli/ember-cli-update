@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
@@ -199,15 +198,16 @@ describe(function() {
     } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
-      reset: true,
+      reset: true
       // test the resetting logic of ember-cli-update.json
-      blueprint: 'ember-cli',
-      async afterMerge() {
-        expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
-          .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'));
+      // no longer a valid blueprint name
+      // blueprint: 'ember-cli',
+      // async afterMerge() {
+      //   expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
+      //     .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'));
 
-        await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
-      }
+      //   await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
+      // }
     });
 
     fixtureCompare({

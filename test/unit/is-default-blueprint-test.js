@@ -8,7 +8,7 @@ describe(isDefaultBlueprint, function() {
   it('detects default blueprint', function() {
     expect(isDefaultBlueprint({
       packageName: 'ember-cli',
-      name: 'ember-cli'
+      name: 'app'
     })).to.be.true;
   });
 

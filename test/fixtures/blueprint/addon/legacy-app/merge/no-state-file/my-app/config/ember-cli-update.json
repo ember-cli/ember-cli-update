@@ -6,8 +6,7 @@
       "version": "0.0.0",
       "blueprints": [
         {
-          "name": "ember-cli",
-          "type": "app",
+          "name": "app",
           "isBaseBlueprint": true,
           "options": [
             "--no-welcome"

@@ -22,8 +22,7 @@ describe(_loadDefaultBlueprint, function() {
 
     expect(blueprint).to.deep.equal({
       packageName: 'ember-cli',
-      name: 'ember-cli',
-      type: 'app',
+      name: 'app',
       version: undefined,
       isBaseBlueprint: true,
       options: [
@@ -47,8 +46,7 @@ describe(_loadDefaultBlueprint, function() {
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
-          name: 'ember-cli',
-          type: 'app',
+          name: 'app',
           version,
           isBaseBlueprint: true,
           options: []
@@ -62,8 +60,7 @@ describe(_loadDefaultBlueprint, function() {
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
-          name: 'ember-cli',
-          type: 'app',
+          name: 'app',
           version,
           isBaseBlueprint: true,
           options: [
@@ -79,8 +76,7 @@ describe(_loadDefaultBlueprint, function() {
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
-          name: 'ember-cli',
-          type: 'app',
+          name: 'app',
           version,
           isBaseBlueprint: true,
           options: [
@@ -96,8 +92,7 @@ describe(_loadDefaultBlueprint, function() {
 
         expect(blueprint).to.deep.equal({
           packageName: 'ember-cli',
-          name: 'ember-cli',
-          type: 'app',
+          name: 'app',
           version,
           isBaseBlueprint: true,
           options: [
@@ -119,8 +114,7 @@ describe(_loadDefaultBlueprint, function() {
 
       expect(blueprint).to.deep.equal({
         packageName: 'ember-cli',
-        name: 'ember-cli',
-        type: 'addon',
+        name: 'addon',
         version,
         isBaseBlueprint: true,
         options: [
@@ -136,8 +130,7 @@ describe(_loadDefaultBlueprint, function() {
 
       expect(blueprint).to.deep.equal({
         packageName: 'ember-cli',
-        name: 'ember-cli',
-        type: 'addon',
+        name: 'addon',
         version,
         isBaseBlueprint: true,
         options: [
