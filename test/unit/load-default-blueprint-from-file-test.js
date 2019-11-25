@@ -36,8 +36,7 @@ describe(loadDefaultBlueprintFromDisk, function() {
 
     expect(blueprint).to.deep.equal({
       packageName: 'ember-cli',
-      name: 'ember-cli',
-      type: 'app',
+      name: 'app',
       version: '0.0.1',
       isBaseBlueprint: true,
       options: ['--no-welcome']

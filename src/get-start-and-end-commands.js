@@ -55,10 +55,9 @@ function getArgs(projectName, blueprint) {
   let _blueprint;
   if (isCustomBlueprint) {
     _blueprint = blueprint.path;
-  } else if (blueprint.type === 'addon') {
-    _blueprint = 'addon';
   } else {
-    _blueprint = 'app';
+    // Can we use the above path all the time, even if it is default?
+    _blueprint = blueprint.name;
   }
 
   return [

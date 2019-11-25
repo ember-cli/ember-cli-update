@@ -1,9 +1,16 @@
 'use strict';
 
-const { defaultBlueprintName } = require('./constants');
+const {
+  defaultPackageName,
+  defaultAppBlueprintName,
+  defaultAddonBlueprintName
+} = require('./constants');
 
 function isDefaultBlueprint({ packageName, name }) {
-  return packageName === defaultBlueprintName && name === defaultBlueprintName;
+  return packageName === defaultPackageName && [
+    defaultAppBlueprintName,
+    defaultAddonBlueprintName
+  ].includes(name);
 }
 
 module.exports = isDefaultBlueprint;

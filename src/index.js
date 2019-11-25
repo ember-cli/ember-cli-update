@@ -63,22 +63,20 @@ module.exports = async function emberCliUpdate({
     let parsedPackage = await parseBlueprintPackage(_blueprint);
     packageUrl = parsedPackage.url;
 
-    let { name } = parsedPackage;
-    if (!name) {
+    let packageName = parsedPackage.name;
+    if (!packageName) {
       let downloadedPackage = await downloadPackage(null, packageUrl, toDefault);
-      name = downloadedPackage.name;
+      packageName = downloadedPackage.name;
     }
 
-    let packageName = name;
-
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
+    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, packageName);
     if (existingBlueprint) {
       isPersistedBlueprint = true;
       blueprint = loadSafeBlueprint(existingBlueprint);
     } else {
       blueprint = loadSafeBlueprint({
         packageName,
-        name,
+        name: packageName,
         location: parsedPackage.location
       });
     }
@@ -173,8 +171,8 @@ All blueprints are up-to-date!`;
           startDownloadedPackage,
           endDownloadedPackage
         ] = await Promise.all([
-          downloadPackage(blueprint.name, packageUrl, blueprint.version),
-          downloadPackage(blueprint.name, packageUrl, to)
+          downloadPackage(blueprint.packageName, packageUrl, blueprint.version),
+          downloadPackage(blueprint.packageName, packageUrl, to)
         ]);
 
         startBlueprint.path = startDownloadedPackage.path;

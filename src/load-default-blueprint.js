@@ -1,12 +1,16 @@
 'use strict';
 
 const loadSafeBlueprint = require('./load-safe-blueprint');
-const { defaultBlueprintName } = require('./constants');
+const {
+  defaultPackageName,
+  defaultAppBlueprintName,
+  defaultAddonBlueprintName
+} = require('./constants');
 
 function loadDefaultBlueprint(projectOptions = [], version) {
-  let type = 'app';
+  let name = defaultAppBlueprintName;
   if (projectOptions.includes('addon')) {
-    type = 'addon';
+    name = defaultAddonBlueprintName;
   }
 
   let options = [];
@@ -19,9 +23,8 @@ function loadDefaultBlueprint(projectOptions = [], version) {
   }
 
   return loadSafeBlueprint({
-    packageName: defaultBlueprintName,
-    name: defaultBlueprintName,
-    type,
+    packageName: defaultPackageName,
+    name,
     version,
     options,
     isBaseBlueprint: true
