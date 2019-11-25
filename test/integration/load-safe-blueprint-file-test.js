@@ -37,6 +37,7 @@ describe(loadSafeBlueprintFile, function() {
       blueprints: [{
         packageName: 'test-blueprint',
         name: 'test-blueprint',
+        location: '../test-blueprint',
         version: '0.0.1'
       }]
     });

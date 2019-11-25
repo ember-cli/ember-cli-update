@@ -18,6 +18,8 @@ async function loadSafeBlueprintFile(cwd) {
   emberCliUpdateJson.blueprints = emberCliUpdateJson.packages.reduce((blueprints, _package) => {
     for (let blueprint of _package.blueprints) {
       blueprint.packageName = _package.name;
+      blueprint.location = _package.location;
+      blueprint.version = _package.version;
 
       blueprints.push(blueprint);
     }

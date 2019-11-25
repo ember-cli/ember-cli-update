@@ -21,6 +21,7 @@ describe(saveBlueprintFile, function() {
         {
           packageName: 'test-blueprint',
           name: 'test-blueprint',
+          location: '../test-blueprint',
           version: '0.0.1'
         }
       ]

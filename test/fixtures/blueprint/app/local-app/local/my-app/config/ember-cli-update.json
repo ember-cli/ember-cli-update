@@ -3,20 +3,20 @@
   "packages": [
     {
       "name": "ember-cli-update-npm-blueprint-test",
+      "version": "0.0.11",
       "blueprints": [
         {
-          "name": "ember-cli-update-npm-blueprint-test",
-          "version": "0.0.11"
+          "name": "ember-cli-update-npm-blueprint-test"
         }
       ]
     },
     {
       "name": "ember-cli-update-git-blueprint-test",
+      "location": "../local-blueprint",
+      "version": "0.0.1",
       "blueprints": [
         {
           "name": "ember-cli-update-git-blueprint-test",
-          "location": "../local-blueprint",
-          "version": "0.0.1",
           "isBaseBlueprint": true,
           "options": [
             "--supplied-option=foo",
