@@ -14,7 +14,7 @@ function toPosixAbsolutePath(path) {
   return posixPath;
 }
 
-async function parseBlueprint(blueprint) {
+async function parseBlueprintPackage(blueprint) {
   let name;
   let location;
   let url;
@@ -40,5 +40,5 @@ async function parseBlueprint(blueprint) {
   };
 }
 
-module.exports = parseBlueprint;
+module.exports = parseBlueprintPackage;
 module.exports.toPosixAbsolutePath = toPosixAbsolutePath;

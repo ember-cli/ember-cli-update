@@ -10,7 +10,7 @@ const _getTagVersion = require('./get-tag-version');
 const getRemoteUrl = require('./get-remote-url');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
-const parseBlueprint = require('./parse-blueprint');
+const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
 const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
@@ -60,10 +60,10 @@ module.exports = async function emberCliUpdate({
   let isPersistedBlueprint;
 
   if (_blueprint) {
-    let parsedBlueprint = await parseBlueprint(_blueprint);
-    packageUrl = parsedBlueprint.url;
+    let parsedPackage = await parseBlueprintPackage(_blueprint);
+    packageUrl = parsedPackage.url;
 
-    let { name } = parsedBlueprint;
+    let { name } = parsedPackage;
     if (!name) {
       let downloadedPackage = await downloadPackage(null, packageUrl, toDefault);
       name = downloadedPackage.name;
@@ -79,7 +79,7 @@ module.exports = async function emberCliUpdate({
       blueprint = loadSafeBlueprint({
         packageName,
         name,
-        location: parsedBlueprint.location
+        location: parsedPackage.location
       });
     }
 
@@ -135,8 +135,8 @@ All blueprints are up-to-date!`;
   }
 
   if (blueprint.location && !packageUrl) {
-    let parsedBlueprint = await parseBlueprint(blueprint.location);
-    packageUrl = parsedBlueprint.url;
+    let parsedPackage = await parseBlueprintPackage(blueprint.location);
+    packageUrl = parsedPackage.url;
   }
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
