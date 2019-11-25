@@ -163,7 +163,10 @@ All blueprints are up-to-date!`;
         blueprint = loadDefaultBlueprint(projectOptions, blueprint.version);
       }
 
-      startBlueprint = { ...blueprint };
+      if (!reset) {
+        startBlueprint = { ...blueprint };
+      }
+
       endBlueprint = { ...blueprint };
 
       if (isCustomBlueprint) {
@@ -171,14 +174,16 @@ All blueprints are up-to-date!`;
           startDownloadedPackage,
           endDownloadedPackage
         ] = await Promise.all([
-          downloadPackage(blueprint.packageName, packageUrl, blueprint.version),
-          downloadPackage(blueprint.packageName, packageUrl, to)
+          startBlueprint ? downloadPackage(startBlueprint.packageName, packageUrl, startBlueprint.version) : null,
+          downloadPackage(endBlueprint.packageName, packageUrl, to)
         ]);
 
-        startBlueprint.path = startDownloadedPackage.path;
-        endBlueprint.path = endDownloadedPackage.path;
+        if (startBlueprint) {
+          startBlueprint.path = startDownloadedPackage.path;
+          startBlueprint.version = startDownloadedPackage.version;
+        }
 
-        startBlueprint.version = startDownloadedPackage.version;
+        endBlueprint.path = endDownloadedPackage.path;
         endBlueprint.version = endDownloadedPackage.version;
       } else {
         let packageName = getPackageName(projectOptions);
@@ -188,10 +193,12 @@ All blueprints are up-to-date!`;
 
         let getTagVersion = _getTagVersion(versions, packageName);
 
-        if (from) {
-          startBlueprint.version = await getTagVersion(from);
-        } else {
-          startBlueprint.version = getProjectVersion(packageVersion, versions, projectOptions);
+        if (startBlueprint) {
+          if (from) {
+            startBlueprint.version = await getTagVersion(from);
+          } else {
+            startBlueprint.version = getProjectVersion(packageVersion, versions, projectOptions);
+          }
         }
 
         endBlueprint.version = await getTagVersion(to);
@@ -207,7 +214,7 @@ All blueprints are up-to-date!`;
       }
 
       return {
-        startVersion: startBlueprint.version,
+        startVersion: startBlueprint && startBlueprint.version,
         endVersion: endBlueprint.version,
         customDiffOptions
       };
