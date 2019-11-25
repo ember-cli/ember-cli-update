@@ -3,10 +3,11 @@
   "packages": [
     {
       "name": "test-blueprint",
+      "location": "../test-blueprint",
+      "version": "0.0.1",
       "blueprints": [
         {
-          "name": "test-blueprint",
-          "version": "0.0.1"
+          "name": "test-blueprint"
         }
       ]
     }

@@ -11,6 +11,8 @@ async function saveBlueprintFile(cwd, emberCliUpdateJson) {
     if (!_package) {
       _package = {
         name: blueprint.packageName,
+        location: blueprint.location,
+        version: blueprint.version,
         blueprints: []
       };
 
@@ -20,6 +22,8 @@ async function saveBlueprintFile(cwd, emberCliUpdateJson) {
     _package.blueprints.push(blueprint);
 
     delete blueprint.packageName;
+    delete blueprint.location;
+    delete blueprint.version;
 
     return packages;
   }, []);
