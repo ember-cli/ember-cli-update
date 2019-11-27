@@ -274,6 +274,10 @@ async function appendNodeModulesIgnore({
   cwd,
   projectName
 }) {
+  if (!await fs.pathExists(path.join(cwd, projectName, 'node_modules'))) {
+    return;
+  }
+
   let isIgnoringNodeModules;
   let gitignore = '';
   try {
