@@ -9,7 +9,6 @@ const getProjectVersion = require('./get-project-version');
 const saveBlueprint = require('./save-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
-const stageBlueprintFile = require('./stage-blueprint-file');
 const { glimmerPackageName } = require('./constants');
 
 module.exports = async function bootstrap() {
@@ -42,6 +41,4 @@ module.exports = async function bootstrap() {
     cwd,
     blueprint
   });
-
-  await stageBlueprintFile(cwd);
 };

@@ -6,7 +6,8 @@
       "version": "0.0.11",
       "blueprints": [
         {
-          "name": "ember-cli-update-npm-blueprint-test"
+          "name": "ember-cli-update-npm-blueprint-test",
+          "isBaseBlueprint": true
         }
       ]
     },
@@ -17,7 +18,6 @@
       "blueprints": [
         {
           "name": "ember-cli-update-git-blueprint-test",
-          "isBaseBlueprint": true,
           "options": [
             "--supplied-option=foo"
           ]
