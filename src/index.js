@@ -72,14 +72,16 @@ module.exports = async function emberCliUpdate({
     let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, packageName);
     if (existingBlueprint) {
       isPersistedBlueprint = true;
-      blueprint = loadSafeBlueprint(existingBlueprint);
+      blueprint = existingBlueprint;
     } else {
-      blueprint = loadSafeBlueprint({
+      blueprint = {
         packageName,
         name: packageName,
         location: parsedPackage.location
-      });
+      };
     }
+
+    blueprint = loadSafeBlueprint(blueprint);
 
     if (from) {
       blueprint.version = from;

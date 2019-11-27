@@ -38,6 +38,7 @@ describe(function() {
     addon,
     bootstrap,
     save,
+    blueprintOptions = [],
     beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
@@ -83,6 +84,7 @@ describe(function() {
         `--from=${from}`
       ];
     }
+    args = [...args, '--', ...blueprintOptions];
 
     return processBin({
       binFile: 'ember-cli-update',
@@ -94,9 +96,9 @@ describe(function() {
   }
 
   function fixtureCompare({
+    actual = tmpPath,
     mergeFixtures
   }) {
-    let actual = tmpPath;
     let expected = mergeFixtures;
 
     _fixtureCompare({
@@ -328,7 +330,7 @@ describe(function() {
       bootstrap: true
     })).promise;
 
-    assertNoUnstaged(status);
+    assertNoStaged(status);
 
     expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
       .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
@@ -342,27 +344,29 @@ describe(function() {
 
   it('can save an old blueprint\'s state', async function() {
     let {
-      name,
+      location,
       version: from
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/local/my-app')).blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app')).blueprints[1];
 
     let {
       status
     } = await (await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/npm-app/local',
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/init',
       commitMessage: 'my-app',
       save: true,
-      blueprint: name,
+      blueprint: location,
+      blueprintOptions: ['--supplied-option=foo'],
       from,
       async beforeMerge() {
-        await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
+        await initBlueprint('test/fixtures/blueprint/app/local', location);
       }
     })).promise;
 
-    assertNoUnstaged(status);
+    assertNoStaged(status);
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/app/npm-app/local/my-app'
+      actual: path.join(tmpPath, 'config'),
+      mergeFixtures: 'test/fixtures/blueprint/app/local-app/local/my-app/config'
     });
   });
 });

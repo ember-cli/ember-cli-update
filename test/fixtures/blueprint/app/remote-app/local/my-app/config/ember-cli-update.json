@@ -7,7 +7,8 @@
       "version": "0.0.23",
       "blueprints": [
         {
-          "name": "ember-cli-update-git-blueprint-test"
+          "name": "ember-cli-update-git-blueprint-test",
+          "isBaseBlueprint": true
         }
       ]
     }

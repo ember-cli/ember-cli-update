@@ -8,6 +8,7 @@
       "blueprints": [
         {
           "name": "ember-cli-update-git-blueprint-test",
+          "isBaseBlueprint": true,
           "options": [
             "--custom-option=123"
           ]

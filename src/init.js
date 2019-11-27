@@ -9,9 +9,13 @@ const saveBlueprint = require('./save-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 const loadSafeBlueprint = require('./load-safe-blueprint');
+const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
+const loadBlueprintFile = require('./load-blueprint-file');
+const bootstrap = require('./bootstrap');
+const findBlueprint = require('./find-blueprint');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -47,15 +51,26 @@ module.exports = async function init({
     name = downloadedPackage.name;
   }
 
-  let blueprint = loadSafeBlueprint({
-    packageName,
-    name,
-    location,
-    path: downloadedPackage.path,
-    version: downloadedPackage.version,
-    isBaseBlueprint: true,
-    options: blueprintOptions
-  });
+  let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
+
+  let blueprint;
+
+  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
+  if (existingBlueprint) {
+    blueprint = existingBlueprint;
+  } else {
+    blueprint = {
+      packageName,
+      name,
+      location,
+      path: downloadedPackage.path,
+      options: blueprintOptions
+    };
+  }
+
+  blueprint = loadSafeBlueprint(blueprint);
+
+  blueprint.version = downloadedPackage.version;
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
@@ -81,6 +96,10 @@ module.exports = async function init({
     ignoredFiles: [await getBlueprintFilePath(cwd)],
     wasRunAsExecutable
   })).promise;
+
+  if (!await loadBlueprintFile(cwd)) {
+    await bootstrap();
+  }
 
   await saveBlueprint({
     cwd,

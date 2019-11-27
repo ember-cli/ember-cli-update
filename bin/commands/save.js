@@ -15,11 +15,13 @@ module.exports.builder = {
 module.exports.handler = async function handler(argv) {
   let blueprint = argv['blueprint'];
   let from = argv['from'];
+  let blueprintOptions = argv['--'] || [];
 
   try {
     await save({
       blueprint,
-      from
+      from,
+      blueprintOptions
     });
   } catch (err) {
     console.error(err);
