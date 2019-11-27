@@ -228,7 +228,6 @@ module.exports.createEmptyCommit = async function createEmptyCommit({
   projectName
 }) {
   await fs.mkdir(path.join(cwd, projectName));
-  await fs.writeFile(path.join(cwd, projectName, 'package.json'), '{}');
   await appendNodeModulesIgnore({
     cwd,
     projectName
