@@ -83,7 +83,7 @@ describe(init, function() {
     let {
       status
     } = await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/init',
       commitMessage: 'my-app',
       blueprint: location,
       blueprintOptions: ['--supplied-option=foo'],

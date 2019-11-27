@@ -19,8 +19,7 @@
           "name": "ember-cli-update-git-blueprint-test",
           "isBaseBlueprint": true,
           "options": [
-            "--supplied-option=foo",
-            "--unsupplied-option=bar"
+            "--supplied-option=foo"
           ]
         }
       ]
