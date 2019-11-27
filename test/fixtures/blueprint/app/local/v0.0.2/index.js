@@ -8,8 +8,7 @@ module.exports = {
       name: options.entity.name,
       blueprintName: this.name,
       blueprintVersion: require('./package').version,
-      suppliedOption: options.suppliedOption,
-      unsuppliedOption: options.unsuppliedOption || 'bar'
+      suppliedOption: options.suppliedOption
     };
   }
 };
