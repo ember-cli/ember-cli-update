@@ -7,7 +7,7 @@ const toDefault = require('./args').to.default;
 
 async function checkForBlueprintUpdates(blueprints) {
   return await Promise.all(blueprints.map(async blueprint => {
-    let parsedPackage = await parseBlueprintPackage(blueprint.location || blueprint.name);
+    let parsedPackage = await parseBlueprintPackage(blueprint.location || blueprint.packageName);
 
     let [
       { version: currentVersion },
