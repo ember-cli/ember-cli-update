@@ -12,6 +12,10 @@ module.exports = async function save({
   from,
   blueprintOptions
 }) {
+  if (!from) {
+    throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+  }
+
   let cwd = process.cwd();
 
   let parsedPackage = await parseBlueprintPackage(_blueprint);
