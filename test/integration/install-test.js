@@ -90,7 +90,11 @@ describe(install, function() {
       commitMessage: 'my-app',
       addon: location,
       async beforeMerge() {
-        await initBlueprint('test/fixtures/blueprint/addon/legacy', location);
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
 
         await run('npm install', { cwd: tmpPath });
       },

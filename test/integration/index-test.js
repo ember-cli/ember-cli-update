@@ -385,7 +385,11 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
           blueprint: location,
           to,
           async beforeMerge() {
-            await initBlueprint('test/fixtures/blueprint/app/legacy', location);
+            await initBlueprint({
+              fixturesPath: 'test/fixtures/blueprint/app/legacy',
+              resolvedFrom: tmpPath,
+              relativeDir: location
+            });
           }
         });
 
@@ -457,7 +461,11 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
           blueprint: name,
           to: toDefault,
           async beforeMerge() {
-            await initBlueprint('test/fixtures/blueprint/addon/legacy', location);
+            await initBlueprint({
+              fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+              resolvedFrom: tmpPath,
+              relativeDir: location
+            });
           }
         });
 
