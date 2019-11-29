@@ -243,14 +243,18 @@ describe(function() {
       }
     });
 
-    ps.stdout.on('data', data => {
+    function stdoutData(data) {
       let str = data.toString();
       if (str.includes('Blueprint updates have been found.')) {
         let down = '\u001b[B';
         let enter = '\n';
         ps.stdin.write(`${down}${enter}`);
+
+        ps.stdout.removeListener('data', stdoutData);
       }
-    });
+    }
+
+    ps.stdout.on('data', stdoutData);
 
     let {
       status
