@@ -11,7 +11,10 @@ describe(parseBlueprintPackage, function() {
   it('detects local paths', async function() {
     let blueprint = 'test/fixtures/blueprint/app/local';
 
-    let parsedPackage = await parseBlueprintPackage(blueprint);
+    let parsedPackage = await parseBlueprintPackage({
+      cwd: process.cwd(),
+      blueprint
+    });
 
     expect(parsedPackage).to.deep.equal({
       name: undefined,
@@ -23,7 +26,10 @@ describe(parseBlueprintPackage, function() {
   it('detects urls', async function() {
     let blueprint = 'http://test-blueprint.com';
 
-    let parsedPackage = await parseBlueprintPackage(blueprint);
+    let parsedPackage = await parseBlueprintPackage({
+      cwd: process.cwd(),
+      blueprint
+    });
 
     expect(parsedPackage).to.deep.equal({
       name: undefined,
@@ -35,7 +41,10 @@ describe(parseBlueprintPackage, function() {
   it('detects npm packages', async function() {
     let blueprint = 'test-blueprint';
 
-    let parsedPackage = await parseBlueprintPackage(blueprint);
+    let parsedPackage = await parseBlueprintPackage({
+      cwd: process.cwd(),
+      blueprint
+    });
 
     expect(parsedPackage).to.deep.equal({
       name: 'test-blueprint',

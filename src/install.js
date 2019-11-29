@@ -19,7 +19,10 @@ module.exports = async function install({
 
   // This can be optimized by going into the node_modules install location
   // from above and grabbing it from there.
-  let parsedPackage = await parseBlueprintPackage(addon);
+  let parsedPackage = await parseBlueprintPackage({
+    cwd,
+    blueprint: addon
+  });
   let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, toDefault);
 
   let blueprint = loadSafeBlueprint({

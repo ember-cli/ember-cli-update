@@ -18,7 +18,10 @@ module.exports = async function save({
 
   let cwd = process.cwd();
 
-  let parsedPackage = await parseBlueprintPackage(_blueprint);
+  let parsedPackage = await parseBlueprintPackage({
+    cwd,
+    blueprint: _blueprint
+  });
 
   let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, from);
 

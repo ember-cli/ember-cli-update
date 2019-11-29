@@ -14,11 +14,14 @@ function toPosixAbsolutePath(path) {
   return posixPath;
 }
 
-async function parseBlueprintPackage(blueprint) {
+async function parseBlueprintPackage({
+  cwd,
+  blueprint
+}) {
   let name;
   let location;
   let url;
-  let blueprintPath = path.resolve(process.cwd(), blueprint);
+  let blueprintPath = path.resolve(cwd, blueprint);
   if (await fs.pathExists(blueprintPath)) {
     let posixBlueprintPath = toPosixAbsolutePath(blueprintPath);
     url = `git+file://${posixBlueprintPath}`;
