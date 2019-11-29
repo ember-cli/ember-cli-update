@@ -101,7 +101,10 @@ module.exports = async function emberCliUpdate({
     } else {
       isPersistedBlueprint = true;
 
-      let blueprintUpdates = await checkForBlueprintUpdates(blueprints);
+      let blueprintUpdates = await checkForBlueprintUpdates({
+        cwd,
+        blueprints
+      });
 
       let areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
       if (areAllUpToDate) {

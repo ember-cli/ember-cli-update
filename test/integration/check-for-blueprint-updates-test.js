@@ -7,22 +7,14 @@ const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
-const path = require('path');
-const fs = require('fs-extra');
 
 describe(checkForBlueprintUpdates, function() {
   this.timeout(60 * 1000);
 
   let tmpPath;
-  let cwd = process.cwd();
 
   beforeEach(async function() {
-    tmpPath = path.join(await tmpDir(), 'app');
-    await fs.mkdir(tmpPath);
-  });
-
-  afterEach(function() {
-    process.chdir(cwd);
+    tmpPath = await tmpDir();
   });
 
   it('works', async function() {
@@ -39,15 +31,14 @@ describe(checkForBlueprintUpdates, function() {
       relativeDir: localBlueprint.location
     });
 
-    process.chdir(tmpPath);
-
-    let blueprintUpdates = await checkForBlueprintUpdates([
-      localBlueprint,
-      urlBlueprint,
-      npmBlueprint
-    ]);
-
-    process.chdir(cwd);
+    let blueprintUpdates = await checkForBlueprintUpdates({
+      cwd: tmpPath,
+      blueprints: [
+        localBlueprint,
+        urlBlueprint,
+        npmBlueprint
+      ]
+    });
 
     expect(blueprintUpdates).to.deep.equal([
       {

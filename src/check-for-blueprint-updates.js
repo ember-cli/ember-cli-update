@@ -5,10 +5,13 @@ const downloadPackage = require('./download-package');
 
 const toDefault = require('./args').to.default;
 
-async function checkForBlueprintUpdates(blueprints) {
+async function checkForBlueprintUpdates({
+  cwd,
+  blueprints
+}) {
   return await Promise.all(blueprints.map(async blueprint => {
     let parsedPackage = await parseBlueprintPackage({
-      cwd: process.cwd(),
+      cwd,
       blueprint: blueprint.location || blueprint.packageName
     });
 
