@@ -5,11 +5,21 @@ const { expect } = require('../helpers/chai');
 const checkForBlueprintUpdates = require('../../src/check-for-blueprint-updates');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const { promisify } = require('util');
+const tmpDir = promisify(require('tmp').dir);
+const path = require('path');
+const fs = require('fs-extra');
 
 describe(checkForBlueprintUpdates, function() {
   this.timeout(60 * 1000);
 
+  let tmpPath;
   let cwd = process.cwd();
+
+  beforeEach(async function() {
+    tmpPath = path.join(await tmpDir(), 'app');
+    await fs.mkdir(tmpPath);
+  });
 
   afterEach(function() {
     process.chdir(cwd);
@@ -23,9 +33,13 @@ describe(checkForBlueprintUpdates, function() {
     // up to date test
     let npmBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app')).blueprints[0];
 
-    let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', localBlueprint.location);
+    await initBlueprint({
+      fixturesPath: 'test/fixtures/blueprint/app/local',
+      resolvedFrom: tmpPath,
+      relativeDir: localBlueprint.location
+    });
 
-    process.chdir(blueprintPath);
+    process.chdir(tmpPath);
 
     let blueprintUpdates = await checkForBlueprintUpdates([
       localBlueprint,

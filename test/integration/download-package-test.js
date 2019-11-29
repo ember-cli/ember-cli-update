@@ -8,9 +8,19 @@ const { initBlueprint } = require('../helpers/blueprint');
 const parseBlueprintPackage = require('../../src/parse-blueprint-package');
 const downloadPackage = require('../../src/download-package');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const { promisify } = require('util');
+const tmpDir = promisify(require('tmp').dir);
+const fs = require('fs-extra');
 
 describe(downloadPackage, function() {
   this.timeout(30 * 1000);
+
+  let tmpPath;
+
+  beforeEach(async function() {
+    tmpPath = path.join(await tmpDir(), 'app');
+    await fs.mkdir(tmpPath);
+  });
 
   it('throws if missing a range', async function() {
     await expect(downloadPackage('test-name', 'test-url', null))
@@ -24,7 +34,11 @@ describe(downloadPackage, function() {
       version: range
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1];
 
-    let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', location);
+    let blueprintPath = await initBlueprint({
+      fixturesPath: 'test/fixtures/blueprint/app/local',
+      resolvedFrom: tmpPath,
+      relativeDir: location
+    });
 
     let { url } = await parseBlueprintPackage(blueprintPath);
 

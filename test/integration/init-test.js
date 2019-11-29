@@ -88,7 +88,11 @@ describe(init, function() {
       blueprint: location,
       blueprintOptions: ['--supplied-option=foo'],
       async beforeMerge() {
-        await initBlueprint('test/fixtures/blueprint/app/local', location);
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/app/local',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
       }
     });
 

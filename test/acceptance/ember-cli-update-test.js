@@ -29,7 +29,7 @@ describe(function() {
     from,
     to = '3.2.0-beta.1',
     runCodemods,
-    subDir = '',
+    subDir,
     commitMessage,
     init,
     reset,
@@ -239,7 +239,11 @@ describe(function() {
       commitMessage: 'my-app',
       to,
       async beforeMerge() {
-        await initBlueprint('test/fixtures/blueprint/app/local', location);
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/app/local',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
       }
     });
 
@@ -310,7 +314,11 @@ describe(function() {
       install: true,
       addon: location,
       async beforeMerge() {
-        await initBlueprint('test/fixtures/blueprint/addon/legacy', location);
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
 
         await run('npm install', { cwd: tmpPath });
       }
@@ -362,7 +370,11 @@ describe(function() {
       blueprintOptions: ['--supplied-option=foo'],
       from,
       async beforeMerge() {
-        await initBlueprint('test/fixtures/blueprint/app/local', location);
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/app/local',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
       }
     })).promise;
 
