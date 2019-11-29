@@ -9,17 +9,32 @@ const { toPosixAbsolutePath } = parseBlueprintPackage;
 
 describe(parseBlueprintPackage, function() {
   it('detects local paths', async function() {
-    let blueprint = 'test/fixtures/blueprint/app/local';
+    let blueprint = '../fixtures/blueprint/app/local/v0.0.2';
 
     let parsedPackage = await parseBlueprintPackage({
-      cwd: process.cwd(),
+      cwd: __dirname,
       blueprint
     });
 
     expect(parsedPackage).to.deep.equal({
       name: undefined,
       location: blueprint,
-      url: `git+file://${toPosixAbsolutePath(path.join(process.cwd(), blueprint))}`
+      url: `git+file://${toPosixAbsolutePath(path.join(__dirname, blueprint))}`
+    });
+  });
+
+  it('ignores subdirs that collide with blueprint names', async function() {
+    let blueprint = 'config';
+
+    let parsedPackage = await parseBlueprintPackage({
+      cwd: path.resolve(__dirname, '../fixtures/blueprint/app/local-app/local/my-app'),
+      blueprint
+    });
+
+    expect(parsedPackage).to.deep.equal({
+      name: blueprint,
+      location: undefined,
+      url: undefined
     });
   });
 
@@ -27,7 +42,6 @@ describe(parseBlueprintPackage, function() {
     let blueprint = 'http://test-blueprint.com';
 
     let parsedPackage = await parseBlueprintPackage({
-      cwd: process.cwd(),
       blueprint
     });
 
@@ -42,12 +56,11 @@ describe(parseBlueprintPackage, function() {
     let blueprint = 'test-blueprint';
 
     let parsedPackage = await parseBlueprintPackage({
-      cwd: process.cwd(),
       blueprint
     });
 
     expect(parsedPackage).to.deep.equal({
-      name: 'test-blueprint',
+      name: blueprint,
       location: undefined,
       url: undefined
     });

@@ -27,7 +27,6 @@ describe(downloadPackage, function() {
     let blueprintPath = await initBlueprint('test/fixtures/blueprint/app/local', location);
 
     let { url } = await parseBlueprintPackage({
-      cwd: process.cwd(),
       blueprint: blueprintPath
     });
 
