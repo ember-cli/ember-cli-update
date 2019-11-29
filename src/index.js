@@ -60,7 +60,10 @@ module.exports = async function emberCliUpdate({
   let isPersistedBlueprint;
 
   if (_blueprint) {
-    let parsedPackage = await parseBlueprintPackage(_blueprint);
+    let parsedPackage = await parseBlueprintPackage({
+      cwd,
+      blueprint: _blueprint
+    });
     packageUrl = parsedPackage.url;
 
     let packageName = parsedPackage.name;
@@ -135,7 +138,10 @@ All blueprints are up-to-date!`;
   }
 
   if (blueprint.location && !packageUrl) {
-    let parsedPackage = await parseBlueprintPackage(blueprint.location);
+    let parsedPackage = await parseBlueprintPackage({
+      cwd,
+      blueprint: blueprint.location
+    });
     packageUrl = parsedPackage.url;
   }
 

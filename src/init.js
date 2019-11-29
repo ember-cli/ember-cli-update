@@ -32,7 +32,10 @@ module.exports = async function init({
   let location;
   let url;
   if (_blueprint) {
-    let parsedPackage = await parseBlueprintPackage(_blueprint);
+    let parsedPackage = await parseBlueprintPackage({
+      cwd,
+      blueprint: _blueprint
+    });
     packageName = parsedPackage.name;
     location = parsedPackage.location;
     url = parsedPackage.url;
