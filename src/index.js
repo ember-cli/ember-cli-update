@@ -204,15 +204,20 @@ All blueprints are up-to-date!`;
 
         let getTagVersion = _getTagVersion(versions, packageName);
 
-        if (startBlueprint) {
-          if (from) {
-            startBlueprint.version = await getTagVersion(from);
-          } else {
-            startBlueprint.version = getProjectVersion(packageVersion, versions, projectOptions);
-          }
-        }
-
-        endBlueprint.version = await getTagVersion(to);
+        await Promise.all([
+          (async() => {
+            if (startBlueprint) {
+              if (from) {
+                startBlueprint.version = await getTagVersion(from);
+              } else {
+                startBlueprint.version = getProjectVersion(packageVersion, versions, projectOptions);
+              }
+            }
+          })(),
+          (async() => {
+            endBlueprint.version = await getTagVersion(to);
+          })()
+        ]);
       }
 
       let customDiffOptions;
