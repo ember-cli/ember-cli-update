@@ -212,8 +212,7 @@ describe(_getStartAndEndCommands, function() {
         options: {
           projectName,
           blueprint: loadSafeBlueprint({
-            name: blueprint,
-            path: blueprintPath
+            name: blueprint
           })
         }
       });
@@ -224,7 +223,10 @@ describe(_getStartAndEndCommands, function() {
         cwd,
         packageRoot,
         projectName,
-        blueprintPath
+        blueprint: {
+          name: blueprint,
+          options: []
+        }
       }]]);
     });
 
@@ -238,8 +240,7 @@ describe(_getStartAndEndCommands, function() {
           projectName,
           blueprint: loadSafeBlueprint({
             name: blueprint,
-            version: packageVersion,
-            path: blueprintPath
+            version: packageVersion
           })
         }
       });
@@ -250,7 +251,11 @@ describe(_getStartAndEndCommands, function() {
         cwd,
         packageRoot: undefined,
         projectName,
-        blueprintPath
+        blueprint: {
+          name: blueprint,
+          version: packageVersion,
+          options: []
+        }
       }]]);
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{

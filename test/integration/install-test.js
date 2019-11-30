@@ -78,7 +78,7 @@ describe(install, function() {
     });
   }
 
-  it('can install an addon with a default blueprint and a state file', async function() {
+  it('can install an addon with a default blueprint and no state file', async function() {
     let {
       location
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[0];
@@ -86,7 +86,7 @@ describe(install, function() {
     let {
       status
     } = await merge({
-      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/ideal',
+      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
       commitMessage: 'my-app',
       addon: location,
       async beforeMerge() {
@@ -104,7 +104,7 @@ describe(install, function() {
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app'
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/no-state-file/my-app'
     });
 
     assertNoStaged(status);

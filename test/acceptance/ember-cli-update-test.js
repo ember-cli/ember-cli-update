@@ -299,7 +299,7 @@ describe(function() {
     assertNoStaged(status);
   });
 
-  it('can install an addon with a default blueprint and no state file', async function() {
+  it('can install an addon with a default blueprint and a state file', async function() {
     this.timeout(3 * 60 * 1000);
 
     let {
@@ -307,9 +307,10 @@ describe(function() {
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[0];
 
     let {
-      status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/ideal',
       commitMessage: 'my-app',
       install: true,
       addon: location,
@@ -322,12 +323,33 @@ describe(function() {
 
         await run('npm install', { cwd: tmpPath });
       }
-    })).promise;
+    });
+
+    let didOverwrite;
+
+    function stdoutData(data) {
+      let str = data.toString();
+      if (/^\? Overwrite .+\? \(yndH\)/m.test(str)) {
+        let yes = 'y';
+        let enter = '\n';
+        ps.stdin.write(`${yes}${enter}`);
+
+        didOverwrite = true;
+      }
+    }
+
+    ps.stdout.on('data', stdoutData);
+
+    let {
+      status
+    } = await promise;
+
+    expect(didOverwrite).to.be.ok;
 
     await fs.remove(path.join(tmpPath, 'package-lock.json'));
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/no-state-file/my-app'
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app'
     });
 
     assertNoStaged(status);

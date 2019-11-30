@@ -171,7 +171,7 @@ async function postCreateCustomBlueprint({
       cwd,
       packageRoot,
       projectName: options.projectName,
-      blueprintPath: options.blueprint.path
+      blueprint: options.blueprint
     });
   }
 
@@ -194,7 +194,7 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   cwd,
   packageRoot,
   projectName,
-  blueprintPath
+  blueprint
 }) {
   let defaultBlueprint = loadDefaultBlueprint();
 
@@ -216,9 +216,19 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
     await utils.npx(`ember-cli ${command}`, { cwd });
   }
 
+  // `not found: ember` without this
   await run('npm install', { cwd: projectRoot });
 
-  await utils.npx(`--no-install ember install ${blueprintPath}`, { cwd: projectRoot });
+  // https://github.com/ember-cli/ember-cli/issues/8937
+  // await utils.npx(`--no-install ember install ${blueprint.path}`, { cwd: projectRoot });
+
+  await run(`npm install ${blueprint.path}`, { cwd: projectRoot });
+
+  await utils.npx(`--no-install ember g ${blueprint.packageName}`, { cwd: projectRoot });
+
+  let packageJson = await fs.readJson(path.join(projectRoot, 'package.json'));
+  packageJson.devDependencies[blueprint.packageName] = blueprint.version;
+  await fs.writeJson(path.join(projectRoot, 'package.json'), packageJson);
 
   await fs.remove(path.join(projectRoot, 'package-lock.json'));
 };
