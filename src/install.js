@@ -23,6 +23,7 @@ module.exports = async function install({
     cwd,
     blueprint: addon
   });
+
   let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, toDefault);
 
   let blueprint = loadSafeBlueprint({
@@ -31,6 +32,8 @@ module.exports = async function install({
     location: parsedPackage.location,
     version: downloadedPackage.version
   });
+
+  await utils.npx(`--no-install ember g ${blueprint.packageName}`, { cwd });
 
   if (!await loadBlueprintFile(cwd)) {
     await bootstrap();
