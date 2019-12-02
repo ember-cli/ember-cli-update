@@ -42,6 +42,7 @@
   "dependencies": {
     "boilerplate-update": "0.29.5",
     "debug": "^4.1.1",
+    "execa": "^3.4.0",
     "fs-extra": "^8.0.0",
     "inquirer": "^7.0.0",
     "npm-package-arg": "^7.0.0",

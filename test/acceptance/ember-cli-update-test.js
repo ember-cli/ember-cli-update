@@ -18,6 +18,9 @@ const {
 const { initBlueprint } = require('../helpers/blueprint');
 const run = require('../../src/run');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const overwriteBlueprintFiles = require('../../src/overwrite-blueprint-files');
+
+const toDefault = require('../../src/args').to.default;
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -62,9 +65,6 @@ describe(function() {
         'init',
         `--to=${to}`
       ];
-      if (reset) {
-        args.push('--reset');
-      }
     }
     if (install) {
       args = [
@@ -79,10 +79,17 @@ describe(function() {
     }
     if (save) {
       args = [
-        'save',
-        `-b=${blueprint}`,
-        `--from=${from}`
+        'save'
       ];
+    }
+    if (reset) {
+      args.push('--reset');
+    }
+    if (blueprint) {
+      args.push(`-b=${blueprint}`);
+    }
+    if (from) {
+      args.push(`--from=${from}`);
     }
     args = [...args, '--', ...blueprintOptions];
 
@@ -325,26 +332,11 @@ describe(function() {
       }
     });
 
-    let didOverwrite;
-
-    function stdoutData(data) {
-      let str = data.toString();
-      if (/^\? Overwrite .+\? \(yndH\)/m.test(str)) {
-        let yes = 'y';
-        let enter = '\n';
-        ps.stdin.write(`${yes}${enter}`);
-
-        didOverwrite = true;
-      }
-    }
-
-    ps.stdout.on('data', stdoutData);
+    overwriteBlueprintFiles(ps);
 
     let {
       status
     } = await promise;
-
-    expect(didOverwrite).to.be.ok;
 
     await fs.remove(path.join(tmpPath, 'package-lock.json'));
 
@@ -353,6 +345,44 @@ describe(function() {
     });
 
     assertNoStaged(status);
+  });
+
+  it('can update a legacy addon blueprint', async function() {
+    this.timeout(15 * 60 * 1000);
+
+    let {
+      name,
+      location
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app')).blueprints[0];
+
+    let {
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/ideal',
+      commitMessage: 'my-app',
+      blueprint: name,
+      to: toDefault,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+      }
+    });
+
+    overwriteBlueprintFiles(ps);
+
+    let {
+      status
+    } = await promise;
+
+    assertNoUnstaged(status);
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app'
+    });
   });
 
   it('can bootstrap the default blueprint', async function() {

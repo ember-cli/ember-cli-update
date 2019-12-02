@@ -6,6 +6,8 @@ const run = require('./run');
 const utils = require('./utils');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const isDefaultBlueprint = require('./is-default-blueprint');
+const emberInstallAddon = require('./ember-install-addon');
+const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 
 const nodeModulesIgnore = `
 
@@ -219,12 +221,16 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   // `not found: ember` without this
   await run('npm install', { cwd: projectRoot });
 
-  // https://github.com/ember-cli/ember-cli/issues/8937
-  // await utils.npx(`--no-install ember install ${blueprint.path}`, { cwd: projectRoot });
+  let { ps } = await emberInstallAddon({
+    cwd: projectRoot,
+    addonName: blueprint.path,
+    blueprintPackageName: blueprint.packageName,
+    stdin: 'pipe'
+  });
 
-  await run(`npm install ${blueprint.path}`, { cwd: projectRoot });
+  overwriteBlueprintFiles(ps);
 
-  await utils.npx(`--no-install ember g ${blueprint.packageName}`, { cwd: projectRoot });
+  await ps;
 
   let packageJson = await fs.readJson(path.join(projectRoot, 'package.json'));
   packageJson.devDependencies[blueprint.packageName] = blueprint.version;
