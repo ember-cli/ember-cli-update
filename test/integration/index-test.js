@@ -444,37 +444,6 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
         assertNoUnstaged(status);
       });
-
-      it('can update a legacy addon blueprint', async function() {
-        this.timeout(15 * 60 * 1000);
-
-        let {
-          name,
-          location
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app')).blueprints[0];
-
-        let {
-          status
-        } = await merge({
-          fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/ideal',
-          commitMessage: 'my-app',
-          blueprint: name,
-          to: toDefault,
-          async beforeMerge() {
-            await initBlueprint({
-              fixturesPath: 'test/fixtures/blueprint/addon/legacy',
-              resolvedFrom: tmpPath,
-              relativeDir: location
-            });
-          }
-        });
-
-        fixtureCompare({
-          mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app'
-        });
-
-        assertNoUnstaged(status);
-      });
     });
   });
 });
