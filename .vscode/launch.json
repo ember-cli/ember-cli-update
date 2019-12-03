@@ -17,7 +17,8 @@
       ],
       "env": {
         "DEBUG": "ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures,ember-cli-addon-tests"
-      }
+      },
+      "outputCapture": "std"
     }
   ]
 }
