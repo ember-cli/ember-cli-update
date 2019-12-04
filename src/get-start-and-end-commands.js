@@ -213,10 +213,6 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
 
   let args = getArgs(projectName, defaultBlueprint);
 
-  let projectRoot = path.join(cwd, projectName);
-
-  await fs.remove(projectRoot);
-
   if (packageRoot) {
     await runEmberLocally({
       packageRoot,
@@ -228,6 +224,8 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
 
     await utils.npx(`ember-cli ${command}`, { cwd });
   }
+
+  let projectRoot = path.join(cwd, projectName);
 
   // `not found: ember` without this
   await run('npm install', { cwd: projectRoot });
