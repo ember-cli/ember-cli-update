@@ -1,4 +1,7 @@
 {
   "name": "ember-cli-update-git-blueprint-test",
-  "version": "0.0.2"
+  "version": "0.0.2",
+  "keywords": [
+    "ember-blueprint"
+  ]
 }
