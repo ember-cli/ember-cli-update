@@ -93,21 +93,37 @@ function createProjectFromCache({
 }) {
   return async function createProject(cwd) {
     if (options.blueprint) {
-      let args = getArgs(options.projectName, options.blueprint);
-
-      await runEmberLocally({
-        packageRoot,
-        args,
-        cwd
-      });
-
       let isCustomBlueprint = !isDefaultBlueprint(options.blueprint);
 
+      let isDefaultAddonBlueprint;
+
       if (isCustomBlueprint) {
-        await postCreateCustomBlueprint({
+        let { keywords } = utils.require(path.join(options.blueprint.path, 'package'));
+
+        isDefaultAddonBlueprint = !(keywords && keywords.includes('ember-blueprint'));
+      }
+
+      if (isDefaultAddonBlueprint) {
+        await module.exports.installAddonBlueprint({
           cwd,
           packageRoot,
-          options
+          projectName: options.projectName,
+          blueprint: options.blueprint
+        });
+      } else {
+        let args = getArgs(options.projectName, options.blueprint);
+
+        await runEmberLocally({
+          packageRoot,
+          args,
+          cwd
+        });
+      }
+
+      if (isCustomBlueprint) {
+        await module.exports.appendNodeModulesIgnore({
+          cwd,
+          projectName: options.projectName
         });
       }
     } else {
@@ -130,20 +146,38 @@ function createProjectFromRemote({
 }) {
   return async function createProject(cwd) {
     if (options.blueprint) {
-      let command = getArgs(options.projectName, options.blueprint).join(' ');
-
       let isCustomBlueprint = !isDefaultBlueprint(options.blueprint);
 
-      if (isCustomBlueprint) {
-        await utils.npx(`ember-cli ${command}`, { cwd });
-        // await utils.npx(`-p github:ember-cli/ember-cli#cfb9780 ember new ${options.projectName} -sn -sg -b ${options.blueprint.name}@${options.blueprint.version}`, { cwd });
+      let isDefaultAddonBlueprint;
 
-        await postCreateCustomBlueprint({
+      if (isCustomBlueprint) {
+        let { keywords } = utils.require(path.join(options.blueprint.path, 'package'));
+
+        isDefaultAddonBlueprint = !(keywords && keywords.includes('ember-blueprint'));
+      }
+
+      if (isDefaultAddonBlueprint) {
+        await module.exports.installAddonBlueprint({
           cwd,
-          options
+          projectName: options.projectName,
+          blueprint: options.blueprint
         });
       } else {
-        await utils.npx(`-p ember-cli@${options.blueprint.version} ember ${command}`, { cwd });
+        let command = getArgs(options.projectName, options.blueprint).join(' ');
+
+        if (isCustomBlueprint) {
+          await utils.npx(`ember-cli ${command}`, { cwd });
+          // await utils.npx(`-p github:ember-cli/ember-cli#cfb9780 ember new ${options.projectName} -sn -sg -b ${options.blueprint.name}@${options.blueprint.version}`, { cwd });
+        } else {
+          await utils.npx(`-p ember-cli@${options.blueprint.version} ember ${command}`, { cwd });
+        }
+      }
+
+      if (isCustomBlueprint) {
+        await module.exports.appendNodeModulesIgnore({
+          cwd,
+          projectName: options.projectName
+        });
       }
     } else {
       // We are doing a blueprint init, and need an empty first commit.
@@ -158,29 +192,6 @@ function createProjectFromRemote({
       options
     });
   };
-}
-
-async function postCreateCustomBlueprint({
-  cwd,
-  packageRoot,
-  options
-}) {
-  // This means it's not a full app blueprint, but a default blueprint of an addon.
-  // There may be a faster way to detect this.
-  let files = await utils.readdir(path.join(cwd, options.projectName));
-  if (!files.length) {
-    await module.exports.installAddonBlueprint({
-      cwd,
-      packageRoot,
-      projectName: options.projectName,
-      blueprint: options.blueprint
-    });
-  }
-
-  await module.exports.appendNodeModulesIgnore({
-    cwd,
-    projectName: options.projectName
-  });
 }
 
 function postCreateProject({

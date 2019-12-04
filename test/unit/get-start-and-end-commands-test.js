@@ -185,6 +185,10 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
+      sinon.stub(utils, 'require')
+        .withArgs(path.join(blueprintPath, 'package'))
+        .returns({ keywords: ['ember-blueprint'] });
+
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(npxStub.args).to.deep.equal([[
@@ -212,10 +216,15 @@ describe(_getStartAndEndCommands, function() {
         options: {
           projectName,
           blueprint: loadSafeBlueprint({
-            name: blueprint
+            name: blueprint,
+            path: blueprintPath
           })
         }
       });
+
+      sinon.stub(utils, 'require')
+        .withArgs(path.join(blueprintPath, 'package'))
+        .returns({ keywords: ['ember-addon'] });
 
       expect(await createProject(cwd)).to.equal(projectPath);
 
@@ -225,6 +234,7 @@ describe(_getStartAndEndCommands, function() {
         projectName,
         blueprint: {
           name: blueprint,
+          path: blueprintPath,
           options: []
         }
       }]]);
@@ -240,20 +250,25 @@ describe(_getStartAndEndCommands, function() {
           projectName,
           blueprint: loadSafeBlueprint({
             name: blueprint,
-            version: packageVersion
+            version: packageVersion,
+            path: blueprintPath
           })
         }
       });
+
+      sinon.stub(utils, 'require')
+        .withArgs(path.join(blueprintPath, 'package'))
+        .returns({ keywords: ['ember-addon'] });
 
       expect(await createProject(cwd)).to.equal(projectPath);
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
-        packageRoot: undefined,
         projectName,
         blueprint: {
           name: blueprint,
           version: packageVersion,
+          path: blueprintPath,
           options: []
         }
       }]]);
@@ -382,6 +397,10 @@ describe(_getStartAndEndCommands, function() {
           })
         }
       });
+
+      sinon.stub(utils, 'require')
+        .withArgs(path.join(blueprintPath, 'package'))
+        .returns({ keywords: ['ember-blueprint'] });
 
       expect(await createProject(cwd)).to.equal(projectPath);
 
