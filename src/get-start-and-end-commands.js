@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs-extra');
 const run = require('./run');
 const utils = require('./utils');
-const loadDefaultBlueprint = require('./load-default-blueprint');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const emberInstallAddon = require('./ember-install-addon');
 const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
@@ -16,6 +15,7 @@ const nodeModulesIgnore = `
 
 module.exports = function getStartAndEndCommands({
   packageJson: { name: projectName },
+  baseBlueprint,
   startBlueprint,
   endBlueprint
 }) {
@@ -37,12 +37,14 @@ module.exports = function getStartAndEndCommands({
     createProjectFromCache,
     createProjectFromRemote,
     startOptions: {
+      baseBlueprint,
       blueprint: startBlueprint,
 
       // for cache detection logic
       packageRange: startRange
     },
     endOptions: {
+      baseBlueprint,
       blueprint: endBlueprint,
 
       // for cache detection logic
@@ -106,6 +108,7 @@ function createProjectFromCache({
       if (isDefaultAddonBlueprint) {
         await module.exports.installAddonBlueprint({
           cwd,
+          baseBlueprint: options.baseBlueprint,
           packageRoot,
           projectName: options.projectName,
           blueprint: options.blueprint
@@ -159,6 +162,7 @@ function createProjectFromRemote({
       if (isDefaultAddonBlueprint) {
         await module.exports.installAddonBlueprint({
           cwd,
+          baseBlueprint: options.baseBlueprint,
           projectName: options.projectName,
           blueprint: options.blueprint
         });
@@ -205,13 +209,12 @@ function postCreateProject({
 
 module.exports.installAddonBlueprint = async function installAddonBlueprint({
   cwd,
+  baseBlueprint,
   packageRoot,
   projectName,
   blueprint
 }) {
-  let defaultBlueprint = loadDefaultBlueprint();
-
-  let args = getArgs(projectName, defaultBlueprint);
+  let args = getArgs(projectName, baseBlueprint);
 
   if (packageRoot) {
     await runEmberLocally({

@@ -24,6 +24,7 @@ const commandName = 'ember';
 const blueprint = 'test-blueprint';
 const blueprintPath = '/path/to/blueprint';
 const projectPath = path.normalize(`${cwd}/${projectName}`);
+const baseBlueprint = 'test base blueprint';
 const defaultStartBlueprint = loadDefaultBlueprint([], startVersion);
 const defaultEndBlueprint = loadDefaultBlueprint([], endVersion);
 
@@ -51,6 +52,7 @@ describe(_getStartAndEndCommands, function() {
   function getStartAndEndCommands(options) {
     return _getStartAndEndCommands(Object.assign({
       packageJson: { name: projectName },
+      baseBlueprint,
       startBlueprint: defaultStartBlueprint,
       endBlueprint: defaultEndBlueprint
     }, options));
@@ -70,10 +72,12 @@ describe(_getStartAndEndCommands, function() {
       packageName,
       commandName,
       startOptions: {
+        baseBlueprint,
         blueprint: defaultStartBlueprint,
         packageRange: startVersion
       },
       endOptions: {
+        baseBlueprint,
         blueprint: defaultEndBlueprint,
         packageRange: endVersion
       }
@@ -155,6 +159,7 @@ describe(_getStartAndEndCommands, function() {
         packageName,
         commandName,
         startOptions: {
+          baseBlueprint,
           blueprint: {
             name: blueprint,
             version: startVersion
@@ -162,6 +167,7 @@ describe(_getStartAndEndCommands, function() {
           packageRange: ''
         },
         endOptions: {
+          baseBlueprint,
           blueprint: {
             name: blueprint,
             version: endVersion
@@ -214,6 +220,7 @@ describe(_getStartAndEndCommands, function() {
       let createProject = createProjectFromCache({
         packageRoot,
         options: {
+          baseBlueprint,
           projectName,
           blueprint: loadSafeBlueprint({
             name: blueprint,
@@ -230,6 +237,7 @@ describe(_getStartAndEndCommands, function() {
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
+        baseBlueprint,
         packageRoot,
         projectName,
         blueprint: {
@@ -247,6 +255,7 @@ describe(_getStartAndEndCommands, function() {
 
       let createProject = createProjectFromRemote({
         options: {
+          baseBlueprint,
           projectName,
           blueprint: loadSafeBlueprint({
             name: blueprint,
@@ -264,6 +273,7 @@ describe(_getStartAndEndCommands, function() {
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
+        baseBlueprint,
         projectName,
         blueprint: {
           name: blueprint,
@@ -297,10 +307,12 @@ describe(_getStartAndEndCommands, function() {
         packageName,
         commandName,
         startOptions: {
+          baseBlueprint,
           blueprint: null,
           packageRange: null
         },
         endOptions: {
+          baseBlueprint,
           blueprint: defaultEndBlueprint,
           packageRange: endVersion
         }
@@ -327,10 +339,12 @@ describe(_getStartAndEndCommands, function() {
         packageName,
         commandName,
         startOptions: {
+          baseBlueprint,
           blueprint: null,
           packageRange: ''
         },
         endOptions: {
+          baseBlueprint,
           blueprint: {
             name: blueprint,
             version: endVersion

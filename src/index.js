@@ -22,6 +22,7 @@ const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const findBlueprint = require('./find-blueprint');
+const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 
 const {
   'to': { default: toDefault },
@@ -154,6 +155,19 @@ All blueprints are up-to-date!`;
     createCustomDiff = true;
   }
 
+  let baseBlueprint;
+  let defaultBlueprint;
+
+  if (isCustomBlueprint) {
+    baseBlueprint = emberCliUpdateJson.blueprints.find(b => b.isBaseBlueprint);
+    if (baseBlueprint) {
+      baseBlueprint = loadSafeBlueprint(baseBlueprint);
+    } else {
+      defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
+      baseBlueprint = defaultBlueprint;
+    }
+  }
+
   let endBlueprint;
 
   let result = await (await boilerplateUpdate({
@@ -224,6 +238,7 @@ All blueprints are up-to-date!`;
       if (createCustomDiff) {
         customDiffOptions = getStartAndEndCommands({
           packageJson,
+          baseBlueprint,
           startBlueprint,
           endBlueprint
         });
@@ -256,7 +271,8 @@ All blueprints are up-to-date!`;
     // even if you are currently working on a custom blueprint.
     if (!emberCliUpdateJson || !isCustomBlueprint) {
       await saveBlueprint({
-        cwd
+        cwd,
+        blueprint: defaultBlueprint
       });
     }
 

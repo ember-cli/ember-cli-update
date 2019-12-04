@@ -311,7 +311,7 @@ describe(function() {
 
     let {
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[1];
 
     let {
       ps,
@@ -353,7 +353,7 @@ describe(function() {
     let {
       name,
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app')).blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app')).blueprints[1];
 
     let {
       ps,
