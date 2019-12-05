@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs-extra');
+const execa = require('execa');
 const run = require('./run');
 const utils = require('./utils');
 const isDefaultBlueprint = require('./is-default-blueprint');
@@ -68,6 +69,16 @@ function isDefaultAddonBlueprint(blueprint) {
 }
 
 function getArgs(projectName, blueprint) {
+  let args = [];
+
+  if (blueprint.isBaseBlueprint) {
+    args.push('new');
+    args.push(projectName);
+    args.push('-sg');
+  } else {
+    args.push('init');
+  }
+
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   let _blueprint;
@@ -79,16 +90,25 @@ function getArgs(projectName, blueprint) {
   }
 
   return [
-    'new',
-    projectName,
+    ...args,
     '-sn',
     '-sb',
-    '-sg',
     '-b',
     _blueprint,
     ...blueprint.options
   ];
 }
+
+module.exports.spawn = async function spawn(command, args, options) {
+  let ps = execa(command, args, {
+    stdio: ['pipe', 'pipe', 'inherit'],
+    ...options
+  });
+
+  overwriteBlueprintFiles(ps);
+
+  await ps;
+};
 
 async function runEmberLocally({
   packageRoot,
@@ -98,12 +118,14 @@ async function runEmberLocally({
 }) {
   let args = getArgs(projectName, blueprint);
 
-  await utils.spawn('node', [
+  if (!blueprint.isBaseBlueprint) {
+    cwd = path.join(cwd, projectName);
+  }
+
+  await module.exports.spawn('node', [
     path.join(packageRoot, 'bin/ember'),
     ...args
-  ], {
-    cwd
-  });
+  ], { cwd });
 }
 
 function createProjectFromCache({
@@ -111,52 +133,38 @@ function createProjectFromCache({
   options
 }) {
   return async function createProject(cwd) {
-    if (options.blueprint) {
-      let firstBlueprint = options.blueprint;
-
-      let _isDefaultAddonBlueprint = isDefaultAddonBlueprint(firstBlueprint);
-
-      if (_isDefaultAddonBlueprint) {
-        firstBlueprint = options.baseBlueprint;
-      }
-
+    if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
       await runEmberLocally({
         packageRoot,
         cwd,
         projectName: options.projectName,
-        blueprint: firstBlueprint
-      });
-
-      if (_isDefaultAddonBlueprint) {
-        await module.exports.installAddonBlueprint({
-          cwd,
-          projectName: options.projectName,
-          blueprint: options.blueprint
-        });
-      }
-
-      let isCustomBlueprint = !isDefaultBlueprint(options.blueprint);
-
-      if (isCustomBlueprint) {
-        await module.exports.appendNodeModulesIgnore({
-          cwd,
-          projectName: options.projectName
-        });
-      }
-    } else {
-      // We are doing a blueprint init, and need an empty first commit.
-      await module.exports.createEmptyCommit({
-        cwd,
-        projectName: options.projectName
+        blueprint: options.baseBlueprint
       });
     }
 
-    return postCreateProject({
+    if (options.blueprint) {
+      await runEmberLocally({
+        packageRoot,
+        cwd,
+        projectName: options.projectName,
+        blueprint: options.blueprint
+      });
+    }
+
+    return await postCreateProject({
       cwd,
       options
     });
   };
 }
+
+module.exports.npx = async function npx(args, options) {
+  let ps = utils.npx(args.join(' '), options);
+
+  overwriteBlueprintFiles(ps);
+
+  await ps;
+};
 
 async function runEmberRemotely({
   cwd,
@@ -167,72 +175,70 @@ async function runEmberRemotely({
 
   let args = getArgs(projectName, blueprint);
 
-  let command = args.join(' ');
+  if (!blueprint.isBaseBlueprint) {
+    cwd = path.join(cwd, projectName);
+  }
 
   if (isCustomBlueprint) {
-    await utils.npx(`ember-cli ${command}`, { cwd });
-    // await utils.npx(`-p github:ember-cli/ember-cli#cfb9780 ember new ${options.projectName} -sn -sg -b ${options.blueprint.name}@${options.blueprint.version}`, { cwd });
+    args = ['ember-cli', ...args];
+    // args = ['-p', 'github:ember-cli/ember-cli#cfb9780', 'ember', 'new', projectName, '-sn', '-sg', '-b', `${blueprint.packageName}@${blueprint.version}`];
   } else {
-    await utils.npx(`-p ember-cli@${blueprint.version} ember ${command}`, { cwd });
+    args = ['-p', `ember-cli@${blueprint.version}`, 'ember', ...args];
   }
+
+  await module.exports.npx(args, { cwd });
 }
 
 function createProjectFromRemote({
   options
 }) {
   return async function createProject(cwd) {
-    if (options.blueprint) {
-      let firstBlueprint = options.blueprint;
-
-      let _isDefaultAddonBlueprint = isDefaultAddonBlueprint(firstBlueprint);
-
-      if (_isDefaultAddonBlueprint) {
-        firstBlueprint = options.baseBlueprint;
-      }
-
+    if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
       await runEmberRemotely({
         cwd,
         projectName: options.projectName,
-        blueprint: firstBlueprint
-      });
-
-      if (_isDefaultAddonBlueprint) {
-        await module.exports.installAddonBlueprint({
-          cwd,
-          projectName: options.projectName,
-          blueprint: options.blueprint
-        });
-      }
-
-      let isCustomBlueprint = !isDefaultBlueprint(options.blueprint);
-
-      if (isCustomBlueprint) {
-        await module.exports.appendNodeModulesIgnore({
-          cwd,
-          projectName: options.projectName
-        });
-      }
-    } else {
-      // We are doing a blueprint init, and need an empty first commit.
-      await module.exports.createEmptyCommit({
-        cwd,
-        projectName: options.projectName
+        blueprint: options.baseBlueprint
       });
     }
 
-    return postCreateProject({
+    if (options.blueprint) {
+      await runEmberRemotely({
+        cwd,
+        projectName: options.projectName,
+        blueprint: options.blueprint
+      });
+    }
+
+    return await postCreateProject({
       cwd,
       options
     });
   };
 }
 
-function postCreateProject({
+async function postCreateProject({
   cwd,
   options: {
-    projectName
+    projectName,
+    blueprint
   }
 }) {
+  if (blueprint && isDefaultAddonBlueprint(blueprint)) {
+    await module.exports.installAddonBlueprint({
+      cwd,
+      projectName,
+      blueprint
+    });
+  }
+
+  if (!(blueprint && isDefaultBlueprint(blueprint))) {
+    // This might not be needed anymore.
+    await module.exports.appendNodeModulesIgnore({
+      cwd,
+      projectName
+    });
+  }
+
   return path.join(cwd, projectName);
 }
 
@@ -262,17 +268,6 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   await fs.writeJson(path.join(projectRoot, 'package.json'), packageJson);
 
   await fs.remove(path.join(projectRoot, 'package-lock.json'));
-};
-
-module.exports.createEmptyCommit = async function createEmptyCommit({
-  cwd,
-  projectName
-}) {
-  await fs.mkdir(path.join(cwd, projectName));
-  await appendNodeModulesIgnore({
-    cwd,
-    projectName
-  });
 };
 
 async function appendNodeModulesIgnore({
