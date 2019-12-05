@@ -24,7 +24,7 @@ const commandName = 'ember';
 const blueprint = 'test-blueprint';
 const blueprintPath = '/path/to/blueprint';
 const projectPath = path.normalize(`${cwd}/${projectName}`);
-const baseBlueprint = 'test base blueprint';
+const baseBlueprint = loadDefaultBlueprint([], '0.0.3');
 const defaultStartBlueprint = loadDefaultBlueprint([], startVersion);
 const defaultEndBlueprint = loadDefaultBlueprint([], endVersion);
 
@@ -235,10 +235,26 @@ describe(_getStartAndEndCommands, function() {
 
       expect(await createProject(cwd)).to.equal(projectPath);
 
+      expect(spawnStub.args).to.deep.equal([[
+        'node',
+        [
+          path.normalize(`${packageRoot}/bin/ember`),
+          'new',
+          projectName,
+          '-sn',
+          '-sb',
+          '-sg',
+          '-b',
+          'app',
+          '--no-welcome'
+        ],
+        {
+          cwd
+        }
+      ]]);
+
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
-        baseBlueprint,
-        packageRoot,
         projectName,
         blueprint: {
           name: blueprint,
@@ -271,9 +287,15 @@ describe(_getStartAndEndCommands, function() {
 
       expect(await createProject(cwd)).to.equal(projectPath);
 
+      expect(npxStub.args).to.deep.equal([[
+        `-p ${packageName}@0.0.3 ${commandName} new ${projectName} -sn -sb -sg -b app --no-welcome`,
+        {
+          cwd
+        }
+      ]]);
+
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         cwd,
-        baseBlueprint,
         projectName,
         blueprint: {
           name: blueprint,
