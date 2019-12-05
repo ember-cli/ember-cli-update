@@ -24,7 +24,7 @@ describe(overwriteBlueprintFiles, function() {
     let {
       packageName,
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app')).blueprints[1];
 
     let blueprintPath = await initBlueprint({
       fixturesPath: 'test/fixtures/blueprint/addon/legacy',
