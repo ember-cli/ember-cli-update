@@ -10,6 +10,7 @@ const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const isDefaultBlueprint = require('./is-default-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
 const findBlueprint = require('./find-blueprint');
@@ -63,7 +64,6 @@ module.exports = async function init({
       packageName,
       name,
       location,
-      path: downloadedPackage.path,
       options: blueprintOptions
     };
   }
@@ -71,6 +71,37 @@ module.exports = async function init({
   blueprint = loadSafeBlueprint(blueprint);
 
   blueprint.version = downloadedPackage.version;
+  blueprint.path = downloadedPackage.path;
+
+  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
+
+  let baseBlueprint;
+
+  if (isCustomBlueprint && !blueprint.isBaseBlueprint) {
+    baseBlueprint = emberCliUpdateJson.blueprints.find(b => b.isBaseBlueprint);
+    if (baseBlueprint) {
+      baseBlueprint = loadSafeBlueprint(baseBlueprint);
+      let isCustomBlueprint = !isDefaultBlueprint(baseBlueprint);
+      if (isCustomBlueprint) {
+        let url;
+        if (baseBlueprint.location) {
+          let parsedPackage = await parseBlueprintPackage({
+            cwd,
+            blueprint: baseBlueprint
+          });
+          url = parsedPackage.url;
+        }
+        let downloadedPackage = await downloadPackage(baseBlueprint.packageName, url, baseBlueprint.version);
+        baseBlueprint.path = downloadedPackage.path;
+      }
+    } else {
+      let defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
+      baseBlueprint = defaultBlueprint;
+    }
+  } else {
+    // for non-existing blueprints
+    blueprint.isBaseBlueprint = true;
+  }
 
   let result = await (await boilerplateUpdate({
     endVersion: blueprint.version,
@@ -81,6 +112,7 @@ module.exports = async function init({
       packageJson
     }) => getStartAndEndCommands({
       packageJson,
+      baseBlueprint,
       endBlueprint: blueprint
     }),
     ignoredFiles: [await getBlueprintFilePath(cwd)],

@@ -158,14 +158,30 @@ All blueprints are up-to-date!`;
   let baseBlueprint;
   let defaultBlueprint;
 
-  if (isCustomBlueprint) {
+  if (isCustomBlueprint && !blueprint.isBaseBlueprint) {
     baseBlueprint = emberCliUpdateJson.blueprints.find(b => b.isBaseBlueprint);
     if (baseBlueprint) {
       baseBlueprint = loadSafeBlueprint(baseBlueprint);
+      let isCustomBlueprint = !isDefaultBlueprint(baseBlueprint);
+      if (isCustomBlueprint) {
+        let url;
+        if (baseBlueprint.location) {
+          let parsedPackage = await parseBlueprintPackage({
+            cwd,
+            blueprint: baseBlueprint
+          });
+          url = parsedPackage.url;
+        }
+        let downloadedPackage = await downloadPackage(baseBlueprint.packageName, url, baseBlueprint.version);
+        baseBlueprint.path = downloadedPackage.path;
+      }
     } else {
       defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
       baseBlueprint = defaultBlueprint;
     }
+  } else {
+    // for non-existing blueprints
+    blueprint.isBaseBlueprint = true;
   }
 
   let endBlueprint;
