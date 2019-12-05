@@ -311,7 +311,7 @@ describe(function() {
 
     let {
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app')).blueprints[1];
 
     let {
       ps,
@@ -341,7 +341,7 @@ describe(function() {
     await fs.remove(path.join(tmpPath, 'package-lock.json'));
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app'
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app'
     });
 
     assertNoStaged(status);
@@ -381,7 +381,7 @@ describe(function() {
     assertNoUnstaged(status);
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/ideal/my-app'
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app'
     });
   });
 
