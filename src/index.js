@@ -40,7 +40,7 @@ function formatBlueprintLine({
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
   from,
-  to,
+  to = toDefault,
   resolveConflicts,
   runCodemods,
   codemodsUrl = codemodsUrlDefault,
@@ -69,7 +69,7 @@ module.exports = async function emberCliUpdate({
 
     let packageName = parsedPackage.name;
     if (!packageName) {
-      let downloadedPackage = await downloadPackage(null, packageUrl, toDefault);
+      let downloadedPackage = await downloadPackage(null, packageUrl, to);
       packageName = downloadedPackage.name;
     }
 
