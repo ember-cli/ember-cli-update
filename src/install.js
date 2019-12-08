@@ -11,7 +11,8 @@ const emberInstallAddon = require('./ember-install-addon');
 const toDefault = require('./args').to.default;
 
 module.exports = async function install({
-  addon
+  addon,
+  to = toDefault
 }) {
   let cwd = process.cwd();
 
@@ -20,7 +21,7 @@ module.exports = async function install({
     blueprint: addon
   });
 
-  let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, toDefault);
+  let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, to);
 
   // We are double installing it, via the above and the below.
   // The above is needed to resolve the real package name,
@@ -29,7 +30,7 @@ module.exports = async function install({
   // This may be able to be combined somehow...
   let { ps } = await emberInstallAddon({
     cwd,
-    addonName: addon,
+    addonName: `${addon}@${to}`,
     blueprintPackageName: downloadedPackage.name
   });
 
