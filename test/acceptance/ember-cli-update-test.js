@@ -175,16 +175,17 @@ describe(function() {
 
     ps.stdout.pipe(process.stdout);
 
-    function stdoutData(data) {
-      let str = data.toString();
-      if (str.includes('These codemods apply to your project.')) {
-        ps.stdin.write(' \n');
-
-        ps.stdout.removeListener('data', stdoutData);
+    await new Promise(resolve => {
+      function stdoutData(data) {
+        let str = data.toString();
+        if (str.includes('These codemods apply to your project.')) {
+          ps.stdin.write(' \n');
+          ps.stdout.removeListener('data', stdoutData);
+          resolve();
+        }
       }
-    }
-
-    ps.stdout.on('data', stdoutData);
+      ps.stdout.on('data', stdoutData);
+    });
 
     let {
       status
@@ -254,18 +255,48 @@ describe(function() {
       }
     });
 
-    function stdoutData(data) {
-      let str = data.toString();
-      if (str.includes('Blueprint updates have been found.')) {
-        let down = '\u001b[B';
-        let enter = '\n';
-        ps.stdin.write(`${down}${enter}`);
-
-        ps.stdout.removeListener('data', stdoutData);
+    let whichBlueprint = new Promise(resolve => {
+      function whichBlueprint(data) {
+        let str = data.toString();
+        if (str.includes('Blueprint updates have been found.')) {
+          let down = '\u001b[B';
+          let enter = '\n';
+          ps.stdin.write(`${down}${enter}`);
+          ps.stdout.removeListener('data', whichBlueprint);
+          resolve();
+        }
       }
-    }
-
-    ps.stdout.on('data', stdoutData);
+      ps.stdout.on('data', whichBlueprint);
+    });
+    let whichVersion = new Promise(resolve => {
+      function whichVersion(data) {
+        let str = data.toString();
+        if (str.includes('Do you want the latest version?')) {
+          let down = '\u001b[B';
+          let enter = '\n';
+          ps.stdin.write(`${down}${enter}`);
+          ps.stdout.removeListener('data', whichVersion);
+          resolve();
+        }
+      }
+      ps.stdout.on('data', whichVersion);
+    });
+    let customVersion = new Promise(resolve => {
+      function customVersion(data) {
+        let str = data.toString();
+        if (str.includes('What version?')) {
+          let range = to;
+          let enter = '\n';
+          ps.stdin.write(`${range}${enter}`);
+          ps.stdout.removeListener('data', customVersion);
+          resolve();
+        }
+      }
+      ps.stdout.on('data', customVersion);
+    });
+    await whichBlueprint;
+    await whichVersion;
+    await customVersion;
 
     let {
       status
