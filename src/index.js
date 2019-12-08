@@ -138,6 +138,30 @@ All blueprints are up-to-date!`;
 
       let existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
       blueprint = loadSafeBlueprint(existingBlueprint);
+
+      let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
+
+      answer = await inquirer.prompt([{
+        type: 'list',
+        message: 'Do you want the latest version?',
+        name: 'choice',
+        choices: [
+          latestVersion,
+          'SemVer string'
+        ]
+      }]);
+
+      if (answer.choice === latestVersion) {
+        to = toDefault;
+      } else {
+        answer = await inquirer.prompt([{
+          type: 'input',
+          message: 'What version?',
+          name: 'semver'
+        }]);
+
+        to = answer.semver;
+      }
     }
   }
 
