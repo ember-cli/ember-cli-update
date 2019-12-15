@@ -38,6 +38,7 @@ jobs:
   - os: osx
     env: TEST_COMMAND=test:slow
   - stage: Deploy
+    if: tag IS present
     cache: ignore
     env: ignore
     before_install: ignore
