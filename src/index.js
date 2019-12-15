@@ -1,6 +1,5 @@
 'use strict';
 
-const inquirer = require('inquirer');
 const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
@@ -15,7 +14,6 @@ const downloadPackage = require('./download-package');
 const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
-const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
@@ -23,19 +21,14 @@ const getBlueprintFilePath = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
+const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 
 const {
   'to': { default: toDefault },
   'codemods-url': { default: codemodsUrlDefault }
 } = require('./args');
 
-function formatBlueprintLine({
-  name,
-  currentVersion,
-  latestVersion
-}) {
-  return `${name}, current: ${currentVersion}, latest: ${latestVersion}`;
-}
+const { formatBlueprintLine } = chooseBlueprintUpdates;
 
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
@@ -102,12 +95,16 @@ module.exports = async function emberCliUpdate({
     } else {
       isPersistedBlueprint = true;
 
-      let blueprintUpdates = await checkForBlueprintUpdates({
+      let {
+        areAllUpToDate,
+        blueprintUpdates,
+        blueprint: _blueprint,
+        to: _to
+      } = await chooseBlueprintUpdates({
         cwd,
-        blueprints
+        emberCliUpdateJson
       });
 
-      let areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
       if (areAllUpToDate) {
         return `${blueprintUpdates.map(formatBlueprintLine).join(`
 `)}
@@ -115,53 +112,8 @@ module.exports = async function emberCliUpdate({
 All blueprints are up-to-date!`;
       }
 
-      let choicesByName = blueprintUpdates.reduce((choices, blueprintUpdate) => {
-        let name = formatBlueprintLine(blueprintUpdate);
-        choices[name] = {
-          blueprintUpdate,
-          choice: {
-            name,
-            disabled: blueprintUpdate.isUpToDate
-          }
-        };
-        return choices;
-      }, {});
-
-      let answer = await inquirer.prompt([{
-        type: 'list',
-        message: 'Blueprint updates have been found. Which one would you like to update?',
-        name: 'blueprint',
-        choices: Object.values(choicesByName).map(({ choice }) => choice)
-      }]);
-
-      let { blueprintUpdate } = choicesByName[answer.blueprint];
-
-      let existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
-      blueprint = loadSafeBlueprint(existingBlueprint);
-
-      let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
-
-      answer = await inquirer.prompt([{
-        type: 'list',
-        message: 'Do you want the latest version?',
-        name: 'choice',
-        choices: [
-          latestVersion,
-          'SemVer string'
-        ]
-      }]);
-
-      if (answer.choice === latestVersion) {
-        to = toDefault;
-      } else {
-        answer = await inquirer.prompt([{
-          type: 'input',
-          message: 'What version?',
-          name: 'semver'
-        }]);
-
-        to = answer.semver;
-      }
+      blueprint = _blueprint;
+      to = _to;
     }
   }
 
