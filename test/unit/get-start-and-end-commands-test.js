@@ -551,20 +551,6 @@ describe(_getStartAndEndCommands, function() {
           {
             cwd
           }
-        ],
-        [
-          'node',
-          [
-            path.normalize(`${packageRoot}/bin/ember`),
-            'init',
-            '-sn',
-            '-sb',
-            '-b',
-            blueprintPath
-          ],
-          {
-            cwd: projectPath
-          }
         ]
       ]);
 
@@ -616,19 +602,6 @@ describe(_getStartAndEndCommands, function() {
           ],
           {
             cwd
-          }
-        ],
-        [
-          [
-            packageName,
-            'init',
-            '-sn',
-            '-sb',
-            '-b',
-            blueprintPath
-          ],
-          {
-            cwd: projectPath
           }
         ]
       ]);

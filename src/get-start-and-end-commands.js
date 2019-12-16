@@ -178,20 +178,20 @@ function createProject(runEmber) {
       }
 
       if (options.blueprint) {
-        await runEmber({
-          packageRoot,
-          cwd,
-          projectName: options.projectName,
-          blueprint: options.blueprint
-        });
-      }
-
-      if (options.blueprint && isDefaultAddonBlueprint(options.blueprint)) {
-        await module.exports.installAddonBlueprint({
-          cwd,
-          projectName: options.projectName,
-          blueprint: options.blueprint
-        });
+        if (isDefaultAddonBlueprint(options.blueprint)) {
+          await module.exports.installAddonBlueprint({
+            cwd,
+            projectName: options.projectName,
+            blueprint: options.blueprint
+          });
+        } else {
+          await runEmber({
+            packageRoot,
+            cwd,
+            projectName: options.projectName,
+            blueprint: options.blueprint
+          });
+        }
       }
 
       if (!(options.blueprint && isDefaultBlueprint(options.blueprint))) {
