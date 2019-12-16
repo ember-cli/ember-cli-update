@@ -8,6 +8,7 @@ const utils = require('./utils');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const emberInstallAddon = require('./ember-install-addon');
 const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
+const debug = require('debug')('ember-cli-update');
 
 const nodeModulesIgnore = `
 
@@ -100,6 +101,8 @@ function getArgs(projectName, blueprint) {
 }
 
 module.exports.spawn = async function spawn(command, args, options) {
+  debug(`${command} ${args.join(' ')}`);
+
   let ps = execa(command, args, {
     stdio: ['pipe', 'pipe', 'inherit'],
     ...options
