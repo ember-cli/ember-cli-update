@@ -22,16 +22,18 @@ async function getBaseBlueprint({
       baseBlueprint = loadSafeBlueprint(baseBlueprint);
       let isCustomBlueprint = !isDefaultBlueprint(baseBlueprint);
       if (isCustomBlueprint) {
-        let url;
         if (baseBlueprint.location) {
           let parsedPackage = await parseBlueprintPackage({
             cwd,
             blueprint: baseBlueprint
           });
-          url = parsedPackage.url;
+          let downloadedPackage = await downloadPackage(
+            baseBlueprint.packageName,
+            parsedPackage.url,
+            baseBlueprint.version
+          );
+          baseBlueprint.path = downloadedPackage.path;
         }
-        let downloadedPackage = await downloadPackage(baseBlueprint.packageName, url, baseBlueprint.version);
-        baseBlueprint.path = downloadedPackage.path;
       }
     } else {
       defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
