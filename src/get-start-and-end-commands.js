@@ -100,6 +100,37 @@ function getArgs(projectName, blueprint) {
   ];
 }
 
+function createProject({
+  packageRoot,
+  options,
+  runEmber
+}) {
+  return async function createProject(cwd) {
+    if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
+      await runEmber({
+        packageRoot,
+        cwd,
+        projectName: options.projectName,
+        blueprint: options.baseBlueprint
+      });
+    }
+
+    if (options.blueprint) {
+      await runEmber({
+        packageRoot,
+        cwd,
+        projectName: options.projectName,
+        blueprint: options.blueprint
+      });
+    }
+
+    return await postCreateProject({
+      cwd,
+      options
+    });
+  };
+}
+
 module.exports.spawn = async function spawn(command, args, options) {
   debug(`${command} ${args.join(' ')}`);
 
@@ -135,30 +166,11 @@ function createProjectFromCache({
   packageRoot,
   options
 }) {
-  return async function createProject(cwd) {
-    if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
-      await runEmberLocally({
-        packageRoot,
-        cwd,
-        projectName: options.projectName,
-        blueprint: options.baseBlueprint
-      });
-    }
-
-    if (options.blueprint) {
-      await runEmberLocally({
-        packageRoot,
-        cwd,
-        projectName: options.projectName,
-        blueprint: options.blueprint
-      });
-    }
-
-    return await postCreateProject({
-      cwd,
-      options
-    });
-  };
+  return createProject({
+    packageRoot,
+    options,
+    runEmber: runEmberLocally
+  });
 }
 
 module.exports.npx = async function npx(args, options) {
@@ -195,28 +207,10 @@ async function runEmberRemotely({
 function createProjectFromRemote({
   options
 }) {
-  return async function createProject(cwd) {
-    if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
-      await runEmberRemotely({
-        cwd,
-        projectName: options.projectName,
-        blueprint: options.baseBlueprint
-      });
-    }
-
-    if (options.blueprint) {
-      await runEmberRemotely({
-        cwd,
-        projectName: options.projectName,
-        blueprint: options.blueprint
-      });
-    }
-
-    return await postCreateProject({
-      cwd,
-      options
-    });
-  };
+  return createProject({
+    options,
+    runEmber: runEmberRemotely
+  });
 }
 
 async function postCreateProject({
