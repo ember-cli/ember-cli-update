@@ -36,8 +36,8 @@ module.exports = function getStartAndEndCommands({
     projectName,
     packageName: 'ember-cli',
     commandName: 'ember',
-    createProjectFromCache,
-    createProjectFromRemote,
+    createProjectFromCache: createProject(runEmberLocally),
+    createProjectFromRemote: createProject(runEmberRemotely),
     startOptions: {
       baseBlueprint,
       blueprint: startBlueprint,
@@ -100,37 +100,6 @@ function getArgs(projectName, blueprint) {
   ];
 }
 
-function createProject({
-  packageRoot,
-  options,
-  runEmber
-}) {
-  return async function createProject(cwd) {
-    if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
-      await runEmber({
-        packageRoot,
-        cwd,
-        projectName: options.projectName,
-        blueprint: options.baseBlueprint
-      });
-    }
-
-    if (options.blueprint) {
-      await runEmber({
-        packageRoot,
-        cwd,
-        projectName: options.projectName,
-        blueprint: options.blueprint
-      });
-    }
-
-    return await postCreateProject({
-      cwd,
-      options
-    });
-  };
-}
-
 module.exports.spawn = async function spawn(command, args, options) {
   debug(`${command} ${args.join(' ')}`);
 
@@ -138,6 +107,14 @@ module.exports.spawn = async function spawn(command, args, options) {
     stdio: ['pipe', 'pipe', 'inherit'],
     ...options
   });
+
+  overwriteBlueprintFiles(ps);
+
+  await ps;
+};
+
+module.exports.npx = async function npx(args, options) {
+  let ps = utils.npx(args.join(' '), options);
 
   overwriteBlueprintFiles(ps);
 
@@ -162,25 +139,6 @@ async function runEmberLocally({
   ], { cwd });
 }
 
-function createProjectFromCache({
-  packageRoot,
-  options
-}) {
-  return createProject({
-    packageRoot,
-    options,
-    runEmber: runEmberLocally
-  });
-}
-
-module.exports.npx = async function npx(args, options) {
-  let ps = utils.npx(args.join(' '), options);
-
-  overwriteBlueprintFiles(ps);
-
-  await ps;
-};
-
 async function runEmberRemotely({
   cwd,
   projectName,
@@ -204,13 +162,36 @@ async function runEmberRemotely({
   await module.exports.npx(args, { cwd });
 }
 
-function createProjectFromRemote({
-  options
-}) {
-  return createProject({
-    options,
-    runEmber: runEmberRemotely
-  });
+function createProject(runEmber) {
+  return ({
+    packageRoot,
+    options
+  }) => {
+    return async function createProject(cwd) {
+      if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
+        await runEmber({
+          packageRoot,
+          cwd,
+          projectName: options.projectName,
+          blueprint: options.baseBlueprint
+        });
+      }
+
+      if (options.blueprint) {
+        await runEmber({
+          packageRoot,
+          cwd,
+          projectName: options.projectName,
+          blueprint: options.blueprint
+        });
+      }
+
+      return await postCreateProject({
+        cwd,
+        options
+      });
+    };
+  };
 }
 
 async function postCreateProject({
