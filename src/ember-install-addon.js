@@ -36,24 +36,47 @@ async function getEmberCliVersion({
 
 async function emberInstallAddon({
   cwd,
-  addonName,
-  blueprintPackageName,
+  addonNameOverride,
+  packageName,
+  version,
+  blueprintPath,
   stdin
 }) {
-  let emberCliVersion = await getEmberCliVersion({ cwd });
+  let addon;
 
-  let install = ember(['i', addonName], { cwd, stdin });
+  if (addonNameOverride) {
+    addon = addonNameOverride;
+    if (version && !blueprintPath) {
+      addon += `@${version}`;
+    }
+  }
+
+  if (!addon) {
+    addon = blueprintPath;
+  }
+
+  if (!addon) {
+    addon = `${packageName}@${version}`;
+  }
+
+  let install = ember(['i', addon], { cwd, stdin });
 
   let generate;
 
-  let isBuggyEmberCliVersion = semver.satisfies(emberCliVersion, buggyEmberCliRange);
-
-  if (!isBuggyEmberCliVersion) {
+  if (!blueprintPath) {
     generate = install;
   } else {
-    await install;
+    let emberCliVersion = await getEmberCliVersion({ cwd });
 
-    generate = ember(['g', blueprintPackageName], { cwd, stdin });
+    let isBuggyEmberCliVersion = semver.satisfies(emberCliVersion, buggyEmberCliRange);
+
+    if (!isBuggyEmberCliVersion) {
+      generate = install;
+    } else {
+      await install;
+
+      generate = ember(['g', packageName], { cwd, stdin });
+    }
   }
 
   return {

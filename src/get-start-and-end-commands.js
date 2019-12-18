@@ -9,6 +9,7 @@ const isDefaultBlueprint = require('./is-default-blueprint');
 const emberInstallAddon = require('./ember-install-addon');
 const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('debug')('ember-cli-update');
+const npm = require('boilerplate-update/src/npm');
 
 const nodeModulesIgnore = `
 
@@ -37,7 +38,10 @@ module.exports = function getStartAndEndCommands({
   } else if (!endBlueprint.isBaseBlueprint && isDefaultBlueprint(baseBlueprint)) {
     startRange = endRange = baseBlueprint.version;
   } else {
-    startRange = endRange = '';
+    // first version that supports blueprints with versions
+    // `-b foo@1.2.3`
+    // https://github.com/ember-cli/ember-cli/pull/8571
+    startRange = endRange = '>=3.11.0-beta.1';
   }
 
   return {
@@ -63,13 +67,18 @@ module.exports = function getStartAndEndCommands({
   };
 };
 
-function isDefaultAddonBlueprint(blueprint) {
+async function isDefaultAddonBlueprint(blueprint) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   let isDefaultAddonBlueprint;
 
   if (isCustomBlueprint) {
-    let { keywords } = utils.require(path.join(blueprint.path, 'package'));
+    let keywords;
+    if (blueprint.path) {
+      keywords = utils.require(path.join(blueprint.path, 'package')).keywords;
+    } else {
+      keywords = await npm.json(`v ${blueprint.packageName} keywords`);
+    }
 
     isDefaultAddonBlueprint = !(keywords && keywords.includes('ember-blueprint'));
   }
@@ -88,14 +97,16 @@ function getArgs(projectName, blueprint) {
     args.push('init');
   }
 
-  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
-
   let _blueprint;
-  if (isCustomBlueprint) {
+  if (blueprint.path) {
+    // Only use path when necessary, because `npm install <folder>`
+    // symlinks instead of actually installing, so any peerDeps won't
+    // work. Example https://github.com/salsify/ember-cli-dependency-lint/blob/v1.0.3/lib/commands/dependency-lint.js#L5
     _blueprint = blueprint.path;
-  } else {
-    // Can we use the above path all the time, even if it is default?
+  } else if (isDefaultBlueprint(blueprint)) {
     _blueprint = blueprint.name;
+  } else {
+    _blueprint = `${blueprint.packageName}@${blueprint.version}`;
   }
 
   return [
@@ -186,7 +197,7 @@ function createProject(runEmber) {
       }
 
       if (options.blueprint) {
-        if (isDefaultAddonBlueprint(options.blueprint)) {
+        if (await isDefaultAddonBlueprint(options.blueprint)) {
           await module.exports.installAddonBlueprint({
             cwd,
             projectName: options.projectName,
@@ -227,8 +238,9 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
 
   let { ps } = await emberInstallAddon({
     cwd: projectRoot,
-    addonName: blueprint.path,
-    blueprintPackageName: blueprint.packageName,
+    packageName: blueprint.packageName,
+    version: blueprint.version,
+    blueprintPath: blueprint.path,
     stdin: 'pipe'
   });
 

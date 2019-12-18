@@ -14,6 +14,8 @@ const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
 const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
+const getVersions = require('boilerplate-update/src/get-versions');
+const _getTagVersion = require('./get-tag-version');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -35,6 +37,7 @@ module.exports = async function init({
       blueprint: _blueprint
     });
     packageName = parsedPackage.name;
+    name = parsedPackage.name;
     location = parsedPackage.location;
     url = parsedPackage.url;
   } else {
@@ -43,13 +46,18 @@ module.exports = async function init({
     name = defaultBlueprint.name;
   }
 
-  let downloadedPackage = await downloadPackage(packageName, url, to);
-  packageName = downloadedPackage.name;
-
-  // could be "app" or "addon" already
-  // don't want to overwrite with "ember-cli"
-  if (!name) {
+  let version;
+  let path;
+  if (url) {
+    let downloadedPackage = await downloadPackage(packageName, url, to);
+    packageName = downloadedPackage.name;
     name = downloadedPackage.name;
+    version = downloadedPackage.version;
+    path = downloadedPackage.path;
+  } else {
+    let versions = await getVersions(packageName);
+    let getTagVersion = _getTagVersion(versions, packageName);
+    version = await getTagVersion(to);
   }
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
@@ -70,8 +78,8 @@ module.exports = async function init({
 
   blueprint = loadSafeBlueprint(blueprint);
 
-  blueprint.version = downloadedPackage.version;
-  blueprint.path = downloadedPackage.path;
+  blueprint.version = version;
+  blueprint.path = path;
 
   let {
     baseBlueprint

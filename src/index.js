@@ -172,21 +172,27 @@ All blueprints are up-to-date!`;
       endBlueprint = { ...blueprint };
 
       if (isCustomBlueprint) {
-        let [
-          startDownloadedPackage,
-          endDownloadedPackage
-        ] = await Promise.all([
-          startBlueprint ? downloadPackage(startBlueprint.packageName, packageUrl, startBlueprint.version) : null,
-          downloadPackage(endBlueprint.packageName, packageUrl, to)
-        ]);
+        if (packageUrl) {
+          let [
+            startDownloadedPackage,
+            endDownloadedPackage
+          ] = await Promise.all([
+            startBlueprint ? downloadPackage(startBlueprint.packageName, packageUrl, startBlueprint.version) : null,
+            downloadPackage(endBlueprint.packageName, packageUrl, to)
+          ]);
 
-        if (startBlueprint) {
-          startBlueprint.path = startDownloadedPackage.path;
-          startBlueprint.version = startDownloadedPackage.version;
+          if (startBlueprint) {
+            startBlueprint.path = startDownloadedPackage.path;
+            startBlueprint.version = startDownloadedPackage.version;
+          }
+
+          endBlueprint.path = endDownloadedPackage.path;
+          endBlueprint.version = endDownloadedPackage.version;
+        } else {
+          let versions = await getVersions(endBlueprint.packageName);
+          let getTagVersion = _getTagVersion(versions, endBlueprint.packageName);
+          endBlueprint.version = await getTagVersion(to);
         }
-
-        endBlueprint.path = endDownloadedPackage.path;
-        endBlueprint.version = endDownloadedPackage.version;
       } else {
         let packageName = getPackageName(projectOptions);
         let packageVersion = getPackageVersion(packageJson, packageName);
