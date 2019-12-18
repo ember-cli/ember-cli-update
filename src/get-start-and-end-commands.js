@@ -186,38 +186,25 @@ function createProject(runEmber) {
         });
       }
 
-      return await postCreateProject({
-        cwd,
-        options
-      });
+      if (options.blueprint && isDefaultAddonBlueprint(options.blueprint)) {
+        await module.exports.installAddonBlueprint({
+          cwd,
+          projectName: options.projectName,
+          blueprint: options.blueprint
+        });
+      }
+
+      if (!(options.blueprint && isDefaultBlueprint(options.blueprint))) {
+        // This might not be needed anymore.
+        await module.exports.appendNodeModulesIgnore({
+          cwd,
+          projectName: options.projectName
+        });
+      }
+
+      return path.join(cwd, options.projectName);
     };
   };
-}
-
-async function postCreateProject({
-  cwd,
-  options: {
-    projectName,
-    blueprint
-  }
-}) {
-  if (blueprint && isDefaultAddonBlueprint(blueprint)) {
-    await module.exports.installAddonBlueprint({
-      cwd,
-      projectName,
-      blueprint
-    });
-  }
-
-  if (!(blueprint && isDefaultBlueprint(blueprint))) {
-    // This might not be needed anymore.
-    await module.exports.appendNodeModulesIgnore({
-      cwd,
-      projectName
-    });
-  }
-
-  return path.join(cwd, projectName);
 }
 
 module.exports.installAddonBlueprint = async function installAddonBlueprint({
