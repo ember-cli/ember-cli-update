@@ -3,6 +3,6 @@
   "version": "0.0.0",
   "description": "",
   "devDependencies": {
-    "ember-cli": "~3.2.0-beta.1"
+    "ember-cli": "~3.11.0-beta.1"
   }
 }

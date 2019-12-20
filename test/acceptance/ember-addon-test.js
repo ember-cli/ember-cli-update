@@ -77,7 +77,7 @@ describe(function() {
       command: 'update',
       additionalArguments: [
         '--to',
-        '3.2.0-beta.1',
+        '3.11.0-beta.1',
         '--resolve-conflicts'
       ],
       detectServerStart() {
