@@ -198,7 +198,8 @@ describe(function() {
     } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
-      reset: true
+      reset: true,
+      to: '2.11.1'
       // test the resetting logic of ember-cli-update.json
       // no longer a valid blueprint name
       // blueprint: 'ember-cli',
