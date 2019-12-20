@@ -320,7 +320,8 @@ describe(function() {
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       init: true,
-      reset: true
+      reset: true,
+      to: '2.11.1'
     })).promise;
 
     expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
@@ -420,7 +421,7 @@ describe(function() {
     let {
       status
     } = await (await merge({
-      fixturesPath: 'test/fixtures/app/merge',
+      fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       bootstrap: true
     })).promise;
@@ -433,7 +434,7 @@ describe(function() {
     await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/app/merge/my-app'
+      mergeFixtures: 'test/fixtures/app/local/my-app'
     });
   });
 
