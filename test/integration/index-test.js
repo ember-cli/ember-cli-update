@@ -42,7 +42,7 @@ describe(function() {
     dirty,
     blueprint,
     from,
-    to = '3.2.0-beta.1',
+    to = '3.11.0-beta.1',
     reset,
     compareOnly,
     statsOnly,
@@ -237,7 +237,7 @@ describe(function() {
     expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
 
     expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.2.0-beta.1');
+      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
   });
 
   it('resolves semver ranges', async function() {
@@ -265,17 +265,17 @@ applicable codemods: `);
     } = await merge({
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app',
-      to: '3.3.0',
+      to: '3.15.0',
       statsOnly: true
     });
 
     assertNoStaged(status);
 
     expect(result).to.equal(`project options: app, welcome
-from version: 3.2.0-beta.1
-to version: 3.3.0
+from version: 3.11.0-beta.1
+to version: 3.15.0
 output repo: https://github.com/ember-cli/ember-new-output
-applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, notify-property-change, qunit-dom-codemod`);
+applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, notify-property-change, qunit-dom-codemod, deprecate-merge-codemod, deprecate-router-events-codemod, cp-property-codemod, cp-volatile-codemod, cp-property-map-codemod, ember-angle-brackets-codemod`);
   });
 
   it('lists codemods', async function() {

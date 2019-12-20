@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  name: 'my-custom-addon'
+  name: require('./package').name
 };
