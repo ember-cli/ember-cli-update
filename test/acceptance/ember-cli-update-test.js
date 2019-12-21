@@ -198,7 +198,7 @@ describe(function() {
     await fs.remove(path.join(tmpPath, 'MODULE_REPORT.md'));
 
     let nodeVersion = 'latest-node';
-    if (process.env.NODE_LTS) {
+    if (process.env.NODE_LTS === 'true') {
       nodeVersion = 'min-node';
     }
 

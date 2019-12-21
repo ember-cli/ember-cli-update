@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+  schedule:
+  # nightly
+  - cron: '0 0 * * *'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1.1.0
+
+    - run: npm ci
+    - run: npm run lint
+
+  test:
+    strategy:
+      matrix:
+        runner:
+        - ubuntu-latest
+        - macos-latest
+        node-version:
+        - 8
+        - 13
+        test-command:
+        - test:fast
+        - test:slow
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1.1.0
+      with:
+        version: ${{ matrix.node-version }}
+
+    # for test cache hits
+    - run: npm i -g ember-cli@2.11.1
+
+    - run: npm ci
+    - run: npm run ${{ matrix.test-command }}
+      env:
+        NODE_LTS: ${{ matrix.node-version == 8 }}
