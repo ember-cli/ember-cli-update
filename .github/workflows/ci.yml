@@ -32,6 +32,12 @@ jobs:
         test-command:
         - test:fast
         - test:slow
+        exclude:
+          - os: macos-latest
+            node: 13
+          - os: macos-latest
+            node: 8
+            test-command: test:fast
 
     runs-on: ${{ matrix.os }}
 
