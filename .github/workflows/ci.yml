@@ -41,6 +41,8 @@ jobs:
       with:
         version: ${{ matrix.node }}
 
+    - run: node --version
+
     # for test cache hits
     - run: npm i -g ember-cli@2.11.1
 
