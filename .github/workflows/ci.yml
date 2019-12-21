@@ -23,7 +23,7 @@ jobs:
   test:
     strategy:
       matrix:
-        runner:
+        os:
         - ubuntu-latest
         - macos-latest
         node-version:
@@ -33,7 +33,7 @@ jobs:
         - test:fast
         - test:slow
 
-    runs-on: ${{ matrix.runner }}
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v1
