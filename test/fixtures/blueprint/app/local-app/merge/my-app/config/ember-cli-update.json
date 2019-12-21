@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "ember-cli-update-npm-blueprint-test",
-      "version": "0.0.14",
+      "version": "0.0.18",
       "blueprints": [
         {
           "name": "ember-cli-update-npm-blueprint-test",
