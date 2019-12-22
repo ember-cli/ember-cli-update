@@ -394,6 +394,7 @@ describe(function() {
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/ideal',
       commitMessage: 'my-app',
       blueprint: name,
+      // test semver latest resolution instead of pinned
       to: toDefault,
       async beforeMerge() {
         await initBlueprint({
@@ -414,6 +415,41 @@ describe(function() {
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app'
+    });
+  });
+
+  // this is different than the local test in that it tests
+  // that peer-deps (requiring ember-cli internals) works
+  // in existing npm addons
+  // https://github.com/salsify/ember-cli-dependency-lint/blob/v1.0.3/lib/commands/dependency-lint.js#L5
+  it('can update a npm addon blueprint', async function() {
+    this.timeout(15 * 60 * 1000);
+
+    let {
+      name,
+      version
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/npm-app/merge/my-app')).blueprints[1];
+
+    let {
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/addon/npm-app/local',
+      commitMessage: 'my-app',
+      blueprint: name,
+      to: version
+    });
+
+    overwriteBlueprintFiles(ps);
+
+    let {
+      status
+    } = await promise;
+
+    assertNoUnstaged(status);
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/addon/npm-app/merge/my-app'
     });
   });
 
