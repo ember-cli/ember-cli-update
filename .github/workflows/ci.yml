@@ -28,6 +28,7 @@ jobs:
         os:
         - ubuntu-latest
         - macos-latest
+        - windows-latest
         node:
         - 10
         - '*'
@@ -39,6 +40,11 @@ jobs:
         - os: macos-latest
           node: '*'
         - os: macos-latest
+          node: 10
+          test-command: test:fast
+        - os: windows-latest
+          node: '*'
+        - os: windows-latest
           node: 10
           test-command: test:fast
 
