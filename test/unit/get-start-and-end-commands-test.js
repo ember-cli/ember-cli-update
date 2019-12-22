@@ -16,6 +16,7 @@ const {
 const projectName = 'my-custom-app';
 const startVersion = '0.0.1';
 const endVersion = '0.0.2';
+const baseVersion = '0.0.3';
 const packageRoot = '/test/package/root';
 const packageVersion = startVersion;
 const cwd = '/test/cwd';
@@ -24,7 +25,7 @@ const commandName = 'ember';
 const blueprint = 'test-blueprint';
 const blueprintPath = '/path/to/blueprint';
 const projectPath = path.normalize(`${cwd}/${projectName}`);
-const baseBlueprint = loadDefaultBlueprint([], '0.0.3');
+const baseBlueprint = loadDefaultBlueprint([], baseVersion);
 const defaultStartBlueprint = loadDefaultBlueprint([], startVersion);
 const defaultEndBlueprint = loadDefaultBlueprint([], endVersion);
 
@@ -265,7 +266,7 @@ describe(_getStartAndEndCommands, function() {
   });
 
   describe('custom blueprint', function() {
-    it('returns an options object', async function() {
+    it('returns an options object - base default', async function() {
       let options = getStartAndEndCommands({
         baseBlueprint,
         startBlueprint: {
@@ -294,7 +295,7 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: startVersion
           },
-          packageRange: '0.0.3'
+          packageRange: baseVersion
         },
         endOptions: {
           baseBlueprint,
@@ -302,7 +303,58 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: endVersion
           },
-          packageRange: '0.0.3'
+          packageRange: baseVersion
+        }
+      });
+    });
+
+    it('returns an options object - base custom', async function() {
+      let options = getStartAndEndCommands({
+        baseBlueprint: {
+          version: baseVersion,
+          isBaseBlueprint: true
+        },
+        startBlueprint: {
+          name: blueprint,
+          version: startVersion
+        },
+        endBlueprint: {
+          name: blueprint,
+          version: endVersion
+        }
+      });
+
+      expect(options.createProjectFromCache).to.be.a('function');
+      expect(options.createProjectFromRemote).to.be.a('function');
+
+      delete options.createProjectFromCache;
+      delete options.createProjectFromRemote;
+
+      expect(options).to.deep.equal({
+        projectName,
+        packageName,
+        commandName,
+        startOptions: {
+          baseBlueprint: {
+            version: baseVersion,
+            isBaseBlueprint: true
+          },
+          blueprint: {
+            name: blueprint,
+            version: startVersion
+          },
+          packageRange: ''
+        },
+        endOptions: {
+          baseBlueprint: {
+            version: baseVersion,
+            isBaseBlueprint: true
+          },
+          blueprint: {
+            name: blueprint,
+            version: endVersion
+          },
+          packageRange: ''
         }
       });
     });
@@ -682,7 +734,7 @@ describe(_getStartAndEndCommands, function() {
         startOptions: {
           baseBlueprint,
           blueprint: null,
-          packageRange: '0.0.3'
+          packageRange: baseVersion
         },
         endOptions: {
           baseBlueprint,
@@ -690,7 +742,7 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: endVersion
           },
-          packageRange: '0.0.3'
+          packageRange: baseVersion
         }
       });
     });
