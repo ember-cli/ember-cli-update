@@ -10,7 +10,7 @@ You can run this either as a global executable available to all projects or an E
 
 Fetches list of codemods and instructions from [ember-cli-update-codemods-manifest](https://github.com/ember-cli/ember-cli-update-codemods-manifest)
 
-This is a thin wrapper of [boilerplate-update](https://github.com/kellyselden/boilerplate-update).
+This attempts to be a thin wrapper of [boilerplate-update](https://github.com/kellyselden/boilerplate-update).
 
 ## Installation
 
