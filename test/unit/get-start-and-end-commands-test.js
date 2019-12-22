@@ -56,6 +56,14 @@ describe(_getStartAndEndCommands, function() {
     }, options));
   }
 
+  it('throws if base blueprint is not marked as such', function() {
+    let f = () => getStartAndEndCommands({
+      baseBlueprint: {}
+    });
+
+    expect(f).to.throw('The intended base blueprint is not actually a base blueprint.');
+  });
+
   it('throws if two layers of base blueprints', function() {
     let f = () => getStartAndEndCommands({
       baseBlueprint

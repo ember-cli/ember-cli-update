@@ -21,6 +21,10 @@ module.exports = function getStartAndEndCommands({
   startBlueprint,
   endBlueprint
 }) {
+  if (baseBlueprint && !baseBlueprint.isBaseBlueprint) {
+    throw new Error('The intended base blueprint is not actually a base blueprint.');
+  }
+
   if (endBlueprint.isBaseBlueprint && baseBlueprint) {
     throw new Error('You supplied two layers of base blueprints.');
   }
