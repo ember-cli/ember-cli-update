@@ -286,7 +286,7 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: startVersion
           },
-          packageRange: ''
+          packageRange: '0.0.3'
         },
         endOptions: {
           baseBlueprint,
@@ -294,7 +294,7 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: endVersion
           },
-          packageRange: ''
+          packageRange: '0.0.3'
         }
       });
     });
@@ -673,7 +673,7 @@ describe(_getStartAndEndCommands, function() {
         startOptions: {
           baseBlueprint,
           blueprint: null,
-          packageRange: ''
+          packageRange: '0.0.3'
         },
         endOptions: {
           baseBlueprint,
@@ -681,7 +681,7 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: endVersion
           },
-          packageRange: ''
+          packageRange: '0.0.3'
         }
       });
     });
