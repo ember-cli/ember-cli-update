@@ -21,15 +21,15 @@ module.exports = function getStartAndEndCommands({
   startBlueprint,
   endBlueprint
 }) {
-  let isCustomBlueprint = !isDefaultBlueprint(endBlueprint);
-
   let startRange;
   let endRange;
-  if (isCustomBlueprint) {
-    startRange = endRange = '';
-  } else {
+  if (isDefaultBlueprint(endBlueprint)) {
     startRange = startBlueprint && startBlueprint.version;
     endRange = endBlueprint.version;
+  } else if (!endBlueprint.isBaseBlueprint && isDefaultBlueprint(baseBlueprint)) {
+    startRange = endRange = baseBlueprint.version;
+  } else {
+    startRange = endRange = '';
   }
 
   return {
