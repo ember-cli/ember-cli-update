@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 0,
+  "packages": [
+    {
+      "name": "ember-cli",
+      "version": "3.11.0-beta.1",
+      "blueprints": [
+        {
+          "name": "app",
+          "isBaseBlueprint": true,
+          "options": [
+            "--no-welcome"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ember-cli-update-npm-addon-test",
+      "version": "0.0.3",
+      "blueprints": [
+        {
+          "name": "ember-cli-update-npm-addon-test"
+        }
+      ]
+    }
+  ]
+}
