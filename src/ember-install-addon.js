@@ -2,6 +2,7 @@
 
 const execa = require('execa');
 const semver = require('semver');
+const debug = require('debug')('ember-cli-update');
 
 // not fixed yet
 // https://github.com/ember-cli/ember-cli/issues/8937
@@ -11,6 +12,8 @@ function ember(args, {
   cwd,
   stdin = 'inherit'
 }) {
+  debug(`ember ${args.join(' ')}`);
+
   let ps = execa('ember', args, {
     cwd,
     preferLocal: true,
