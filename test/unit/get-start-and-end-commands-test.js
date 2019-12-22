@@ -50,11 +50,18 @@ describe(_getStartAndEndCommands, function() {
   function getStartAndEndCommands(options) {
     return _getStartAndEndCommands(Object.assign({
       packageJson: { name: projectName },
-      baseBlueprint,
       startBlueprint: defaultStartBlueprint,
       endBlueprint: defaultEndBlueprint
     }, options));
   }
+
+  it('throws if two layers of base blueprints', function() {
+    let f = () => getStartAndEndCommands({
+      baseBlueprint
+    });
+
+    expect(f).to.throw('You supplied two layers of base blueprints.');
+  });
 
   it('returns an options object', function() {
     let options = getStartAndEndCommands();
@@ -70,12 +77,12 @@ describe(_getStartAndEndCommands, function() {
       packageName,
       commandName,
       startOptions: {
-        baseBlueprint,
+        baseBlueprint: undefined,
         blueprint: defaultStartBlueprint,
         packageRange: startVersion
       },
       endOptions: {
-        baseBlueprint,
+        baseBlueprint: undefined,
         blueprint: defaultEndBlueprint,
         packageRange: endVersion
       }
@@ -260,6 +267,7 @@ describe(_getStartAndEndCommands, function() {
   describe('custom blueprint', function() {
     it('returns an options object', async function() {
       let options = getStartAndEndCommands({
+        baseBlueprint,
         startBlueprint: {
           name: blueprint,
           version: startVersion
@@ -639,12 +647,12 @@ describe(_getStartAndEndCommands, function() {
         packageName,
         commandName,
         startOptions: {
-          baseBlueprint,
+          baseBlueprint: undefined,
           blueprint: null,
           packageRange: null
         },
         endOptions: {
-          baseBlueprint,
+          baseBlueprint: undefined,
           blueprint: defaultEndBlueprint,
           packageRange: endVersion
         }
@@ -653,6 +661,7 @@ describe(_getStartAndEndCommands, function() {
 
     it('returns an options object - custom', async function() {
       let options = getStartAndEndCommands({
+        baseBlueprint,
         startBlueprint: null,
         endBlueprint: {
           name: blueprint,

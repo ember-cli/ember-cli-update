@@ -21,6 +21,10 @@ module.exports = function getStartAndEndCommands({
   startBlueprint,
   endBlueprint
 }) {
+  if (endBlueprint.isBaseBlueprint && baseBlueprint) {
+    throw new Error('You supplied two layers of base blueprints.');
+  }
+
   let startRange;
   let endRange;
   if (isDefaultBlueprint(endBlueprint)) {
