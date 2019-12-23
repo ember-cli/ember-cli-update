@@ -1,95 +1,64 @@
 'use strict';
 
+const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const { AddonTestApp } = require('ember-cli-addon-tests');
 const {
-  gitInit,
-  commit: _commit,
-  postCommit,
-  processIo,
+  buildTmp,
+  commit,
+  processBin,
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
-const { run } = require('git-diff-apply');
 const {
   assertNormalUpdate,
   assertNoUnstaged
 } = require('../helpers/assertions');
-const { promisify } = require('util');
-const cpr = promisify(require('cpr'));
+const run = require('../../src/run');
+const replaceFile = require('boilerplate-update/src/replace-file');
+const { EOL } = require('os');
 
-const commitMessage = 'add files';
-
-async function reset(tmpPath) {
-  await run('git rm -r .', { cwd: tmpPath });
-
-  await cpr('test/fixtures/app/local/my-app', tmpPath);
-}
-
-async function init(tmpPath) {
-  await gitInit({
-    cwd: tmpPath
-  });
-
-  await _commit({
-    cwd: tmpPath
-  });
-}
-
-async function commit(tmpPath) {
-  await _commit({
-    m: commitMessage,
-    cwd: tmpPath
-  });
-
-  await postCommit({
-    cwd: tmpPath
+async function mutatePackageJson(cwd, callback) {
+  await replaceFile(path.join(cwd, 'package.json'), file => {
+    let pkg = JSON.parse(file);
+    callback(pkg);
+    return JSON.stringify(pkg, null, 2).replace(/\n/g, EOL) + EOL;
   });
 }
 
 describe(function() {
-  this.timeout(10 * 60 * 1000);
+  this.timeout(3 * 60 * 1000);
 
-  let app;
+  let tmpPath;
 
-  beforeEach(async function() {
-    app = new AddonTestApp();
-
-    await app.create('my-app', {
-      fixturesPath: 'test/fixtures/app/local',
-      skipNpm: true
+  async function merge({
+    fixturesPath,
+    to = '3.11.0-beta.1',
+    commitMessage,
+    beforeMerge = () => Promise.resolve()
+  }) {
+    tmpPath = await buildTmp({
+      fixturesPath
     });
 
-    await init(app.path);
+    await beforeMerge();
 
-    // remove newer fixture files not present in older versions
-    await reset(app.path);
-
-    app.editPackageJSON(pkg => {
-      pkg.devDependencies['ember-cli-update'] = '*';
-    });
-
-    await commit(app.path);
-
-    await app.run('npm', 'install', '--no-package-lock');
-
-    await app.startServer({
-      command: 'update',
-      additionalArguments: [
-        '--to',
-        '3.11.0-beta.1',
+    return await (await processBin({
+      bin: 'ember',
+      args: [
+        'update',
+        `--to=${to}`,
         '--resolve-conflicts'
       ],
-      detectServerStart() {
-        return true;
-      }
-    });
-  });
+      cwd: tmpPath,
+      commitMessage,
+      expect
+    })).promise;
+  }
 
   function fixtureCompare({
+    actual = tmpPath,
     mergeFixtures
   }) {
-    let actual = app.path;
     let expected = mergeFixtures;
 
     _fixtureCompare({
@@ -99,22 +68,28 @@ describe(function() {
     });
   }
 
-  async function merge() {
-    return await processIo({
-      ps: app.server,
-      cwd: app.path,
-      commitMessage,
-      expect
-    });
-  }
-
   it('works', async function() {
     let {
       status
-    } = await merge();
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
+      async beforeMerge() {
+        await mutatePackageJson(tmpPath, pkg => {
+          pkg.devDependencies['ember-cli-update'] = '*';
+        });
+
+        await run('npm install --no-package-lock', { cwd: tmpPath });
+
+        await commit({
+          m: 'my-app',
+          cwd: tmpPath
+        });
+      }
+    });
 
     // remove addon because it's not in the fixtures
-    app.editPackageJSON(pkg => {
+    await mutatePackageJson(tmpPath, pkg => {
       delete pkg.devDependencies['ember-cli-update'];
     });
 
