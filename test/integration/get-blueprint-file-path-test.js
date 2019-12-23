@@ -5,31 +5,62 @@ const { expect } = require('../helpers/chai');
 const getBlueprintFilePath = require('../../src/get-blueprint-file-path');
 const path = require('path');
 
+const { getBlueprintRelativeFilePath } = getBlueprintFilePath;
+
 describe(getBlueprintFilePath, function() {
-  it('finds a standard config dir', async function() {
-    let dir = 'test/fixtures/blueprint/app/local-app/local/my-app';
+  it('doesn\'t have an ember-addon key', async function() {
+    let dir = 'test/fixtures/package-json/no-ember-addon';
+    let expected = 'config/ember-cli-update.json';
 
     let filePath = await getBlueprintFilePath(dir);
 
-    expect(path.dirname(filePath)).to.have.basename('config');
-    expect(filePath).to.be.a.path();
+    expect(filePath).to.endWith(path.join(dir, expected));
   });
 
-  it('finds a custom config dir', async function() {
-    let dir = 'test/fixtures/blueprint/app/legacy-app/local/my-app';
+  it('doesn\'t have a custom config dir', async function() {
+    let dir = 'test/fixtures/package-json/no-config-path';
+    let expected = 'config/ember-cli-update.json';
 
     let filePath = await getBlueprintFilePath(dir);
 
-    expect(path.dirname(filePath)).to.not.have.basename('config');
-    expect(filePath).to.be.a.path();
+    expect(filePath).to.endWith(path.join(dir, expected));
   });
 
-  it('falls back if no state file', async function() {
-    let dir = 'test/fixtures/blueprint/addon/legacy-app/local/no-state-file/my-app';
+  it('uses a custom config dir', async function() {
+    let dir = 'test/fixtures/package-json/config-path';
+    let expected = 'config2/ember-cli-update.json';
 
     let filePath = await getBlueprintFilePath(dir);
 
-    expect(path.dirname(filePath)).to.have.basename('config');
-    expect(filePath).to.not.be.a.path();
+    expect(filePath).to.endWith(path.join(dir, expected));
+  });
+
+  describe(getBlueprintRelativeFilePath, function() {
+    it('doesn\'t have an ember-addon key', async function() {
+      let dir = 'test/fixtures/package-json/no-ember-addon';
+      let expected = 'config/ember-cli-update.json';
+
+      let filePath = await getBlueprintRelativeFilePath(dir);
+
+      expect(filePath).to.equal(path.normalize(expected));
+    });
+
+    it('doesn\'t have a custom config dir', async function() {
+      let dir = 'test/fixtures/package-json/no-config-path';
+      let expected = 'config/ember-cli-update.json';
+
+      let filePath = await getBlueprintRelativeFilePath(dir);
+
+      expect(filePath).to.equal(path.normalize(expected));
+    });
+
+    it('uses a custom config dir', async function() {
+      let dir = 'test/fixtures/package-json/config-path';
+      let expected = 'config2/ember-cli-update.json';
+
+      let filePath = await getBlueprintRelativeFilePath(dir);
+
+      expect(filePath).to.equal(path.normalize(expected));
+    });
   });
 });
