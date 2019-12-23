@@ -17,7 +17,7 @@ const saveBlueprint = require('./save-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
-const getBlueprintFilePath = require('./get-blueprint-file-path');
+const { getBlueprintRelativeFilePath } = require('./get-blueprint-file-path');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
@@ -243,7 +243,7 @@ All blueprints are up-to-date!`;
     codemodsUrl,
     codemodsJson,
     createCustomDiff,
-    ignoredFiles: [await getBlueprintFilePath(cwd)],
+    ignoredFiles: [await getBlueprintRelativeFilePath(cwd)],
     wasRunAsExecutable
   })).promise;
 

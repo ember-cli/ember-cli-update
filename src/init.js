@@ -9,7 +9,7 @@ const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const stageBlueprintFile = require('./stage-blueprint-file');
-const getBlueprintFilePath = require('./get-blueprint-file-path');
+const { getBlueprintRelativeFilePath } = require('./get-blueprint-file-path');
 const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
 const findBlueprint = require('./find-blueprint');
@@ -106,7 +106,7 @@ module.exports = async function init({
       baseBlueprint,
       endBlueprint: blueprint
     }),
-    ignoredFiles: [await getBlueprintFilePath(cwd)],
+    ignoredFiles: [await getBlueprintRelativeFilePath(cwd)],
     wasRunAsExecutable
   })).promise;
 

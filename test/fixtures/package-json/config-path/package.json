@@ -1,0 +1,5 @@
+{
+  "ember-addon": {
+    "configPath": "config2"
+  }
+}

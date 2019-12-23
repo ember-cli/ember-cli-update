@@ -4,6 +4,12 @@ const fs = require('fs-extra');
 const path = require('path');
 
 async function getBlueprintFilePath(cwd) {
+  let relative = await getBlueprintRelativeFilePath(cwd);
+
+  return path.join(cwd, relative);
+}
+
+async function getBlueprintRelativeFilePath(cwd) {
   let configDir = 'config';
 
   try {
@@ -14,7 +20,8 @@ async function getBlueprintFilePath(cwd) {
     }
   } catch (err) {}
 
-  return path.join(cwd, configDir, 'ember-cli-update.json');
+  return path.join(configDir, 'ember-cli-update.json');
 }
 
 module.exports = getBlueprintFilePath;
+module.exports.getBlueprintRelativeFilePath = getBlueprintRelativeFilePath;
