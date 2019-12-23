@@ -32,8 +32,9 @@ jobs:
         - 8
         - 13
         test-command:
+        - test:command
+        - test:bin
         - test:fast
-        - test:slow
         exclude:
         - os: macos-latest
           node: 13

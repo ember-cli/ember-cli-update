@@ -10,8 +10,9 @@
   "scripts": {
     "start": "bin/ember-cli-update.js",
     "test": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha \"test/!(fixtures)/**/*-test.js\"",
+    "test:command": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/ember-addon-test.js --retries 1",
+    "test:bin": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/ember-cli-update-test.js --retries 1",
     "test:fast": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures mocha \"test/+(integration|unit)/**/*-test.js\" --retries 1",
-    "test:slow": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures,ember-cli-addon-tests mocha test/acceptance/**/*-test.js --retries 1",
     "lint": "eslint . --ext js,json"
   },
   "repository": {
