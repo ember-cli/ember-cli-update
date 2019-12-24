@@ -108,7 +108,8 @@ module.exports = async function emberCliUpdate({
         to: _to
       } = await chooseBlueprintUpdates({
         cwd,
-        emberCliUpdateJson
+        emberCliUpdateJson,
+        reset
       });
 
       if (areAllUpToDate) {
@@ -119,7 +120,9 @@ All blueprints are up-to-date!`;
       }
 
       blueprint = _blueprint;
-      to = _to;
+      if (!reset) {
+        to = _to;
+      }
     }
   }
 

@@ -15,70 +15,102 @@ function formatBlueprintLine({
   return `${name}, current: ${currentVersion}, latest: ${latestVersion}`;
 }
 
+async function chooseBlueprint({
+  choicesByName,
+  message
+}) {
+  let answer = await inquirer.prompt([{
+    type: 'list',
+    message,
+    name: 'blueprint',
+    choices: Object.values(choicesByName).map(({ choice }) => choice)
+  }]);
+
+  return choicesByName[answer.blueprint];
+}
+
 async function chooseBlueprintUpdates({
   cwd,
-  emberCliUpdateJson
+  emberCliUpdateJson,
+  reset
 }) {
   let to;
-  let blueprint;
+  let existingBlueprint;
+  let blueprintUpdates;
+  let areAllUpToDate;
 
   let { blueprints } = emberCliUpdateJson;
 
-  let blueprintUpdates = await checkForBlueprintUpdates({
-    cwd,
-    blueprints
-  });
-
-  let areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
-  if (!areAllUpToDate) {
-    let choicesByName = blueprintUpdates.reduce((choices, blueprintUpdate) => {
-      let name = formatBlueprintLine(blueprintUpdate);
+  if (reset) {
+    let choicesByName = blueprints.reduce((choices, blueprint) => {
+      let name = blueprint.packageName;
       choices[name] = {
-        blueprintUpdate,
+        blueprint,
         choice: {
-          name,
-          disabled: blueprintUpdate.isUpToDate
+          name
         }
       };
       return choices;
     }, {});
 
-    let answer = await inquirer.prompt([{
-      type: 'list',
-      message: 'Blueprint updates have been found. Which one would you like to update?',
-      name: 'blueprint',
-      choices: Object.values(choicesByName).map(({ choice }) => choice)
-    }]);
+    existingBlueprint = (await chooseBlueprint({
+      choicesByName,
+      message: 'Which blueprint would you like to reset?'
+    })).blueprint;
+  } else {
+    blueprintUpdates = await checkForBlueprintUpdates({
+      cwd,
+      blueprints
+    });
 
-    let { blueprintUpdate } = choicesByName[answer.blueprint];
+    areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
+    if (!areAllUpToDate) {
+      let choicesByName = blueprintUpdates.reduce((choices, blueprintUpdate) => {
+        let name = formatBlueprintLine(blueprintUpdate);
+        choices[name] = {
+          blueprintUpdate,
+          choice: {
+            name,
+            disabled: blueprintUpdate.isUpToDate
+          }
+        };
+        return choices;
+      }, {});
 
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
-    blueprint = loadSafeBlueprint(existingBlueprint);
+      let { blueprintUpdate } = await chooseBlueprint({
+        choicesByName,
+        message: 'Blueprint updates have been found. Which one would you like to update?'
+      });
 
-    let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
+      existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
 
-    answer = await inquirer.prompt([{
-      type: 'list',
-      message: 'Do you want the latest version?',
-      name: 'choice',
-      choices: [
-        latestVersion,
-        'SemVer string'
-      ]
-    }]);
+      let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
 
-    if (answer.choice === latestVersion) {
-      to = toDefault;
-    } else {
-      answer = await inquirer.prompt([{
-        type: 'input',
-        message: 'What version?',
-        name: 'semver'
+      let answer = await inquirer.prompt([{
+        type: 'list',
+        message: 'Do you want the latest version?',
+        name: 'choice',
+        choices: [
+          latestVersion,
+          'SemVer string'
+        ]
       }]);
 
-      to = answer.semver;
+      if (answer.choice === latestVersion) {
+        to = toDefault;
+      } else {
+        answer = await inquirer.prompt([{
+          type: 'input',
+          message: 'What version?',
+          name: 'semver'
+        }]);
+
+        to = answer.semver;
+      }
     }
   }
+
+  let blueprint = loadSafeBlueprint(existingBlueprint);
 
   return {
     blueprintUpdates,

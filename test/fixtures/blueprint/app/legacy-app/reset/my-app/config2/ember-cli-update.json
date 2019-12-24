@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 0,
+  "packages": [
+    {
+      "name": "ember-cli-update-git-blueprint-test",
+      "location": "../legacy-blueprint",
+      "version": "0.0.1",
+      "blueprints": [
+        {
+          "name": "ember-cli-update-git-blueprint-test",
+          "isBaseBlueprint": true,
+          "options": [
+            "--custom-option=123"
+          ]
+        }
+      ]
+    }
+  ]
+}
