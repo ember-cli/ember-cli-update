@@ -1,6 +1,9 @@
 environment:
   matrix:
     - nodejs_version: "10"
+      TEST_COMMAND: "test:bin"
+    - nodejs_version: "10"
+      TEST_COMMAND: "test:command"
   DEBUG: "ember-cli-update,boilerplate-update,git-diff-apply"
 
 branches:
@@ -31,8 +34,7 @@ install:
 test_script:
   - node --version
   - npm --version
-  - npm run test:bin
-  - npm run test:command
+  - npm run %TEST_COMMAND%
 
 # http://help.appveyor.com/discussions/questions/1310-delete-cache
 cache:
