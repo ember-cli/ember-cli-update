@@ -19,11 +19,11 @@ describe(checkForBlueprintUpdates, function() {
 
   it('works', async function() {
     // out of date test
-    let localBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app')).blueprints[1];
-    let urlBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/local/my-app')).blueprints[0];
+    let localBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
+    let urlBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/local/my-app/config/ember-cli-update.json')).blueprints[0];
 
     // up to date test
-    let npmBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app')).blueprints[0];
+    let npmBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
 
     await initBlueprint({
       fixturesPath: 'test/fixtures/blueprint/app/local',
@@ -45,14 +45,14 @@ describe(checkForBlueprintUpdates, function() {
         packageName: localBlueprint.packageName,
         name: localBlueprint.name,
         currentVersion: localBlueprint.version,
-        latestVersion: (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1].version,
+        latestVersion: (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1].version,
         isUpToDate: false
       },
       {
         packageName: urlBlueprint.packageName,
         name: urlBlueprint.name,
         currentVersion: urlBlueprint.version,
-        latestVersion: (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app')).blueprints[0].version,
+        latestVersion: (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update.json')).blueprints[0].version,
         isUpToDate: false
       },
       {

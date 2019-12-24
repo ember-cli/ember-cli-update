@@ -32,7 +32,7 @@ describe(downloadPackage, function() {
       name,
       location,
       version: range
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let blueprintPath = await initBlueprint({
       fixturesPath: 'test/fixtures/blueprint/app/local',
@@ -56,7 +56,7 @@ describe(downloadPackage, function() {
       name,
       location: url,
       version: range
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app')).blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
 
     let downloadedPackage = await downloadPackage(null, url, range);
 
@@ -69,7 +69,7 @@ describe(downloadPackage, function() {
     let {
       name,
       version: range
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app')).blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
 
     let downloadedPackage = await downloadPackage(name, null, range);
 

@@ -78,7 +78,7 @@ describe(init, function() {
   it('can initialize a custom blueprint', async function() {
     let {
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       status

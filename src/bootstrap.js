@@ -10,9 +10,15 @@ const saveBlueprint = require('./save-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const { glimmerPackageName } = require('./constants');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 module.exports = async function bootstrap() {
   let cwd = process.cwd();
+
+  // A custom config location in package.json may be reset/init away,
+  // so we can no longer look it up on the fly after the run.
+  // We must rely on a lookup before the run.
+  let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
   let packageJson = require(path.join(cwd, 'package'));
 
@@ -38,7 +44,7 @@ module.exports = async function bootstrap() {
   }
 
   await saveBlueprint({
-    cwd,
+    emberCliUpdateJsonPath,
     blueprint
   });
 };

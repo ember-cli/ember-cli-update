@@ -9,6 +9,7 @@ const bootstrap = require('./bootstrap');
 const emberInstallAddon = require('./ember-install-addon');
 const getVersions = require('boilerplate-update/src/get-versions');
 const _getTagVersion = require('./get-tag-version');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 const toDefault = require('./args').to.default;
 
@@ -16,6 +17,11 @@ module.exports = async function install({
   addon
 }) {
   let cwd = process.cwd();
+
+  // A custom config location in package.json may be reset/init away,
+  // so we can no longer look it up on the fly after the run.
+  // We must rely on a lookup before the run.
+  let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
   let parsedPackage = await parseBlueprintPackage({
     cwd,
@@ -58,12 +64,12 @@ module.exports = async function install({
     version
   });
 
-  if (!await loadBlueprintFile(cwd)) {
+  if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
     await bootstrap();
   }
 
   await saveBlueprint({
-    cwd,
+    emberCliUpdateJsonPath,
     blueprint
   });
 };

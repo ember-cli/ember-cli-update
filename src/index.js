@@ -22,6 +22,7 @@ const isDefaultBlueprint = require('./is-default-blueprint');
 const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 const {
   'to': { default: toDefault },
@@ -47,7 +48,12 @@ module.exports = async function emberCliUpdate({
 }) {
   let cwd = process.cwd();
 
-  let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
+  // A custom config location in package.json may be reset/init away,
+  // so we can no longer look it up on the fly after the run.
+  // We must rely on a lookup before the run.
+  let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
+
+  let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
   let blueprint;
   let packageUrl;
@@ -248,35 +254,41 @@ All blueprints are up-to-date!`;
   })).promise;
 
   if (_blueprint) {
-    let emberCliUpdateJson = await loadBlueprintFile(cwd);
+    let emberCliUpdateJson = await loadBlueprintFile(emberCliUpdateJsonPath);
 
     // If you don't have a state file, save the default blueprint,
     // even if you are currently working on a custom blueprint.
     if (!emberCliUpdateJson || !isCustomBlueprint) {
       await saveBlueprint({
-        cwd,
+        emberCliUpdateJsonPath,
         blueprint: defaultBlueprint
       });
     }
 
     if (isCustomBlueprint) {
       await saveBlueprint({
-        cwd,
+        emberCliUpdateJsonPath,
         blueprint: endBlueprint
       });
     }
 
     if (!reset) {
-      await stageBlueprintFile(cwd);
+      await stageBlueprintFile({
+        cwd,
+        emberCliUpdateJsonPath
+      });
     }
   } else if (isPersistedBlueprint) {
     await saveBlueprint({
-      cwd,
+      emberCliUpdateJsonPath,
       blueprint: endBlueprint
     });
 
     if (!reset) {
-      await stageBlueprintFile(cwd);
+      await stageBlueprintFile({
+        cwd,
+        emberCliUpdateJsonPath
+      });
     }
   }
 

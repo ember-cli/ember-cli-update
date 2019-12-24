@@ -6,6 +6,7 @@ const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 module.exports = async function save({
   blueprint: _blueprint,
@@ -17,6 +18,11 @@ module.exports = async function save({
   }
 
   let cwd = process.cwd();
+
+  // A custom config location in package.json may be reset/init away,
+  // so we can no longer look it up on the fly after the run.
+  // We must rely on a lookup before the run.
+  let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
   let parsedPackage = await parseBlueprintPackage({
     cwd,
@@ -33,12 +39,12 @@ module.exports = async function save({
     options: blueprintOptions
   });
 
-  if (!await loadBlueprintFile(cwd)) {
+  if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
     await bootstrap();
   }
 
   await saveBlueprint({
-    cwd,
+    emberCliUpdateJsonPath,
     blueprint
   });
 };

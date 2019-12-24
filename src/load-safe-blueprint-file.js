@@ -2,8 +2,8 @@
 
 const loadBlueprintFile = require('./load-blueprint-file');
 
-async function loadSafeBlueprintFile(cwd) {
-  let emberCliUpdateJson = await loadBlueprintFile(cwd);
+async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
+  let emberCliUpdateJson = await loadBlueprintFile(emberCliUpdateJsonPath);
 
   if (!emberCliUpdateJson) {
     emberCliUpdateJson = {};

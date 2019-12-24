@@ -15,7 +15,9 @@ describe(saveBlueprintFile, function() {
   });
 
   it('works', async function() {
-    await saveBlueprintFile(tmpPath, {
+    let emberCliUpdateJsonPath = path.join(tmpPath, 'ember-cli-update.json');
+
+    await saveBlueprintFile(emberCliUpdateJsonPath, {
       schemaVersion: 0,
       blueprints: [
         {
@@ -28,7 +30,7 @@ describe(saveBlueprintFile, function() {
       ]
     });
 
-    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/normal/config/ember-cli-update.json');
+    expect(emberCliUpdateJsonPath).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/normal/ember-cli-update.json');
   });
 });
