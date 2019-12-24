@@ -32,8 +32,8 @@ jobs:
         - 8
         - '*'
         test-command:
-        - test:command
         - test:bin
+        - test:command
         - test:fast
         exclude:
         - os: macos-latest
