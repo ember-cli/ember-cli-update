@@ -311,6 +311,55 @@ describe(function() {
     assertNoUnstaged(status);
   });
 
+  it('can reset from multiple blueprint', async function() {
+    let {
+      location,
+      version: to
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/my-app/config/ember-cli-update.json')).blueprints[1];
+
+    let {
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
+      commitMessage: 'my-app',
+      reset: true,
+      to,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/app/local',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+      }
+    });
+
+    let whichBlueprint = new Promise(resolve => {
+      function whichBlueprint(data) {
+        let str = data.toString();
+        if (str.includes('Which blueprint would you like to reset?')) {
+          let down = '\u001b[B';
+          let enter = '\n';
+          ps.stdin.write(`${down}${enter}`);
+          ps.stdout.removeListener('data', whichBlueprint);
+          resolve();
+        }
+      }
+      ps.stdout.on('data', whichBlueprint);
+    });
+    await whichBlueprint;
+
+    let {
+      status
+    } = await promise;
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/app/local-app/reset/my-app'
+    });
+
+    assertNoStaged(status);
+  });
+
   it('can init the default blueprint', async function() {
     this.timeout(5 * 60 * 1000);
 

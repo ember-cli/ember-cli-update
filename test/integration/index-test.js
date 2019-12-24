@@ -200,15 +200,6 @@ describe(function() {
       commitMessage: 'my-app',
       reset: true,
       to: '2.11.1'
-      // test the resetting logic of ember-cli-update.json
-      // no longer a valid blueprint name
-      // blueprint: 'ember-cli',
-      // async afterMerge() {
-      //   expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
-      //     .and.equal(path.join(cwd, 'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'));
-
-      //   await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
-      // }
     });
 
     fixtureCompare({
@@ -399,6 +390,36 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         });
 
         assertNoUnstaged(status);
+      });
+
+      it('resets blueprint', async function() {
+        let {
+          location,
+          version: to
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/local/my-app/config2/ember-cli-update.json')).blueprints[0];
+
+        let {
+          status
+        } = await merge({
+          fixturesPath: 'test/fixtures/blueprint/app/legacy-app/merge',
+          commitMessage: 'my-app',
+          reset: true,
+          to,
+          blueprint: 'ember-cli-update-git-blueprint-test',
+          async beforeMerge() {
+            await initBlueprint({
+              fixturesPath: 'test/fixtures/blueprint/app/legacy',
+              resolvedFrom: tmpPath,
+              relativeDir: location
+            });
+          }
+        });
+
+        fixtureCompare({
+          mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/reset/my-app'
+        });
+
+        assertNoStaged(status);
       });
     });
 
