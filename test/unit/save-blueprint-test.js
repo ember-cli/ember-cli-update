@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const utils = require('../../src/utils');
 const _saveBlueprint = require('../../src/save-blueprint');
 
-const cwd = process.cwd();
+const emberCliUpdateJsonPath = 'test-path';
 
 describe(_saveBlueprint, function() {
   let loadDefaultBlueprintFromDisk;
@@ -15,14 +15,14 @@ describe(_saveBlueprint, function() {
 
   beforeEach(function() {
     loadDefaultBlueprintFromDisk = sinon.stub(utils, 'loadDefaultBlueprintFromDisk')
-      .withArgs(cwd).resolves({
+      .withArgs(emberCliUpdateJsonPath).resolves({
         packageName: 'ember-cli',
         name: 'ember-cli',
         version: '0.0.1',
         options: []
       });
     loadSafeBlueprintFile = sinon.stub(utils, 'loadSafeBlueprintFile')
-      .withArgs(cwd).resolves({
+      .withArgs(emberCliUpdateJsonPath).resolves({
         blueprints: []
       });
     saveBlueprintFile = sinon.stub(utils, 'saveBlueprintFile').resolves();
@@ -32,14 +32,14 @@ describe(_saveBlueprint, function() {
     expect(loadDefaultBlueprintFromDisk).to.not.be.called;
     expect(loadSafeBlueprintFile).to.be.calledOnce;
     expect(saveBlueprintFile).to.be.calledOnce;
-    expect(saveBlueprintFile.args[0][0]).to.equal(cwd);
+    expect(saveBlueprintFile.args[0][0]).to.equal(emberCliUpdateJsonPath);
 
     sinon.restore();
   });
 
   async function saveBlueprint(blueprint) {
     await _saveBlueprint({
-      cwd,
+      emberCliUpdateJsonPath,
       blueprint
     });
   }

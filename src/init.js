@@ -16,6 +16,7 @@ const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
 const getVersions = require('boilerplate-update/src/get-versions');
 const _getTagVersion = require('./get-tag-version');
+const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -26,6 +27,11 @@ module.exports = async function init({
   wasRunAsExecutable
 }) {
   let cwd = process.cwd();
+
+  // A custom config location in package.json may be reset/init away,
+  // so we can no longer look it up on the fly after the run.
+  // We must rely on a lookup before the run.
+  let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
   let packageName;
   let name;
@@ -60,7 +66,7 @@ module.exports = async function init({
     version = await getTagVersion(to);
   }
 
-  let emberCliUpdateJson = await loadSafeBlueprintFile(cwd);
+  let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
   let blueprint;
 
@@ -110,17 +116,20 @@ module.exports = async function init({
     wasRunAsExecutable
   })).promise;
 
-  if (!await loadBlueprintFile(cwd)) {
+  if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
     await bootstrap();
   }
 
   await saveBlueprint({
-    cwd,
+    emberCliUpdateJsonPath,
     blueprint
   });
 
   if (!reset) {
-    await stageBlueprintFile(cwd);
+    await stageBlueprintFile({
+      cwd,
+      emberCliUpdateJsonPath
+    });
   }
 
   return result;

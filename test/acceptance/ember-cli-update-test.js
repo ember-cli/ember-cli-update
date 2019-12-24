@@ -237,7 +237,7 @@ describe(function() {
     let {
       location,
       version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       ps,
@@ -343,7 +343,7 @@ describe(function() {
 
     let {
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       ps,
@@ -385,7 +385,7 @@ describe(function() {
     let {
       name,
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       ps,
@@ -428,7 +428,7 @@ describe(function() {
     let {
       name,
       version
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/npm-app/merge/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       ps,
@@ -478,7 +478,7 @@ describe(function() {
     let {
       location,
       version: from
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       status

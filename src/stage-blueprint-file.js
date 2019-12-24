@@ -1,12 +1,15 @@
 'use strict';
 
-const { getBlueprintRelativeFilePath } = require('./get-blueprint-file-path');
+const path = require('path');
 const run = require('./run');
 
-async function stageBlueprintFile(cwd) {
-  let emberCliUpdateJsonPath = await getBlueprintRelativeFilePath(cwd);
+async function stageBlueprintFile({
+  cwd,
+  emberCliUpdateJsonPath
+}) {
+  let relative = path.relative(cwd, emberCliUpdateJsonPath);
 
-  await run(`git add ${emberCliUpdateJsonPath}`);
+  await run(`git add ${relative}`);
 }
 
 module.exports = stageBlueprintFile;

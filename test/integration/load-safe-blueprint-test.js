@@ -15,4 +15,14 @@ describe(loadSafeBlueprint, function() {
       options: []
     });
   });
+
+  it('doesn\'t remove existing options', async function() {
+    let blueprint = loadSafeBlueprint({
+      options: ['foo']
+    });
+
+    expect(blueprint).to.deep.equal({
+      options: ['foo']
+    });
+  });
 });

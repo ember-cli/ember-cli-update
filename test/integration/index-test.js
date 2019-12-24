@@ -376,7 +376,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           location,
           version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app')).blueprints[0];
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json')).blueprints[0];
 
         let {
           status
@@ -407,7 +407,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           name,
           version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app')).blueprints[0];
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
 
         let {
           status
@@ -428,7 +428,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       it('can update an npm blueprint', async function() {
         let {
           name
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app')).blueprints[0];
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
 
         let {
           status

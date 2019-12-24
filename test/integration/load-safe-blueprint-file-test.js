@@ -6,7 +6,7 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
 describe(loadSafeBlueprintFile, function() {
   it('populates when missing', async function() {
-    let dir = 'test/fixtures/ember-cli-update-json/missing';
+    let dir = 'test/fixtures/ember-cli-update-json/missing/ember-cli-update.json';
 
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 
@@ -17,7 +17,7 @@ describe(loadSafeBlueprintFile, function() {
   });
 
   it('populates when empty', async function() {
-    let dir = 'test/fixtures/ember-cli-update-json/empty';
+    let dir = 'test/fixtures/ember-cli-update-json/empty/ember-cli-update.json';
 
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 
@@ -28,7 +28,7 @@ describe(loadSafeBlueprintFile, function() {
   });
 
   it('flattens packages', async function() {
-    let dir = 'test/fixtures/ember-cli-update-json/normal';
+    let dir = 'test/fixtures/ember-cli-update-json/normal/ember-cli-update.json';
 
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 

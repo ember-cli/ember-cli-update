@@ -81,7 +81,7 @@ describe(install, function() {
   it('can install an addon with a default blueprint and no state file', async function() {
     let {
       location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       status
