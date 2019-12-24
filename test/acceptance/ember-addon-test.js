@@ -1,6 +1,5 @@
 'use strict';
 
-const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const {
@@ -14,16 +13,7 @@ const {
   assertNoUnstaged
 } = require('../helpers/assertions');
 const run = require('../../src/run');
-const replaceFile = require('boilerplate-update/src/replace-file');
-const { EOL } = require('os');
-
-async function mutatePackageJson(cwd, callback) {
-  await replaceFile(path.join(cwd, 'package.json'), file => {
-    let pkg = JSON.parse(file);
-    callback(pkg);
-    return JSON.stringify(pkg, null, 2).replace(/\n/g, EOL) + EOL;
-  });
-}
+const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
 
 describe(function() {
   this.timeout(3 * 60 * 1000);
