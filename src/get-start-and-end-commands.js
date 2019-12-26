@@ -10,6 +10,7 @@ const emberInstallAddon = require('./ember-install-addon');
 const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('debug')('ember-cli-update');
 const npm = require('boilerplate-update/src/npm');
+const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
 
 const nodeModulesIgnore = `
 
@@ -248,9 +249,9 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
 
   await ps;
 
-  let packageJson = await fs.readJson(path.join(projectRoot, 'package.json'));
-  packageJson.devDependencies[blueprint.packageName] = blueprint.version;
-  await fs.writeJson(path.join(projectRoot, 'package.json'), packageJson);
+  await mutatePackageJson(projectRoot, packageJson => {
+    packageJson.devDependencies[blueprint.packageName] = blueprint.version;
+  });
 
   await fs.remove(path.join(projectRoot, 'package-lock.json'));
 };
