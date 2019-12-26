@@ -12,16 +12,11 @@ async function checkForBlueprintUpdates({
   blueprints
 }) {
   return await Promise.all(blueprints.map(async blueprint => {
-    let parsedPackage = await parseBlueprintPackage({
-      cwd,
-      blueprint: blueprint.location || blueprint.packageName
-    });
-
     let currentVersion = blueprint.version;
     let latestVersion;
 
-    if (parsedPackage.name) {
-      let versions = await getVersions(parsedPackage.name);
+    if (!blueprint.location) {
+      let versions = await getVersions(blueprint.packageName);
 
       latestVersion = await getTagVersion({
         range: toDefault,
@@ -29,7 +24,12 @@ async function checkForBlueprintUpdates({
         packageName: blueprint.packageName
       });
     } else {
-      let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, toDefault);
+      let parsedPackage = await parseBlueprintPackage({
+        cwd,
+        blueprint: blueprint.location || blueprint.packageName
+      });
+
+      let downloadedPackage = await downloadPackage(blueprint.packageName, parsedPackage.url, toDefault);
 
       latestVersion = downloadedPackage.version;
     }
