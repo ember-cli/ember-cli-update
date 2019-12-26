@@ -42,23 +42,17 @@ describe(checkForBlueprintUpdates, function() {
 
     expect(blueprintUpdates).to.deep.equal([
       {
-        packageName: localBlueprint.packageName,
-        name: localBlueprint.name,
-        currentVersion: localBlueprint.version,
+        blueprint: localBlueprint,
         latestVersion: (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1].version,
         isUpToDate: false
       },
       {
-        packageName: urlBlueprint.packageName,
-        name: urlBlueprint.name,
-        currentVersion: urlBlueprint.version,
+        blueprint: urlBlueprint,
         latestVersion: (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update.json')).blueprints[0].version,
         isUpToDate: false
       },
       {
-        packageName: npmBlueprint.packageName,
-        name: npmBlueprint.name,
-        currentVersion: npmBlueprint.version,
+        blueprint: npmBlueprint,
         latestVersion: npmBlueprint.version,
         isUpToDate: true
       }

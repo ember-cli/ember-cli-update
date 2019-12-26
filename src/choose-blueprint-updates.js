@@ -2,17 +2,15 @@
 
 const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
 const inquirer = require('inquirer');
-const findBlueprint = require('./find-blueprint');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 
 const toDefault = require('./args').to.default;
 
 function formatBlueprintLine({
-  name,
-  currentVersion,
+  blueprint,
   latestVersion
 }) {
-  return `${name}, current: ${currentVersion}, latest: ${latestVersion}`;
+  return `${blueprint.name}, current: ${blueprint.version}, latest: ${latestVersion}`;
 }
 
 async function chooseBlueprint({
@@ -82,7 +80,7 @@ async function chooseBlueprintUpdates({
         message: 'Blueprint updates have been found. Which one would you like to update?'
       });
 
-      existingBlueprint = findBlueprint(emberCliUpdateJson, blueprintUpdate.packageName, blueprintUpdate.name);
+      existingBlueprint = blueprintUpdate.blueprint;
 
       let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
 

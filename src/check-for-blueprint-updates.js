@@ -17,41 +17,25 @@ async function checkForBlueprintUpdates({
       blueprint: blueprint.location || blueprint.packageName
     });
 
-    let currentVersion;
+    let currentVersion = blueprint.version;
     let latestVersion;
 
     if (parsedPackage.name) {
       let versions = await getVersions(parsedPackage.name);
 
-      let tagVersions = await Promise.all([
-        getTagVersion({
-          range: blueprint.version,
-          versions,
-          packageName: blueprint.packageName
-        }),
-        getTagVersion({
-          range: toDefault,
-          versions,
-          packageName: blueprint.packageName
-        })
-      ]);
-
-      currentVersion = tagVersions[0];
-      latestVersion = tagVersions[1];
+      latestVersion = await getTagVersion({
+        range: toDefault,
+        versions,
+        packageName: blueprint.packageName
+      });
     } else {
-      let packages = await Promise.all([
-        downloadPackage(parsedPackage.name, parsedPackage.url, blueprint.version),
-        downloadPackage(parsedPackage.name, parsedPackage.url, toDefault)
-      ]);
+      let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, toDefault);
 
-      currentVersion = packages[0].version;
-      latestVersion = packages[1].version;
+      latestVersion = downloadedPackage.version;
     }
 
     return {
-      packageName: blueprint.packageName,
-      name: blueprint.name,
-      currentVersion,
+      blueprint,
       latestVersion,
       isUpToDate: currentVersion === latestVersion
     };
