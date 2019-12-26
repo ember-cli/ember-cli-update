@@ -34,7 +34,6 @@ async function chooseBlueprintUpdates({
 }) {
   let to;
   let existingBlueprint;
-  let blueprintUpdates;
   let areAllUpToDate;
 
   let { blueprints } = emberCliUpdateJson;
@@ -56,13 +55,20 @@ async function chooseBlueprintUpdates({
       message: 'Which blueprint would you like to reset?'
     })).blueprint;
   } else {
-    blueprintUpdates = await checkForBlueprintUpdates({
+    let blueprintUpdates = await checkForBlueprintUpdates({
       cwd,
       blueprints
     });
 
     areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
-    if (!areAllUpToDate) {
+
+    if (areAllUpToDate) {
+      // eslint-disable-next-line no-console
+      console.log(`${blueprintUpdates.map(formatBlueprintLine).join(`
+`)}
+
+All blueprints are up-to-date!`);
+    } else {
       let choicesByName = blueprintUpdates.reduce((choices, blueprintUpdate) => {
         let name = formatBlueprintLine(blueprintUpdate);
         choices[name] = {
@@ -111,7 +117,6 @@ async function chooseBlueprintUpdates({
   let blueprint = loadSafeBlueprint(existingBlueprint);
 
   return {
-    blueprintUpdates,
     areAllUpToDate,
     to,
     blueprint
@@ -119,4 +124,3 @@ async function chooseBlueprintUpdates({
 }
 
 module.exports = chooseBlueprintUpdates;
-module.exports.formatBlueprintLine = formatBlueprintLine;

@@ -29,8 +29,6 @@ const {
   'codemods-url': { default: codemodsUrlDefault }
 } = require('./args');
 
-const { formatBlueprintLine } = chooseBlueprintUpdates;
-
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
   from,
@@ -103,7 +101,6 @@ module.exports = async function emberCliUpdate({
 
       let {
         areAllUpToDate,
-        blueprintUpdates,
         blueprint: _blueprint,
         to: _to
       } = await chooseBlueprintUpdates({
@@ -113,10 +110,7 @@ module.exports = async function emberCliUpdate({
       });
 
       if (areAllUpToDate) {
-        return `${blueprintUpdates.map(formatBlueprintLine).join(`
-`)}
-
-All blueprints are up-to-date!`;
+        return;
       }
 
       blueprint = _blueprint;
