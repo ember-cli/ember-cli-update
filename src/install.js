@@ -1,15 +1,13 @@
 'use strict';
 
 const parseBlueprintPackage = require('./parse-blueprint-package');
-const downloadPackage = require('./download-package');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
 const emberInstallAddon = require('./ember-install-addon');
-const getVersions = require('boilerplate-update/src/get-versions');
-const _getTagVersion = require('./get-tag-version');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const resolvePackage = require('./resolve-package');
 
 const toDefault = require('./args').to.default;
 
@@ -28,20 +26,15 @@ module.exports = async function install({
     blueprint: addon
   });
 
-  let packageName;
-  let version;
-  let path;
-  if (parsedPackage.location) {
-    let downloadedPackage = await downloadPackage(null, parsedPackage.url, toDefault);
-    packageName = downloadedPackage.name;
-    version = downloadedPackage.version;
-    path = downloadedPackage.path;
-  } else {
-    packageName = addon;
-    let versions = await getVersions(packageName);
-    let getTagVersion = _getTagVersion(versions, packageName);
-    version = await getTagVersion(toDefault);
-  }
+  let {
+    name: packageName,
+    version,
+    path
+  } = await resolvePackage({
+    name: addon,
+    url: parsedPackage.url,
+    range: toDefault
+  });
 
   // We are double installing it, via the above and the below.
   // The above is needed to resolve the real package name

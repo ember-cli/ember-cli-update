@@ -1,14 +1,12 @@
 'use strict';
 
 const parseBlueprintPackage = require('./parse-blueprint-package');
-const downloadPackage = require('./download-package');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
-const getVersions = require('boilerplate-update/src/get-versions');
-const _getTagVersion = require('./get-tag-version');
+const resolvePackage = require('./resolve-package');
 
 module.exports = async function save({
   blueprint: _blueprint,
@@ -31,19 +29,14 @@ module.exports = async function save({
     blueprint: _blueprint
   });
 
-  let packageName;
-  let version;
-
-  if (parsedPackage.location) {
-    let downloadedPackage = await downloadPackage(null, parsedPackage.url, from);
-    packageName = downloadedPackage.name;
-    version = downloadedPackage.version;
-  } else {
-    packageName = _blueprint;
-    let versions = await getVersions(packageName);
-    let getTagVersion = _getTagVersion(versions, packageName);
-    version = await getTagVersion(from);
-  }
+  let {
+    name: packageName,
+    version
+  } = await resolvePackage({
+    name: _blueprint,
+    url: parsedPackage.url,
+    range: from
+  });
 
   let blueprint = loadSafeBlueprint({
     packageName,

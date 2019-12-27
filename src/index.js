@@ -23,11 +23,33 @@ const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const resolvePackage = require('./resolve-package');
 
 const {
   'to': { default: toDefault },
   'codemods-url': { default: codemodsUrlDefault }
 } = require('./args');
+
+async function _resolvePackage(blueprint, url, range) {
+  if (blueprint.version && !url) {
+    return;
+  }
+
+  let {
+    version,
+    path
+  } = await resolvePackage({
+    name: blueprint.packageName,
+    url,
+    range
+  });
+
+  blueprint.version = version;
+
+  if (path) {
+    blueprint.path = path;
+  }
+}
 
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
@@ -173,29 +195,13 @@ module.exports = async function emberCliUpdate({
       }
 
       endBlueprint = { ...blueprint };
+      delete endBlueprint.version;
 
       if (isCustomBlueprint) {
-        if (packageUrl) {
-          let [
-            startDownloadedPackage,
-            endDownloadedPackage
-          ] = await Promise.all([
-            startBlueprint ? downloadPackage(startBlueprint.packageName, packageUrl, startBlueprint.version) : null,
-            downloadPackage(endBlueprint.packageName, packageUrl, to)
-          ]);
-
-          if (startBlueprint) {
-            startBlueprint.path = startDownloadedPackage.path;
-            startBlueprint.version = startDownloadedPackage.version;
-          }
-
-          endBlueprint.path = endDownloadedPackage.path;
-          endBlueprint.version = endDownloadedPackage.version;
-        } else {
-          let versions = await getVersions(endBlueprint.packageName);
-          let getTagVersion = _getTagVersion(versions, endBlueprint.packageName);
-          endBlueprint.version = await getTagVersion(to);
-        }
+        await Promise.all([
+          startBlueprint ? _resolvePackage(startBlueprint, packageUrl, startBlueprint.version) : null,
+          _resolvePackage(endBlueprint, packageUrl, to)
+        ]);
       } else {
         let packageName = getPackageName(projectOptions);
         let packageVersion = getPackageVersion(packageJson, packageName);
