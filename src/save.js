@@ -7,6 +7,8 @@ const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const getVersions = require('boilerplate-update/src/get-versions');
+const _getTagVersion = require('./get-tag-version');
 
 module.exports = async function save({
   blueprint: _blueprint,
@@ -29,13 +31,25 @@ module.exports = async function save({
     blueprint: _blueprint
   });
 
-  let downloadedPackage = await downloadPackage(parsedPackage.name, parsedPackage.url, from);
+  let packageName;
+  let version;
+
+  if (parsedPackage.location) {
+    let downloadedPackage = await downloadPackage(null, parsedPackage.url, from);
+    packageName = downloadedPackage.name;
+    version = downloadedPackage.version;
+  } else {
+    packageName = _blueprint;
+    let versions = await getVersions(packageName);
+    let getTagVersion = _getTagVersion(versions, packageName);
+    version = await getTagVersion(from);
+  }
 
   let blueprint = loadSafeBlueprint({
-    packageName: downloadedPackage.name,
-    name: downloadedPackage.name,
+    packageName,
+    name: packageName,
     location: parsedPackage.location,
-    version: downloadedPackage.version,
+    version,
     options: blueprintOptions
   });
 
