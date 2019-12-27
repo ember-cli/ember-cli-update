@@ -3,7 +3,6 @@
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprintPackage = require('./parse-blueprint-package');
-const downloadPackage = require('./download-package');
 const saveBlueprint = require('./save-blueprint');
 const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 const loadSafeBlueprint = require('./load-safe-blueprint');
@@ -14,9 +13,8 @@ const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
 const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
-const getVersions = require('boilerplate-update/src/get-versions');
-const _getTagVersion = require('./get-tag-version');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const resolvePackage = require('./resolve-package');
 
 module.exports = async function init({
   blueprint: _blueprint,
@@ -52,19 +50,18 @@ module.exports = async function init({
     name = defaultBlueprint.name;
   }
 
-  let version;
-  let path;
-  if (url) {
-    let downloadedPackage = await downloadPackage(packageName, url, to);
-    packageName = downloadedPackage.name;
-    name = downloadedPackage.name;
-    version = downloadedPackage.version;
-    path = downloadedPackage.path;
-  } else {
-    let versions = await getVersions(packageName);
-    let getTagVersion = _getTagVersion(versions, packageName);
-    version = await getTagVersion(to);
+  let packageInfo = await resolvePackage({
+    name: packageName,
+    url,
+    range: to
+  });
+
+  packageName = packageInfo.name;
+  if (!name) {
+    name = packageInfo.name;
   }
+  let version = packageInfo.version;
+  let path = packageInfo.path;
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
