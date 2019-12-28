@@ -360,7 +360,7 @@ describe(function() {
     assertNoStaged(status);
   });
 
-  it('can init the default blueprint', async function() {
+  it('can reset the default blueprint', async function() {
     this.timeout(5 * 60 * 1000);
 
     let {
@@ -383,6 +383,32 @@ describe(function() {
     });
 
     expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
+
+    assertNoStaged(status);
+  });
+
+  it('can init the default blueprint', async function() {
+    this.timeout(5 * 60 * 1000);
+
+    let {
+      status
+    } = await (await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
+      init: true,
+      to: '2.11.1'
+    })).promise;
+
+    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
+      .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
+
+    await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/init/my-app'
+    });
+
+    expect(status).to.match(/^ M README\.md$/m);
 
     assertNoStaged(status);
   });

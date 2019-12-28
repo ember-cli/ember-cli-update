@@ -92,15 +92,19 @@ module.exports = async function init({
     blueprint
   });
 
+  let init = false;
+
   if (!baseBlueprint) {
     // for non-existing default blueprints
     blueprint.isBaseBlueprint = true;
+    init = true;
   }
 
   let result = await (await boilerplateUpdate({
     endVersion: blueprint.version,
     resolveConflicts,
     reset,
+    init,
     createCustomDiff: true,
     customDiffOptions: ({
       packageJson
@@ -122,7 +126,7 @@ module.exports = async function init({
     blueprint
   });
 
-  if (!reset) {
+  if (!(reset || init)) {
     await stageBlueprintFile({
       cwd,
       emberCliUpdateJsonPath
