@@ -189,14 +189,16 @@ function createProject(runEmber) {
           _cwd = path.join(_cwd, projectName);
         }
 
+        let args = getArgs({
+          projectName,
+          blueprint
+        });
+
         await runEmber({
           packageRoot,
           cwd: _cwd,
           blueprint,
-          args: getArgs({
-            projectName,
-            blueprint
-          })
+          args
         });
       }
 
