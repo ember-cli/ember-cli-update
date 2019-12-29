@@ -3,7 +3,7 @@
 ## Installation
 
 * `git clone <repository-url>`
-* `cd my-custom-addon`
+* `cd @my-scope/my-custom-addon`
 * `npm install`
 
 ## Linting
