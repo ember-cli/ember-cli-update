@@ -396,19 +396,19 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           location,
           version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/local/my-app/config2/ember-cli-update.json')).blueprints[0];
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
 
         let {
           status
         } = await merge({
-          fixturesPath: 'test/fixtures/blueprint/app/legacy-app/merge',
+          fixturesPath: 'test/fixtures/blueprint/app/local-app/merge',
           commitMessage: 'my-app',
           reset: true,
           to,
           blueprint: 'ember-cli-update-git-blueprint-test',
           async beforeMerge() {
             await initBlueprint({
-              fixturesPath: 'test/fixtures/blueprint/app/legacy',
+              fixturesPath: 'test/fixtures/blueprint/app/local',
               resolvedFrom: tmpPath,
               relativeDir: location
             });
@@ -416,7 +416,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         });
 
         fixtureCompare({
-          mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/reset/my-app'
+          mergeFixtures: 'test/fixtures/blueprint/app/local-app/reset/my-app'
         });
 
         assertNoStaged(status);
