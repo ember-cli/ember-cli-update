@@ -148,13 +148,9 @@ async function runEmberLocally({
   packageRoot,
   cwd,
   projectName,
-  blueprint
+  blueprint,
+  args
 }) {
-  let args = getArgs({
-    projectName,
-    blueprint
-  });
-
   if (!blueprint.isBaseBlueprint) {
     cwd = path.join(cwd, projectName);
   }
@@ -168,14 +164,10 @@ async function runEmberLocally({
 async function runEmberRemotely({
   cwd,
   projectName,
-  blueprint
+  blueprint,
+  args
 }) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
-
-  let args = getArgs({
-    projectName,
-    blueprint
-  });
 
   if (!blueprint.isBaseBlueprint) {
     cwd = path.join(cwd, projectName);
@@ -206,7 +198,11 @@ function createProject(runEmber) {
           packageRoot,
           cwd,
           projectName,
-          blueprint
+          blueprint,
+          args: getArgs({
+            projectName,
+            blueprint
+          })
         });
       }
 
