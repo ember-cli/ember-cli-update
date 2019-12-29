@@ -1,11 +1,11 @@
-# my-custom-addon
+# @my-scope/my-custom-addon
 
 This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd my-custom-addon`
+* `cd @my-scope/my-custom-addon`
 * `npm install`
 * `bower install`
 

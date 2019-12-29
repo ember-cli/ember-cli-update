@@ -2,5 +2,5 @@
 'use strict';
 
 module.exports = {
-  name: 'my-custom-addon'
+  name: '@my-scope/my-custom-addon'
 };

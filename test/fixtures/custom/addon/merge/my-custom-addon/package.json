@@ -1,5 +1,5 @@
 {
-  "name": "my-custom-addon",
+  "name": "@my-scope/my-custom-addon",
   "version": "0.0.0",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
