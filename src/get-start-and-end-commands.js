@@ -201,13 +201,17 @@ function createProject(runEmber) {
     }
   }) => {
     return async function createProject(cwd) {
-      if (!blueprint || !blueprint.isBaseBlueprint) {
+      async function _runEmber(blueprint) {
         await runEmber({
           packageRoot,
           cwd,
           projectName,
-          blueprint: baseBlueprint
+          blueprint
         });
+      }
+
+      if (!blueprint || !blueprint.isBaseBlueprint) {
+        await _runEmber(baseBlueprint);
       }
 
       if (blueprint) {
@@ -218,12 +222,7 @@ function createProject(runEmber) {
             blueprint
           });
         } else {
-          await runEmber({
-            packageRoot,
-            cwd,
-            projectName,
-            blueprint
-          });
+          await _runEmber(blueprint);
         }
       }
 
