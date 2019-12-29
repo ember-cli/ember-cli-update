@@ -10,7 +10,7 @@ const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 const loadDefaultBlueprint = require('../../src/load-default-blueprint');
 
 const {
-  getArgs
+  getArgs: _getArgs
 } = _getStartAndEndCommands;
 
 const projectName = 'my-custom-project';
@@ -771,12 +771,18 @@ describe(_getStartAndEndCommands, function() {
     });
   });
 
-  describe(getArgs, function() {
+  describe(_getArgs, function() {
+    function getArgs(options) {
+      return _getArgs({
+        projectName,
+        ...options
+      });
+    }
+
     it('works for default app', function() {
       let blueprint = loadDefaultBlueprint(['welcome']);
 
       let args = getArgs({
-        projectName,
         blueprint
       });
 
@@ -795,7 +801,6 @@ describe(_getStartAndEndCommands, function() {
       let blueprint = loadDefaultBlueprint(['addon']);
 
       let args = getArgs({
-        projectName,
         blueprint
       });
 
@@ -818,7 +823,6 @@ describe(_getStartAndEndCommands, function() {
       });
 
       let args = getArgs({
-        projectName,
         blueprint
       });
 
@@ -839,7 +843,6 @@ describe(_getStartAndEndCommands, function() {
       });
 
       let args = getArgs({
-        projectName,
         blueprint
       });
 
@@ -862,7 +865,6 @@ describe(_getStartAndEndCommands, function() {
       };
 
       let args = getArgs({
-        projectName,
         blueprint
       });
 
