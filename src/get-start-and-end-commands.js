@@ -185,44 +185,48 @@ async function runEmberRemotely({
 function createProject(runEmber) {
   return ({
     packageRoot,
-    options
+    options: {
+      projectName,
+      baseBlueprint,
+      blueprint
+    }
   }) => {
     return async function createProject(cwd) {
-      if (!options.blueprint || !options.blueprint.isBaseBlueprint) {
+      if (!blueprint || !blueprint.isBaseBlueprint) {
         await runEmber({
           packageRoot,
           cwd,
-          projectName: options.projectName,
-          blueprint: options.baseBlueprint
+          projectName,
+          blueprint: baseBlueprint
         });
       }
 
-      if (options.blueprint) {
-        if (await isDefaultAddonBlueprint(options.blueprint)) {
+      if (blueprint) {
+        if (await isDefaultAddonBlueprint(blueprint)) {
           await module.exports.installAddonBlueprint({
             cwd,
-            projectName: options.projectName,
-            blueprint: options.blueprint
+            projectName,
+            blueprint
           });
         } else {
           await runEmber({
             packageRoot,
             cwd,
-            projectName: options.projectName,
-            blueprint: options.blueprint
+            projectName,
+            blueprint
           });
         }
       }
 
-      if (!(options.blueprint && isDefaultBlueprint(options.blueprint))) {
+      if (!(blueprint && isDefaultBlueprint(blueprint))) {
         // This might not be needed anymore.
         await module.exports.appendNodeModulesIgnore({
           cwd,
-          projectName: options.projectName
+          projectName
         });
       }
 
-      return path.join(cwd, options.projectName);
+      return path.join(cwd, projectName);
     };
   };
 }
