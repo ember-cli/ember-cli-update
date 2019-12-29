@@ -367,7 +367,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           location,
           version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json')).blueprints[0];
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json')).blueprints[1];
 
         let {
           status
