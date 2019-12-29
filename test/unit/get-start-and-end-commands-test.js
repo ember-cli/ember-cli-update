@@ -407,8 +407,7 @@ describe(_getStartAndEndCommands, function() {
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        cwd,
-        projectName
+        projectRoot
       }]]);
     });
 
@@ -471,8 +470,7 @@ describe(_getStartAndEndCommands, function() {
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        cwd,
-        projectName
+        projectRoot
       }]]);
     });
 
@@ -514,8 +512,7 @@ describe(_getStartAndEndCommands, function() {
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        cwd,
-        projectName
+        projectRoot
       }]]);
     });
 
@@ -575,8 +572,7 @@ describe(_getStartAndEndCommands, function() {
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        cwd,
-        projectName
+        projectRoot
       }]]);
     });
 
@@ -623,8 +619,7 @@ describe(_getStartAndEndCommands, function() {
       ]);
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
-        cwd,
-        projectName,
+        projectRoot,
         blueprint: {
           path: blueprintPath,
           options: []
@@ -675,8 +670,7 @@ describe(_getStartAndEndCommands, function() {
       ]);
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
-        cwd,
-        projectName,
+        projectRoot,
         blueprint: {
           path: blueprintPath,
           options: []
@@ -684,8 +678,7 @@ describe(_getStartAndEndCommands, function() {
       }]]);
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        cwd,
-        projectName
+        projectRoot
       }]]);
     });
   });

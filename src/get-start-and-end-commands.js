@@ -182,11 +182,13 @@ function createProject(runEmber) {
     }
   }) => {
     return async function createProject(cwd) {
+      let projectRoot = path.join(cwd, projectName);
+
       async function _runEmber(blueprint) {
         let _cwd = cwd;
 
         if (!blueprint.isBaseBlueprint) {
-          _cwd = path.join(_cwd, projectName);
+          _cwd = projectRoot;
         }
 
         let args = getArgs({
@@ -209,8 +211,7 @@ function createProject(runEmber) {
       if (blueprint) {
         if (await isDefaultAddonBlueprint(blueprint)) {
           await module.exports.installAddonBlueprint({
-            cwd,
-            projectName,
+            projectRoot,
             blueprint
           });
         } else {
@@ -221,23 +222,19 @@ function createProject(runEmber) {
       if (!(blueprint && isDefaultBlueprint(blueprint))) {
         // This might not be needed anymore.
         await module.exports.appendNodeModulesIgnore({
-          cwd,
-          projectName
+          projectRoot
         });
       }
 
-      return path.join(cwd, projectName);
+      return projectRoot;
     };
   };
 }
 
 module.exports.installAddonBlueprint = async function installAddonBlueprint({
-  cwd,
-  projectName,
+  projectRoot,
   blueprint
 }) {
-  let projectRoot = path.join(cwd, projectName);
-
   // `not found: ember` without this
   await run('npm install', { cwd: projectRoot });
 
@@ -261,22 +258,21 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
 };
 
 async function appendNodeModulesIgnore({
-  cwd,
-  projectName
+  projectRoot
 }) {
-  if (!await fs.pathExists(path.join(cwd, projectName, 'node_modules'))) {
+  if (!await fs.pathExists(path.join(projectRoot, 'node_modules'))) {
     return;
   }
 
   let isIgnoringNodeModules;
   let gitignore = '';
   try {
-    gitignore = await fs.readFile(path.join(cwd, projectName, '.gitignore'), 'utf8');
+    gitignore = await fs.readFile(path.join(projectRoot, '.gitignore'), 'utf8');
 
     isIgnoringNodeModules = /^\/?node_modules\/?$/m.test(gitignore);
   } catch (err) {}
   if (!isIgnoringNodeModules) {
-    await fs.writeFile(path.join(cwd, projectName, '.gitignore'), `${gitignore}${nodeModulesIgnore}`);
+    await fs.writeFile(path.join(projectRoot, '.gitignore'), `${gitignore}${nodeModulesIgnore}`);
   }
 }
 
