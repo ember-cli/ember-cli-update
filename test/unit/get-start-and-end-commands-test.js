@@ -775,6 +775,7 @@ describe(_getStartAndEndCommands, function() {
     function getArgs(options) {
       return _getArgs({
         projectName,
+        directoryName: projectName,
         ...options
       });
     }
@@ -813,6 +814,26 @@ describe(_getStartAndEndCommands, function() {
         '-b',
         'addon',
         '--no-welcome'
+      ]);
+    });
+
+    it('works for scoped project', function() {
+      let blueprint = loadDefaultBlueprint(['welcome']);
+
+      let args = getArgs({
+        projectName: `@my-scope/${projectName}`,
+        blueprint
+      });
+
+      expect(args).to.deep.equal([
+        'new',
+        `@my-scope/${projectName}`,
+        `-dir=${projectName}`,
+        '-sg',
+        '-sn',
+        '-sb',
+        '-b',
+        'app'
       ]);
     });
 

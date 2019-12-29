@@ -89,6 +89,7 @@ async function isDefaultAddonBlueprint(blueprint) {
 
 function getArgs({
   projectName,
+  directoryName,
   blueprint
 }) {
   let args = [];
@@ -96,6 +97,9 @@ function getArgs({
   if (blueprint.isBaseBlueprint) {
     args.push('new');
     args.push(projectName);
+    if (directoryName !== projectName) {
+      args.push(`-dir=${directoryName}`);
+    }
     args.push('-sg');
   } else {
     args.push('init');
@@ -156,7 +160,7 @@ function runEmberRemotely({
 
   if (isCustomBlueprint) {
     args = ['ember-cli', ...args];
-    // args = ['-p', 'github:ember-cli/ember-cli#cfb9780', 'ember', 'new', projectName, '-sn', '-sg', '-b', `${blueprint.packageName}@${blueprint.version}`];
+    // args = ['-p', 'github:ember-cli/ember-cli#cfb9780', 'ember', 'new', projectName, `-dir=${directoryName}, '-sg', -sn', '-b', `${blueprint.packageName}@${blueprint.version}`];
   } else {
     args = ['-p', `ember-cli@${blueprint.version}`, 'ember', ...args];
   }
@@ -174,7 +178,10 @@ function createProject(runEmber) {
     }
   }) => {
     return async function createProject(cwd) {
-      let projectRoot = path.join(cwd, projectName);
+      // remove scope
+      let directoryName = projectName.replace(/^@.+\//, '');
+
+      let projectRoot = path.join(cwd, directoryName);
 
       async function _runEmber(blueprint) {
         let _cwd = cwd;
@@ -185,6 +192,7 @@ function createProject(runEmber) {
 
         let args = getArgs({
           projectName,
+          directoryName,
           blueprint
         });
 
