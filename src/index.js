@@ -53,6 +53,7 @@ async function _resolvePackage(blueprint, url, range) {
 
 module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
+  blueprintOptions,
   from,
   to = toDefault,
   resolveConflicts,
@@ -100,7 +101,8 @@ module.exports = async function emberCliUpdate({
       blueprint = {
         packageName,
         name: packageName,
-        location: parsedPackage.location
+        location: parsedPackage.location,
+        options: blueprintOptions
       };
     }
 
