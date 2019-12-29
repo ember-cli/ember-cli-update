@@ -20,10 +20,12 @@ module.exports.handler = async function handler(argv) {
   let statsOnly = argv['stats-only'];
   let listCodemods = argv['list-codemods'];
   let createCustomDiff = argv['create-custom-diff'];
+  let blueprintOptions = argv['--'] || [];
 
   try {
     let message = await emberCliUpdate({
       blueprint,
+      blueprintOptions,
       from,
       to,
       resolveConflicts,

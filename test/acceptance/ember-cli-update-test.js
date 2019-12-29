@@ -580,4 +580,42 @@ describe(function() {
       mergeFixtures: 'test/fixtures/blueprint/app/local-app/local/my-app/config'
     });
   });
+
+  it('can update a legacy blueprint without a state file', async function() {
+    this.timeout(3 * 60 * 1000);
+
+    let {
+      location,
+      version: from,
+      options
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/local/my-app/config2/ember-cli-update.json')).blueprints[1];
+
+    let {
+      version: to
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json')).blueprints[1];
+
+    let {
+      status
+    } = await (await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/legacy-app/init',
+      commitMessage: 'my-app',
+      blueprint: location,
+      from,
+      to,
+      blueprintOptions: options,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/app/legacy',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+      }
+    })).promise;
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/merge/my-app'
+    });
+
+    assertNoUnstaged(status);
+  });
 });
