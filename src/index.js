@@ -11,7 +11,6 @@ const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
-const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
@@ -158,10 +157,7 @@ module.exports = async function emberCliUpdate({
     createCustomDiff = true;
   }
 
-  let {
-    baseBlueprint,
-    defaultBlueprint
-  } = await getBaseBlueprint({
+  let baseBlueprint = await getBaseBlueprint({
     cwd,
     emberCliUpdateJson,
     blueprint
@@ -258,32 +254,7 @@ module.exports = async function emberCliUpdate({
     wasRunAsExecutable
   })).promise;
 
-  if (_blueprint) {
-    let emberCliUpdateJson = await loadBlueprintFile(emberCliUpdateJsonPath);
-
-    // If you don't have a state file, save the default blueprint,
-    // even if you are currently working on a custom blueprint.
-    if (!emberCliUpdateJson || !isCustomBlueprint) {
-      await saveBlueprint({
-        emberCliUpdateJsonPath,
-        blueprint: defaultBlueprint
-      });
-    }
-
-    if (isCustomBlueprint) {
-      await saveBlueprint({
-        emberCliUpdateJsonPath,
-        blueprint: endBlueprint
-      });
-    }
-
-    if (!reset) {
-      await stageBlueprintFile({
-        cwd,
-        emberCliUpdateJsonPath
-      });
-    }
-  } else if (isPersistedBlueprint) {
+  if (_blueprint || isPersistedBlueprint) {
     await saveBlueprint({
       emberCliUpdateJsonPath,
       blueprint: endBlueprint

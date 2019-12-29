@@ -4,7 +4,6 @@ const parseBlueprintPackage = require('./parse-blueprint-package');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
-const bootstrap = require('./bootstrap');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 
@@ -47,7 +46,7 @@ module.exports = async function save({
   });
 
   if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
-    await bootstrap();
+    blueprint.isBaseBlueprint = true;
   }
 
   await saveBlueprint({

@@ -7,7 +7,8 @@ const { expect } = require('../helpers/chai');
 const {
   buildTmp,
   processBin,
-  fixtureCompare: _fixtureCompare
+  fixtureCompare: _fixtureCompare,
+  commit
 } = require('git-fixtures');
 const {
   assertNormalUpdate,
@@ -550,27 +551,48 @@ describe(function() {
   });
 
   it('can save an old blueprint\'s state', async function() {
-    let {
-      location,
-      version: from
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
+    let [
+      {
+        packageName,
+        version: base
+      },
+      {
+        location,
+        version: partial,
+        options
+      }
+    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints;
+
+    let commitMessage = 'my-app';
+
+    await (await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/init',
+      commitMessage,
+      save: true,
+      from: base,
+      blueprint: packageName
+    })).promise;
+
+    await initBlueprint({
+      fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
+      resolvedFrom: tmpPath,
+      relativeDir: location
+    });
 
     let {
       status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/init',
-      commitMessage: 'my-app',
-      save: true,
-      blueprint: location,
-      blueprintOptions: ['--supplied-option=foo'],
-      from,
-      async beforeMerge() {
-        await initBlueprint({
-          fixturesPath: 'test/fixtures/blueprint/app/local',
-          resolvedFrom: tmpPath,
-          relativeDir: location
-        });
-      }
+    } = await (await processBin({
+      binFile: 'ember-cli-update',
+      args: [
+        'save',
+        `-b=${location}`,
+        `--from=${partial}`,
+        '--',
+        ...options
+      ],
+      cwd: tmpPath,
+      commitMessage,
+      expect
     })).promise;
 
     assertNoStaged(status);
@@ -594,22 +616,36 @@ describe(function() {
       version: to
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json')).blueprints[1];
 
-    let {
-      status
-    } = await (await merge({
+    await (await merge({
       fixturesPath: 'test/fixtures/blueprint/app/legacy-app/init',
       commitMessage: 'my-app',
-      blueprint: location,
-      from,
-      to,
-      blueprintOptions: options,
-      async beforeMerge() {
-        await initBlueprint({
-          fixturesPath: 'test/fixtures/blueprint/app/legacy',
-          resolvedFrom: tmpPath,
-          relativeDir: location
-        });
-      }
+      bootstrap: true
+    })).promise;
+
+    let commitMessage = 'bootstrap';
+
+    await commit({ m: commitMessage, cwd: tmpPath });
+
+    await initBlueprint({
+      fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/legacy'),
+      resolvedFrom: tmpPath,
+      relativeDir: location
+    });
+
+    let {
+      status
+    } = await (await processBin({
+      binFile: 'ember-cli-update',
+      args: [
+        `-b=${location}`,
+        `--from=${from}`,
+        `--to=${to}`,
+        '--',
+        ...options
+      ],
+      cwd: tmpPath,
+      commitMessage,
+      expect
     })).promise;
 
     fixtureCompare({

@@ -9,19 +9,24 @@ const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const { getBlueprintRelativeFilePath } = require('./get-blueprint-file-path');
-const loadBlueprintFile = require('./load-blueprint-file');
-const bootstrap = require('./bootstrap');
 const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 
+const {
+  'to': { default: toDefault }
+} = require('./args');
+const {
+  blueprintOptionsDefault
+} = require('../bin/commands/init');
+
 module.exports = async function init({
   blueprint: _blueprint,
-  to,
+  to = toDefault,
   resolveConflicts,
   reset,
-  blueprintOptions,
+  blueprintOptions = blueprintOptionsDefault,
   wasRunAsExecutable
 }) {
   let cwd = process.cwd();
@@ -84,9 +89,7 @@ module.exports = async function init({
   blueprint.version = version;
   blueprint.path = path;
 
-  let {
-    baseBlueprint
-  } = await getBaseBlueprint({
+  let baseBlueprint = await getBaseBlueprint({
     cwd,
     emberCliUpdateJson,
     blueprint
@@ -116,10 +119,6 @@ module.exports = async function init({
     ignoredFiles: [await getBlueprintRelativeFilePath(cwd)],
     wasRunAsExecutable
   })).promise;
-
-  if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
-    await bootstrap();
-  }
 
   await saveBlueprint({
     emberCliUpdateJsonPath,
