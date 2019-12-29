@@ -33,13 +33,15 @@ describe(_getStartAndEndCommands, function() {
   let npxStub;
   let spawnStub;
   let readdirStub;
+  let overwriteBlueprintFilesStub;
   let installAddonBlueprintStub;
   let appendNodeModulesIgnoreStub;
 
   beforeEach(function() {
-    npxStub = sinon.stub(_getStartAndEndCommands, 'npx').resolves();
-    spawnStub = sinon.stub(_getStartAndEndCommands, 'spawn').resolves();
+    npxStub = sinon.stub(_getStartAndEndCommands, 'npx').returns('test npx');
+    spawnStub = sinon.stub(_getStartAndEndCommands, 'spawn').returns('test spawn');
     readdirStub = sinon.stub(utils, 'readdir').resolves(['foo']);
+    overwriteBlueprintFilesStub = sinon.stub(_getStartAndEndCommands, 'overwriteBlueprintFiles');
     installAddonBlueprintStub = sinon.stub(_getStartAndEndCommands, 'installAddonBlueprint').resolves();
     appendNodeModulesIgnoreStub = sinon.stub(_getStartAndEndCommands, 'appendNodeModulesIgnore').resolves();
   });
@@ -131,6 +133,8 @@ describe(_getStartAndEndCommands, function() {
         cwd
       }
     ]]);
+
+    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn']]);
   });
 
   it('can create a partial project from cache', async function() {
@@ -186,6 +190,8 @@ describe(_getStartAndEndCommands, function() {
         }
       ]
     ]);
+
+    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn'], ['test spawn']]);
   });
 
   it('can create a base project from remote', async function() {
@@ -217,6 +223,8 @@ describe(_getStartAndEndCommands, function() {
         cwd
       }
     ]]);
+
+    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
   });
 
   it('can create a partial project from remote', async function() {
@@ -271,6 +279,8 @@ describe(_getStartAndEndCommands, function() {
         }
       ]
     ]);
+
+    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx'], ['test npx']]);
   });
 
   describe('custom blueprint', function() {
@@ -404,6 +414,8 @@ describe(_getStartAndEndCommands, function() {
         }
       ]]);
 
+      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn']]);
+
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
@@ -467,6 +479,8 @@ describe(_getStartAndEndCommands, function() {
         ]
       ]);
 
+      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn'], ['test spawn']]);
+
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
@@ -508,6 +522,8 @@ describe(_getStartAndEndCommands, function() {
           cwd
         }
       ]]);
+
+      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
 
       expect(installAddonBlueprintStub).to.not.be.called;
 
@@ -569,6 +585,8 @@ describe(_getStartAndEndCommands, function() {
         ]
       ]);
 
+      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx'], ['test npx']]);
+
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
@@ -617,6 +635,8 @@ describe(_getStartAndEndCommands, function() {
           }
         ]
       ]);
+
+      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn']]);
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         projectRoot,
@@ -668,6 +688,8 @@ describe(_getStartAndEndCommands, function() {
           }
         ]
       ]);
+
+      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         projectRoot,
