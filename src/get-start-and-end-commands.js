@@ -147,14 +147,8 @@ module.exports.npx = async function npx(args, options) {
 async function runEmberLocally({
   packageRoot,
   cwd,
-  projectName,
-  blueprint,
   args
 }) {
-  if (!blueprint.isBaseBlueprint) {
-    cwd = path.join(cwd, projectName);
-  }
-
   await module.exports.spawn('node', [
     path.join(packageRoot, 'bin/ember'),
     ...args
@@ -163,15 +157,10 @@ async function runEmberLocally({
 
 async function runEmberRemotely({
   cwd,
-  projectName,
   blueprint,
   args
 }) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
-
-  if (!blueprint.isBaseBlueprint) {
-    cwd = path.join(cwd, projectName);
-  }
 
   if (isCustomBlueprint) {
     args = ['ember-cli', ...args];
@@ -194,10 +183,15 @@ function createProject(runEmber) {
   }) => {
     return async function createProject(cwd) {
       async function _runEmber(blueprint) {
+        let _cwd = cwd;
+
+        if (!blueprint.isBaseBlueprint) {
+          _cwd = path.join(_cwd, projectName);
+        }
+
         await runEmber({
           packageRoot,
-          cwd,
-          projectName,
+          cwd: _cwd,
           blueprint,
           args: getArgs({
             projectName,
