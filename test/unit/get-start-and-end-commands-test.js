@@ -24,7 +24,7 @@ const packageName = 'ember-cli';
 const commandName = 'ember';
 const blueprint = 'test-blueprint';
 const blueprintPath = '/path/to/blueprint';
-const projectPath = path.normalize(`${cwd}/${projectName}`);
+const projectRoot = path.normalize(`${cwd}/${projectName}`);
 const baseBlueprint = loadDefaultBlueprint([], baseVersion);
 const defaultStartBlueprint = loadDefaultBlueprint([], startVersion);
 const defaultEndBlueprint = loadDefaultBlueprint([], endVersion);
@@ -113,7 +113,7 @@ describe(_getStartAndEndCommands, function() {
       .withArgs(path.join(blueprintPath, 'package'))
       .returns({ keywords: ['ember-blueprint'] });
 
-    expect(await createProject(cwd)).to.equal(projectPath);
+    expect(await createProject(cwd)).to.equal(projectRoot);
 
     expect(spawnStub.args).to.deep.equal([[
       'node',
@@ -151,7 +151,7 @@ describe(_getStartAndEndCommands, function() {
       .withArgs(path.join(blueprintPath, 'package'))
       .returns({ keywords: ['ember-blueprint'] });
 
-    expect(await createProject(cwd)).to.equal(projectPath);
+    expect(await createProject(cwd)).to.equal(projectRoot);
 
     expect(spawnStub.args).to.deep.equal([
       [
@@ -182,7 +182,7 @@ describe(_getStartAndEndCommands, function() {
           blueprintPath
         ],
         {
-          cwd: projectPath
+          cwd: projectRoot
         }
       ]
     ]);
@@ -198,7 +198,7 @@ describe(_getStartAndEndCommands, function() {
       }
     });
 
-    expect(await createProject(cwd)).to.equal(projectPath);
+    expect(await createProject(cwd)).to.equal(projectRoot);
 
     expect(npxStub.args).to.deep.equal([[
       [
@@ -236,7 +236,7 @@ describe(_getStartAndEndCommands, function() {
       .withArgs(path.join(blueprintPath, 'package'))
       .returns({ keywords: ['ember-blueprint'] });
 
-    expect(await createProject(cwd)).to.equal(projectPath);
+    expect(await createProject(cwd)).to.equal(projectRoot);
 
     expect(npxStub.args).to.deep.equal([
       [
@@ -267,7 +267,7 @@ describe(_getStartAndEndCommands, function() {
           blueprintPath
         ],
         {
-          cwd: projectPath
+          cwd: projectRoot
         }
       ]
     ]);
@@ -385,7 +385,7 @@ describe(_getStartAndEndCommands, function() {
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-blueprint'] });
 
-      expect(await createProject(cwd)).to.equal(projectPath);
+      expect(await createProject(cwd)).to.equal(projectRoot);
 
       expect(spawnStub.args).to.deep.equal([[
         'node',
@@ -433,7 +433,7 @@ describe(_getStartAndEndCommands, function() {
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-blueprint'] });
 
-      expect(await createProject(cwd)).to.equal(projectPath);
+      expect(await createProject(cwd)).to.equal(projectRoot);
 
       expect(spawnStub.args).to.deep.equal([
         [
@@ -463,7 +463,7 @@ describe(_getStartAndEndCommands, function() {
             blueprintPath
           ],
           {
-            cwd: projectPath
+            cwd: projectRoot
           }
         ]
       ]);
@@ -493,7 +493,7 @@ describe(_getStartAndEndCommands, function() {
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-blueprint'] });
 
-      expect(await createProject(cwd)).to.equal(projectPath);
+      expect(await createProject(cwd)).to.equal(projectRoot);
 
       expect(npxStub.args).to.deep.equal([[
         [
@@ -539,7 +539,7 @@ describe(_getStartAndEndCommands, function() {
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-blueprint'] });
 
-      expect(await createProject(cwd)).to.equal(projectPath);
+      expect(await createProject(cwd)).to.equal(projectRoot);
 
       expect(npxStub.args).to.deep.equal([
         [
@@ -567,7 +567,7 @@ describe(_getStartAndEndCommands, function() {
             blueprintPath
           ],
           {
-            cwd: projectPath
+            cwd: projectRoot
           }
         ]
       ]);
@@ -600,7 +600,7 @@ describe(_getStartAndEndCommands, function() {
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-addon'] });
 
-      expect(await createProject(cwd)).to.equal(projectPath);
+      expect(await createProject(cwd)).to.equal(projectRoot);
 
       expect(spawnStub.args).to.deep.equal([
         [
@@ -651,7 +651,7 @@ describe(_getStartAndEndCommands, function() {
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-addon'] });
 
-      expect(await createProject(cwd)).to.equal(projectPath);
+      expect(await createProject(cwd)).to.equal(projectRoot);
 
       expect(npxStub.args).to.deep.equal([
         [
