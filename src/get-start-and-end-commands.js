@@ -123,39 +123,31 @@ function getArgs({
   ];
 }
 
-module.exports.spawn = async function spawn(command, args, options) {
+module.exports.spawn = function spawn(command, args, options) {
   debug(`${command} ${args.join(' ')}`);
 
-  let ps = execa(command, args, {
+  return execa(command, args, {
     stdio: ['pipe', 'pipe', 'inherit'],
     ...options
   });
-
-  overwriteBlueprintFiles(ps);
-
-  await ps;
 };
 
-module.exports.npx = async function npx(args, options) {
-  let ps = utils.npx(args.join(' '), options);
-
-  overwriteBlueprintFiles(ps);
-
-  await ps;
+module.exports.npx = function npx(args, options) {
+  return utils.npx(args.join(' '), options);
 };
 
-async function runEmberLocally({
+function runEmberLocally({
   packageRoot,
   cwd,
   args
 }) {
-  await module.exports.spawn('node', [
+  return module.exports.spawn('node', [
     path.join(packageRoot, 'bin/ember'),
     ...args
   ], { cwd });
 }
 
-async function runEmberRemotely({
+function runEmberRemotely({
   cwd,
   blueprint,
   args
@@ -169,7 +161,7 @@ async function runEmberRemotely({
     args = ['-p', `ember-cli@${blueprint.version}`, 'ember', ...args];
   }
 
-  await module.exports.npx(args, { cwd });
+  return module.exports.npx(args, { cwd });
 }
 
 function createProject(runEmber) {
@@ -196,12 +188,16 @@ function createProject(runEmber) {
           blueprint
         });
 
-        await runEmber({
+        let ps = runEmber({
           packageRoot,
           cwd: _cwd,
           blueprint,
           args
         });
+
+        module.exports.overwriteBlueprintFiles(ps);
+
+        await ps;
       }
 
       if (!blueprint || !blueprint.isBaseBlueprint) {
@@ -278,3 +274,4 @@ async function appendNodeModulesIgnore({
 
 module.exports.appendNodeModulesIgnore = appendNodeModulesIgnore;
 module.exports.getArgs = getArgs;
+module.exports.overwriteBlueprintFiles = overwriteBlueprintFiles;
