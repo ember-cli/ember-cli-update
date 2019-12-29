@@ -87,7 +87,10 @@ async function isDefaultAddonBlueprint(blueprint) {
   return isDefaultAddonBlueprint;
 }
 
-function getArgs(projectName, blueprint) {
+function getArgs({
+  projectName,
+  blueprint
+}) {
   let args = [];
 
   if (blueprint.isBaseBlueprint) {
@@ -147,7 +150,10 @@ async function runEmberLocally({
   projectName,
   blueprint
 }) {
-  let args = getArgs(projectName, blueprint);
+  let args = getArgs({
+    projectName,
+    blueprint
+  });
 
   if (!blueprint.isBaseBlueprint) {
     cwd = path.join(cwd, projectName);
@@ -166,7 +172,10 @@ async function runEmberRemotely({
 }) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
-  let args = getArgs(projectName, blueprint);
+  let args = getArgs({
+    projectName,
+    blueprint
+  });
 
   if (!blueprint.isBaseBlueprint) {
     cwd = path.join(cwd, projectName);

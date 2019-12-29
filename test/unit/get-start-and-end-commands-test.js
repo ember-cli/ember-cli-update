@@ -760,7 +760,10 @@ describe(_getStartAndEndCommands, function() {
     it('works for default app', function() {
       let blueprint = loadDefaultBlueprint(['welcome']);
 
-      let args = getArgs(projectName, blueprint);
+      let args = getArgs({
+        projectName,
+        blueprint
+      });
 
       expect(args).to.deep.equal([
         'new',
@@ -776,7 +779,10 @@ describe(_getStartAndEndCommands, function() {
     it('works for default addon', function() {
       let blueprint = loadDefaultBlueprint(['addon']);
 
-      let args = getArgs(projectName, blueprint);
+      let args = getArgs({
+        projectName,
+        blueprint
+      });
 
       expect(args).to.deep.equal([
         'new',
@@ -796,7 +802,10 @@ describe(_getStartAndEndCommands, function() {
         isBaseBlueprint: true
       });
 
-      let args = getArgs(projectName, blueprint);
+      let args = getArgs({
+        projectName,
+        blueprint
+      });
 
       expect(args).to.deep.equal([
         'new',
@@ -814,7 +823,10 @@ describe(_getStartAndEndCommands, function() {
         path: '/path/to/my-blueprint'
       });
 
-      let args = getArgs(projectName, blueprint);
+      let args = getArgs({
+        projectName,
+        blueprint
+      });
 
       expect(args).to.deep.equal([
         'init',
@@ -834,7 +846,10 @@ describe(_getStartAndEndCommands, function() {
         ]
       };
 
-      let args = getArgs(projectName, blueprint);
+      let args = getArgs({
+        projectName,
+        blueprint
+      });
 
       expect(args).to.deep.equal([
         'new',
