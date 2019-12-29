@@ -13,7 +13,7 @@ const {
   getArgs
 } = _getStartAndEndCommands;
 
-const projectName = 'my-custom-app';
+const projectName = 'my-custom-project';
 const startVersion = '0.0.1';
 const endVersion = '0.0.2';
 const baseVersion = '0.0.3';
@@ -757,8 +757,6 @@ describe(_getStartAndEndCommands, function() {
   });
 
   describe(getArgs, function() {
-    let projectName = 'my-project';
-
     it('works for default app', function() {
       let blueprint = loadDefaultBlueprint(['welcome']);
 
