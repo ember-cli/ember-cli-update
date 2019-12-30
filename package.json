@@ -64,7 +64,7 @@
     "eslint-plugin-mocha": "^6.0.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-prefer-let": "^1.0.1",
-    "git-diff-apply": "0.20.0",
+    "git-diff-apply": "0.20.1",
     "git-fixtures": "^2.1.0",
     "mocha": "^6.0.0",
     "mocha-helpers": "^4.0.0",
