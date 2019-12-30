@@ -23,21 +23,6 @@ describe(parseBlueprintPackage, function() {
     });
   });
 
-  it('ignores subdirs that collide with blueprint names', async function() {
-    let blueprint = 'config';
-
-    let parsedPackage = await parseBlueprintPackage({
-      cwd: path.resolve(__dirname, '../fixtures/blueprint/app/local-app/local/my-app'),
-      blueprint
-    });
-
-    expect(parsedPackage).to.deep.equal({
-      name: blueprint,
-      location: undefined,
-      url: undefined
-    });
-  });
-
   it('detects urls', async function() {
     let blueprint = 'http://test-blueprint.com';
 
@@ -56,6 +41,25 @@ describe(parseBlueprintPackage, function() {
     let blueprint = 'test-blueprint';
 
     let parsedPackage = await parseBlueprintPackage({
+      blueprint
+    });
+
+    expect(parsedPackage).to.deep.equal({
+      name: blueprint,
+      location: undefined,
+      url: undefined
+    });
+  });
+
+  it('uses npm even if subdir match', async function() {
+    let blueprint = 'config';
+
+    let cwd = path.resolve(__dirname, '../fixtures/blueprint/app/local-app/local/my-app');
+
+    expect(cwd).to.be.a.directory().and.include.subDirs([blueprint]);
+
+    let parsedPackage = await parseBlueprintPackage({
+      cwd,
       blueprint
     });
 

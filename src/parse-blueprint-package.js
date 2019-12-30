@@ -14,12 +14,6 @@ function toPosixAbsolutePath(path) {
   return posixPath;
 }
 
-// https://stackoverflow.com/a/45242825/1703845
-function isSubDir(base, test) {
-  let relative = path.relative(base, test);
-  return !relative.startsWith('..') && !path.isAbsolute(relative);
-}
-
 async function parseBlueprintPackage({
   cwd = '.',
   blueprint
@@ -27,8 +21,15 @@ async function parseBlueprintPackage({
   let name;
   let location;
   let url;
-  let blueprintPath = path.resolve(cwd, blueprint);
-  if (await fs.pathExists(blueprintPath) && !isSubDir(cwd, blueprintPath)) {
+  let blueprintPath;
+
+  if (blueprint.startsWith('.')) {
+    blueprintPath = path.resolve(cwd, blueprint);
+  } else if (path.isAbsolute(blueprint) && await fs.pathExists(blueprint)) {
+    blueprintPath = blueprint;
+  }
+
+  if (blueprintPath) {
     let posixBlueprintPath = toPosixAbsolutePath(blueprintPath);
     url = `git+file://${posixBlueprintPath}`;
     location = blueprint;
@@ -42,6 +43,7 @@ async function parseBlueprintPackage({
       name = blueprint;
     }
   }
+
   return {
     name,
     location,
