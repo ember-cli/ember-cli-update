@@ -159,7 +159,7 @@ module.exports = async function emberCliUpdate({
 
   let baseBlueprint = await getBaseBlueprint({
     cwd,
-    emberCliUpdateJson,
+    blueprints: emberCliUpdateJson.blueprints,
     blueprint
   });
 

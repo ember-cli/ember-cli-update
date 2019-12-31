@@ -7,7 +7,7 @@ const isDefaultBlueprint = require('./is-default-blueprint');
 
 async function getBaseBlueprint({
   cwd,
-  emberCliUpdateJson,
+  blueprints,
   blueprint
 }) {
   let baseBlueprint;
@@ -15,7 +15,7 @@ async function getBaseBlueprint({
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   if (isCustomBlueprint && !blueprint.isBaseBlueprint) {
-    baseBlueprint = emberCliUpdateJson.blueprints.find(b => b.isBaseBlueprint);
+    baseBlueprint = blueprints.find(b => b.isBaseBlueprint);
     if (baseBlueprint) {
       baseBlueprint = loadSafeBlueprint(baseBlueprint);
       let isCustomBlueprint = !isDefaultBlueprint(baseBlueprint);
