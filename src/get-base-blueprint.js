@@ -23,7 +23,7 @@ async function getBaseBlueprint({
         if (baseBlueprint.location) {
           let parsedPackage = await parseBlueprintPackage({
             cwd,
-            blueprint: baseBlueprint
+            blueprint: baseBlueprint.location
           });
           let downloadedPackage = await downloadPackage(
             baseBlueprint.packageName,
