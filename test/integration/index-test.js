@@ -447,9 +447,14 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       });
 
       it('can update an npm blueprint', async function() {
-        let {
-          name
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+        let [
+          {
+            location
+          },
+          {
+            name
+          }
+        ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints;
 
         let {
           status
@@ -457,7 +462,15 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
           fixturesPath: 'test/fixtures/blueprint/app/npm-app/local',
           commitMessage: 'my-app',
           blueprint: name,
-          to: toDefault
+          to: toDefault,
+          async beforeMerge() {
+            // test local base blueprints
+            await initBlueprint({
+              fixturesPath: 'test/fixtures/blueprint/app/local',
+              resolvedFrom: tmpPath,
+              relativeDir: location
+            });
+          }
         });
 
         fixtureCompare({
