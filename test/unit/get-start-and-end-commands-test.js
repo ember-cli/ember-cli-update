@@ -817,7 +817,7 @@ describe(_getStartAndEndCommands, function() {
       ]);
     });
 
-    it('works for scoped project', function() {
+    it('works for scoped project - base', function() {
       let blueprint = loadDefaultBlueprint(['welcome']);
 
       let args = getArgs({
@@ -834,6 +834,26 @@ describe(_getStartAndEndCommands, function() {
         '-sb',
         '-b',
         'app'
+      ]);
+    });
+
+    it('works for scoped project - partial', function() {
+      let blueprint = loadSafeBlueprint({
+        path: '/path/to/my-blueprint'
+      });
+
+      let args = getArgs({
+        projectName: `@my-scope/${projectName}`,
+        blueprint
+      });
+
+      expect(args).to.deep.equal([
+        'init',
+        `--name=@my-scope/${projectName}`,
+        '-sn',
+        '-sb',
+        '-b',
+        '/path/to/my-blueprint'
       ]);
     });
 
