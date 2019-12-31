@@ -1,4 +1,4 @@
-my-app
+@my-scope/my-app
 ember-cli-update-git-blueprint-test
 0.0.1
 foo
