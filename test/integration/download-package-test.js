@@ -69,7 +69,7 @@ describe(downloadPackage, function() {
     let {
       name,
       version: range
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let downloadedPackage = await downloadPackage(name, null, range);
 
