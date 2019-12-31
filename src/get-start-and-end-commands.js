@@ -103,6 +103,9 @@ function getArgs({
     args.push('-sg');
   } else {
     args.push('init');
+    if (directoryName !== projectName) {
+      args.push(`--name=${projectName}`);
+    }
   }
 
   let _blueprint;
