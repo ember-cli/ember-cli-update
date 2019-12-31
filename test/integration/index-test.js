@@ -449,7 +449,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       it('can update an npm blueprint', async function() {
         let {
           name
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
         let {
           status

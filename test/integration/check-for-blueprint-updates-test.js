@@ -23,7 +23,7 @@ describe(checkForBlueprintUpdates, function() {
     let urlBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/local/my-app/config/ember-cli-update.json')).blueprints[0];
 
     // up to date test
-    let npmBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
+    let npmBlueprint = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     await initBlueprint({
       fixturesPath: 'test/fixtures/blueprint/app/local',
