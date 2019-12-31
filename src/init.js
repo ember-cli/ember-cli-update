@@ -91,7 +91,7 @@ module.exports = async function init({
 
   let baseBlueprint = await getBaseBlueprint({
     cwd,
-    emberCliUpdateJson,
+    blueprints: emberCliUpdateJson.blueprints,
     blueprint
   });
 
