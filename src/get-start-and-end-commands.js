@@ -92,21 +92,16 @@ function getArgs({
   directoryName,
   blueprint
 }) {
-  let args = [];
+  let args = [
+    'new',
+    projectName
+  ];
 
-  if (blueprint.isBaseBlueprint) {
-    args.push('new');
-    args.push(projectName);
-    if (directoryName !== projectName) {
-      args.push(`-dir=${directoryName}`);
-    }
-    args.push('-sg');
-  } else {
-    args.push('init');
-    if (directoryName !== projectName) {
-      args.push(`--name=${projectName}`);
-    }
+  if (directoryName !== projectName) {
+    args.push(`-dir=${directoryName}`);
   }
+
+  args.push('-sg');
 
   let _blueprint;
   if (blueprint.path) {
@@ -185,52 +180,42 @@ function createProject(runEmber) {
     }
   }) => {
     return async function createProject(cwd) {
+      if (!blueprint) {
+        return cwd;
+      }
+
       // remove scope
       let directoryName = projectName.replace(/^@.+\//, '');
 
-      let projectRoot = path.join(cwd, directoryName);
-
       async function _runEmber(blueprint) {
-        let _cwd = cwd;
-
-        if (!blueprint.isBaseBlueprint) {
-          _cwd = projectRoot;
-        }
-
         let args = getArgs({
           projectName,
           directoryName,
           blueprint
         });
 
-        let ps = runEmber({
+        await runEmber({
           packageRoot,
-          cwd: _cwd,
+          cwd,
           blueprint,
           args
         });
-
-        module.exports.overwriteBlueprintFiles(ps);
-
-        await ps;
       }
 
-      if (!blueprint || !blueprint.isBaseBlueprint) {
+      let projectRoot = path.join(cwd, directoryName);
+
+      if (await isDefaultAddonBlueprint(blueprint)) {
         await _runEmber(baseBlueprint);
+
+        await module.exports.installAddonBlueprint({
+          projectRoot,
+          blueprint
+        });
+      } else {
+        await _runEmber(blueprint);
       }
 
-      if (blueprint) {
-        if (await isDefaultAddonBlueprint(blueprint)) {
-          await module.exports.installAddonBlueprint({
-            projectRoot,
-            blueprint
-          });
-        } else {
-          await _runEmber(blueprint);
-        }
-      }
-
-      if (!(blueprint && isDefaultBlueprint(blueprint))) {
+      if (!isDefaultBlueprint(blueprint)) {
         // This might not be needed anymore.
         await module.exports.appendNodeModulesIgnore({
           projectRoot
@@ -289,4 +274,3 @@ async function appendNodeModulesIgnore({
 
 module.exports.appendNodeModulesIgnore = appendNodeModulesIgnore;
 module.exports.getArgs = getArgs;
-module.exports.overwriteBlueprintFiles = overwriteBlueprintFiles;

@@ -33,7 +33,6 @@ describe(_getStartAndEndCommands, function() {
   let npxStub;
   let spawnStub;
   let readdirStub;
-  let overwriteBlueprintFilesStub;
   let installAddonBlueprintStub;
   let appendNodeModulesIgnoreStub;
 
@@ -41,7 +40,6 @@ describe(_getStartAndEndCommands, function() {
     npxStub = sinon.stub(_getStartAndEndCommands, 'npx').returns('test npx');
     spawnStub = sinon.stub(_getStartAndEndCommands, 'spawn').returns('test spawn');
     readdirStub = sinon.stub(utils, 'readdir').resolves(['foo']);
-    overwriteBlueprintFilesStub = sinon.stub(_getStartAndEndCommands, 'overwriteBlueprintFiles');
     installAddonBlueprintStub = sinon.stub(_getStartAndEndCommands, 'installAddonBlueprint').resolves();
     appendNodeModulesIgnoreStub = sinon.stub(_getStartAndEndCommands, 'appendNodeModulesIgnore').resolves();
   });
@@ -100,7 +98,7 @@ describe(_getStartAndEndCommands, function() {
     });
   });
 
-  it('can create a base project from cache', async function() {
+  it('can create a project from cache', async function() {
     let { createProjectFromCache } = getStartAndEndCommands();
 
     let createProject = createProjectFromCache({
@@ -133,68 +131,9 @@ describe(_getStartAndEndCommands, function() {
         cwd
       }
     ]]);
-
-    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn']]);
   });
 
-  it('can create a partial project from cache', async function() {
-    let { createProjectFromCache } = getStartAndEndCommands();
-
-    let createProject = createProjectFromCache({
-      packageRoot,
-      options: {
-        baseBlueprint,
-        projectName,
-        blueprint: loadSafeBlueprint({
-          path: blueprintPath
-        })
-      }
-    });
-
-    sinon.stub(utils, 'require')
-      .withArgs(path.join(blueprintPath, 'package'))
-      .returns({ keywords: ['ember-blueprint'] });
-
-    expect(await createProject(cwd)).to.equal(projectRoot);
-
-    expect(spawnStub.args).to.deep.equal([
-      [
-        'node',
-        [
-          path.normalize(`${packageRoot}/bin/ember`),
-          'new',
-          projectName,
-          '-sg',
-          '-sn',
-          '-sb',
-          '-b',
-          baseBlueprint.name,
-          ...baseBlueprint.options
-        ],
-        {
-          cwd
-        }
-      ],
-      [
-        'node',
-        [
-          path.normalize(`${packageRoot}/bin/ember`),
-          'init',
-          '-sn',
-          '-sb',
-          '-b',
-          blueprintPath
-        ],
-        {
-          cwd: projectRoot
-        }
-      ]
-    ]);
-
-    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn'], ['test spawn']]);
-  });
-
-  it('can create a base project from remote', async function() {
+  it('can create a project from remote', async function() {
     let { createProjectFromRemote } = getStartAndEndCommands();
 
     let createProject = createProjectFromRemote({
@@ -223,98 +162,18 @@ describe(_getStartAndEndCommands, function() {
         cwd
       }
     ]]);
-
-    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
-  });
-
-  it('can create a partial project from remote', async function() {
-    let { createProjectFromRemote } = getStartAndEndCommands();
-
-    let createProject = createProjectFromRemote({
-      options: {
-        baseBlueprint,
-        projectName,
-        blueprint: loadSafeBlueprint({
-          path: blueprintPath
-        })
-      }
-    });
-
-    sinon.stub(utils, 'require')
-      .withArgs(path.join(blueprintPath, 'package'))
-      .returns({ keywords: ['ember-blueprint'] });
-
-    expect(await createProject(cwd)).to.equal(projectRoot);
-
-    expect(npxStub.args).to.deep.equal([
-      [
-        [
-          '-p',
-          `${baseBlueprint.packageName}@${baseBlueprint.version}`,
-          commandName,
-          'new',
-          projectName,
-          '-sg',
-          '-sn',
-          '-sb',
-          '-b',
-          baseBlueprint.name,
-          ...baseBlueprint.options
-        ],
-        {
-          cwd
-        }
-      ],
-      [
-        [
-          packageName,
-          'init',
-          '-sn',
-          '-sb',
-          '-b',
-          blueprintPath
-        ],
-        {
-          cwd: projectRoot
-        }
-      ]
-    ]);
-
-    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx'], ['test npx']]);
   });
 
   it('can create a project without a blueprint', async function() {
     let { createProjectFromRemote } = getStartAndEndCommands();
 
     let createProject = createProjectFromRemote({
-      options: {
-        baseBlueprint,
-        projectName
-      }
+      options: {}
     });
 
-    expect(await createProject(cwd)).to.equal(projectRoot);
+    expect(await createProject(cwd)).to.equal(cwd);
 
-    expect(npxStub.args).to.deep.equal([[
-      [
-        '-p',
-        `${baseBlueprint.packageName}@${baseBlueprint.version}`,
-        commandName,
-        'new',
-        projectName,
-        '-sg',
-        '-sn',
-        '-sb',
-        '-b',
-        baseBlueprint.name,
-        ...baseBlueprint.options
-      ],
-      {
-        cwd
-      }
-    ]]);
-
-    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
+    expect(npxStub).to.not.be.called;
   });
 
   describe('custom blueprint', function() {
@@ -411,7 +270,7 @@ describe(_getStartAndEndCommands, function() {
       });
     });
 
-    it('can create a base project from cache', async function() {
+    it('can create a project from cache', async function() {
       let { createProjectFromCache } = getStartAndEndCommands();
 
       let createProject = createProjectFromCache({
@@ -448,8 +307,6 @@ describe(_getStartAndEndCommands, function() {
         }
       ]]);
 
-      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn']]);
-
       expect(installAddonBlueprintStub).to.not.be.called;
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
@@ -457,72 +314,7 @@ describe(_getStartAndEndCommands, function() {
       }]]);
     });
 
-    it('can create a partial project from cache', async function() {
-      let { createProjectFromCache } = getStartAndEndCommands();
-
-      let createProject = createProjectFromCache({
-        packageRoot,
-        options: {
-          baseBlueprint: loadSafeBlueprint({
-            path: blueprintPath,
-            isBaseBlueprint: true
-          }),
-          projectName,
-          blueprint: loadSafeBlueprint({
-            path: blueprintPath
-          })
-        }
-      });
-
-      sinon.stub(utils, 'require')
-        .withArgs(path.join(blueprintPath, 'package'))
-        .returns({ keywords: ['ember-blueprint'] });
-
-      expect(await createProject(cwd)).to.equal(projectRoot);
-
-      expect(spawnStub.args).to.deep.equal([
-        [
-          'node',
-          [
-            path.normalize(`${packageRoot}/bin/ember`),
-            'new',
-            projectName,
-            '-sg',
-            '-sn',
-            '-sb',
-            '-b',
-            blueprintPath
-          ],
-          {
-            cwd
-          }
-        ],
-        [
-          'node',
-          [
-            path.normalize(`${packageRoot}/bin/ember`),
-            'init',
-            '-sn',
-            '-sb',
-            '-b',
-            blueprintPath
-          ],
-          {
-            cwd: projectRoot
-          }
-        ]
-      ]);
-
-      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn'], ['test spawn']]);
-
-      expect(installAddonBlueprintStub).to.not.be.called;
-
-      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        projectRoot
-      }]]);
-    });
-
-    it('can create a base project from remote', async function() {
+    it('can create a project from remote', async function() {
       let { createProjectFromRemote } = getStartAndEndCommands();
 
       let createProject = createProjectFromRemote({
@@ -556,70 +348,6 @@ describe(_getStartAndEndCommands, function() {
           cwd
         }
       ]]);
-
-      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
-
-      expect(installAddonBlueprintStub).to.not.be.called;
-
-      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        projectRoot
-      }]]);
-    });
-
-    it('can create a partial project from remote', async function() {
-      let { createProjectFromRemote } = getStartAndEndCommands();
-
-      let createProject = createProjectFromRemote({
-        options: {
-          baseBlueprint: loadSafeBlueprint({
-            path: blueprintPath,
-            isBaseBlueprint: true
-          }),
-          projectName,
-          blueprint: loadSafeBlueprint({
-            path: blueprintPath
-          })
-        }
-      });
-
-      sinon.stub(utils, 'require')
-        .withArgs(path.join(blueprintPath, 'package'))
-        .returns({ keywords: ['ember-blueprint'] });
-
-      expect(await createProject(cwd)).to.equal(projectRoot);
-
-      expect(npxStub.args).to.deep.equal([
-        [
-          [
-            packageName,
-            'new',
-            projectName,
-            '-sg',
-            '-sn',
-            '-sb',
-            '-b',
-            blueprintPath
-          ],
-          {
-            cwd
-          }
-        ],
-        [
-          [
-            packageName,
-            'init',
-            '-sn',
-            '-sb',
-            '-b',
-            blueprintPath
-          ],
-          {
-            cwd: projectRoot
-          }
-        ]
-      ]);
-
-      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx'], ['test npx']]);
 
       expect(installAddonBlueprintStub).to.not.be.called;
 
@@ -669,8 +397,6 @@ describe(_getStartAndEndCommands, function() {
           }
         ]
       ]);
-
-      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test spawn']]);
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         projectRoot,
@@ -726,8 +452,6 @@ describe(_getStartAndEndCommands, function() {
           }
         ]
       ]);
-
-      expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
 
       expect(installAddonBlueprintStub.args).to.deep.equal([[{
         projectRoot,
@@ -855,7 +579,7 @@ describe(_getStartAndEndCommands, function() {
       ]);
     });
 
-    it('works for scoped project - base', function() {
+    it('works for scoped project', function() {
       let blueprint = loadDefaultBlueprint(['welcome']);
 
       let args = getArgs({
@@ -875,30 +599,9 @@ describe(_getStartAndEndCommands, function() {
       ]);
     });
 
-    it('works for scoped project - partial', function() {
+    it('works for custom blueprint', function() {
       let blueprint = loadSafeBlueprint({
         path: '/path/to/my-blueprint'
-      });
-
-      let args = getArgs({
-        projectName: `@my-scope/${projectName}`,
-        blueprint
-      });
-
-      expect(args).to.deep.equal([
-        'init',
-        `--name=@my-scope/${projectName}`,
-        '-sn',
-        '-sb',
-        '-b',
-        '/path/to/my-blueprint'
-      ]);
-    });
-
-    it('works for custom base blueprint', function() {
-      let blueprint = loadSafeBlueprint({
-        path: '/path/to/my-blueprint',
-        isBaseBlueprint: true
       });
 
       let args = getArgs({
@@ -909,24 +612,6 @@ describe(_getStartAndEndCommands, function() {
         'new',
         projectName,
         '-sg',
-        '-sn',
-        '-sb',
-        '-b',
-        '/path/to/my-blueprint'
-      ]);
-    });
-
-    it('works for custom partial blueprint', function() {
-      let blueprint = loadSafeBlueprint({
-        path: '/path/to/my-blueprint'
-      });
-
-      let args = getArgs({
-        blueprint
-      });
-
-      expect(args).to.deep.equal([
-        'init',
         '-sn',
         '-sb',
         '-b',
