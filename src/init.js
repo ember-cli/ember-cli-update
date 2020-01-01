@@ -66,7 +66,7 @@ module.exports = async function init({
     name = packageInfo.name;
   }
   let version = packageInfo.version;
-  let path = packageInfo.path;
+  let _path = packageInfo.path;
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
@@ -87,7 +87,14 @@ module.exports = async function init({
   blueprint = loadSafeBlueprint(blueprint);
 
   blueprint.version = version;
-  blueprint.path = path;
+  blueprint.path = _path;
+
+  await foo({
+    cwd,
+    projectName: (await getPackageJson()).name,
+    packageRoot: path.resolve(__dirname, '../node_modules/ember-cli'),
+    blueprint
+  });
 
   let baseBlueprint = await getBaseBlueprint({
     cwd,
@@ -95,30 +102,30 @@ module.exports = async function init({
     blueprint
   });
 
-  let init = false;
+  // let init = false;
 
   if (!baseBlueprint) {
     // for non-existing default blueprints
     blueprint.isBaseBlueprint = true;
-    init = true;
+    // init = true;
   }
 
-  let result = await (await boilerplateUpdate({
-    endVersion: blueprint.version,
-    resolveConflicts,
-    reset,
-    init,
-    createCustomDiff: true,
-    customDiffOptions: ({
-      packageJson
-    }) => getStartAndEndCommands({
-      packageJson,
-      baseBlueprint,
-      endBlueprint: blueprint
-    }),
-    ignoredFiles: [await getBlueprintRelativeFilePath(cwd)],
-    wasRunAsExecutable
-  })).promise;
+  // let result = await (await boilerplateUpdate({
+  //   endVersion: blueprint.version,
+  //   resolveConflicts,
+  //   reset,
+  //   init,
+  //   createCustomDiff: true,
+  //   customDiffOptions: ({
+  //     packageJson
+  //   }) => getStartAndEndCommands({
+  //     packageJson,
+  //     baseBlueprint,
+  //     endBlueprint: blueprint
+  //   }),
+  //   ignoredFiles: [await getBlueprintRelativeFilePath(cwd)],
+  //   wasRunAsExecutable
+  // })).promise;
 
   await saveBlueprint({
     emberCliUpdateJsonPath,
@@ -132,5 +139,99 @@ module.exports = async function init({
     });
   }
 
-  return result;
+  // return result;
 };
+
+const path = require('path');
+const utils = require('./utils');
+const isDefaultBlueprint = require('./is-default-blueprint');
+const getPackageJson = require('boilerplate-update/src/get-package-json');
+const execa = require('execa');
+const debug = require('debug')('ember-cli-update');
+
+module.exports.spawn = function spawn(command, args, options) {
+  debug(`${command} ${args.join(' ')}`);
+
+  let ps = execa(command, args, {
+    // stdio: ['pipe', 'pipe', 'inherit'],
+    stdio: 'inherit',
+    ...options
+  });
+
+  // ps.stdout.pipe(process.stdout);
+
+  return ps;
+};
+
+module.exports.npx = function npx(args, options) {
+  return utils.npx(args.join(' '), options);
+};
+
+function runEmberLocally({
+  packageRoot,
+  cwd,
+  args
+}) {
+  return module.exports.spawn('node', [
+    path.join(packageRoot, 'bin/ember'),
+    ...args
+  ], { cwd });
+}
+
+function runEmberRemotely({
+  cwd,
+  blueprint,
+  args
+}) {
+  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
+
+  if (isCustomBlueprint) {
+    args = ['ember-cli', ...args];
+    // args = ['-p', 'github:ember-cli/ember-cli#cfb9780', 'ember', 'new', projectName, `-dir=${directoryName}, '-sg', -sn', '-b', `${blueprint.packageName}@${blueprint.version}`];
+  } else {
+    args = ['-p', `ember-cli@${blueprint.version}`, 'ember', ...args];
+  }
+
+  return module.exports.npx(args, { cwd });
+}
+
+const runEmber = runEmberLocally;
+
+async function foo({
+  projectName,
+  packageRoot,
+  cwd,
+  blueprint
+}) {
+  // remove scope
+  let directoryName = projectName.replace(/^@.+\//, '');
+
+  // let projectRoot = path.join(cwd, directoryName);
+
+  async function _runEmber(blueprint) {
+    let _cwd = cwd;
+
+    // if (!blueprint.isBaseBlueprint) {
+    //   _cwd = projectRoot;
+    // }
+
+    let args = getStartAndEndCommands.getArgs({
+      projectName,
+      directoryName,
+      blueprint
+    });
+
+    let ps = runEmber({
+      packageRoot,
+      cwd: _cwd,
+      blueprint,
+      args
+    });
+
+    // module.exports.overwriteBlueprintFiles(ps);
+
+    await ps;
+  }
+
+  await _runEmber(blueprint);
+}
