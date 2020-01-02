@@ -293,10 +293,6 @@ describe(_getStartAndEndCommands, function() {
       }
     });
 
-    sinon.stub(utils, 'require')
-      .withArgs(path.join(blueprintPath, 'package'))
-      .returns({ keywords: ['ember-blueprint'] });
-
     expect(await createProject(cwd)).to.equal(projectRoot);
 
     expect(npxStub.args).to.deep.equal([[
