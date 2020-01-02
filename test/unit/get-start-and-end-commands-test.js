@@ -283,6 +283,44 @@ describe(_getStartAndEndCommands, function() {
     expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx'], ['test npx']]);
   });
 
+  it('can create a project without a blueprint', async function() {
+    let { createProjectFromRemote } = getStartAndEndCommands();
+
+    let createProject = createProjectFromRemote({
+      options: {
+        baseBlueprint,
+        projectName
+      }
+    });
+
+    sinon.stub(utils, 'require')
+      .withArgs(path.join(blueprintPath, 'package'))
+      .returns({ keywords: ['ember-blueprint'] });
+
+    expect(await createProject(cwd)).to.equal(projectRoot);
+
+    expect(npxStub.args).to.deep.equal([[
+      [
+        '-p',
+        `${baseBlueprint.packageName}@${baseBlueprint.version}`,
+        commandName,
+        'new',
+        projectName,
+        '-sg',
+        '-sn',
+        '-sb',
+        '-b',
+        baseBlueprint.name,
+        ...baseBlueprint.options
+      ],
+      {
+        cwd
+      }
+    ]]);
+
+    expect(overwriteBlueprintFilesStub.args).to.deep.equal([['test npx']]);
+  });
+
   describe('custom blueprint', function() {
     it('returns an options object - base default', async function() {
       let options = getStartAndEndCommands({
