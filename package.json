@@ -48,7 +48,7 @@
     "semver": "^6.0.0",
     "tmp": "0.1.0",
     "update-notifier": "^4.0.0",
-    "yargs": "^15.0.0"
+    "yargs": "^15.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.0",
