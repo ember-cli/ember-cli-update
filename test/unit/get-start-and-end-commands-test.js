@@ -645,6 +645,10 @@ describe(_getStartAndEndCommands, function() {
           options: []
         }
       }]]);
+
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
+        projectRoot
+      }]]);
     });
 
     it('can install an addon blueprint from remote', async function() {
