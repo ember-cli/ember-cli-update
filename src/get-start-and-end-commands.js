@@ -133,10 +133,14 @@ function getArgs({
 module.exports.spawn = function spawn(command, args, options) {
   debug(`${command} ${args.join(' ')}`);
 
-  return execa(command, args, {
+  let ps = execa(command, args, {
     stdio: ['pipe', 'pipe', 'inherit'],
     ...options
   });
+
+  ps.stdout.pipe(process.stdout);
+
+  return ps;
 };
 
 module.exports.npx = function npx(args, options) {
