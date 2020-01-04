@@ -10,6 +10,7 @@ const {
   fixtureCompare: _fixtureCompare,
   commit
 } = require('git-fixtures');
+const { isGitClean } = require('git-diff-apply');
 const {
   assertNormalUpdate,
   assertNoUnstaged,
@@ -230,6 +231,37 @@ describe(function() {
 
     assertNormalUpdate(status);
     assertNoUnstaged(status);
+  });
+
+  it('has all up-to-date blueprints', async function() {
+    let {
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/remote-app/merge',
+      commitMessage: 'my-app'
+    });
+
+    ps.stdout.pipe(process.stdout);
+
+    await new Promise(resolve => {
+      function stdoutData(data) {
+        let str = data.toString();
+        if (str.includes('All blueprints are up-to-date!')) {
+          ps.stdout.removeListener('data', stdoutData);
+          resolve();
+        }
+      }
+      ps.stdout.on('data', stdoutData);
+    });
+
+    let {
+      status
+    } = await promise;
+
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
+
+    expect(status).to.equal('');
   });
 
   it('can pick from multiple blueprints', async function() {
