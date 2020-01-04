@@ -23,8 +23,7 @@ module.exports = async function init({
   to = toDefault,
   resolveConflicts,
   reset,
-  blueprintOptions = [],
-  wasRunAsExecutable
+  blueprintOptions = []
 }) {
   let cwd = process.cwd();
 
@@ -100,7 +99,10 @@ module.exports = async function init({
     init = true;
   }
 
-  let result = await (await boilerplateUpdate({
+  let {
+    promise,
+    resolveConflictsProcess
+  } = await boilerplateUpdate({
     endVersion: blueprint.version,
     resolveConflicts,
     reset,
@@ -113,21 +115,27 @@ module.exports = async function init({
       baseBlueprint,
       endBlueprint: blueprint
     }),
-    ignoredFiles: [await getBlueprintRelativeFilePath(cwd)],
-    wasRunAsExecutable
-  })).promise;
-
-  await saveBlueprint({
-    emberCliUpdateJsonPath,
-    blueprint
+    ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
   });
 
-  if (!(reset || init)) {
-    await stageBlueprintFile({
-      cwd,
-      emberCliUpdateJsonPath
-    });
-  }
+  return {
+    promise: (async() => {
+      let result = await promise;
 
-  return result;
+      await saveBlueprint({
+        emberCliUpdateJsonPath,
+        blueprint
+      });
+
+      if (!(reset || init)) {
+        await stageBlueprintFile({
+          cwd,
+          emberCliUpdateJsonPath
+        });
+      }
+
+      return result;
+    })(),
+    resolveConflictsProcess
+  };
 };

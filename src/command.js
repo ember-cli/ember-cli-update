@@ -83,7 +83,15 @@ module.exports = {
   ],
 
   async run(options) {
-    options.wasRunAsExecutable = true;
-    await emberCliUpdate(options);
+    let result = await emberCliUpdate(options);
+
+    let ps = result.resolveConflictsProcess;
+    if (ps) {
+      process.stdin.pipe(ps.stdin);
+      ps.stdout.pipe(process.stdout);
+      ps.stderr.pipe(process.stderr);
+    }
+
+    await result.promise;
   }
 };

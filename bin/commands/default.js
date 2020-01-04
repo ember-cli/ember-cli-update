@@ -23,7 +23,7 @@ module.exports.handler = async function handler(argv) {
   let blueprintOptions = argv._.slice(0);
 
   try {
-    let message = await emberCliUpdate({
+    let result = await emberCliUpdate({
       blueprint,
       blueprintOptions,
       from,
@@ -36,11 +36,26 @@ module.exports.handler = async function handler(argv) {
       compareOnly,
       statsOnly,
       listCodemods,
-      createCustomDiff,
-      wasRunAsExecutable: true
+      createCustomDiff
     });
+
+    let ps = result.resolveConflictsProcess;
+    if (ps) {
+      process.stdin.pipe(ps.stdin);
+      ps.stdout.pipe(process.stdout);
+      ps.stderr.pipe(process.stderr);
+    }
+
+    let message = await result.promise;
     if (message) {
       console.log(message);
+    }
+
+    // since we are piping, not inheriting, the child process
+    // doesn't have the power to close its parent
+    if (ps) {
+      // eslint-disable-next-line no-process-exit
+      process.exit();
     }
   } catch (err) {
     console.error(err);

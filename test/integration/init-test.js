@@ -48,7 +48,7 @@ describe(init, function() {
 
     process.chdir(tmpPath);
 
-    let promise = init({
+    let { promise } = await init({
       blueprint,
       to,
       blueprintOptions

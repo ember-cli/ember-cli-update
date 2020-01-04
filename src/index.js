@@ -63,8 +63,7 @@ module.exports = async function emberCliUpdate({
   compareOnly,
   statsOnly,
   listCodemods,
-  createCustomDiff,
-  wasRunAsExecutable
+  createCustomDiff
 }) {
   let cwd = process.cwd();
 
@@ -170,7 +169,10 @@ module.exports = async function emberCliUpdate({
 
   let endBlueprint;
 
-  let result = await (await boilerplateUpdate({
+  let {
+    promise,
+    resolveConflictsProcess
+  } = await boilerplateUpdate({
     projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),
     mergeOptions: async function mergeOptions({
       packageJson,
@@ -250,23 +252,29 @@ module.exports = async function emberCliUpdate({
     codemodsUrl,
     codemodsJson,
     createCustomDiff,
-    ignoredFiles: [await getBlueprintRelativeFilePath(cwd)],
-    wasRunAsExecutable
-  })).promise;
+    ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
+  });
 
-  if (_blueprint || isPersistedBlueprint) {
-    await saveBlueprint({
-      emberCliUpdateJsonPath,
-      blueprint: endBlueprint
-    });
+  return {
+    promise: (async() => {
+      let result = await promise;
 
-    if (!reset) {
-      await stageBlueprintFile({
-        cwd,
-        emberCliUpdateJsonPath
-      });
-    }
-  }
+      if (_blueprint || isPersistedBlueprint) {
+        await saveBlueprint({
+          emberCliUpdateJsonPath,
+          blueprint: endBlueprint
+        });
 
-  return result;
+        if (!reset) {
+          await stageBlueprintFile({
+            cwd,
+            emberCliUpdateJsonPath
+          });
+        }
+      }
+
+      return result;
+    })(),
+    resolveConflictsProcess
+  };
 };

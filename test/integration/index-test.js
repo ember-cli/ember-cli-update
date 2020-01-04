@@ -65,7 +65,7 @@ describe(function() {
     process.chdir(tmpPath);
 
     let promise = (async() => {
-      let result = await emberCliUpdate({
+      let result = await (await emberCliUpdate({
         blueprint,
         from,
         to,
@@ -76,7 +76,7 @@ describe(function() {
         codemodsJson,
         listCodemods,
         createCustomDiff
-      });
+      })).promise;
 
       await afterMerge();
 
