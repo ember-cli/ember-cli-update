@@ -132,7 +132,7 @@ module.exports = async function emberCliUpdate({
       });
 
       if (areAllUpToDate) {
-        return;
+        return { promise: Promise.resolve() };
       }
 
       blueprint = _blueprint;
