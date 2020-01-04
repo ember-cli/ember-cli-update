@@ -64,7 +64,8 @@ describe(function() {
     if (init) {
       args = [
         'init',
-        `--to=${to}`
+        `--to=${to}`,
+        '--resolve-conflicts'
       ];
     }
     if (install) {
