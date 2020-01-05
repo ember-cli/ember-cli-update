@@ -428,19 +428,19 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         let {
           name,
           version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
+        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my.app/config/ember-cli-update.json')).blueprints[0];
 
         let {
           status
         } = await merge({
           fixturesPath: 'test/fixtures/blueprint/app/remote-app/local',
-          commitMessage: 'my-app',
+          commitMessage: 'my.app',
           blueprint: name,
           to
         });
 
         fixtureCompare({
-          mergeFixtures: 'test/fixtures/blueprint/app/remote-app/merge/my-app'
+          mergeFixtures: 'test/fixtures/blueprint/app/remote-app/merge/my.app'
         });
 
         assertNoUnstaged(status);
