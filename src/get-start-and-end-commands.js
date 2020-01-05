@@ -184,25 +184,38 @@ function createProject(runEmber) {
         return cwd;
       }
 
-      // remove scope
-      let directoryName = projectName.replace(/^@.+\//, '');
+      let projectRoot;
 
       async function _runEmber(blueprint) {
-        let args = getArgs({
-          projectName,
-          directoryName,
-          blueprint
-        });
+        async function __runEmber() {
+          // remove scope
+          let directoryName = projectName.replace(/^@.+\//, '');
 
-        await runEmber({
-          packageRoot,
-          cwd,
-          blueprint,
-          args
-        });
+          let args = getArgs({
+            projectName,
+            directoryName,
+            blueprint
+          });
+
+          await runEmber({
+            packageRoot,
+            cwd,
+            blueprint,
+            args
+          });
+
+          projectRoot = path.join(cwd, directoryName);
+        }
+
+        try {
+          await __runEmber();
+        } catch (err) {
+          // We currently do not support a name of `...`.
+          projectName = 'my-project';
+
+          await __runEmber();
+        }
       }
-
-      let projectRoot = path.join(cwd, directoryName);
 
       if (await isDefaultAddonBlueprint(blueprint)) {
         await _runEmber(baseBlueprint);
