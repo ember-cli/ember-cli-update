@@ -239,7 +239,7 @@ describe(function() {
       promise
     } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/remote-app/merge',
-      commitMessage: 'my-app'
+      commitMessage: 'my.app'
     });
 
     ps.stdout.pipe(process.stdout);
