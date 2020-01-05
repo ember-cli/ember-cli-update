@@ -465,6 +465,61 @@ describe(_getStartAndEndCommands, function() {
         projectRoot
       }]]);
     });
+
+    it('falls back to safe project name if invalid', async function() {
+      let { createProjectFromRemote } = getStartAndEndCommands();
+
+      readdirStub.resolves([]);
+
+      let createProject = createProjectFromRemote({
+        options: {
+          baseBlueprint,
+          projectName,
+          blueprint: loadSafeBlueprint({
+            path: blueprintPath
+          })
+        }
+      });
+
+      sinon.stub(utils, 'require')
+        .withArgs(path.join(blueprintPath, 'package'))
+        .returns({ keywords: ['ember-addon'] });
+
+      npxStub.onCall(0).rejects();
+
+      expect(await createProject(cwd)).to.equal(path.join(cwd, 'my-project'));
+
+      expect(npxStub.getCall(1).args).to.deep.equal([
+        [
+          '-p',
+          `${baseBlueprint.packageName}@${baseBlueprint.version}`,
+          commandName,
+          'new',
+          'my-project',
+          '-sg',
+          '-sn',
+          '-sb',
+          '-b',
+          baseBlueprint.name,
+          ...baseBlueprint.options
+        ],
+        {
+          cwd
+        }
+      ]);
+
+      expect(installAddonBlueprintStub.args).to.deep.equal([[{
+        projectRoot: path.join(cwd, 'my-project'),
+        blueprint: {
+          path: blueprintPath,
+          options: []
+        }
+      }]]);
+
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
+        projectRoot: path.join(cwd, 'my-project')
+      }]]);
+    });
   });
 
   describe('init blueprint', function() {
