@@ -591,6 +591,7 @@ describe(function() {
       {
         location,
         version: partial,
+        codemodsUrl,
         options
       }
     ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints;
@@ -619,6 +620,7 @@ describe(function() {
         'save',
         `-b=${location}`,
         `--from=${partial}`,
+        `--codemods-url=${codemodsUrl}`,
         ...options
       ],
       cwd: tmpPath,
@@ -640,6 +642,7 @@ describe(function() {
     let {
       location,
       version: from,
+      codemodsUrl,
       options
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/local/my-app/config2/ember-cli-update.json')).blueprints[1];
 
@@ -671,6 +674,7 @@ describe(function() {
         `-b=${location}`,
         `--from=${from}`,
         `--to=${to}`,
+        `--codemods-url=${codemodsUrl}`,
         ...options
       ],
       cwd: tmpPath,

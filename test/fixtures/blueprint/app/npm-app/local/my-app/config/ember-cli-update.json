@@ -8,6 +8,7 @@
       "blueprints": [
         {
           "name": "ember-cli-update-git-blueprint-test",
+          "codemodsUrl": "test-codemods",
           "isBaseBlueprint": true,
           "options": [
             "--supplied-option=foo"

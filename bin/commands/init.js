@@ -11,6 +11,7 @@ module.exports.builder = {
   blueprint: args['blueprint'],
   to: args['to'],
   resolveConflicts: args['resolve-conflicts'],
+  codemodsUrl: args['codemods-url'],
   reset: args['reset']
 };
 

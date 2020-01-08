@@ -9,8 +9,10 @@ const {
 
 function loadDefaultBlueprint(projectOptions = [], version) {
   let name = defaultAppBlueprintName;
+  let codemodsUrl = 'ember-app-codemods-manifest@1';
   if (projectOptions.includes('addon')) {
     name = defaultAddonBlueprintName;
+    codemodsUrl = 'ember-addon-codemods-manifest@1';
   }
 
   let options = [];
@@ -26,6 +28,7 @@ function loadDefaultBlueprint(projectOptions = [], version) {
     packageName: defaultPackageName,
     name,
     version,
+    codemodsUrl,
     options,
     isBaseBlueprint: true
   });
