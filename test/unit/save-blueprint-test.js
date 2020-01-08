@@ -5,6 +5,10 @@ const { expect } = require('../helpers/chai');
 const sinon = require('sinon');
 const utils = require('../../src/utils');
 const _saveBlueprint = require('../../src/save-blueprint');
+const {
+  defaultPackageName,
+  defaultAppBlueprintName
+} = require('../../src/constants');
 
 const emberCliUpdateJsonPath = 'test-path';
 
@@ -16,8 +20,8 @@ describe(_saveBlueprint, function() {
   beforeEach(function() {
     loadDefaultBlueprintFromDisk = sinon.stub(utils, 'loadDefaultBlueprintFromDisk')
       .withArgs(emberCliUpdateJsonPath).resolves({
-        packageName: 'ember-cli',
-        name: 'ember-cli',
+        packageName: defaultPackageName,
+        name: defaultAppBlueprintName,
         version: '0.0.1',
         options: []
       });
@@ -51,8 +55,8 @@ describe(_saveBlueprint, function() {
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
         blueprints: [
           {
-            packageName: 'ember-cli',
-            name: 'ember-cli',
+            packageName: defaultPackageName,
+            name: defaultAppBlueprintName,
             version: '0.0.1'
           }
         ]
@@ -69,8 +73,8 @@ describe(_saveBlueprint, function() {
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
         blueprints: [
           {
-            packageName: 'ember-cli',
-            name: 'ember-cli',
+            packageName: defaultPackageName,
+            name: defaultAppBlueprintName,
             version: '0.0.1'
           }
         ]
