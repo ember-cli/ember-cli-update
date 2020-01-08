@@ -39,6 +39,7 @@ describe(loadSafeBlueprintFile, function() {
         name: 'test-blueprint',
         location: '../test-blueprint',
         version: '0.0.1',
+        codemodsUrl: 'test-codemods',
         isBaseBlueprint: true
       }]
     });

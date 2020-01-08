@@ -10,6 +10,7 @@ const resolvePackage = require('./resolve-package');
 module.exports = async function save({
   blueprint: _blueprint,
   from,
+  codemodsUrl,
   blueprintOptions
 }) {
   if (!from) {
@@ -47,6 +48,10 @@ module.exports = async function save({
 
   if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
     blueprint.isBaseBlueprint = true;
+  }
+
+  if (codemodsUrl) {
+    blueprint.codemodsUrl = codemodsUrl;
   }
 
   await saveBlueprint({

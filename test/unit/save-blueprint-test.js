@@ -128,6 +128,27 @@ describe(_saveBlueprint, function() {
         }));
       });
 
+      it('saves with codemods url', async function() {
+        await saveBlueprint({
+          packageName: 'test-blueprint',
+          name: 'test-blueprint',
+          version: '0.0.1',
+          codemodsUrl: 'codemods-test',
+          options: []
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              packageName: 'test-blueprint',
+              name: 'test-blueprint',
+              version: '0.0.1',
+              codemodsUrl: 'codemods-test'
+            }
+          ]
+        }));
+      });
+
       it('saves with options', async function() {
         await saveBlueprint({
           packageName: 'test-blueprint',
@@ -334,6 +355,36 @@ describe(_saveBlueprint, function() {
               name: 'test-blueprint',
               location: '/foo/bar',
               version: '0.0.1'
+            }
+          ]
+        }));
+      });
+
+      it('saves with codemods url', async function() {
+        loadSafeBlueprintFile.resolves({
+          blueprints: [
+            {
+              packageName: 'test-blueprint',
+              name: 'test-blueprint',
+              version: '0.0.0',
+              codemodsUrl: 'codemods-test'
+            }
+          ]
+        });
+
+        await saveBlueprint({
+          packageName: 'test-blueprint',
+          name: 'test-blueprint',
+          version: '0.0.1'
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            {
+              packageName: 'test-blueprint',
+              name: 'test-blueprint',
+              version: '0.0.1',
+              codemodsUrl: 'codemods-test'
             }
           ]
         }));

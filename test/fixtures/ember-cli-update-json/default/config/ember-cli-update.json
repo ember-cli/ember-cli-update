@@ -7,6 +7,7 @@
       "blueprints": [
         {
           "name": "app",
+          "codemodsUrl": "ember-app-codemods-manifest@1",
           "isBaseBlueprint": true
         }
       ]

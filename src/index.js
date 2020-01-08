@@ -25,8 +25,7 @@ const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 
 const {
-  'to': { default: toDefault },
-  'codemods-url': { default: codemodsUrlDefault }
+  'to': { default: toDefault }
 } = require('./args');
 
 async function _resolvePackage(blueprint, url, range) {
@@ -57,7 +56,7 @@ module.exports = async function emberCliUpdate({
   to = toDefault,
   resolveConflicts,
   runCodemods,
-  codemodsUrl = codemodsUrlDefault,
+  codemodsUrl,
   codemodsJson,
   reset,
   compareOnly,
@@ -156,6 +155,10 @@ module.exports = async function emberCliUpdate({
     createCustomDiff = true;
   }
 
+  if (codemodsUrl) {
+    blueprint.codemodsUrl = codemodsUrl;
+  }
+
   let baseBlueprint = await getBaseBlueprint({
     cwd,
     blueprints: emberCliUpdateJson.blueprints,
@@ -249,7 +252,7 @@ module.exports = async function emberCliUpdate({
     statsOnly,
     listCodemods,
     runCodemods,
-    codemodsUrl,
+    codemodsUrl: blueprint.codemodsUrl,
     codemodsJson,
     createCustomDiff,
     ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]

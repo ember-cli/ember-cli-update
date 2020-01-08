@@ -83,6 +83,7 @@ describe(init, function() {
       {
         location,
         options,
+        codemodsUrl,
         version: to
       }
     ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/my-app/config/ember-cli-update.json')).blueprints;
@@ -110,6 +111,7 @@ describe(init, function() {
         reset: true,
         blueprint: location,
         to,
+        codemodsUrl,
         blueprintOptions: options
       }),
       cwd: tmpPath,
@@ -131,6 +133,7 @@ describe(init, function() {
       },
       {
         location,
+        codemodsUrl,
         options
       }
     ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints;
@@ -156,6 +159,7 @@ describe(init, function() {
     } = await processExit({
       promise: init({
         blueprint: location,
+        codemodsUrl,
         blueprintOptions: options
       }),
       cwd: tmpPath,

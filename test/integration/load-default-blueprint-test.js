@@ -24,6 +24,7 @@ describe(_loadDefaultBlueprint, function() {
       packageName: 'ember-cli',
       name: 'app',
       version: undefined,
+      codemodsUrl: 'ember-app-codemods-manifest@1',
       isBaseBlueprint: true,
       options: [
         '--no-welcome'
@@ -48,6 +49,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          codemodsUrl: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: []
         });
@@ -62,6 +64,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          codemodsUrl: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: [
             '--yarn'
@@ -78,6 +81,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          codemodsUrl: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: [
             '--no-welcome'
@@ -94,6 +98,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          codemodsUrl: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: [
             '--yarn',
@@ -116,6 +121,7 @@ describe(_loadDefaultBlueprint, function() {
         packageName: 'ember-cli',
         name: 'addon',
         version,
+        codemodsUrl: 'ember-addon-codemods-manifest@1',
         isBaseBlueprint: true,
         options: [
           '--no-welcome'
@@ -132,6 +138,7 @@ describe(_loadDefaultBlueprint, function() {
         packageName: 'ember-cli',
         name: 'addon',
         version,
+        codemodsUrl: 'ember-addon-codemods-manifest@1',
         isBaseBlueprint: true,
         options: [
           '--yarn',
