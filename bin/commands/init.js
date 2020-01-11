@@ -15,19 +15,10 @@ module.exports.builder = {
 };
 
 module.exports.handler = async function handler(argv) {
-  let blueprint = argv['blueprint'];
-  let to = argv['to'];
-  let resolveConflicts = argv['resolve-conflicts'];
-  let reset = argv['reset'];
-  let blueprintOptions = argv._.slice(1);
-
   try {
     let result = await init({
-      blueprint,
-      to,
-      resolveConflicts,
-      reset,
-      blueprintOptions
+      ...argv,
+      blueprintOptions: argv._.slice(1)
     });
 
     let ps = result.resolveConflictsProcess;
