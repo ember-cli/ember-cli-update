@@ -7,12 +7,8 @@ module.exports.command = 'install <addon>';
 module.exports.describe = 'install an addon';
 
 module.exports.handler = async function handler(argv) {
-  let addon = argv['addon'];
-
   try {
-    await install({
-      addon
-    });
+    await install(argv);
   } catch (err) {
     console.error(err);
   }
