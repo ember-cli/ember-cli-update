@@ -26,7 +26,8 @@ install:
   - ps: rm C:\Users\appveyor\AppData\Roaming\npm\npx*
   # test that we can't find it
   - ps: if (gcm npx) { exit }
-  - npm ci
+  - curl -L https://unpkg.com/@pnpm/self-installer | node
+  - pnpm install
 
 # Post-install test scripts.
 test_script:
