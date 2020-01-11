@@ -2,7 +2,7 @@
 
 const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
-const getVersions = require('boilerplate-update/src/get-versions');
+const getVersions = require('./get-versions');
 const getTagVersion = require('boilerplate-update/src/get-tag-version');
 
 const toDefault = require('./args').to.default;

@@ -1,7 +1,7 @@
 'use strict';
 
 const downloadPackage = require('./download-package');
-const getVersions = require('boilerplate-update/src/get-versions');
+const getVersions = require('./get-versions');
 const _getTagVersion = require('./get-tag-version');
 
 async function resolvePackage({
