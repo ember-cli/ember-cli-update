@@ -25,7 +25,7 @@ module.exports = {
   },
   'codemods-url': {
     type: 'string',
-    default: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v3/manifest.json',
+    default: 'https://raw.githubusercontent.com/ember-cli/ember-cli-update-codemods-manifest/v4/manifest.json',
     description: 'Supply your own codemods manifest via URL'
   },
   'codemods-json': {
