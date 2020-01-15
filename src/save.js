@@ -10,7 +10,7 @@ const resolvePackage = require('./resolve-package');
 module.exports = async function save({
   blueprint: _blueprint,
   from,
-  codemodsUrl,
+  codemodsSource,
   blueprintOptions
 }) {
   if (!from) {
@@ -50,8 +50,8 @@ module.exports = async function save({
     blueprint.isBaseBlueprint = true;
   }
 
-  if (codemodsUrl) {
-    blueprint.codemodsUrl = codemodsUrl;
+  if (codemodsSource) {
+    blueprint.codemodsSource = codemodsSource;
   }
 
   await saveBlueprint({

@@ -10,7 +10,7 @@ module.exports.describe = 'save old blueprint state';
 module.exports.builder = {
   blueprint: args['blueprint'],
   from: args['from'],
-  codemodsUrl: args['codemods-url']
+  codemodsSource: args['codemods-source']
 };
 
 module.exports.handler = async function handler(argv) {

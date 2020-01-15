@@ -21,7 +21,7 @@ async function saveBlueprint({
     type,
     location,
     version,
-    codemodsUrl,
+    codemodsSource,
     options,
     isBaseBlueprint
   } = blueprint;
@@ -46,8 +46,8 @@ async function saveBlueprint({
 
     savedBlueprint.version = version;
 
-    if (codemodsUrl) {
-      savedBlueprint.codemodsUrl = codemodsUrl;
+    if (codemodsSource) {
+      savedBlueprint.codemodsSource = codemodsSource;
     }
 
     if (isBaseBlueprint !== undefined) {

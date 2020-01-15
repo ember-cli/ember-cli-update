@@ -133,7 +133,7 @@ describe(_saveBlueprint, function() {
           packageName: 'test-blueprint',
           name: 'test-blueprint',
           version: '0.0.1',
-          codemodsUrl: 'codemods-test',
+          codemodsSource: 'codemods-test',
           options: []
         });
 
@@ -143,7 +143,7 @@ describe(_saveBlueprint, function() {
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1',
-              codemodsUrl: 'codemods-test'
+              codemodsSource: 'codemods-test'
             }
           ]
         }));
@@ -367,7 +367,7 @@ describe(_saveBlueprint, function() {
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.0',
-              codemodsUrl: 'codemods-test'
+              codemodsSource: 'codemods-test'
             }
           ]
         });
@@ -384,7 +384,7 @@ describe(_saveBlueprint, function() {
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1',
-              codemodsUrl: 'codemods-test'
+              codemodsSource: 'codemods-test'
             }
           ]
         }));
