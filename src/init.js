@@ -22,7 +22,7 @@ module.exports = async function init({
   blueprint: _blueprint,
   to = toDefault,
   resolveConflicts,
-  codemodsUrl,
+  codemodsSource,
   reset,
   blueprintOptions = []
 }) {
@@ -50,8 +50,8 @@ module.exports = async function init({
     let defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
     packageName = defaultBlueprint.packageName;
     name = defaultBlueprint.name;
-    if (!codemodsUrl) {
-      codemodsUrl = defaultBlueprint.codemodsUrl;
+    if (!codemodsSource) {
+      codemodsSource = defaultBlueprint.codemodsSource;
     }
   }
 
@@ -89,8 +89,8 @@ module.exports = async function init({
   blueprint.version = version;
   blueprint.path = path;
 
-  if (codemodsUrl) {
-    blueprint.codemodsUrl = codemodsUrl;
+  if (codemodsSource) {
+    blueprint.codemodsSource = codemodsSource;
   }
 
   let baseBlueprint = await getBaseBlueprint({

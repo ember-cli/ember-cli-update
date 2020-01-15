@@ -23,7 +23,7 @@ module.exports = {
     default: false,
     description: 'Run codemods to help update your code'
   },
-  'codemods-url': {
+  'codemods-source': {
     type: 'string',
     description: 'Supply your own codemods manifest via URL'
   },

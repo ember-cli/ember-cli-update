@@ -8,7 +8,7 @@
       "blueprints": [
         {
           "name": "test-blueprint",
-          "codemodsUrl": "test-codemods",
+          "codemodsSource": "test-codemods",
           "isBaseBlueprint": true
         }
       ]

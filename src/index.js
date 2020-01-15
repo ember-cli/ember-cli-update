@@ -56,7 +56,7 @@ module.exports = async function emberCliUpdate({
   to = toDefault,
   resolveConflicts,
   runCodemods,
-  codemodsUrl,
+  codemodsSource,
   codemodsJson,
   reset,
   compareOnly,
@@ -155,8 +155,8 @@ module.exports = async function emberCliUpdate({
     createCustomDiff = true;
   }
 
-  if (codemodsUrl) {
-    blueprint.codemodsUrl = codemodsUrl;
+  if (codemodsSource) {
+    blueprint.codemodsSource = codemodsSource;
   }
 
   let baseBlueprint = await getBaseBlueprint({
@@ -252,7 +252,7 @@ module.exports = async function emberCliUpdate({
     statsOnly,
     listCodemods,
     runCodemods,
-    codemodsUrl: blueprint.codemodsUrl,
+    codemodsSource: blueprint.codemodsSource,
     codemodsJson,
     createCustomDiff,
     ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
