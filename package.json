@@ -59,7 +59,7 @@
     "ember-cli": "3.11.0-beta.1",
     "eslint": "^6.8.0",
     "eslint-config-sane": "0.8.5",
-    "eslint-config-sane-node": "0.2.2",
+    "eslint-config-sane-node": "0.3.0",
     "eslint-plugin-json-files": "0.8.0",
     "eslint-plugin-mocha": "^6.2.2",
     "eslint-plugin-node": "^11.0.0",
@@ -67,7 +67,7 @@
     "git-diff-apply": "0.22.5",
     "git-fixtures": "^2.1.0",
     "mocha": "^7.0.0",
-    "mocha-helpers": "^4.0.0",
+    "mocha-helpers": "^4.2.1",
     "renovate-config-standard": "^2.0.0",
     "sinon": "^8.0.0",
     "sinon-chai": "^3.3.0"
