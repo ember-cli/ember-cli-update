@@ -124,3 +124,4 @@ All blueprints are up-to-date!`);
 }
 
 module.exports = chooseBlueprintUpdates;
+module.exports.formatBlueprintLine = formatBlueprintLine;
