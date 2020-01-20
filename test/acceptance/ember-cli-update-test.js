@@ -42,6 +42,7 @@ describe(function() {
     install,
     addon,
     bootstrap,
+    stats,
     save,
     blueprintOptions = [],
     beforeMerge = () => Promise.resolve()
@@ -77,6 +78,11 @@ describe(function() {
     if (bootstrap) {
       args = [
         'bootstrap'
+      ];
+    }
+    if (stats) {
+      args = [
+        'stats'
       ];
     }
     if (save) {
@@ -687,5 +693,50 @@ describe(function() {
     });
 
     assertNoUnstaged(status);
+  });
+
+  it('can show single blueprint stats', async function() {
+    let {
+      packageName,
+      location,
+      version: from
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
+
+    let {
+      version: to
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+
+    let {
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
+      commitMessage: 'my-app',
+      stats: true,
+      blueprint: packageName,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/app/local',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+      }
+    });
+
+    let result = '';
+
+    ps.stdout.on('data', data => {
+      let str = data.toString();
+      result += str;
+    });
+
+    let {
+      status
+    } = await promise;
+
+    assertNoStaged(status);
+
+    expect(result).to.equal(`${packageName}, current: ${from}, latest: ${to}
+`);
   });
 });
