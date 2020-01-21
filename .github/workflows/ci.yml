@@ -57,3 +57,19 @@ jobs:
     - run: npm run ${{ matrix.test-command }}
       env:
         NODE_LTS: ${{ matrix.node == 8 }}
+
+  ember-cli-update:
+    needs: test
+    if: github.event_name == 'pull_request'
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: ${{ github.head_ref }}
+        token: ${{ secrets.GitHubToken }}
+    - uses: actions/setup-node@v1.1.0
+    - uses: kellyselden/ember-cli-update-action@v1.2.2
+      with:
+        autofix_command: npm run lint -- --fix

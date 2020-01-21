@@ -72,6 +72,10 @@
     "sinon": "^8.0.0",
     "sinon-chai": "^3.3.0"
   },
+  "optionalDependencies": {
+    "@kellyselden/node-template": "0.5.2",
+    "standard-node-template": "0.0.1"
+  },
   "ember-addon": {
     "main": "src/ember-addon.js"
   }
