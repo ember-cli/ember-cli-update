@@ -54,7 +54,7 @@ jobs:
     - run: npm i -g ember-cli@2.11.1
 
     - run: npm ci
-    - run: npm run ${{ matrix.test-command }}
+    - run: npm run ${{ matrix.test-command }} -- --retries 1
       env:
         NODE_LTS: ${{ matrix.node == 8 }}
 
