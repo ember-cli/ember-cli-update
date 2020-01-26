@@ -73,7 +73,7 @@
     "sinon-chai": "^3.3.0"
   },
   "optionalDependencies": {
-    "@kellyselden/node-template": "0.5.8",
+    "@kellyselden/node-template": "0.6.0",
     "standard-node-template": "0.0.1"
   },
   "ember-addon": {
