@@ -1,0 +1,35 @@
+language: node_js
+node_js:
+- '8'
+branches:
+  only:
+  - master
+  # npm version tags
+  - /^v\d+\.\d+\.\d+$/
+cache:
+  directories:
+  - "$HOME/.npm"
+jobs:
+  include:
+  - name: test
+    before_script:
+    - npm run lint
+  - if: branch = master AND type = pull_request
+    name: ember-cli-update
+    script:
+    - git checkout $TRAVIS_PULL_REQUEST_SHA
+    - git checkout -B $TRAVIS_PULL_REQUEST_BRANCH
+    - git remote set-url origin https://$GITHUB_TOKEN@github.com/$TRAVIS_PULL_REQUEST_SLUG.git
+    - npx https://github.com/kellyselden/ember-cli-update-action.git#semver:^1.3.11 --pull-request-url https://api.github.com/repos/$TRAVIS_REPO_SLUG/pulls/$TRAVIS_PULL_REQUEST --autofix-command "npm run lint -- --fix"
+  - if: tag IS present
+    name: deploy
+    install: ignore
+    script: ignore
+    deploy:
+      provider: npm
+      email: kellyselden@gmail.com
+      api_key: $NPM_TOKEN
+      edge: true # opt in to dpl v2
+      on:
+        tags: true
+        repo: ember-cli/ember-cli-update

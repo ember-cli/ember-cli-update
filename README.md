@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ember-cli-update
 
 [![npm version](https://badge.fury.io/js/ember-cli-update.svg)](https://badge.fury.io/js/ember-cli-update)
@@ -157,3 +158,9 @@ If you are getting an error or unexpected results, running the command with the 
 * Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,boilerplate-update,git-diff-apply && ember update`
 
 will give you more detailed logging.
+=======
+
+
+
+[![Build Status](https://travis-ci.org/ember-cli/ember-cli-update.svg?branch=master)](https://travis-ci.org/ember-cli/ember-cli-update)
+>>>>>>> 3f9f445... v0.9.2...v0.10.0
