@@ -13,13 +13,14 @@
     },
     {
       "name": "@kellyselden/node-template",
-      "version": "0.9.2",
+      "version": "0.10.0",
       "blueprints": [
         {
           "name": "@kellyselden/node-template",
           "options": [
             "--repo-slug=ember-cli/ember-cli-update",
-            "--ci-provider=github-actions"
+            "--appveryor=iguxxyxkiu9kyeyo",
+            "--github-actions"
           ]
         }
       ]
