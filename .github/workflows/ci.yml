@@ -56,6 +56,7 @@ jobs:
       timeout-minutes: 10
       env:
         NODE_LTS: ${{ matrix.node == 8 }}
+        DEBUG: ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures
 
   ember-cli-update:
     needs: test
