@@ -10,10 +10,10 @@
   "scripts": {
     "lint": "eslint . --ext js,json",
     "start": "bin/ember-cli-update.js",
-    "test": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures mocha \"test/!(fixtures)/**/*-test.js\"",
-    "test:command": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures mocha test/acceptance/ember-addon-test.js",
-    "test:bin": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures mocha test/acceptance/ember-cli-update-test.js",
-    "test:fast": "cross-env DEBUG=ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures mocha \"test/+(integration|unit)/**/*-test.js\""
+    "test": "mocha \"test/!(fixtures)/**/*-test.js\"",
+    "test:command": "mocha test/acceptance/ember-addon-test.js",
+    "test:bin": "mocha test/acceptance/ember-cli-update-test.js",
+    "test:fast": "mocha \"test/+(integration|unit)/**/*-test.js\""
   },
   "repository": {
     "type": "git",
@@ -56,7 +56,6 @@
     "chai-as-promised": "^7.1.1",
     "chai-fs": "^2.0.0",
     "chai-string": "^1.5.0",
-    "cross-env": "^6.0.0",
     "ember-cli": "3.11.0-beta.1",
     "eslint": "^6.8.0",
     "eslint-config-sane": "0.8.5",
