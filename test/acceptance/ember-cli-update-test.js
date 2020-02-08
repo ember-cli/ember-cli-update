@@ -24,6 +24,10 @@ const overwriteBlueprintFiles = require('../../src/overwrite-blueprint-files');
 
 const toDefault = require('../../src/args').to.default;
 
+const select = ' ';
+const down = '\u001b[B';
+const enter = '\n';
+
 describe(function() {
   this.timeout(30 * 1000);
 
@@ -187,7 +191,7 @@ describe(function() {
       function stdoutData(data) {
         let str = data.toString();
         if (str.includes('These codemods apply to your project.')) {
-          ps.stdin.write(' \n');
+          ps.stdin.write(`${select}${enter}`);
           ps.stdout.removeListener('data', stdoutData);
           resolve();
         }
@@ -298,8 +302,6 @@ describe(function() {
       function whichBlueprint(data) {
         let str = data.toString();
         if (str.includes('Blueprint updates have been found.')) {
-          let down = '\u001b[B';
-          let enter = '\n';
           ps.stdin.write(`${down}${enter}`);
           ps.stdout.removeListener('data', whichBlueprint);
           resolve();
@@ -311,8 +313,6 @@ describe(function() {
       function whichVersion(data) {
         let str = data.toString();
         if (str.includes('Do you want the latest version?')) {
-          let down = '\u001b[B';
-          let enter = '\n';
           ps.stdin.write(`${down}${enter}`);
           ps.stdout.removeListener('data', whichVersion);
           resolve();
@@ -325,7 +325,6 @@ describe(function() {
         let str = data.toString();
         if (str.includes('What version?')) {
           let range = to;
-          let enter = '\n';
           ps.stdin.write(`${range}${enter}`);
           ps.stdout.removeListener('data', customVersion);
           resolve();
@@ -377,8 +376,6 @@ describe(function() {
       function whichBlueprint(data) {
         let str = data.toString();
         if (str.includes('Which blueprint would you like to reset?')) {
-          let down = '\u001b[B';
-          let enter = '\n';
           ps.stdin.write(`${down}${enter}`);
           ps.stdout.removeListener('data', whichBlueprint);
           resolve();
