@@ -419,7 +419,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         });
 
         fixtureCompare({
-          mergeFixtures: 'test/fixtures/blueprint/app/local-app/reset/my-app'
+          mergeFixtures: 'test/fixtures/blueprint/app/local-app/reset/merge/my-app'
         });
 
         assertNoStaged(status);

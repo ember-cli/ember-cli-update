@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 0,
+  "packages": [
+    {
+      "name": "ember-cli-update-npm-blueprint-test",
+      "version": "0.0.24",
+      "blueprints": [
+        {
+          "name": "ember-cli-update-npm-blueprint-test",
+          "isBaseBlueprint": true
+        }
+      ]
+    },
+    {
+      "name": "ember-cli-update-git-blueprint-test",
+      "location": "../local-blueprint",
+      "version": "0.0.0",
+      "blueprints": [
+        {
+          "name": "ember-cli-update-git-blueprint-test",
+          "codemodsSource": "test-codemods",
+          "options": [
+            "--supplied-option=foo"
+          ]
+        }
+      ]
+    }
+  ]
+}
