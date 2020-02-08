@@ -86,7 +86,7 @@ module.exports = async function emberCliUpdate({
 
     let packageName = parsedPackage.name;
     if (!packageName) {
-      let downloadedPackage = await downloadPackage(null, packageUrl, to);
+      let downloadedPackage = await downloadPackage(null, packageUrl, toDefault);
       packageName = downloadedPackage.name;
     }
 
