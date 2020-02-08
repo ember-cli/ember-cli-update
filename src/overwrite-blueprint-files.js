@@ -2,6 +2,9 @@
 
 const blueprintOverwriteRegex = /^\? Overwrite (.+)\? /m;
 
+const yes = 'y';
+const enter = '\n';
+
 function overwriteBlueprintFiles(ps) {
   let existingMatches = [];
 
@@ -17,8 +20,6 @@ function overwriteBlueprintFiles(ps) {
 
     let matches = str.match(blueprintOverwriteRegex);
     if (matches) {
-      let yes = 'y';
-      let enter = '\n';
       ps.stdin.write(`${yes}${enter}`);
 
       existingMatches.push(matches[1]);
