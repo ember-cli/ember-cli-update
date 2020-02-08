@@ -55,7 +55,6 @@ module.exports = async function emberCliUpdate({
   runCodemods,
   codemodsSource,
   codemodsJson,
-  reset,
   compareOnly,
   statsOnly,
   listCodemods,
@@ -104,7 +103,7 @@ module.exports = async function emberCliUpdate({
       blueprint.version = from;
     }
 
-    if (!blueprint.version && !reset) {
+    if (!blueprint.version) {
       throw new Error('A custom blueprint cannot detect --from. You must supply it.');
     }
   } else {
@@ -120,7 +119,6 @@ module.exports = async function emberCliUpdate({
       } = await chooseBlueprintUpdates({
         cwd,
         emberCliUpdateJson,
-        reset,
         to
       });
 
@@ -129,9 +127,7 @@ module.exports = async function emberCliUpdate({
       }
 
       blueprint = _blueprint;
-      if (!reset) {
-        to = _to;
-      }
+      to = _to;
     }
   }
 
@@ -185,10 +181,7 @@ module.exports = async function emberCliUpdate({
         throw 'cannot checkout older versions of glimmer blueprint';
       }
 
-      let startBlueprint;
-      if (!reset) {
-        startBlueprint = { ...blueprint };
-      }
+      let startBlueprint = { ...blueprint };
       endBlueprint = { ...blueprint };
       delete endBlueprint.version;
 
@@ -240,7 +233,6 @@ module.exports = async function emberCliUpdate({
     remoteUrl: ({ projectOptions }) => getRemoteUrl(projectOptions),
     compareOnly,
     resolveConflicts,
-    reset,
     statsOnly,
     listCodemods,
     runCodemods,
@@ -260,12 +252,10 @@ module.exports = async function emberCliUpdate({
           blueprint: endBlueprint
         });
 
-        if (!reset) {
-          await stageBlueprintFile({
-            cwd,
-            emberCliUpdateJsonPath
-          });
-        }
+        await stageBlueprintFile({
+          cwd,
+          emberCliUpdateJsonPath
+        });
       }
 
       return result;

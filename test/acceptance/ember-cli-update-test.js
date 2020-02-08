@@ -94,7 +94,10 @@ describe(function() {
       ];
     }
     if (reset) {
-      args.push('--reset');
+      args = [
+        'reset',
+        ...to ? [`--to=${to}`] : []
+      ];
     }
     if (blueprint) {
       args.push(`-b=${blueprint}`);
@@ -350,15 +353,18 @@ describe(function() {
 
   it('can reset from multiple blueprint', async function() {
     let {
-      location,
+      location
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/local/my-app/config/ember-cli-update.json')).blueprints[1];
+
+    let {
       version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       ps,
       promise
     } = await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/reset/local',
       commitMessage: 'my-app',
       reset: true,
       to,
@@ -396,15 +402,42 @@ describe(function() {
   });
 
   it('can reset the default blueprint', async function() {
+    let commitMessage = 'my-app';
+
+    let {
+      ps,
+      promise
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage,
+      reset: true,
+      to: '2.11.1',
+      async beforeMerge() {
+        await fs.copy(
+          path.resolve(__dirname, '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'),
+          path.join(tmpPath, 'config/ember-cli-update.json')
+        );
+
+        await commit({ m: commitMessage, cwd: tmpPath });
+      }
+    });
+
+    let whichBlueprint = new Promise(resolve => {
+      function whichBlueprint(data) {
+        let str = data.toString();
+        if (str.includes('Which blueprint would you like to reset?')) {
+          ps.stdin.write(`${down}${enter}`);
+          ps.stdout.removeListener('data', whichBlueprint);
+          resolve();
+        }
+      }
+      ps.stdout.on('data', whichBlueprint);
+    });
+    await whichBlueprint;
+
     let {
       status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app',
-      init: true,
-      reset: true,
-      to: '2.11.1'
-    })).promise;
+    } = await promise;
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/reset/my-app'
