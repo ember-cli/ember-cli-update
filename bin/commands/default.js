@@ -2,6 +2,7 @@
 
 const args = require('../../src/args');
 const emberCliUpdate = require('../../src');
+const reset = require('../../src/reset');
 
 module.exports.command = '$0';
 
@@ -9,10 +10,15 @@ module.exports.builder = args;
 
 module.exports.handler = async function handler(argv) {
   try {
-    let result = await emberCliUpdate({
-      ...argv,
-      blueprintOptions: argv._.slice(0)
-    });
+    let result;
+    if (argv.reset) {
+      result = await reset(argv);
+    } else {
+      result = await emberCliUpdate({
+        ...argv,
+        blueprintOptions: argv._.slice(0)
+      });
+    }
 
     let ps = result.resolveConflictsProcess;
     if (ps) {

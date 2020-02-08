@@ -4,8 +4,6 @@ const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprintPackage = require('./parse-blueprint-package');
 const saveBlueprint = require('./save-blueprint');
-const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
-const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const { getBlueprintRelativeFilePath } = require('./get-blueprint-file-path');
 const findBlueprint = require('./find-blueprint');
@@ -13,6 +11,7 @@ const getBaseBlueprint = require('./get-base-blueprint');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
+const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 
 module.exports = async function reset({
   blueprint: _blueprint,
@@ -25,67 +24,73 @@ module.exports = async function reset({
   // We must rely on a lookup before the run.
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
-  let packageName;
-  let name;
-  let location;
-  let url;
+  let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
+
+  let { blueprints } = emberCliUpdateJson;
+
+  if (!blueprints.length) {
+    throw new Error('No blueprints found.');
+  }
+
+  let blueprint;
+  let packageInfo;
+
   if (_blueprint) {
     let parsedPackage = await parseBlueprintPackage({
       cwd,
       blueprint: _blueprint
     });
-    packageName = parsedPackage.name;
-    name = parsedPackage.name;
-    location = parsedPackage.location;
-    url = parsedPackage.url;
-  } else {
-    let defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
-    packageName = defaultBlueprint.packageName;
-    name = defaultBlueprint.name;
-  }
+    let url = parsedPackage.url;
 
-  let packageInfo = await resolvePackage({
-    name: packageName,
-    url,
-    range: to
-  });
+    packageInfo = await resolvePackage({
+      name: parsedPackage.name,
+      url,
+      range: to
+    });
 
-  packageName = packageInfo.name;
-  if (!name) {
-    name = packageInfo.name;
-  }
-  let version = packageInfo.version;
-  let path = packageInfo.path;
+    let packageName = packageInfo.name;
+    let name = packageInfo.name;
 
-  let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
+    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
+    if (!existingBlueprint) {
+      throw new Error('Blueprint not found.');
+    }
 
-  let blueprint;
-
-  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
-  if (existingBlueprint) {
     blueprint = existingBlueprint;
   } else {
-    blueprint = {
-      packageName,
-      name,
-      location
-    };
+    let {
+      blueprint: _blueprint
+    } = await chooseBlueprintUpdates({
+      cwd,
+      emberCliUpdateJson,
+      reset: true
+    });
+
+    blueprint = _blueprint;
+
+    let parsedPackage = await parseBlueprintPackage({
+      cwd,
+      blueprint: blueprint.location || blueprint.packageName
+    });
+    let url = parsedPackage.url;
+
+    packageInfo = await resolvePackage({
+      name: blueprint.packageName,
+      url,
+      range: to
+    });
   }
 
-  blueprint = loadSafeBlueprint(blueprint);
+  blueprint.version = packageInfo.version;
+  blueprint.path = packageInfo.path;
 
-  blueprint.version = version;
-  blueprint.path = path;
-
-  let baseBlueprint = await getBaseBlueprint({
-    cwd,
-    blueprints: emberCliUpdateJson.blueprints,
-    blueprint
-  });
-
-  if (!baseBlueprint) {
-    // for non-existing default blueprints
-    blueprint.isBaseBlueprint = true;
+  let baseBlueprint;
+  if (!blueprint.isBaseBlueprint) {
+    baseBlueprint = await getBaseBlueprint({
+      cwd,
+      blueprints,
+      blueprint
+    });
   }
 
   let {

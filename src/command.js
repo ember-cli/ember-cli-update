@@ -1,6 +1,7 @@
 'use strict';
 
 const emberCliUpdate = require('.');
+const reset = require('./reset');
 const args = require('./args');
 
 module.exports = {
@@ -82,7 +83,12 @@ module.exports = {
   ],
 
   async run(options) {
-    let result = await emberCliUpdate(options);
+    let result;
+    if (options.reset) {
+      result = await reset(options);
+    } else {
+      result = await emberCliUpdate(options);
+    }
 
     let ps = result.resolveConflictsProcess;
     if (ps) {

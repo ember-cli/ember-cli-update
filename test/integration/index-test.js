@@ -15,8 +15,7 @@ const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
 const utils = require('boilerplate-update/src/utils');
 const {
-  assertNoUnstaged,
-  assertNoStaged
+  assertNoUnstaged
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
@@ -191,25 +190,6 @@ describe(function() {
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(stderr).to.contain('version cannot be determined');
-  });
-
-  it('resets app', async function() {
-    let {
-      status
-    } = await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app',
-      reset: true,
-      to: '2.11.1'
-    });
-
-    fixtureCompare({
-      mergeFixtures: 'test/fixtures/app/reset/my-app'
-    });
-
-    expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
-
-    assertNoStaged(status);
   });
 
   it('opens compare url', async function() {
@@ -393,36 +373,6 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
         });
 
         assertNoUnstaged(status);
-      });
-
-      it('resets blueprint', async function() {
-        let {
-          location,
-          version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
-
-        let {
-          status
-        } = await merge({
-          fixturesPath: 'test/fixtures/blueprint/app/local-app/merge',
-          commitMessage: 'my-app',
-          reset: true,
-          to,
-          blueprint: 'ember-cli-update-git-blueprint-test',
-          async beforeMerge() {
-            await initBlueprint({
-              fixturesPath: 'test/fixtures/blueprint/app/local',
-              resolvedFrom: tmpPath,
-              relativeDir: location
-            });
-          }
-        });
-
-        fixtureCompare({
-          mergeFixtures: 'test/fixtures/blueprint/app/local-app/reset/merge/my-app'
-        });
-
-        assertNoStaged(status);
       });
     });
 
