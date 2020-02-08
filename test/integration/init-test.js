@@ -11,7 +11,6 @@ const {
 } = require('git-fixtures');
 const init = require('../../src/init');
 const {
-  assertNoStaged,
   assertNoUnstaged
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
@@ -74,57 +73,6 @@ describe(init, function() {
       expected
     });
   }
-
-  it('can reset a custom blueprint', async function() {
-    let [
-      {
-        packageName
-      },
-      {
-        location,
-        options,
-        codemodsSource,
-        version: to
-      }
-    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/my-app/config/ember-cli-update.json')).blueprints;
-
-    await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/init',
-      commitMessage: 'my-app',
-      blueprint: packageName
-    });
-
-    let commitMessage = 'base init';
-
-    await commit({ m: commitMessage });
-
-    await initBlueprint({
-      fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
-      resolvedFrom: tmpPath,
-      relativeDir: location
-    });
-
-    let {
-      status
-    } = await processExit({
-      promise: init({
-        reset: true,
-        blueprint: location,
-        to,
-        codemodsSource,
-        blueprintOptions: options
-      }),
-      cwd: tmpPath,
-      commitMessage,
-      expect
-    });
-
-    fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/app/local-app/reset/my-app'
-    });
-
-    assertNoStaged(status);
-  });
 
   it('can initialize a custom blueprint', async function() {
     let [
