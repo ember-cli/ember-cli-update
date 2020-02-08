@@ -302,7 +302,7 @@ describe(function() {
       function whichBlueprint(data) {
         let str = data.toString();
         if (str.includes('Blueprint updates have been found.')) {
-          ps.stdin.write(`${down}${enter}`);
+          ps.stdin.write(`${enter}`);
           ps.stdout.removeListener('data', whichBlueprint);
           resolve();
         }
