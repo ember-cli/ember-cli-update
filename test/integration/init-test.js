@@ -154,14 +154,16 @@ describe(init, function() {
       relativeDir: location
     });
 
+    let { promise } = await init({
+      blueprint: location,
+      codemodsSource,
+      blueprintOptions: options
+    });
+
     let {
       status
     } = await processExit({
-      promise: init({
-        blueprint: location,
-        codemodsSource,
-        blueprintOptions: options
-      }),
+      promise,
       cwd: tmpPath,
       commitMessage,
       expect
