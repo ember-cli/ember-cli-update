@@ -50,7 +50,7 @@ module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
   blueprintOptions,
   from,
-  to = defaultTo,
+  to,
   resolveConflicts,
   runCodemods,
   codemodsSource,
@@ -72,7 +72,6 @@ module.exports = async function emberCliUpdate({
 
   let blueprint;
   let packageUrl;
-  let isPersistedBlueprint;
 
   if (_blueprint) {
     let parsedPackage = await parseBlueprintPackage({
@@ -89,7 +88,6 @@ module.exports = async function emberCliUpdate({
 
     let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, packageName);
     if (existingBlueprint) {
-      isPersistedBlueprint = true;
       blueprint = existingBlueprint;
     } else {
       blueprint = {
@@ -115,8 +113,6 @@ module.exports = async function emberCliUpdate({
     if (!blueprints.length) {
       blueprint = loadDefaultBlueprint();
     } else {
-      isPersistedBlueprint = true;
-
       let {
         areAllUpToDate,
         blueprint: _blueprint,
@@ -124,7 +120,8 @@ module.exports = async function emberCliUpdate({
       } = await chooseBlueprintUpdates({
         cwd,
         emberCliUpdateJson,
-        reset
+        reset,
+        to
       });
 
       if (areAllUpToDate) {
@@ -165,6 +162,10 @@ module.exports = async function emberCliUpdate({
   if (!baseBlueprint) {
     // for non-existing blueprints
     blueprint.isBaseBlueprint = true;
+  }
+
+  if (typeof to !== 'string') {
+    to = defaultTo;
   }
 
   let endBlueprint;
@@ -259,7 +260,7 @@ module.exports = async function emberCliUpdate({
     promise: (async() => {
       let result = await promise;
 
-      if (_blueprint || isPersistedBlueprint) {
+      if (!(compareOnly || statsOnly || listCodemods || runCodemods)) {
         await saveBlueprint({
           emberCliUpdateJsonPath,
           blueprint: endBlueprint

@@ -29,9 +29,9 @@ async function chooseBlueprint({
 async function chooseBlueprintUpdates({
   cwd,
   emberCliUpdateJson,
-  reset
+  reset,
+  to
 }) {
-  let to;
   let existingBlueprint;
   let areAllUpToDate;
 
@@ -87,28 +87,30 @@ All blueprints are up-to-date!`);
 
       existingBlueprint = blueprintUpdate.blueprint;
 
-      let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
+      if (typeof to !== 'string') {
+        let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
 
-      let answer = await inquirer.prompt([{
-        type: 'list',
-        message: 'Do you want the latest version?',
-        name: 'choice',
-        choices: [
-          latestVersion,
-          'SemVer string'
-        ]
-      }]);
-
-      if (answer.choice === latestVersion) {
-        to = defaultTo;
-      } else {
-        answer = await inquirer.prompt([{
-          type: 'input',
-          message: 'What version?',
-          name: 'semver'
+        let answer = await inquirer.prompt([{
+          type: 'list',
+          message: 'Do you want the latest version?',
+          name: 'choice',
+          choices: [
+            latestVersion,
+            'SemVer string'
+          ]
         }]);
 
-        to = answer.semver;
+        if (answer.choice === latestVersion) {
+          to = defaultTo;
+        } else {
+          answer = await inquirer.prompt([{
+            type: 'input',
+            message: 'What version?',
+            name: 'semver'
+          }]);
+
+          to = answer.semver;
+        }
       }
     }
   }
