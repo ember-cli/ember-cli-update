@@ -78,7 +78,7 @@ ember-cli-update --run-codemods
 | --resolve-conflicts | Automatically run git mergetool if conflicts found | Boolean | | false |
 | --run-codemods | Run codemods to help update your code | Boolean | | false |
 | --codemods-source | Supply your own codemods manifest via URL | String | "ember-app-codemods-manifest@*" "git+https://github.com/ember-cli/ember-app-codemods-manifest.git#semver:*" | |
-| --codemods-json | Supply your own codemods manifest via JSON | String | '{ /* json */ }' | |
+| --codemods-json | Supply your own codemods manifest via JSON | String | `{ /* json */ }` | |
 | --reset | Reset your code to the default blueprint at the new version | Boolean | | false |
 | --compare-only | Show the changes between different versions without updating | Boolean | | false |
 | --stats-only | Show all calculated values regarding your project | Boolean | | false |

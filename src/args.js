@@ -4,7 +4,7 @@ module.exports = {
   'blueprint': {
     alias: ['b'],
     type: 'string',
-    description: 'Provide a custom blueprint for use in the update'
+    description: 'Provide a custom blueprint for use in the update ("@glimmer/blueprint", "git+https://git@github.com/tildeio/libkit.git", "../blueprint")'
   },
   'from': {
     type: 'string',
@@ -26,11 +26,11 @@ module.exports = {
   },
   'codemods-source': {
     type: 'string',
-    description: 'Supply your own codemods manifest via URL'
+    description: 'Supply your own codemods manifest via URL ("ember-app-codemods-manifest@*", "git+https://github.com/ember-cli/ember-app-codemods-manifest.git#semver:*")'
   },
   'codemods-json': {
     type: 'string',
-    description: 'Supply your own codemods manifest via JSON'
+    description: 'Supply your own codemods manifest via JSON (`{ /* json */ }`)'
   },
   'reset': {
     type: 'boolean',
