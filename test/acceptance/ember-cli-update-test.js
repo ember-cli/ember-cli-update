@@ -160,8 +160,6 @@ describe(function() {
   });
 
   it('runs codemods', async function() {
-    this.timeout(5 * 60 * 1000);
-
     async function _merge(src, dest) {
       await fs.copy(
         path.resolve(__dirname, `../fixtures/codemod/codemods/ember-modules-codemod/${src}/my-app`),
@@ -275,8 +273,6 @@ describe(function() {
   });
 
   it('can pick from multiple blueprints', async function() {
-    this.timeout(15 * 60 * 1000);
-
     let {
       location,
       version: to
@@ -397,8 +393,6 @@ describe(function() {
   });
 
   it('can reset the default blueprint', async function() {
-    this.timeout(5 * 60 * 1000);
-
     let {
       status
     } = await (await merge({
@@ -424,8 +418,6 @@ describe(function() {
   });
 
   it('can init the default blueprint', async function() {
-    this.timeout(5 * 60 * 1000);
-
     let {
       status
     } = await (await merge({
@@ -450,7 +442,7 @@ describe(function() {
   });
 
   it('can install an addon with a default blueprint and a state file', async function() {
-    this.timeout(3 * 60 * 1000);
+    this.timeout(60 * 1000);
 
     let {
       location
@@ -491,7 +483,7 @@ describe(function() {
   });
 
   it('can update a legacy addon blueprint', async function() {
-    this.timeout(15 * 60 * 1000);
+    this.timeout(3 * 60 * 1000);
 
     let {
       name,
@@ -534,7 +526,7 @@ describe(function() {
   // in existing npm addons
   // https://github.com/salsify/ember-cli-dependency-lint/blob/v1.0.3/lib/commands/dependency-lint.js#L5
   it('can update a npm addon blueprint', async function() {
-    this.timeout(15 * 60 * 1000);
+    this.timeout(3 * 60 * 1000);
 
     let {
       name,
@@ -640,8 +632,6 @@ describe(function() {
   });
 
   it('can update a legacy blueprint without a state file', async function() {
-    this.timeout(3 * 60 * 1000);
-
     let {
       location,
       version: from,
