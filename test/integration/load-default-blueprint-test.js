@@ -147,4 +147,22 @@ describe(_loadDefaultBlueprint, function() {
       });
     });
   });
+
+  describe('glimmer', function() {
+    beforeEach(function() {
+      projectOptions.push('glimmer');
+    });
+
+    it('works', async function() {
+      let blueprint = loadDefaultBlueprint();
+
+      expect(blueprint).to.deep.equal({
+        packageName: '@glimmer/blueprint',
+        name: '@glimmer/blueprint',
+        version,
+        isBaseBlueprint: true,
+        options: []
+      });
+    });
+  });
 });

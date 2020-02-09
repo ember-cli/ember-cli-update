@@ -13,7 +13,7 @@ const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const saveBlueprint = require('./save-blueprint');
-const loadDefaultBlueprint = require('./load-default-blueprint');
+const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const stageBlueprintFile = require('./stage-blueprint-file');
 const { getBlueprintRelativeFilePath } = require('./get-blueprint-file-path');
@@ -111,7 +111,7 @@ module.exports = async function emberCliUpdate({
     let { blueprints } = emberCliUpdateJson;
 
     if (!blueprints.length) {
-      blueprint = loadDefaultBlueprint();
+      blueprint = await loadDefaultBlueprintFromDisk(cwd, from);
     } else {
       let {
         areAllUpToDate,
@@ -186,15 +186,9 @@ module.exports = async function emberCliUpdate({
       }
 
       let startBlueprint;
-
-      if (!isCustomBlueprint && createCustomDiff) {
-        blueprint = loadDefaultBlueprint(projectOptions, blueprint.version);
-      }
-
       if (!reset) {
         startBlueprint = { ...blueprint };
       }
-
       endBlueprint = { ...blueprint };
       delete endBlueprint.version;
 

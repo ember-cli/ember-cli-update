@@ -6,18 +6,30 @@ const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const utils = require('./utils');
+const {
+  defaultPackageName
+} = require('./constants');
 
-async function loadDefaultBlueprintFromDisk(cwd) {
-  let packageJson = utils.require(path.join(cwd, 'package'));
+async function loadDefaultBlueprintFromDisk(cwd, version) {
+  let packageJson;
+  try {
+    packageJson = utils.require(path.join(cwd, 'package'));
+  } catch (err) {}
 
-  let projectOptions = await getProjectOptions(packageJson);
+  let projectOptions;
 
-  let packageName = 'ember-cli';
-  let packageVersion = getPackageVersion(packageJson, packageName);
+  if (packageJson) {
+    projectOptions = await getProjectOptions(packageJson);
 
-  let versions = await utils.getVersions(packageName);
+    if (!projectOptions.includes('glimmer')) {
+      let packageName = defaultPackageName;
+      let packageVersion = getPackageVersion(packageJson, packageName);
 
-  let version = getProjectVersion(packageVersion, versions, projectOptions);
+      let versions = await utils.getVersions(packageName);
+
+      version = getProjectVersion(packageVersion, versions, projectOptions);
+    }
+  }
 
   let blueprint = loadDefaultBlueprint(projectOptions, version);
 

@@ -3,10 +3,14 @@
 const {
   defaultPackageName,
   defaultAppBlueprintName,
-  defaultAddonBlueprintName
+  defaultAddonBlueprintName,
+  glimmerPackageName
 } = require('./constants');
 
 function isDefaultBlueprint({ packageName, name }) {
+  if (packageName === glimmerPackageName && name === glimmerPackageName) {
+    return true;
+  }
   return packageName === defaultPackageName && [
     defaultAppBlueprintName,
     defaultAddonBlueprintName
