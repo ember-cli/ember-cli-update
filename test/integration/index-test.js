@@ -18,8 +18,7 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
-
-const toDefault = require('../../src/args').to.default;
+const { defaultTo } = require('../../src/constants');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -458,7 +457,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
           fixturesPath: 'test/fixtures/blueprint/app/npm-app/local',
           commitMessage: 'my-app',
           blueprint: name,
-          to: toDefault,
+          to: defaultTo,
           async beforeMerge() {
             // test local base blueprints
             await initBlueprint({

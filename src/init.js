@@ -13,14 +13,11 @@ const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
-
-const {
-  'to': { default: toDefault }
-} = require('./args');
+const { defaultTo } = require('./constants');
 
 module.exports = async function init({
   blueprint: _blueprint,
-  to = toDefault,
+  to = defaultTo,
   resolveConflicts,
   codemodsSource,
   reset,

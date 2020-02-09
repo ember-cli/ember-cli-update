@@ -23,10 +23,7 @@ const getBaseBlueprint = require('./get-base-blueprint');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
-
-const {
-  'to': { default: toDefault }
-} = require('./args');
+const { defaultTo } = require('./constants');
 
 async function _resolvePackage(blueprint, url, range) {
   if (blueprint.version && !url) {
@@ -53,7 +50,7 @@ module.exports = async function emberCliUpdate({
   blueprint: _blueprint,
   blueprintOptions,
   from,
-  to = toDefault,
+  to = defaultTo,
   resolveConflicts,
   runCodemods,
   codemodsSource,
@@ -86,7 +83,7 @@ module.exports = async function emberCliUpdate({
 
     let packageName = parsedPackage.name;
     if (!packageName) {
-      let downloadedPackage = await downloadPackage(null, packageUrl, toDefault);
+      let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
       packageName = downloadedPackage.name;
     }
 

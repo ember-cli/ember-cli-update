@@ -1,5 +1,7 @@
 'use strict';
 
+const { defaultTo } = require('./constants');
+
 module.exports = {
   'blueprint': {
     alias: ['b'],
@@ -12,7 +14,7 @@ module.exports = {
   },
   'to': {
     type: 'string',
-    default: '*',
+    default: defaultTo,
     description: 'Update to a version that isn\'t latest ("2.14.1", "~2.15", "latest", "beta")'
   },
   'resolve-conflicts': {
