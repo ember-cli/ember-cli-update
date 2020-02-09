@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs-extra');
+const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const {
@@ -12,11 +14,10 @@ const {
   assertNormalUpdate,
   assertNoUnstaged
 } = require('../helpers/assertions');
-const run = require('../../src/run');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
 
 describe(function() {
-  this.timeout(3 * 60 * 1000);
+  this.timeout(30 * 1000);
 
   let tmpPath;
 
@@ -59,6 +60,8 @@ describe(function() {
   }
 
   it('works', async function() {
+    let before;
+
     let {
       status
     } = await merge({
@@ -66,10 +69,23 @@ describe(function() {
       commitMessage: 'my-app',
       async beforeMerge() {
         await mutatePackageJson(tmpPath, pkg => {
-          pkg.devDependencies['ember-cli-update'] = '*';
+          before = pkg.devDependencies;
+          pkg.devDependencies = {
+            'ember-cli': before['ember-cli'],
+            'ember-cli-update': ''
+          };
         });
 
-        await run('npm install --no-package-lock', { cwd: tmpPath });
+        let nodeModules = path.join(tmpPath, 'node_modules');
+        await fs.ensureDir(nodeModules);
+        await fs.symlink(
+          path.resolve(__dirname, '../..'),
+          path.join(nodeModules, 'ember-cli-update')
+        );
+        await fs.symlink(
+          path.resolve(path.dirname(require.resolve('ember-cli')), '../..'),
+          path.join(nodeModules, 'ember-cli')
+        );
 
         await commit({
           m: 'my-app',
@@ -78,9 +94,11 @@ describe(function() {
       }
     });
 
-    // remove addon because it's not in the fixtures
     await mutatePackageJson(tmpPath, pkg => {
-      delete pkg.devDependencies['ember-cli-update'];
+      // The tradeoff of not npm installing is we don't get to
+      // test real dep upgrades, which is acceptable for the
+      // ember addon method.
+      pkg.devDependencies = require('../fixtures/app/merge/my-app/package').devDependencies;
     });
 
     fixtureCompare({
