@@ -4,31 +4,41 @@ const loadSafeBlueprint = require('./load-safe-blueprint');
 const {
   defaultPackageName,
   defaultAppBlueprintName,
-  defaultAddonBlueprintName
+  defaultAddonBlueprintName,
+  glimmerPackageName
 } = require('./constants');
 
 function loadDefaultBlueprint(projectOptions = [], version) {
-  let name = defaultAppBlueprintName;
-  let codemodsSource = 'ember-app-codemods-manifest@1';
+  let packageName = defaultPackageName;
+  let name;
+  let codemodsSource;
   if (projectOptions.includes('addon')) {
     name = defaultAddonBlueprintName;
     codemodsSource = 'ember-addon-codemods-manifest@1';
+  } else if (projectOptions.includes('glimmer')) {
+    packageName = glimmerPackageName;
+    name = glimmerPackageName;
+  } else {
+    name = defaultAppBlueprintName;
+    codemodsSource = 'ember-app-codemods-manifest@1';
   }
 
   let options = [];
-  if (projectOptions.includes('yarn')) {
-    options.push('--yarn');
-  }
-  if (!projectOptions.includes('welcome') || projectOptions.includes('addon')) {
-    // Why do addons always have --no-welcome?
-    options.push('--no-welcome');
+  if (!projectOptions.includes('glimmer')) {
+    if (projectOptions.includes('yarn')) {
+      options.push('--yarn');
+    }
+    if (!projectOptions.includes('welcome') || projectOptions.includes('addon')) {
+      // Why do addons always have --no-welcome?
+      options.push('--no-welcome');
+    }
   }
 
   return loadSafeBlueprint({
-    packageName: defaultPackageName,
+    packageName,
     name,
     version,
-    codemodsSource,
+    ...codemodsSource ? { codemodsSource } : {},
     options,
     isBaseBlueprint: true
   });

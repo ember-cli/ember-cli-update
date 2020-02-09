@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 0,
+  "packages": [
+    {
+      "name": "@glimmer/blueprint",
+      "version": "0.6.1",
+      "blueprints": [
+        {
+          "name": "@glimmer/blueprint",
+          "isBaseBlueprint": true
+        }
+      ]
+    }
+  ]
+}
