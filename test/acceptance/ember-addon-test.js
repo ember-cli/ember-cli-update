@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs-extra');
+const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const {
@@ -66,8 +68,15 @@ describe(function() {
       commitMessage: 'my-app',
       async beforeMerge() {
         await mutatePackageJson(tmpPath, pkg => {
-          pkg.devDependencies['ember-cli-update'] = '*';
+          pkg.devDependencies['ember-cli-update'] = '';
         });
+
+        let nodeModules = path.join(tmpPath, 'node_modules');
+        await fs.ensureDir(nodeModules);
+        await fs.symlink(
+          path.resolve(__dirname, '../..'),
+          path.join(nodeModules, 'ember-cli-update')
+        );
 
         await run('npm install --no-package-lock', { cwd: tmpPath });
 
@@ -78,8 +87,8 @@ describe(function() {
       }
     });
 
-    // remove addon because it's not in the fixtures
     await mutatePackageJson(tmpPath, pkg => {
+      // remove addon because it's not in the fixtures
       delete pkg.devDependencies['ember-cli-update'];
     });
 
