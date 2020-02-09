@@ -214,15 +214,14 @@ describe(function() {
     let open = sinon.stub(utils, 'open');
 
     let {
-      result,
-      status
+      result
     } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       compareOnly: true
     });
 
-    assertNoUnstaged(status);
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
 
@@ -241,6 +240,8 @@ describe(function() {
       statsOnly: true
     });
 
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
+
     expect(result).to.equal(`project options: app, welcome
 from version: 1.13.15
 to version: 2.18.2
@@ -251,8 +252,7 @@ applicable codemods: `);
 
   it('shows stats only', async function() {
     let {
-      result,
-      status
+      result
     } = await merge({
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app',
@@ -260,7 +260,7 @@ applicable codemods: `);
       statsOnly: true
     });
 
-    assertNoStaged(status);
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(result).to.equal(`project options: app, welcome
 from version: 3.11.0-beta.1
@@ -272,15 +272,14 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
   it('lists codemods', async function() {
     let {
-      result,
-      status
+      result
     } = await merge({
       fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
       listCodemods: true
     });
 
-    assertNoStaged(status);
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     // I'm not asserting the entire list because it can be different
     // depending on which node version the tests are running under.
@@ -289,8 +288,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
 
   it('accepts codemods via json string', async function() {
     let {
-      result,
-      status
+      result
     } = await merge({
       fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
@@ -307,7 +305,7 @@ applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-help
       })
     });
 
-    assertNoStaged(status);
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(JSON.parse(result)).to.have.own.property('test-codemod-json');
   });
