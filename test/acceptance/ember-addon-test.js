@@ -60,8 +60,6 @@ describe(function() {
   }
 
   it('works', async function() {
-    let before;
-
     let {
       status
     } = await merge({
@@ -69,9 +67,8 @@ describe(function() {
       commitMessage: 'my-app',
       async beforeMerge() {
         await mutatePackageJson(tmpPath, pkg => {
-          before = pkg.devDependencies;
           pkg.devDependencies = {
-            'ember-cli': before['ember-cli'],
+            'ember-cli': pkg.devDependencies['ember-cli'],
             'ember-cli-update': ''
           };
         });
