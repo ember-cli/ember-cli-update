@@ -352,7 +352,7 @@ describe(function() {
     let {
       location,
       version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/my-app/config/ember-cli-update.json')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
 
     let {
       ps,
