@@ -8,8 +8,7 @@ const bootstrap = require('./bootstrap');
 const emberInstallAddon = require('./ember-install-addon');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
-
-const toDefault = require('./args').to.default;
+const { defaultTo } = require('./constants');
 
 module.exports = async function install({
   addon
@@ -33,7 +32,7 @@ module.exports = async function install({
   } = await resolvePackage({
     name: addon,
     url: parsedPackage.url,
-    range: toDefault
+    range: defaultTo
   });
 
   // We are double installing it, via the above and the below.

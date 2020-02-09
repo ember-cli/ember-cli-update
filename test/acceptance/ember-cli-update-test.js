@@ -21,8 +21,7 @@ const { initBlueprint } = require('../helpers/blueprint');
 const run = require('../../src/run');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const overwriteBlueprintFiles = require('../../src/overwrite-blueprint-files');
-
-const toDefault = require('../../src/args').to.default;
+const { defaultTo } = require('../../src/constants');
 
 const select = ' ';
 const down = '\u001b[B';
@@ -502,7 +501,7 @@ describe(function() {
       commitMessage: 'my-app',
       blueprint: name,
       // test semver latest resolution instead of pinned
-      to: toDefault,
+      to: defaultTo,
       async beforeMerge() {
         await initBlueprint({
           fixturesPath: 'test/fixtures/blueprint/addon/legacy',

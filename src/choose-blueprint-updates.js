@@ -3,8 +3,7 @@
 const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
 const inquirer = require('inquirer');
 const loadSafeBlueprint = require('./load-safe-blueprint');
-
-const toDefault = require('./args').to.default;
+const { defaultTo } = require('./constants');
 
 function formatBlueprintLine({
   blueprint,
@@ -101,7 +100,7 @@ All blueprints are up-to-date!`);
       }]);
 
       if (answer.choice === latestVersion) {
-        to = toDefault;
+        to = defaultTo;
       } else {
         answer = await inquirer.prompt([{
           type: 'input',
