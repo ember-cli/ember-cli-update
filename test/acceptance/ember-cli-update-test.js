@@ -160,6 +160,10 @@ describe(function() {
   });
 
   it('runs codemods', async function() {
+    if (process.platform === 'darwin') {
+      this.timeout(60 * 1000);
+    }
+
     async function _merge(src, dest) {
       await fs.copy(
         path.resolve(__dirname, `../fixtures/codemod/codemods/ember-modules-codemod/${src}/my-app`),
@@ -442,7 +446,7 @@ describe(function() {
   });
 
   it('can install an addon with a default blueprint and a state file', async function() {
-    this.timeout(60 * 1000);
+    this.timeout((process.platform === 'darwin' ? 3 : 1) * 60 * 1000);
 
     let {
       location
