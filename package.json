@@ -9,7 +9,7 @@
   },
   "scripts": {
     "lint": "eslint . --ext js,json",
-    "start": "bin/ember-cli-update.js",
+    "start": "node bin/ember-cli-update",
     "test": "mocha \"test/!(fixtures)/**/*-test.js\"",
     "test:command": "mocha test/acceptance/ember-addon-test.js",
     "test:bin": "mocha test/acceptance/ember-cli-update-test.js",
