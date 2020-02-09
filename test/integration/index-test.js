@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
@@ -7,7 +8,8 @@ const sinon = require('sinon');
 const {
   buildTmp,
   processExit,
-  fixtureCompare: _fixtureCompare
+  fixtureCompare: _fixtureCompare,
+  commit
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
@@ -257,7 +259,15 @@ applicable codemods: `);
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app',
       to: '3.15.0',
-      statsOnly: true
+      statsOnly: true,
+      async beforeMerge() {
+        await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
+
+        await commit({
+          m: 'my-app',
+          cwd: tmpPath
+        });
+      }
     });
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;

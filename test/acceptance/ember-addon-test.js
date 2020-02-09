@@ -15,6 +15,9 @@ const {
   assertNoUnstaged
 } = require('../helpers/assertions');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
+const getBlueprintFilePath = require('../../src/get-blueprint-file-path');
+const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const saveBlueprintFile = require('../../src/save-blueprint-file');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -97,6 +100,15 @@ describe(function() {
       // ember addon method.
       pkg.devDependencies = require('../fixtures/app/merge/my-app/package').devDependencies;
     });
+
+    let emberCliUpdateJsonPath = await getBlueprintFilePath(tmpPath);
+
+    let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
+
+    // remove --no-welcome
+    delete emberCliUpdateJson.blueprints[0].options;
+
+    await saveBlueprintFile(emberCliUpdateJsonPath, emberCliUpdateJson);
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/merge/my-app'

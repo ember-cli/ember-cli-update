@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 0,
+  "packages": [
+    {
+      "name": "ember-cli",
+      "version": "2.11.1",
+      "blueprints": [
+        {
+          "name": "app",
+          "codemodsSource": "ember-app-codemods-manifest@1",
+          "isBaseBlueprint": true
+        }
+      ]
+    }
+  ]
+}

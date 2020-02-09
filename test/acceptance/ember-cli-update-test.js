@@ -58,7 +58,7 @@ describe(function() {
     await beforeMerge();
 
     let args = [
-      `--to=${to}`,
+      ...to ? [`--to=${to}`] : [],
       '--resolve-conflicts'
     ];
     if (runCodemods) {
@@ -69,7 +69,7 @@ describe(function() {
     if (init) {
       args = [
         'init',
-        `--to=${to}`
+        ...to ? [`--to=${to}`] : []
       ];
     }
     if (install) {
@@ -287,7 +287,7 @@ describe(function() {
     } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
-      to,
+      to: null,
       async beforeMerge() {
         await initBlueprint({
           fixturesPath: 'test/fixtures/blueprint/app/local',
@@ -406,11 +406,6 @@ describe(function() {
       to: '2.11.1'
     })).promise;
 
-    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
-
-    await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
-
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/reset/my-app'
     });
@@ -429,11 +424,6 @@ describe(function() {
       init: true,
       to: '2.11.1'
     })).promise;
-
-    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
-
-    await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/init/my-app'
