@@ -9,7 +9,7 @@ const { promisify } = require('util');
 const tmpDir = promisify(require('tmp').dir);
 
 describe(checkForBlueprintUpdates, function() {
-  this.timeout(60 * 1000);
+  this.timeout(30 * 1000);
 
   let tmpPath;
 
