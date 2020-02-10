@@ -726,7 +726,7 @@ describe(function() {
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       stats: true,
-      blueprint: packageName,
+      blueprint: location,
       async beforeMerge() {
         await initBlueprint({
           fixturesPath: 'test/fixtures/blueprint/app/local',

@@ -111,4 +111,18 @@ ${packageName2}, current: ${from2}, latest: ${to2}`);
 
     expect(stderr).to.equal('blueprint "missing" was not found');
   });
+
+  it('handles no blueprints', async function() {
+    let {
+      stderr,
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app'
+    });
+
+    assertNoStaged(status);
+
+    expect(stderr).to.equal('no blueprints found');
+  });
 });

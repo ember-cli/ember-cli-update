@@ -4,7 +4,7 @@ const getBlueprintFilePath = require('./get-blueprint-file-path');
 const loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
 const { formatBlueprintLine } = require('./choose-blueprint-updates');
-const findBlueprint = require('./find-blueprint');
+const getBlueprintFromArgs = require('./get-blueprint-from-args');
 
 module.exports = async function stats({
   blueprint
@@ -17,12 +17,18 @@ module.exports = async function stats({
 
   let { blueprints } = emberCliUpdateJson;
 
-  if (blueprint) {
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, blueprint, blueprint);
+  if (!blueprints.length) {
+    throw 'no blueprints found';
+  }
 
-    if (!existingBlueprint) {
-      throw `blueprint "${blueprint}" was not found`;
-    }
+  if (blueprint) {
+    let {
+      existingBlueprint
+    } = await getBlueprintFromArgs({
+      cwd,
+      emberCliUpdateJson,
+      blueprint
+    });
 
     blueprints = [existingBlueprint];
   }

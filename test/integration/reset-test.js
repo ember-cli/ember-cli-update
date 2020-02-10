@@ -102,4 +102,33 @@ describe(reset, function() {
 
     assertNoStaged(status);
   });
+
+  it('handles missing blueprint', async function() {
+    let {
+      stderr,
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
+      commitMessage: 'my-app',
+      blueprint: 'missing'
+    });
+
+    assertNoStaged(status);
+
+    expect(stderr).to.equal('blueprint "missing" was not found');
+  });
+
+  it('handles no blueprints', async function() {
+    let {
+      stderr,
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app'
+    });
+
+    assertNoStaged(status);
+
+    expect(stderr).to.equal('no blueprints found');
+  });
 });
