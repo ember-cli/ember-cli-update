@@ -14,12 +14,11 @@ const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFromArgs = require('./get-blueprint-from-args');
 
 module.exports = async function reset({
+  cwd = process.cwd(),
   blueprint: _blueprint,
   to = defaultTo
-}) {
+} = {}) {
   try {
-    let cwd = process.cwd();
-
     // A custom config location in package.json may be reset/init away,
     // so we can no longer look it up on the fly after the run.
     // We must rely on a lookup before the run.
@@ -89,6 +88,7 @@ module.exports = async function reset({
       promise,
       resolveConflictsProcess
     } = await boilerplateUpdate({
+      cwd,
       endVersion: blueprint.version,
       reset: true,
       createCustomDiff: true,

@@ -20,16 +20,7 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 describe(install, function() {
   this.timeout(60 * 1000);
 
-  let cwd;
   let tmpPath;
-
-  before(function() {
-    cwd = process.cwd();
-  });
-
-  afterEach(function() {
-    process.chdir(cwd);
-  });
 
   async function merge({
     fixturesPath,
@@ -45,10 +36,9 @@ describe(install, function() {
 
     await beforeMerge();
 
-    process.chdir(tmpPath);
-
     let promise = (async() => {
       let result = await install({
+        cwd: tmpPath,
         addon
       });
 
@@ -69,7 +59,7 @@ describe(install, function() {
     mergeFixtures
   }) {
     let actual = tmpPath;
-    let expected = path.join(cwd, mergeFixtures);
+    let expected = mergeFixtures;
 
     _fixtureCompare({
       expect,
@@ -99,7 +89,7 @@ describe(install, function() {
         await run('npm install', { cwd: tmpPath });
       },
       async afterMerge() {
-        await fs.remove('package-lock.json');
+        await fs.remove(path.join(tmpPath, 'package-lock.json'));
       }
     });
 

@@ -7,10 +7,9 @@ const { formatBlueprintLine } = require('./choose-blueprint-updates');
 const getBlueprintFromArgs = require('./get-blueprint-from-args');
 
 module.exports = async function stats({
+  cwd = process.cwd(),
   blueprint
 } = {}) {
-  let cwd = process.cwd();
-
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
