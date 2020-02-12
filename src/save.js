@@ -8,6 +8,7 @@ const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 
 module.exports = async function save({
+  cwd = process.cwd(),
   blueprint: _blueprint,
   from,
   codemodsSource,
@@ -16,8 +17,6 @@ module.exports = async function save({
   if (!from) {
     throw new Error('A custom blueprint cannot detect --from. You must supply it.');
   }
-
-  let cwd = process.cwd();
 
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.

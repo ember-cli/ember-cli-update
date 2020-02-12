@@ -16,6 +16,7 @@ const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 
 module.exports = async function init({
+  cwd = process.cwd(),
   blueprint: _blueprint,
   to = defaultTo,
   resolveConflicts,
@@ -23,8 +24,6 @@ module.exports = async function init({
   reset,
   blueprintOptions = []
 }) {
-  let cwd = process.cwd();
-
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.
@@ -108,6 +107,7 @@ module.exports = async function init({
     promise,
     resolveConflictsProcess
   } = await boilerplateUpdate({
+    cwd,
     endVersion: blueprint.version,
     resolveConflicts,
     reset,

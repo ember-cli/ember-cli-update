@@ -16,16 +16,7 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 describe(stats, function() {
   this.timeout(30 * 1000);
 
-  let cwd;
   let tmpPath;
-
-  before(function() {
-    cwd = process.cwd();
-  });
-
-  afterEach(function() {
-    process.chdir(cwd);
-  });
 
   async function merge({
     blueprint,
@@ -40,9 +31,8 @@ describe(stats, function() {
 
     await beforeMerge();
 
-    process.chdir(tmpPath);
-
     let promise = stats({
+      cwd: tmpPath,
       blueprint
     });
 

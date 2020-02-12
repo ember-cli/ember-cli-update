@@ -11,10 +11,9 @@ const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 
 module.exports = async function install({
+  cwd = process.cwd(),
   addon
 }) {
-  let cwd = process.cwd();
-
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.
@@ -57,7 +56,7 @@ module.exports = async function install({
   });
 
   if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
-    await bootstrap();
+    await bootstrap({ cwd });
   }
 
   await saveBlueprint({

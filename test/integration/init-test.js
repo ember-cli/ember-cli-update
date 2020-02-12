@@ -19,16 +19,7 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 describe(init, function() {
   this.timeout(30 * 1000);
 
-  let cwd;
   let tmpPath;
-
-  before(function() {
-    cwd = process.cwd();
-  });
-
-  afterEach(function() {
-    process.chdir(cwd);
-  });
 
   async function merge({
     fixturesPath,
@@ -45,9 +36,8 @@ describe(init, function() {
 
     await beforeMerge();
 
-    process.chdir(tmpPath);
-
     let { promise } = await init({
+      cwd: tmpPath,
       blueprint,
       to,
       blueprintOptions
@@ -65,7 +55,7 @@ describe(init, function() {
     mergeFixtures
   }) {
     let actual = tmpPath;
-    let expected = path.join(cwd, mergeFixtures);
+    let expected = mergeFixtures;
 
     _fixtureCompare({
       expect,
@@ -94,7 +84,7 @@ describe(init, function() {
 
     let commitMessage = 'base init';
 
-    await commit({ m: commitMessage });
+    await commit({ m: commitMessage, cwd: tmpPath });
 
     await initBlueprint({
       fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
@@ -103,6 +93,7 @@ describe(init, function() {
     });
 
     let { promise } = await init({
+      cwd: tmpPath,
       blueprint: location,
       codemodsSource,
       blueprintOptions: options

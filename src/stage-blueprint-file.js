@@ -9,7 +9,9 @@ async function stageBlueprintFile({
 }) {
   let relative = path.relative(cwd, emberCliUpdateJsonPath);
 
-  await run(`git add ${relative}`);
+  await run(`git add ${relative}`, {
+    cwd
+  });
 }
 
 module.exports = stageBlueprintFile;
