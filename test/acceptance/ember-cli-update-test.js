@@ -711,13 +711,13 @@ describe(function() {
   it('can show single blueprint stats', async function() {
     let {
       packageName,
-      location,
+      name,
       version: from
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[0];
 
     let {
       version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
 
     let {
       ps,
@@ -726,14 +726,7 @@ describe(function() {
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       stats: true,
-      blueprint: location,
-      async beforeMerge() {
-        await initBlueprint({
-          fixturesPath: 'test/fixtures/blueprint/app/local',
-          resolvedFrom: tmpPath,
-          relativeDir: location
-        });
-      }
+      blueprint: packageName
     });
 
     let result = '';
@@ -749,7 +742,10 @@ describe(function() {
 
     assertNoStaged(status);
 
-    expect(result).to.equal(`${packageName}, current: ${from}, latest: ${to}
+    expect(result).to.equal(`package name: ${packageName}
+blueprint name: ${name}
+current version: ${from}
+latest version: ${to}
 `);
   });
 });

@@ -2,9 +2,9 @@
 
 const parseBlueprintPackage = require('./parse-blueprint-package');
 const downloadPackage = require('./download-package');
-const getVersions = require('./get-versions');
 const getTagVersion = require('boilerplate-update/src/get-tag-version');
 const { defaultTo } = require('./constants');
+const utils = require('./utils');
 
 async function checkForBlueprintUpdates({
   cwd,
@@ -15,7 +15,7 @@ async function checkForBlueprintUpdates({
     let latestVersion;
 
     if (!blueprint.location) {
-      let versions = await getVersions(blueprint.packageName);
+      let versions = await utils.getVersions(blueprint.packageName);
 
       latestVersion = await getTagVersion({
         range: defaultTo,

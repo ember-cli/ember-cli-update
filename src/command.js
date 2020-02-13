@@ -3,6 +3,7 @@
 const emberCliUpdate = require('.');
 const reset = require('./reset');
 const args = require('./args');
+const stats = require('./stats');
 
 module.exports = {
   name: 'update',
@@ -86,6 +87,8 @@ module.exports = {
     let result;
     if (options.reset) {
       result = await reset(options);
+    } else if (options.statsOnly) {
+      result = await stats(options);
     } else {
       result = await emberCliUpdate(options);
     }

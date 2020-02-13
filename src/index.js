@@ -57,7 +57,6 @@ module.exports = async function emberCliUpdate({
   codemodsSource,
   codemodsJson,
   compareOnly,
-  statsOnly,
   listCodemods,
   createCustomDiff
 } = {}) {
@@ -231,7 +230,6 @@ module.exports = async function emberCliUpdate({
     remoteUrl: ({ projectOptions }) => getRemoteUrl(projectOptions),
     compareOnly,
     resolveConflicts,
-    statsOnly,
     listCodemods,
     runCodemods,
     codemodsSource: blueprint.codemodsSource,
@@ -244,7 +242,7 @@ module.exports = async function emberCliUpdate({
     promise: (async() => {
       let result = await promise;
 
-      if (!(compareOnly || statsOnly || listCodemods || runCodemods)) {
+      if (!(compareOnly || listCodemods || runCodemods)) {
         await saveBlueprint({
           emberCliUpdateJsonPath,
           blueprint: endBlueprint
