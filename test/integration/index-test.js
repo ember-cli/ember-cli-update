@@ -1,15 +1,12 @@
 'use strict';
 
-const fs = require('fs-extra');
-const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const sinon = require('sinon');
 const {
   buildTmp,
   processExit,
-  fixtureCompare: _fixtureCompare,
-  commit
+  fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
@@ -38,7 +35,6 @@ describe(function() {
     to = '3.11.0-beta.1',
     reset,
     compareOnly,
-    statsOnly,
     runCodemods,
     codemodsJson,
     listCodemods,
@@ -63,7 +59,6 @@ describe(function() {
         to,
         reset,
         compareOnly,
-        statsOnly,
         runCodemods,
         codemodsJson,
         listCodemods,
@@ -201,55 +196,6 @@ describe(function() {
 
     expect(open).to.have.been.calledOnce
       .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
-  });
-
-  it('resolves semver ranges', async function() {
-    let {
-      result
-    } = await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app',
-      from: '1.13',
-      to: '^2',
-      statsOnly: true
-    });
-
-    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
-
-    expect(result).to.equal(`project options: app, welcome
-from version: 1.13.15
-to version: 2.18.2
-output repo: https://github.com/ember-cli/ember-new-output
-codemods source: ember-app-codemods-manifest@1
-applicable codemods: `);
-  });
-
-  it('shows stats only', async function() {
-    let {
-      result
-    } = await merge({
-      fixturesPath: 'test/fixtures/app/merge',
-      commitMessage: 'my-app',
-      to: '3.15.0',
-      statsOnly: true,
-      async beforeMerge() {
-        await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
-
-        await commit({
-          m: 'my-app',
-          cwd: tmpPath
-        });
-      }
-    });
-
-    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
-
-    expect(result).to.equal(`project options: app, welcome
-from version: 3.11.0-beta.1
-to version: 3.15.0
-output repo: https://github.com/ember-cli/ember-new-output
-codemods source: ember-app-codemods-manifest@1
-applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, notify-property-change, qunit-dom-codemod, deprecate-merge-codemod, deprecate-router-events-codemod, cp-property-codemod, cp-volatile-codemod, cp-property-map-codemod, ember-angle-brackets-codemod, ember-data-codemod`);
   });
 
   it('lists codemods', async function() {

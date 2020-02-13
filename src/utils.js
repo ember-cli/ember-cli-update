@@ -9,3 +9,4 @@ module.exports.loadDefaultBlueprintFromDisk = require('./load-default-blueprint-
 module.exports.loadSafeBlueprintFile = require('./load-safe-blueprint-file');
 module.exports.saveBlueprint = require('./save-blueprint');
 module.exports.saveBlueprintFile = require('./save-blueprint-file');
+module.exports.getApplicableCodemods = require('boilerplate-update/src/get-applicable-codemods');
