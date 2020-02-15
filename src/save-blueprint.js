@@ -54,9 +54,7 @@ async function saveBlueprint({
       savedBlueprint.isBaseBlueprint = isBaseBlueprint;
     }
 
-    if (options.length) {
-      savedBlueprint.options = options;
-    }
+    savedBlueprint.options = options;
 
     addBlueprint(emberCliUpdateJson, savedBlueprint);
   } else {

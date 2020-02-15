@@ -106,7 +106,7 @@ describe(function() {
     let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
     // remove --no-welcome
-    delete emberCliUpdateJson.blueprints[0].options;
+    emberCliUpdateJson.blueprints[0].options = [];
 
     await saveBlueprintFile(emberCliUpdateJsonPath, emberCliUpdateJson);
 

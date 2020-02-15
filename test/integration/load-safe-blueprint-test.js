@@ -25,4 +25,16 @@ describe(loadSafeBlueprint, function() {
       options: ['foo']
     });
   });
+
+  it('doesn\'t reorder existing options', async function() {
+    let blueprint = loadSafeBlueprint({
+      foo: 'bar',
+      options: ['foo']
+    });
+
+    expect(Object.keys(blueprint)).to.deep.equal([
+      'foo',
+      'options'
+    ]);
+  });
 });

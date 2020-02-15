@@ -9,6 +9,7 @@ const {
   defaultPackageName,
   defaultAppBlueprintName
 } = require('../../src/constants');
+const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 
 const emberCliUpdateJsonPath = 'test-path';
 
@@ -19,12 +20,11 @@ describe(_saveBlueprint, function() {
 
   beforeEach(function() {
     loadDefaultBlueprintFromDisk = sinon.stub(utils, 'loadDefaultBlueprintFromDisk')
-      .withArgs(emberCliUpdateJsonPath).resolves({
+      .withArgs(emberCliUpdateJsonPath).resolves(loadSafeBlueprint({
         packageName: defaultPackageName,
         name: defaultAppBlueprintName,
-        version: '0.0.1',
-        options: []
-      });
+        version: '0.0.1'
+      }));
     loadSafeBlueprintFile = sinon.stub(utils, 'loadSafeBlueprintFile')
       .withArgs(emberCliUpdateJsonPath).resolves({
         blueprints: []
@@ -44,7 +44,7 @@ describe(_saveBlueprint, function() {
   async function saveBlueprint(blueprint) {
     await _saveBlueprint({
       emberCliUpdateJsonPath,
-      blueprint
+      blueprint: loadSafeBlueprint(blueprint)
     });
   }
 
@@ -54,11 +54,11 @@ describe(_saveBlueprint, function() {
 
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
         blueprints: [
-          {
+          loadSafeBlueprint({
             packageName: defaultPackageName,
             name: defaultAppBlueprintName,
             version: '0.0.1'
-          }
+          })
         ]
       }));
 
@@ -72,11 +72,11 @@ describe(_saveBlueprint, function() {
 
       expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
         blueprints: [
-          {
+          loadSafeBlueprint({
             packageName: defaultPackageName,
             name: defaultAppBlueprintName,
             version: '0.0.1'
-          }
+          })
         ]
       }));
 
@@ -92,17 +92,16 @@ describe(_saveBlueprint, function() {
         await saveBlueprint({
           packageName: 'test-blueprint',
           name: 'test-blueprint',
-          version: '0.0.1',
-          options: []
+          version: '0.0.1'
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1'
-            }
+            })
           ]
         }));
       });
@@ -112,18 +111,17 @@ describe(_saveBlueprint, function() {
           packageName: 'test-blueprint',
           name: 'test-blueprint',
           location: '/foo/bar',
-          version: '0.0.1',
-          options: []
+          version: '0.0.1'
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               location: '/foo/bar',
               version: '0.0.1'
-            }
+            })
           ]
         }));
       });
@@ -133,18 +131,17 @@ describe(_saveBlueprint, function() {
           packageName: 'test-blueprint',
           name: 'test-blueprint',
           version: '0.0.1',
-          codemodsSource: 'codemods-test',
-          options: []
+          codemodsSource: 'codemods-test'
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1',
               codemodsSource: 'codemods-test'
-            }
+            })
           ]
         }));
       });
@@ -159,12 +156,12 @@ describe(_saveBlueprint, function() {
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1',
               options: ['test-option']
-            }
+            })
           ]
         }));
       });
@@ -175,18 +172,17 @@ describe(_saveBlueprint, function() {
             packageName: 'test-blueprint',
             name: 'test-blueprint',
             version: '0.0.1',
-            isBaseBlueprint: true,
-            options: []
+            isBaseBlueprint: true
           });
 
           expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.1',
                 isBaseBlueprint: true
-              }
+              })
             ]
           }));
         });
@@ -196,18 +192,17 @@ describe(_saveBlueprint, function() {
             packageName: 'test-blueprint',
             name: 'test-blueprint',
             version: '0.0.1',
-            isBaseBlueprint: false,
-            options: []
+            isBaseBlueprint: false
           });
 
           expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.1',
                 isBaseBlueprint: false
-              }
+              })
             ]
           }));
         });
@@ -216,17 +211,16 @@ describe(_saveBlueprint, function() {
           await saveBlueprint({
             packageName: 'test-blueprint',
             name: 'test-blueprint',
-            version: '0.0.1',
-            options: []
+            version: '0.0.1'
           });
 
           expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.1'
-              }
+              })
             ]
           }));
         });
@@ -235,33 +229,32 @@ describe(_saveBlueprint, function() {
       it('leaves other blueprints alone', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint-2',
               version: '0.0.0'
-            }
+            })
           ]
         });
 
         await saveBlueprint({
           packageName: 'test-blueprint',
           name: 'test-blueprint',
-          version: '0.0.1',
-          options: []
+          version: '0.0.1'
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint-2',
               version: '0.0.0'
-            },
-            {
+            }),
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1'
-            }
+            })
           ]
         }));
       });
@@ -269,33 +262,32 @@ describe(_saveBlueprint, function() {
       it('leaves other packages alone', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint-2',
               name: 'test-blueprint',
               version: '0.0.0'
-            }
+            })
           ]
         });
 
         await saveBlueprint({
           packageName: 'test-blueprint',
           name: 'test-blueprint',
-          version: '0.0.1',
-          options: []
+          version: '0.0.1'
         });
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint-2',
               name: 'test-blueprint',
               version: '0.0.0'
-            },
-            {
+            }),
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1'
-            }
+            })
           ]
         }));
       });
@@ -305,11 +297,11 @@ describe(_saveBlueprint, function() {
       it('saves blueprint', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.0'
-            }
+            })
           ]
         });
 
@@ -321,11 +313,11 @@ describe(_saveBlueprint, function() {
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1'
-            }
+            })
           ]
         }));
       });
@@ -333,12 +325,12 @@ describe(_saveBlueprint, function() {
       it('saves with location', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               location: '/foo/bar',
               version: '0.0.0'
-            }
+            })
           ]
         });
 
@@ -350,12 +342,12 @@ describe(_saveBlueprint, function() {
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               location: '/foo/bar',
               version: '0.0.1'
-            }
+            })
           ]
         }));
       });
@@ -363,12 +355,12 @@ describe(_saveBlueprint, function() {
       it('saves with codemods url', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.0',
               codemodsSource: 'codemods-test'
-            }
+            })
           ]
         });
 
@@ -380,12 +372,12 @@ describe(_saveBlueprint, function() {
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1',
               codemodsSource: 'codemods-test'
-            }
+            })
           ]
         }));
       });
@@ -393,12 +385,12 @@ describe(_saveBlueprint, function() {
       it('saves with options', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.0',
               options: ['test-option']
-            }
+            })
           ]
         });
 
@@ -410,12 +402,12 @@ describe(_saveBlueprint, function() {
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1',
               options: ['test-option']
-            }
+            })
           ]
         }));
       });
@@ -424,12 +416,12 @@ describe(_saveBlueprint, function() {
         it('saves true', async function() {
           loadSafeBlueprintFile.resolves({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.0',
                 isBaseBlueprint: true
-              }
+              })
             ]
           });
 
@@ -441,12 +433,12 @@ describe(_saveBlueprint, function() {
 
           expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.1',
                 isBaseBlueprint: true
-              }
+              })
             ]
           }));
         });
@@ -454,12 +446,12 @@ describe(_saveBlueprint, function() {
         it('saves false', async function() {
           loadSafeBlueprintFile.resolves({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.0',
                 isBaseBlueprint: false
-              }
+              })
             ]
           });
 
@@ -471,12 +463,12 @@ describe(_saveBlueprint, function() {
 
           expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.1',
                 isBaseBlueprint: false
-              }
+              })
             ]
           }));
         });
@@ -484,11 +476,11 @@ describe(_saveBlueprint, function() {
         it('ignores undefined', async function() {
           loadSafeBlueprintFile.resolves({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.0'
-              }
+              })
             ]
           });
 
@@ -500,11 +492,11 @@ describe(_saveBlueprint, function() {
 
           expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
             blueprints: [
-              {
+              loadSafeBlueprint({
                 packageName: 'test-blueprint',
                 name: 'test-blueprint',
                 version: '0.0.1'
-              }
+              })
             ]
           }));
         });
@@ -513,16 +505,16 @@ describe(_saveBlueprint, function() {
       it('leaves other blueprints alone', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.0'
-            },
-            {
+            }),
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint-2',
               version: '0.0.0'
-            }
+            })
           ]
         });
 
@@ -534,16 +526,16 @@ describe(_saveBlueprint, function() {
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1'
-            },
-            {
+            }),
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint-2',
               version: '0.0.0'
-            }
+            })
           ]
         }));
       });
@@ -551,16 +543,16 @@ describe(_saveBlueprint, function() {
       it('leaves other packages alone', async function() {
         loadSafeBlueprintFile.resolves({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.0'
-            },
-            {
+            }),
+            loadSafeBlueprint({
               packageName: 'test-blueprint-2',
               name: 'test-blueprint',
               version: '0.0.0'
-            }
+            })
           ]
         });
 
@@ -572,16 +564,16 @@ describe(_saveBlueprint, function() {
 
         expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
           blueprints: [
-            {
+            loadSafeBlueprint({
               packageName: 'test-blueprint',
               name: 'test-blueprint',
               version: '0.0.1'
-            },
-            {
+            }),
+            loadSafeBlueprint({
               packageName: 'test-blueprint-2',
               name: 'test-blueprint',
               version: '0.0.0'
-            }
+            })
           ]
         }));
       });

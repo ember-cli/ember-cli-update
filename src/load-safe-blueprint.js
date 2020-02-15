@@ -1,10 +1,13 @@
 'use strict';
 
 function loadSafeBlueprint(blueprint) {
-  return {
-    options: [],
+  blueprint = {
     ...blueprint
   };
+  if (!blueprint.options) {
+    blueprint.options = [];
+  }
+  return blueprint;
 }
 
 module.exports = loadSafeBlueprint;

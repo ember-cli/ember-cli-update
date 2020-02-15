@@ -88,15 +88,13 @@ module.exports = async function emberCliUpdate({
     if (existingBlueprint) {
       blueprint = existingBlueprint;
     } else {
-      blueprint = {
+      blueprint = loadSafeBlueprint({
         packageName,
         name: packageName,
         location: parsedPackage.location,
         options: blueprintOptions
-      };
+      });
     }
-
-    blueprint = loadSafeBlueprint(blueprint);
 
     if (from) {
       blueprint.version = from;
