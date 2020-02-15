@@ -24,6 +24,10 @@ async function saveBlueprintFile(emberCliUpdateJsonPath, emberCliUpdateJson) {
     delete blueprint.location;
     delete blueprint.version;
 
+    if (!blueprint.options.length) {
+      delete blueprint.options;
+    }
+
     return packages;
   }, []);
 

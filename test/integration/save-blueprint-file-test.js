@@ -26,7 +26,9 @@ describe(saveBlueprintFile, function() {
           location: '../test-blueprint',
           version: '0.0.1',
           codemodsSource: 'test-codemods',
-          isBaseBlueprint: true
+          isBaseBlueprint: true,
+          // removes empty options
+          options: []
         }
       ]
     });

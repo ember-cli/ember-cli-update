@@ -1,6 +1,7 @@
 'use strict';
 
 const loadBlueprintFile = require('./load-blueprint-file');
+const loadSafeBlueprint = require('./load-safe-blueprint');
 
 async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
   let emberCliUpdateJson = await loadBlueprintFile(emberCliUpdateJsonPath);
@@ -20,6 +21,8 @@ async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
       blueprint.packageName = _package.name;
       blueprint.location = _package.location;
       blueprint.version = _package.version;
+
+      blueprint = loadSafeBlueprint(blueprint);
 
       blueprints.push(blueprint);
     }

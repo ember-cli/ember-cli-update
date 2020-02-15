@@ -3,6 +3,7 @@
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 
 describe(loadSafeBlueprintFile, function() {
   it('populates when missing', async function() {
@@ -34,14 +35,14 @@ describe(loadSafeBlueprintFile, function() {
 
     expect(emberCliUpdateJson).to.deep.equal({
       schemaVersion: 0,
-      blueprints: [{
+      blueprints: [loadSafeBlueprint({
         packageName: 'test-blueprint',
         name: 'test-blueprint',
         location: '../test-blueprint',
         version: '0.0.1',
         codemodsSource: 'test-codemods',
         isBaseBlueprint: true
-      }]
+      })]
     });
   });
 });

@@ -72,15 +72,13 @@ module.exports = async function init({
   if (existingBlueprint) {
     blueprint = existingBlueprint;
   } else {
-    blueprint = {
+    blueprint = loadSafeBlueprint({
       packageName,
       name,
       location,
       options: blueprintOptions
-    };
+    });
   }
-
-  blueprint = loadSafeBlueprint(blueprint);
 
   blueprint.version = version;
   blueprint.path = path;
