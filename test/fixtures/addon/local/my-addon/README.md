@@ -1,11 +1,11 @@
-# my-addon
+# @my-scope/my-addon
 
-This is my filled out section
+This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd my-addon`
+* `cd @my-scope/my-addon`
 * `npm install`
 * `bower install`
 
