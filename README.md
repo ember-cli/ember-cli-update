@@ -71,35 +71,33 @@ ember-cli-update --run-codemods
 ## Options
 
 ```
-  --help                       Show help                               [boolean]
-  --version                    Show version number                     [boolean]
-  --blueprint, -b              Provide a custom blueprint for use in the update
-                               ("@glimmer/blueprint",
-                               "git+https://git@github.com/tildeio/libkit.git",
-                               "../blueprint")                          [string]
-  --from                       Use a starting version that is different than
-                               what is in your package.json ("2.9.1")   [string]
-  --to                         Update to a version that isn't latest ("2.14.1",
-                               "~2.15", "latest", "beta")               [string]
-  --resolve-conflicts          Automatically run git mergetool if conflicts
-                               found                  [boolean] [default: false]
-  --run-codemods               Run codemods to help update your code
+  --help               Show help                                       [boolean]
+  --version            Show version number                             [boolean]
+  --blueprint, -b      Provide a custom blueprint for use in the update
+                       ("@glimmer/blueprint",
+                       "git+https://git@github.com/tildeio/libkit.git",
+                       "../blueprint")                                  [string]
+  --from               Use a starting version that is different than what is in
+                       your package.json ("2.9.1")                      [string]
+  --to                 Update to a version that isn't latest ("2.14.1", "~2.15",
+                       "latest", "beta")                                [string]
+  --resolve-conflicts  Automatically run git mergetool if conflicts found
                                                       [boolean] [default: false]
-  --codemods-source            Supply your own codemods manifest via URL
-                               ("ember-app-codemods-manifest@*",
-                               "git+https://github.com/ember-cli/ember-app-codem
-                               ods-manifest.git#semver:*")              [string]
-  --codemods-json              Supply your own codemods manifest via JSON (`{ /*
-                               json */ }`)                              [string]
-  --reset                      Reset your code to the default blueprint at the
-                               new version            [boolean] [default: false]
-  --compare-only               Show the changes between different versions
-                               without updating       [boolean] [default: false]
-  --stats-only                 Show all calculated values regarding your project
+  --run-codemods       Run codemods to help update your code
                                                       [boolean] [default: false]
-  --list-codemods              List available codemods[boolean] [default: false]
-  --create-custom-diff, --ccd  Create a personal diff using system .ember-cli
+  --codemods-source    Supply your own codemods manifest via URL
+                       ("ember-app-codemods-manifest@*", "git+https://github.com
+                       /ember-cli/ember-app-codemods-manifest.git#semver:*")
+                                                                        [string]
+  --codemods-json      Supply your own codemods manifest via JSON (`{ /* json */
+                       }`)                                              [string]
+  --reset              Reset your code to the default blueprint at the new
+                       version                        [boolean] [default: false]
+  --compare-only       Show the changes between different versions without
+                       updating                       [boolean] [default: false]
+  --stats-only         Show all calculated values regarding your project
                                                       [boolean] [default: false]
+  --list-codemods      List available codemods        [boolean] [default: false]
 ```
 
 ## Power User Guide

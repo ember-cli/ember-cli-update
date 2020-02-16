@@ -57,8 +57,7 @@ module.exports = async function emberCliUpdate({
   codemodsSource,
   codemodsJson,
   compareOnly,
-  listCodemods,
-  createCustomDiff
+  listCodemods
 } = {}) {
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
@@ -137,10 +136,6 @@ module.exports = async function emberCliUpdate({
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
-  if (isCustomBlueprint) {
-    createCustomDiff = true;
-  }
-
   if (codemodsSource) {
     blueprint.codemodsSource = codemodsSource;
   }
@@ -172,12 +167,6 @@ module.exports = async function emberCliUpdate({
       packageJson,
       projectOptions
     }) {
-      if (createCustomDiff && projectOptions.includes('glimmer')) {
-        // ember-cli doesn't have a way to use non-latest blueprint versions
-        // TODO: The above is not true anymore. This can be fixed.
-        throw 'cannot checkout older versions of glimmer blueprint';
-      }
-
       let startBlueprint = { ...blueprint };
       endBlueprint = { ...blueprint };
       delete endBlueprint.version;
@@ -211,15 +200,12 @@ module.exports = async function emberCliUpdate({
         ]);
       }
 
-      let customDiffOptions;
-      if (createCustomDiff) {
-        customDiffOptions = getStartAndEndCommands({
-          packageJson,
-          baseBlueprint,
-          startBlueprint,
-          endBlueprint
-        });
-      }
+      let customDiffOptions = getStartAndEndCommands({
+        packageJson,
+        baseBlueprint,
+        startBlueprint,
+        endBlueprint
+      });
 
       return {
         startVersion: startBlueprint && startBlueprint.version,
@@ -234,7 +220,7 @@ module.exports = async function emberCliUpdate({
     runCodemods,
     codemodsSource: blueprint.codemodsSource,
     codemodsJson,
-    createCustomDiff,
+    createCustomDiff: true,
     ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
   });
 

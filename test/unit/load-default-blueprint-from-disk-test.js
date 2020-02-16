@@ -38,28 +38,6 @@ describe(loadDefaultBlueprintFromDisk, function() {
     });
   });
 
-  it('handles glimmer app', async function() {
-    require = require.withArgs(path.normalize('/test/path/package')).returns({
-      devDependencies: {
-        '@glimmer/blueprint': '',
-        'ember-cli': '0.0.1'
-      }
-    });
-
-    let blueprint = await loadDefaultBlueprintFromDisk('/test/path', '0.0.2');
-
-    expect(require).to.be.calledOnce;
-    expect(getVersions).to.not.be.called;
-
-    expect(blueprint).to.deep.equal({
-      packageName: '@glimmer/blueprint',
-      name: '@glimmer/blueprint',
-      version: '0.0.2',
-      isBaseBlueprint: true,
-      options: []
-    });
-  });
-
   it('works', async function() {
     require = require.withArgs(path.normalize('/test/path/package')).returns({
       devDependencies: {

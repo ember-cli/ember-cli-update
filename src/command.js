@@ -73,13 +73,6 @@ module.exports = {
       description: args['list-codemods'].description,
       type: Boolean,
       default: args['list-codemods'].default
-    },
-    {
-      name: 'create-custom-diff',
-      aliases: args['create-custom-diff'].alias,
-      description: args['create-custom-diff'].description,
-      type: Boolean,
-      default: args['create-custom-diff'].default
     }
   ],
 

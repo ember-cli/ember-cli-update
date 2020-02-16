@@ -12,7 +12,6 @@ const {
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const {
-  assertNormalUpdate,
   assertNoUnstaged,
   assertNoStaged,
   assertCodemodRan
@@ -129,35 +128,18 @@ describe(function() {
     });
   }
 
-  it('updates app', async function() {
+  it('works', async function() {
     let {
       status
     } = await (await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app'
+      fixturesPath: 'test/fixtures/custom/app/local',
+      commitMessage: 'my-custom-app'
     })).promise;
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/app/merge/my-app'
+      mergeFixtures: 'test/fixtures/custom/app/merge/my-custom-app'
     });
 
-    assertNormalUpdate(status);
-    assertNoUnstaged(status);
-  });
-
-  it('updates addon', async function() {
-    let {
-      status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/addon/local',
-      commitMessage: 'my-addon'
-    })).promise;
-
-    fixtureCompare({
-      mergeFixtures: 'test/fixtures/addon/merge/my-addon'
-    });
-
-    assertNormalUpdate(status);
     assertNoUnstaged(status);
   });
 
@@ -243,7 +225,6 @@ describe(function() {
       mergeFixtures: 'test/fixtures/app/merge/my-app'
     });
 
-    assertNormalUpdate(status);
     assertNoUnstaged(status);
   });
 
