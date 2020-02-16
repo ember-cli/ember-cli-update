@@ -163,6 +163,7 @@ applicable codemods: testCodemod1, testCodemod2`);
 blueprint name: app
 current version: 3.11.0-beta.1
 latest version: 3.15.0
+output repo: https://github.com/ember-cli/ember-new-output
 codemods source: ember-app-codemods-manifest@1
 applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, notify-property-change, qunit-dom-codemod, deprecate-merge-codemod, deprecate-router-events-codemod, cp-property-codemod, cp-volatile-codemod, cp-property-map-codemod, ember-angle-brackets-codemod, ember-data-codemod`);
   });
