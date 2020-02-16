@@ -126,6 +126,26 @@ describe(_saveBlueprint, function() {
         }));
       });
 
+      it('saves with output repu', async function() {
+        await saveBlueprint({
+          packageName: 'test-blueprint',
+          name: 'test-blueprint',
+          version: '0.0.1',
+          outputRepo: 'output-repo-test'
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            loadSafeBlueprint({
+              packageName: 'test-blueprint',
+              name: 'test-blueprint',
+              version: '0.0.1',
+              outputRepo: 'output-repo-test'
+            })
+          ]
+        }));
+      });
+
       it('saves with codemods url', async function() {
         await saveBlueprint({
           packageName: 'test-blueprint',
@@ -347,6 +367,36 @@ describe(_saveBlueprint, function() {
               name: 'test-blueprint',
               location: '/foo/bar',
               version: '0.0.1'
+            })
+          ]
+        }));
+      });
+
+      it('saves with output repo', async function() {
+        loadSafeBlueprintFile.resolves({
+          blueprints: [
+            loadSafeBlueprint({
+              packageName: 'test-blueprint',
+              name: 'test-blueprint',
+              version: '0.0.0',
+              outputRepo: 'output-repo-test'
+            })
+          ]
+        });
+
+        await saveBlueprint({
+          packageName: 'test-blueprint',
+          name: 'test-blueprint',
+          version: '0.0.1'
+        });
+
+        expect(JSON.stringify(saveBlueprintFile.args[0][1])).to.equal(JSON.stringify({
+          blueprints: [
+            loadSafeBlueprint({
+              packageName: 'test-blueprint',
+              name: 'test-blueprint',
+              version: '0.0.1',
+              outputRepo: 'output-repo-test'
             })
           ]
         }));

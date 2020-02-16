@@ -10,6 +10,7 @@ module.exports.describe = 'save old blueprint state';
 module.exports.builder = {
   blueprint: args['blueprint'],
   from: args['from'],
+  outputRepo: args['output-repo'],
   codemodsSource: args['codemods-source']
 };
 

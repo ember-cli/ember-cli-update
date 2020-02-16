@@ -24,6 +24,7 @@ describe(_loadDefaultBlueprint, function() {
       packageName: 'ember-cli',
       name: 'app',
       version: undefined,
+      outputRepo: 'https://github.com/undefined/undefined',
       codemodsSource: 'ember-app-codemods-manifest@1',
       isBaseBlueprint: true,
       options: [
@@ -49,6 +50,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          outputRepo: 'https://github.com/ember-cli/ember-new-output',
           codemodsSource: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: []
@@ -64,6 +66,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          outputRepo: 'https://github.com/ember-cli/ember-new-output',
           codemodsSource: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: [
@@ -81,6 +84,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          outputRepo: 'https://github.com/ember-cli/ember-new-output',
           codemodsSource: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: [
@@ -98,6 +102,7 @@ describe(_loadDefaultBlueprint, function() {
           packageName: 'ember-cli',
           name: 'app',
           version,
+          outputRepo: 'https://github.com/ember-cli/ember-new-output',
           codemodsSource: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
           options: [
@@ -121,6 +126,7 @@ describe(_loadDefaultBlueprint, function() {
         packageName: 'ember-cli',
         name: 'addon',
         version,
+        outputRepo: 'https://github.com/ember-cli/ember-addon-output',
         codemodsSource: 'ember-addon-codemods-manifest@1',
         isBaseBlueprint: true,
         options: [
@@ -138,6 +144,7 @@ describe(_loadDefaultBlueprint, function() {
         packageName: 'ember-cli',
         name: 'addon',
         version,
+        outputRepo: 'https://github.com/ember-cli/ember-addon-output',
         codemodsSource: 'ember-addon-codemods-manifest@1',
         isBaseBlueprint: true,
         options: [
@@ -160,6 +167,7 @@ describe(_loadDefaultBlueprint, function() {
         packageName: '@glimmer/blueprint',
         name: '@glimmer/blueprint',
         version,
+        outputRepo: 'https://github.com/glimmerjs/glimmer-blueprint-output',
         isBaseBlueprint: true,
         options: []
       });

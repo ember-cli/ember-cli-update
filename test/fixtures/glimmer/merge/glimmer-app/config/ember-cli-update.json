@@ -7,6 +7,7 @@
       "blueprints": [
         {
           "name": "@glimmer/blueprint",
+          "outputRepo": "https://github.com/glimmerjs/glimmer-blueprint-output",
           "isBaseBlueprint": true
         }
       ]

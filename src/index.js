@@ -6,7 +6,6 @@ const getPackageVersion = require('./get-package-version');
 const getVersions = require('./get-versions');
 const getProjectVersion = require('./get-project-version');
 const _getTagVersion = require('./get-tag-version');
-const getRemoteUrl = require('./get-remote-url');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
 const parseBlueprintPackage = require('./parse-blueprint-package');
@@ -57,7 +56,8 @@ module.exports = async function emberCliUpdate({
   codemodsSource,
   codemodsJson,
   compareOnly,
-  listCodemods
+  listCodemods,
+  outputRepo
 } = {}) {
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
@@ -136,6 +136,9 @@ module.exports = async function emberCliUpdate({
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
+  if (outputRepo) {
+    blueprint.outputRepo = outputRepo;
+  }
   if (codemodsSource) {
     blueprint.codemodsSource = codemodsSource;
   }
@@ -213,7 +216,7 @@ module.exports = async function emberCliUpdate({
         customDiffOptions
       };
     },
-    remoteUrl: ({ projectOptions }) => getRemoteUrl(projectOptions),
+    remoteUrl: blueprint.outputRepo,
     compareOnly,
     resolveConflicts,
     listCodemods,

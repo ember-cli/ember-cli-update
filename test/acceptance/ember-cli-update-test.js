@@ -593,6 +593,7 @@ describe(function() {
       {
         location,
         version: partial,
+        outputRepo,
         codemodsSource,
         options
       }
@@ -622,6 +623,7 @@ describe(function() {
         'save',
         `-b=${location}`,
         `--from=${partial}`,
+        `--output-repo=${outputRepo}`,
         `--codemods-source=${codemodsSource}`,
         ...options
       ],
@@ -642,6 +644,7 @@ describe(function() {
     let {
       location,
       version: from,
+      outputRepo,
       codemodsSource,
       options
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/local/my-app/config2/ember-cli-update.json')).blueprints[1];
@@ -674,6 +677,7 @@ describe(function() {
         `-b=${location}`,
         `--from=${from}`,
         `--to=${to}`,
+        `--output-repo=${outputRepo}`,
         `--codemods-source=${codemodsSource}`,
         ...options
       ],

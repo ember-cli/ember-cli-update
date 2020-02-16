@@ -71,6 +71,7 @@ describe(init, function() {
       },
       {
         location,
+        outputRepo,
         codemodsSource,
         options
       }
@@ -95,6 +96,7 @@ describe(init, function() {
     let { promise } = await init({
       cwd: tmpPath,
       blueprint: location,
+      outputRepo,
       codemodsSource,
       blueprintOptions: options
     });

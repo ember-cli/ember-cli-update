@@ -32,6 +32,7 @@ describe(loadDefaultBlueprintFromDisk, function() {
       packageName: 'ember-cli',
       name: 'app',
       version: '0.0.1',
+      outputRepo: 'https://github.com/undefined/undefined',
       codemodsSource: 'ember-app-codemods-manifest@1',
       isBaseBlueprint: true,
       options: ['--no-welcome']
@@ -56,6 +57,7 @@ describe(loadDefaultBlueprintFromDisk, function() {
       packageName: 'ember-cli',
       name: 'app',
       version: '0.0.1',
+      outputRepo: 'https://github.com/ember-cli/ember-new-output',
       codemodsSource: 'ember-app-codemods-manifest@1',
       isBaseBlueprint: true,
       options: ['--no-welcome']

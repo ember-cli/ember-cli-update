@@ -40,6 +40,7 @@ describe(loadSafeBlueprintFile, function() {
         name: 'test-blueprint',
         location: '../test-blueprint',
         version: '0.0.1',
+        outputRepo: 'https://github.com/test/output-repo',
         codemodsSource: 'test-codemods',
         isBaseBlueprint: true
       })]

@@ -11,6 +11,7 @@ module.exports = async function save({
   cwd = process.cwd(),
   blueprint: _blueprint,
   from,
+  outputRepo,
   codemodsSource,
   blueprintOptions
 }) {
@@ -49,6 +50,9 @@ module.exports = async function save({
     blueprint.isBaseBlueprint = true;
   }
 
+  if (outputRepo) {
+    blueprint.outputRepo = outputRepo;
+  }
   if (codemodsSource) {
     blueprint.codemodsSource = codemodsSource;
   }

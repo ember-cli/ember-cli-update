@@ -63,6 +63,7 @@ describe(stats, function() {
         name: blueprintName2,
         location,
         version: from2,
+        outputRepo,
         codemodsSource,
         options
       }
@@ -113,6 +114,7 @@ package location: ${location}
 blueprint name: ${blueprintName2}
 current version: ${from2}
 latest version: ${to2}
+output repo: ${outputRepo}
 options: ${options[0]}
 codemods source: ${codemodsSource}
 applicable codemods: testCodemod1, testCodemod2`);
