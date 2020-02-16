@@ -240,12 +240,12 @@ describe(function() {
     let {
       status
     } = await merge({
-      fixturesPath: 'test/fixtures/custom/addon/local',
+      fixturesPath: 'test/fixtures/addon/local',
       commitMessage: 'my-addon'
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/custom/addon/merge/my-addon'
+      mergeFixtures: 'test/fixtures/addon/merge/my-addon'
     });
 
     assertNoUnstaged(status);

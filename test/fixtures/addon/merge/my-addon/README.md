@@ -1,4 +1,4 @@
-my-addon
+@my-scope/my-addon
 ==============================================================================
 
 [Short description of the addon.]
@@ -15,7 +15,7 @@ Installation
 ------------------------------------------------------------------------------
 
 ```
-ember install my-addon
+ember install @my-scope/my-addon
 ```
 
 
