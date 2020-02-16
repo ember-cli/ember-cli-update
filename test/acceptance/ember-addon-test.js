@@ -11,7 +11,6 @@ const {
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const {
-  assertNormalUpdate,
   assertNoUnstaged
 } = require('../helpers/assertions');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
@@ -20,7 +19,7 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const saveBlueprintFile = require('../../src/save-blueprint-file');
 
 describe(function() {
-  this.timeout(30 * 1000);
+  this.timeout(60 * 1000);
 
   let tmpPath;
 
@@ -72,7 +71,8 @@ describe(function() {
         await mutatePackageJson(tmpPath, pkg => {
           pkg.devDependencies = {
             'ember-cli': pkg.devDependencies['ember-cli'],
-            'ember-cli-update': ''
+            'ember-cli-update': '',
+            'ember-welcome-page': ''
           };
         });
 
@@ -114,7 +114,6 @@ describe(function() {
       mergeFixtures: 'test/fixtures/app/merge/my-app'
     });
 
-    assertNormalUpdate(status);
     assertNoUnstaged(status);
   });
 });

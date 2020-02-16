@@ -7,9 +7,7 @@ const getPackageVersion = require('./get-package-version');
 const getVersions = require('./get-versions');
 const getProjectVersion = require('./get-project-version');
 const saveBlueprint = require('./save-blueprint');
-const loadSafeBlueprint = require('./load-safe-blueprint');
 const loadDefaultBlueprint = require('./load-default-blueprint');
-const { glimmerPackageName } = require('./constants');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 
 module.exports = async function bootstrap({
@@ -31,17 +29,7 @@ module.exports = async function bootstrap({
 
   let version = getProjectVersion(packageVersion, versions, projectOptions);
 
-  let blueprint;
-
-  if (packageName === glimmerPackageName) {
-    blueprint = loadSafeBlueprint({
-      packageName,
-      name: packageName,
-      version
-    });
-  } else {
-    blueprint = loadDefaultBlueprint(projectOptions, version);
-  }
+  let blueprint = loadDefaultBlueprint(projectOptions, version);
 
   await saveBlueprint({
     emberCliUpdateJsonPath,

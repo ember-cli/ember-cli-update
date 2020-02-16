@@ -38,7 +38,6 @@ describe(function() {
     runCodemods,
     codemodsJson,
     listCodemods,
-    createCustomDiff,
     commitMessage,
     beforeMerge = () => Promise.resolve(),
     afterMerge = () => Promise.resolve()
@@ -61,8 +60,7 @@ describe(function() {
         compareOnly,
         runCodemods,
         codemodsJson,
-        listCodemods,
-        createCustomDiff
+        listCodemods
       })).promise;
 
       await afterMerge();
@@ -238,29 +236,12 @@ describe(function() {
     expect(JSON.parse(result)).to.have.own.property('test-codemod-json');
   });
 
-  it('can create a personal diff instead of using an output repo - app', async function() {
-    let {
-      status
-    } = await merge({
-      fixturesPath: 'test/fixtures/custom/app/local',
-      commitMessage: 'my-custom-app',
-      createCustomDiff: true
-    });
-
-    fixtureCompare({
-      mergeFixtures: 'test/fixtures/custom/app/merge/my-custom-app'
-    });
-
-    assertNoUnstaged(status);
-  });
-
-  it('can create a personal diff instead of using an output repo - addon', async function() {
+  it('updates addon', async function() {
     let {
       status
     } = await merge({
       fixturesPath: 'test/fixtures/custom/addon/local',
-      commitMessage: 'my-custom-addon',
-      createCustomDiff: true
+      commitMessage: 'my-custom-addon'
     });
 
     fixtureCompare({

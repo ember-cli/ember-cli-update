@@ -11,6 +11,9 @@ const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('debug')('ember-cli-update');
 const npm = require('boilerplate-update/src/npm');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
+const {
+  glimmerPackageName
+} = require('./constants');
 
 const nodeModulesIgnore = `
 
@@ -31,9 +34,12 @@ module.exports = function getStartAndEndCommands({
     throw new Error('You supplied two layers of base blueprints.');
   }
 
+  let isCustomBlueprint = !isDefaultBlueprint(endBlueprint);
+  let isGlimmer = endBlueprint.packageName === glimmerPackageName && endBlueprint.name === glimmerPackageName;
+
   let startRange;
   let endRange;
-  if (isDefaultBlueprint(endBlueprint)) {
+  if (!isCustomBlueprint && !isGlimmer) {
     startRange = startBlueprint && startBlueprint.version;
     endRange = endBlueprint.version;
   } else if (!endBlueprint.isBaseBlueprint && isDefaultBlueprint(baseBlueprint)) {
@@ -109,10 +115,15 @@ function getArgs({
     // symlinks instead of actually installing, so any peerDeps won't
     // work. Example https://github.com/salsify/ember-cli-dependency-lint/blob/v1.0.3/lib/commands/dependency-lint.js#L5
     _blueprint = blueprint.path;
-  } else if (isDefaultBlueprint(blueprint)) {
-    _blueprint = blueprint.name;
   } else {
-    _blueprint = `${blueprint.packageName}@${blueprint.version}`;
+    let isCustomBlueprint = !isDefaultBlueprint(blueprint);
+    let isGlimmer = blueprint.packageName === glimmerPackageName && blueprint.name === glimmerPackageName;
+
+    if (isCustomBlueprint || isGlimmer) {
+      _blueprint = `${blueprint.packageName}@${blueprint.version}`;
+    } else {
+      _blueprint = blueprint.name;
+    }
   }
 
   return [
@@ -159,8 +170,9 @@ function runEmberRemotely({
   args
 }) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
+  let isGlimmer = blueprint.packageName === glimmerPackageName && blueprint.name === glimmerPackageName;
 
-  if (isCustomBlueprint) {
+  if (isCustomBlueprint || isGlimmer) {
     args = ['ember-cli', ...args];
     // args = ['-p', 'github:ember-cli/ember-cli#cfb9780', 'ember', 'new', projectName, `-dir=${directoryName}, '-sg', -sn', '-b', `${blueprint.packageName}@${blueprint.version}`];
   } else {
