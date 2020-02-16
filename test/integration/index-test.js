@@ -241,11 +241,11 @@ describe(function() {
       status
     } = await merge({
       fixturesPath: 'test/fixtures/custom/addon/local',
-      commitMessage: 'my-custom-addon'
+      commitMessage: 'my-addon'
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/custom/addon/merge/my-custom-addon'
+      mergeFixtures: 'test/fixtures/custom/addon/merge/my-addon'
     });
 
     assertNoUnstaged(status);

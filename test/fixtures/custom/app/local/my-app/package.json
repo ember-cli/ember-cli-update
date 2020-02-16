@@ -1,7 +1,7 @@
 {
-  "name": "my-custom-app",
+  "name": "my-app",
   "version": "0.0.0",
-  "description": "Small description for my-custom-app goes here",
+  "description": "Small description for my-app goes here",
   "license": "MIT",
   "author": "",
   "directories": {
