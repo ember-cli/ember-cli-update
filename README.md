@@ -98,6 +98,7 @@ ember-cli-update --run-codemods
   --stats-only         Show all calculated values regarding your project
                                                       [boolean] [default: false]
   --list-codemods      List available codemods        [boolean] [default: false]
+  --output-repo        An output repository of changes over time        [string]
 ```
 
 ## Power User Guide

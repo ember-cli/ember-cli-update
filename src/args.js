@@ -51,5 +51,9 @@ module.exports = {
     type: 'boolean',
     default: false,
     description: 'List available codemods'
+  },
+  'output-repo': {
+    type: 'string',
+    description: 'An output repository of changes over time'
   }
 };

@@ -21,6 +21,7 @@ async function saveBlueprint({
     type,
     location,
     version,
+    outputRepo,
     codemodsSource,
     options,
     isBaseBlueprint
@@ -45,6 +46,10 @@ async function saveBlueprint({
     }
 
     savedBlueprint.version = version;
+
+    if (outputRepo) {
+      savedBlueprint.outputRepo = outputRepo;
+    }
 
     if (codemodsSource) {
       savedBlueprint.codemodsSource = codemodsSource;

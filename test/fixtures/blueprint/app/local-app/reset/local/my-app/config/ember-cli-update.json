@@ -18,6 +18,7 @@
       "blueprints": [
         {
           "name": "ember-cli-update-git-blueprint-test",
+          "outputRepo": "https://github.com/test/output-repo",
           "codemodsSource": "test-codemods",
           "options": [
             "--supplied-option=foo"

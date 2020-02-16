@@ -18,6 +18,9 @@
       "env": {
         "DEBUG": "ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures"
       },
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "outputCapture": "std"
     }
   ]

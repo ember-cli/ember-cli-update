@@ -1,6 +1,7 @@
 'use strict';
 
 const loadSafeBlueprint = require('./load-safe-blueprint');
+const getRemoteUrl = require('./get-remote-url');
 const {
   defaultPackageName,
   defaultAppBlueprintName,
@@ -38,6 +39,7 @@ function loadDefaultBlueprint(projectOptions = [], version) {
     packageName,
     name,
     version,
+    outputRepo: getRemoteUrl(projectOptions),
     ...codemodsSource ? { codemodsSource } : {},
     options,
     isBaseBlueprint: true

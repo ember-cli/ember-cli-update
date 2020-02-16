@@ -8,6 +8,7 @@
       "blueprints": [
         {
           "name": "test-blueprint",
+          "outputRepo": "https://github.com/test/output-repo",
           "codemodsSource": "test-codemods",
           "isBaseBlueprint": true
         }
