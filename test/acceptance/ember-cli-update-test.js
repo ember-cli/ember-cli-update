@@ -133,11 +133,11 @@ describe(function() {
       status
     } = await (await merge({
       fixturesPath: 'test/fixtures/custom/app/local',
-      commitMessage: 'my-custom-app'
+      commitMessage: 'my-app'
     })).promise;
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/custom/app/merge/my-custom-app'
+      mergeFixtures: 'test/fixtures/custom/app/merge/my-app'
     });
 
     assertNoUnstaged(status);
