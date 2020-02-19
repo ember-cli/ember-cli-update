@@ -69,7 +69,7 @@
     "mocha": "^7.0.0",
     "mocha-helpers": "^4.2.1",
     "renovate-config-standard": "^2.0.0",
-    "sinon": "^8.0.0",
+    "sinon": "^9.0.0",
     "sinon-chai": "^3.3.0",
     "standard-node-template": "1.0.0"
   },
