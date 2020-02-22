@@ -4,6 +4,7 @@ const args = require('../../src/args');
 const emberCliUpdate = require('../../src');
 const reset = require('../../src/reset');
 const stats = require('../../src/stats');
+const compare = require('../../src/compare');
 
 module.exports.command = '$0';
 
@@ -16,6 +17,8 @@ module.exports.handler = async function handler(argv) {
       result = await reset(argv);
     } else if (argv.statsOnly) {
       result = await stats(argv);
+    } else if (argv.compareOnly) {
+      result = await compare(argv);
     } else {
       result = await emberCliUpdate({
         ...argv,

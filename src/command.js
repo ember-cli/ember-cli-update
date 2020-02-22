@@ -4,6 +4,7 @@ const emberCliUpdate = require('.');
 const reset = require('./reset');
 const args = require('./args');
 const stats = require('./stats');
+const compare = require('./compare');
 
 module.exports = {
   name: 'update',
@@ -82,6 +83,8 @@ module.exports = {
       result = await reset(options);
     } else if (options.statsOnly) {
       result = await stats(options);
+    } else if (options.compareOnly) {
+      result = await compare(options);
     } else {
       result = await emberCliUpdate(options);
     }
