@@ -10,7 +10,6 @@ const {
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
-const utils = require('boilerplate-update/src/utils');
 const {
   assertNoUnstaged
 } = require('../helpers/assertions');
@@ -34,7 +33,6 @@ describe(function() {
     from,
     to = '3.11.0-beta.1',
     reset,
-    compareOnly,
     runCodemods,
     codemodsJson,
     listCodemods,
@@ -57,7 +55,6 @@ describe(function() {
         from,
         to,
         reset,
-        compareOnly,
         runCodemods,
         codemodsJson,
         listCodemods
@@ -175,25 +172,6 @@ describe(function() {
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(stderr).to.contain('version cannot be determined');
-  });
-
-  it('opens compare url', async function() {
-    let open = sinon.stub(utils, 'open');
-
-    let {
-      result
-    } = await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app',
-      compareOnly: true
-    });
-
-    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
-
-    expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
-
-    expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
   });
 
   it('lists codemods', async function() {
