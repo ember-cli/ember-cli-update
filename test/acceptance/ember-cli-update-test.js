@@ -383,31 +383,21 @@ describe(function() {
   });
 
   it('can reset the default blueprint', async function() {
-    let commitMessage = 'my-app';
-
     let {
       ps,
       promise
     } = await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage,
+      fixturesPath: 'test/fixtures/app/merge',
+      commitMessage: 'my-app',
       reset: true,
-      to: '2.11.1',
-      async beforeMerge() {
-        await fs.copy(
-          path.resolve(__dirname, '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'),
-          path.join(tmpPath, 'config/ember-cli-update.json')
-        );
-
-        await commit({ m: commitMessage, cwd: tmpPath });
-      }
+      to: '2.11.1'
     });
 
     let whichBlueprint = new Promise(resolve => {
       function whichBlueprint(data) {
         let str = data.toString();
         if (str.includes('Which blueprint would you like to reset?')) {
-          ps.stdin.write(`${down}${enter}`);
+          ps.stdin.write(`${enter}`);
           ps.stdout.removeListener('data', whichBlueprint);
           resolve();
         }
