@@ -31,6 +31,7 @@ async function chooseBlueprintUpdates({
   emberCliUpdateJson,
   reset,
   compare,
+  codemods,
   to
 }) {
   let existingBlueprint;
@@ -38,7 +39,7 @@ async function chooseBlueprintUpdates({
 
   let { blueprints } = emberCliUpdateJson;
 
-  if (reset || compare) {
+  if (reset || compare || codemods) {
     let choicesByName = blueprints.reduce((choices, blueprint) => {
       let name = blueprint.packageName;
       choices[name] = {
@@ -53,8 +54,10 @@ async function chooseBlueprintUpdates({
     let message;
     if (reset) {
       message = 'Which blueprint would you like to reset?';
-    } else {
+    } else if (compare) {
       message = 'Which blueprint would you like to compare?';
+    } else {
+      message = 'Which blueprint would you like to run codemods for?';
     }
 
     existingBlueprint = (await chooseBlueprint({

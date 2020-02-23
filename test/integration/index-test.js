@@ -33,9 +33,6 @@ describe(function() {
     from,
     to = '3.11.0-beta.1',
     reset,
-    runCodemods,
-    codemodsJson,
-    listCodemods,
     commitMessage,
     beforeMerge = () => Promise.resolve(),
     afterMerge = () => Promise.resolve()
@@ -54,10 +51,7 @@ describe(function() {
         blueprint,
         from,
         to,
-        reset,
-        runCodemods,
-        codemodsJson,
-        listCodemods
+        reset
       })).promise;
 
       await afterMerge();
@@ -172,46 +166,6 @@ describe(function() {
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(stderr).to.contain('version cannot be determined');
-  });
-
-  it('lists codemods', async function() {
-    let {
-      result
-    } = await merge({
-      fixturesPath: 'test/fixtures/codemod/local',
-      commitMessage: 'my-app',
-      listCodemods: true
-    });
-
-    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
-
-    // I'm not asserting the entire list because it can be different
-    // depending on which node version the tests are running under.
-    expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
-  });
-
-  it('accepts codemods via json string', async function() {
-    let {
-      result
-    } = await merge({
-      fixturesPath: 'test/fixtures/codemod/local',
-      commitMessage: 'my-app',
-      listCodemods: true,
-      codemodsJson: JSON.stringify({
-        'test-codemod-json': {
-          versions: {
-            lodash: '3.0.0'
-          },
-          projectOptions: ['test-project', 'unused'],
-          nodeVersion: '6.0.0',
-          commands: []
-        }
-      })
-    });
-
-    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
-
-    expect(JSON.parse(result)).to.have.own.property('test-codemod-json');
   });
 
   it('updates addon', async function() {

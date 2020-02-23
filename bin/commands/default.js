@@ -5,6 +5,7 @@ const emberCliUpdate = require('../../src');
 const reset = require('../../src/reset');
 const stats = require('../../src/stats');
 const compare = require('../../src/compare');
+const codemods = require('../../src/codemods');
 
 module.exports.command = '$0';
 
@@ -19,6 +20,12 @@ module.exports.handler = async function handler(argv) {
       result = await stats(argv);
     } else if (argv.compareOnly) {
       result = await compare(argv);
+    } else if (argv.listCodemods || argv.runCodemods) {
+      result = await codemods({
+        ...argv,
+        list: argv.listCodemods,
+        sourceJson: argv.codemodsJson
+      });
     } else {
       result = await emberCliUpdate({
         ...argv,

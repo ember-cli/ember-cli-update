@@ -5,6 +5,7 @@ const reset = require('./reset');
 const args = require('./args');
 const stats = require('./stats');
 const compare = require('./compare');
+const codemods = require('./codemods');
 
 module.exports = {
   name: 'update',
@@ -85,6 +86,12 @@ module.exports = {
       result = await stats(options);
     } else if (options.compareOnly) {
       result = await compare(options);
+    } else if (options.listCodemods || options.runCodemods) {
+      result = await codemods({
+        ...options,
+        list: options.listCodemods,
+        sourceJson: options.codemodsJson
+      });
     } else {
       result = await emberCliUpdate(options);
     }

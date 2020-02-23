@@ -35,6 +35,7 @@ describe(function() {
     fixturesPath,
     from,
     to = '3.11.0-beta.1',
+    listCodemods,
     runCodemods,
     subDir,
     commitMessage,
@@ -60,9 +61,10 @@ describe(function() {
       ...to ? [`--to=${to}`] : [],
       '--resolve-conflicts'
     ];
-    if (runCodemods) {
+    if (listCodemods || runCodemods) {
       args = [
-        '--run-codemods'
+        'codemods',
+        ...listCodemods ? ['--list'] : []
       ];
     }
     if (init) {
