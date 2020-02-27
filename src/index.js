@@ -51,9 +51,7 @@ module.exports = async function emberCliUpdate({
   blueprintOptions,
   from,
   to,
-  resolveConflicts,
-  codemodsSource,
-  outputRepo
+  resolveConflicts
 } = {}) {
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
@@ -132,13 +130,6 @@ module.exports = async function emberCliUpdate({
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
-  if (outputRepo) {
-    blueprint.outputRepo = outputRepo;
-  }
-  if (codemodsSource) {
-    blueprint.codemodsSource = codemodsSource;
-  }
-
   let baseBlueprint = await getBaseBlueprint({
     cwd,
     blueprints: emberCliUpdateJson.blueprints,
@@ -212,9 +203,7 @@ module.exports = async function emberCliUpdate({
         customDiffOptions
       };
     },
-    remoteUrl: blueprint.outputRepo,
     resolveConflicts,
-    codemodsSource: blueprint.codemodsSource,
     createCustomDiff: true,
     ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
   });
