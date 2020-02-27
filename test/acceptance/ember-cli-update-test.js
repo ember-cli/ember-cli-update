@@ -7,8 +7,7 @@ const { expect } = require('../helpers/chai');
 const {
   buildTmp,
   processBin,
-  fixtureCompare: _fixtureCompare,
-  commit
+  fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const {
@@ -630,59 +629,6 @@ describe(function() {
       actual: path.join(tmpPath, 'config'),
       mergeFixtures: 'test/fixtures/blueprint/app/local-app/local/my-app/config'
     });
-  });
-
-  it('can update a legacy blueprint without a state file', async function() {
-    let {
-      location,
-      version: from,
-      outputRepo,
-      codemodsSource,
-      options
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/local/my-app/config2/ember-cli-update.json')).blueprints[1];
-
-    let {
-      version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json')).blueprints[1];
-
-    await (await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/legacy-app/init',
-      commitMessage: 'my-app',
-      bootstrap: true
-    })).promise;
-
-    let commitMessage = 'bootstrap';
-
-    await commit({ m: commitMessage, cwd: tmpPath });
-
-    await initBlueprint({
-      fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/legacy'),
-      resolvedFrom: tmpPath,
-      relativeDir: location
-    });
-
-    let {
-      status
-    } = await (await processBin({
-      binFile: 'ember-cli-update',
-      args: [
-        `-b=${location}`,
-        `--from=${from}`,
-        `--to=${to}`,
-        `--output-repo=${outputRepo}`,
-        `--codemods-source=${codemodsSource}`,
-        ...options
-      ],
-      cwd: tmpPath,
-      commitMessage,
-      expect
-    })).promise;
-
-    fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/merge/my-app'
-    });
-
-    assertNoUnstaged(status);
   });
 
   it('can show single blueprint stats', async function() {
