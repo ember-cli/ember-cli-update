@@ -74,7 +74,7 @@ describe(init, function() {
         codemodsSource,
         options
       }
-    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints;
+    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/init/merge/my-app/config/ember-cli-update.json')).blueprints;
 
     await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
@@ -110,7 +110,7 @@ describe(init, function() {
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/app/local-app/merge/my-app'
+      mergeFixtures: 'test/fixtures/blueprint/app/local-app/init/merge/my-app'
     });
 
     assertNoUnstaged(status);
