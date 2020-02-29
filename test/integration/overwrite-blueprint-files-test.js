@@ -17,8 +17,7 @@ describe(overwriteBlueprintFiles, function() {
 
   it('can install an addon with a default blueprint and no state file', async function() {
     let tmpPath = await buildTmp({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app'
+      fixturesPath: 'test/fixtures/app/local'
     });
 
     let {

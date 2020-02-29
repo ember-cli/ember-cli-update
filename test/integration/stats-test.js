@@ -32,8 +32,7 @@ describe(stats, function() {
     beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
-      fixturesPath,
-      commitMessage
+      fixturesPath
     });
 
     await beforeMerge();
