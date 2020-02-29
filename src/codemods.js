@@ -23,6 +23,8 @@ module.exports = async function codemods({
 
     let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
+    let { blueprints } = emberCliUpdateJson;
+
     if (_blueprint) {
       let {
         existingBlueprint
@@ -33,7 +35,7 @@ module.exports = async function codemods({
       });
 
       blueprint = existingBlueprint;
-    } else if (emberCliUpdateJson.blueprints.length) {
+    } else if (blueprints.length) {
       let {
         blueprint: _blueprint
       } = await chooseBlueprintUpdates({

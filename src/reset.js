@@ -46,7 +46,7 @@ module.exports = async function reset({
       packageInfo = _packageInfo;
       blueprint = existingBlueprint;
     } else {
-      if (emberCliUpdateJson.blueprints.length) {
+      if (blueprints.length) {
         let {
           blueprint: _blueprint
         } = await chooseBlueprintUpdates({
