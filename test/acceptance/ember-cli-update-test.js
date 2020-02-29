@@ -575,7 +575,7 @@ describe(function() {
     let commitMessage = 'my-app';
 
     await (await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/init',
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
       commitMessage,
       save: true,
       from: base,

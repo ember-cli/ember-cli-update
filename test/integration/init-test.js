@@ -78,7 +78,7 @@ describe(init, function() {
     ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints;
 
     await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/init',
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
       commitMessage: 'my-app',
       blueprint: packageName
     });
