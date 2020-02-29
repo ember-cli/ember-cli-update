@@ -6,8 +6,7 @@ const { expect } = require('../helpers/chai');
 const {
   buildTmp,
   processExit,
-  fixtureCompare: _fixtureCompare,
-  commit
+  fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const init = require('../../src/init');
 const {
@@ -25,6 +24,8 @@ describe(init, function() {
     fixturesPath,
     blueprint,
     to,
+    outputRepo,
+    codemodsSource,
     blueprintOptions,
     commitMessage,
     beforeMerge = () => Promise.resolve()
@@ -40,6 +41,8 @@ describe(init, function() {
       cwd: tmpPath,
       blueprint,
       to,
+      outputRepo,
+      codemodsSource,
       blueprintOptions
     });
 
@@ -65,49 +68,29 @@ describe(init, function() {
   }
 
   it('can initialize a custom blueprint', async function() {
-    let [
-      {
-        packageName
-      },
-      {
-        location,
-        outputRepo,
-        codemodsSource,
-        options
-      }
-    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/init/merge/my-app/config/ember-cli-update.json')).blueprints;
-
-    await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
-      commitMessage: 'my-app',
-      blueprint: packageName
-    });
-
-    let commitMessage = 'base init';
-
-    await commit({ m: commitMessage, cwd: tmpPath });
-
-    await initBlueprint({
-      fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
-      resolvedFrom: tmpPath,
-      relativeDir: location
-    });
-
-    let { promise } = await init({
-      cwd: tmpPath,
-      blueprint: location,
+    let {
+      location,
       outputRepo,
       codemodsSource,
-      blueprintOptions: options
-    });
+      options
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/init/merge/my-app/config/ember-cli-update.json')).blueprints[0];
 
     let {
       status
-    } = await processExit({
-      promise,
-      cwd: tmpPath,
-      commitMessage,
-      expect
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
+      commitMessage: 'my-app',
+      blueprint: location,
+      outputRepo,
+      codemodsSource,
+      blueprintOptions: options,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+      }
     });
 
     fixtureCompare({
