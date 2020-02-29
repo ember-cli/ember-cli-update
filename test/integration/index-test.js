@@ -39,7 +39,6 @@ describe(function() {
   }) {
     tmpPath = await buildTmp({
       fixturesPath,
-      commitMessage,
       dirty
     });
 
