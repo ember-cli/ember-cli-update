@@ -12,8 +12,7 @@ module.exports.builder = {
   to: args['to'],
   resolveConflicts: args['resolve-conflicts'],
   outputRepo: args['output-repo'],
-  codemodsSource: args['codemods-source'],
-  reset: args['reset']
+  codemodsSource: args['codemods-source']
 };
 
 module.exports.handler = async function handler(argv) {

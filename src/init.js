@@ -22,7 +22,6 @@ module.exports = async function init({
   resolveConflicts,
   outputRepo,
   codemodsSource,
-  reset,
   blueprintOptions = []
 }) {
   // A custom config location in package.json may be reset/init away,
@@ -115,7 +114,6 @@ module.exports = async function init({
     cwd,
     endVersion: blueprint.version,
     resolveConflicts,
-    reset,
     init,
     createCustomDiff: true,
     customDiffOptions: ({
@@ -137,7 +135,7 @@ module.exports = async function init({
         blueprint
       });
 
-      if (!(reset || init)) {
+      if (!init) {
         await stageBlueprintFile({
           cwd,
           emberCliUpdateJsonPath
