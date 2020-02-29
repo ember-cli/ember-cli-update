@@ -15,43 +15,45 @@ module.exports = async function codemods({
   sourceJson,
   list
 } = {}) {
-  let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
-
-  let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
-
   let blueprint;
-
-  if (!emberCliUpdateJson.blueprints.length) {
-    blueprint = await loadDefaultBlueprintFromDisk(cwd);
-  } else if (_blueprint) {
-    let {
-      existingBlueprint
-    } = await getBlueprintFromArgs({
-      cwd,
-      emberCliUpdateJson,
-      blueprint: _blueprint
-    });
-
-    blueprint = existingBlueprint;
-  } else if (!sourceJson) {
-    let {
-      blueprint: _blueprint
-    } = await chooseBlueprintUpdates({
-      cwd,
-      emberCliUpdateJson,
-      codemods: true
-    });
-
-    blueprint = _blueprint;
-  }
-
   let codemodsSource;
-  if (blueprint) {
-    codemodsSource = blueprint.codemodsSource;
-  }
 
-  if (!codemodsSource && !sourceJson) {
-    throw 'no codemods for this blueprint';
+  if (!sourceJson) {
+    let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
+
+    let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
+
+    if (_blueprint) {
+      let {
+        existingBlueprint
+      } = await getBlueprintFromArgs({
+        cwd,
+        emberCliUpdateJson,
+        blueprint: _blueprint
+      });
+
+      blueprint = existingBlueprint;
+    } else if (emberCliUpdateJson.blueprints.length) {
+      let {
+        blueprint: _blueprint
+      } = await chooseBlueprintUpdates({
+        cwd,
+        emberCliUpdateJson,
+        codemods: true
+      });
+
+      blueprint = _blueprint;
+    } else {
+      blueprint = await loadDefaultBlueprintFromDisk(cwd);
+    }
+
+    if (blueprint) {
+      codemodsSource = blueprint.codemodsSource;
+    }
+
+    if (!codemodsSource) {
+      throw 'no codemods for this blueprint';
+    }
   }
 
   let {
