@@ -365,43 +365,6 @@ describe(function() {
     assertNoStaged(status);
   });
 
-  it('can reset the default blueprint', async function() {
-    let {
-      ps,
-      promise
-    } = await merge({
-      fixturesPath: 'test/fixtures/app/merge',
-      commitMessage: 'my-app',
-      reset: true,
-      to: '2.11.1'
-    });
-
-    let whichBlueprint = new Promise(resolve => {
-      function whichBlueprint(data) {
-        let str = data.toString();
-        if (str.includes('Which blueprint would you like to reset?')) {
-          ps.stdin.write(`${enter}`);
-          ps.stdout.removeListener('data', whichBlueprint);
-          resolve();
-        }
-      }
-      ps.stdout.on('data', whichBlueprint);
-    });
-    await whichBlueprint;
-
-    let {
-      status
-    } = await promise;
-
-    fixtureCompare({
-      mergeFixtures: 'test/fixtures/app/reset/my-app'
-    });
-
-    expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
-
-    assertNoStaged(status);
-  });
-
   it('can init the default blueprint', async function() {
     let {
       status

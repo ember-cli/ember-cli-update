@@ -14,6 +14,8 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const sinon = require('sinon');
+const inquirer = require('inquirer');
 
 describe(reset, function() {
   this.timeout(30 * 1000);
@@ -107,17 +109,46 @@ describe(reset, function() {
     expect(stderr).to.equal('blueprint "missing" was not found');
   });
 
-  it('handles no blueprints', async function() {
+  it('can reset the default blueprint without a state file', async function() {
     let {
-      stderr,
       status
     } = await merge({
       fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app'
+      commitMessage: 'my-app',
+      to: '2.11.1'
     });
+
+    expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
 
     assertNoStaged(status);
 
-    expect(stderr).to.equal('no blueprints found');
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/reset/my-app'
+    });
+  });
+
+  it('can reset the default blueprint with a state file', async function() {
+    sinon.stub(inquirer, 'prompt').withArgs([{
+      type: 'list',
+      message: 'Which blueprint would you like to reset?',
+      name: 'blueprint',
+      choices: [{ name: 'ember-cli' }]
+    }]).resolves({ blueprint: 'ember-cli' });
+
+    let {
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/merge',
+      commitMessage: 'my-app',
+      to: '2.11.1'
+    });
+
+    expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
+
+    assertNoStaged(status);
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/reset/my-app'
+    });
   });
 });
