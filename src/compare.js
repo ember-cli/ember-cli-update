@@ -40,11 +40,15 @@ module.exports = async function compare({
     blueprint = existingBlueprint;
   } else {
     if (emberCliUpdateJson.blueprints.length) {
-      blueprint = (await chooseBlueprintUpdates({
+      let {
+        blueprint: _blueprint
+      } = await chooseBlueprintUpdates({
         cwd,
         emberCliUpdateJson,
         compare: true
-      })).blueprint;
+      });
+
+      blueprint = _blueprint;
     } else {
       blueprint = await loadDefaultBlueprintFromDisk(cwd);
     }
