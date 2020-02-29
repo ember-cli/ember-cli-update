@@ -102,20 +102,21 @@ describe(compare, function() {
     expect(stderr).to.equal('blueprint "missing" was not found');
   });
 
-  it('handles no blueprints', async function() {
-    let {
-      stderr
-    } = await merge({
+  it('works for the default blueprint without a state file', async function() {
+    let open = sinon.stub(utils, 'open');
+
+    await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app'
     });
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
-    expect(stderr).to.equal('no blueprints found');
+    expect(open).to.have.been.calledOnce
+      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
   });
 
-  it('works for the default blueprint', async function() {
+  it('works for the default blueprint with a state file', async function() {
     let open = sinon.stub(utils, 'open');
 
     sinon.stub(inquirer, 'prompt').withArgs([{
@@ -128,7 +129,7 @@ describe(compare, function() {
     let commitMessage = 'my-app';
 
     await merge({
-      fixturesPath: 'test/fixtures/app/merge',
+      fixturesPath: 'test/fixtures/app/local',
       commitMessage,
       async beforeMerge() {
         await fs.copy(
