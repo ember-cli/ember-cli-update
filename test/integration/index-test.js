@@ -32,7 +32,6 @@ describe(function() {
     blueprint,
     from,
     to = '3.11.0-beta.1',
-    reset,
     commitMessage,
     beforeMerge = () => Promise.resolve(),
     afterMerge = () => Promise.resolve()
@@ -49,8 +48,7 @@ describe(function() {
         cwd: tmpPath,
         blueprint,
         from,
-        to,
-        reset
+        to
       })).promise;
 
       await afterMerge();
