@@ -505,7 +505,7 @@ describe(function() {
   // that peer-deps (requiring ember-cli internals) works
   // in existing npm addons
   // https://github.com/salsify/ember-cli-dependency-lint/blob/v1.0.3/lib/commands/dependency-lint.js#L5
-  it('can update a npm addon blueprint', async function() {
+  it('can update a npm addon blueprint with implicit peer dep', async function() {
     this.timeout(3 * 60 * 1000);
 
     let {
