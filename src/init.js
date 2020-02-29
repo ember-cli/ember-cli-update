@@ -69,6 +69,8 @@ module.exports = async function init({
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
+  let { blueprints } = emberCliUpdateJson;
+
   let blueprint;
 
   let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
@@ -95,7 +97,7 @@ module.exports = async function init({
 
   let baseBlueprint = await getBaseBlueprint({
     cwd,
-    blueprints: emberCliUpdateJson.blueprints,
+    blueprints,
     blueprint
   });
 

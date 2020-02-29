@@ -22,6 +22,8 @@ module.exports = async function compare({
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
+  let { blueprints } = emberCliUpdateJson;
+
   let blueprint;
   let packageInfo;
 
@@ -39,7 +41,7 @@ module.exports = async function compare({
     packageInfo = _packageInfo;
     blueprint = existingBlueprint;
   } else {
-    if (emberCliUpdateJson.blueprints.length) {
+    if (blueprints.length) {
       let {
         blueprint: _blueprint
       } = await chooseBlueprintUpdates({

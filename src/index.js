@@ -59,6 +59,8 @@ module.exports = async function emberCliUpdate({
 
   let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
+  let { blueprints } = emberCliUpdateJson;
+
   let blueprint;
   let packageUrl;
 
@@ -93,29 +95,25 @@ module.exports = async function emberCliUpdate({
     if (!blueprint.version) {
       throw new Error('A custom blueprint cannot detect --from. You must supply it.');
     }
-  } else {
-    let { blueprints } = emberCliUpdateJson;
+  } else if (blueprints.length) {
+    let {
+      areAllUpToDate,
+      blueprint: _blueprint,
+      to: _to
+    } = await chooseBlueprintUpdates({
+      cwd,
+      emberCliUpdateJson,
+      to
+    });
 
-    if (!blueprints.length) {
-      blueprint = await loadDefaultBlueprintFromDisk(cwd, from);
-    } else {
-      let {
-        areAllUpToDate,
-        blueprint: _blueprint,
-        to: _to
-      } = await chooseBlueprintUpdates({
-        cwd,
-        emberCliUpdateJson,
-        to
-      });
-
-      if (areAllUpToDate) {
-        return { promise: Promise.resolve() };
-      }
-
-      blueprint = _blueprint;
-      to = _to;
+    if (areAllUpToDate) {
+      return { promise: Promise.resolve() };
     }
+
+    blueprint = _blueprint;
+    to = _to;
+  } else {
+    blueprint = await loadDefaultBlueprintFromDisk(cwd, from);
   }
 
   if (blueprint.location && !packageUrl) {
@@ -130,7 +128,7 @@ module.exports = async function emberCliUpdate({
 
   let baseBlueprint = await getBaseBlueprint({
     cwd,
-    blueprints: emberCliUpdateJson.blueprints,
+    blueprints,
     blueprint
   });
 
