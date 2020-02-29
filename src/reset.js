@@ -12,6 +12,7 @@ const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFromArgs = require('./get-blueprint-from-args');
+const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 
 module.exports = async function reset({
   cwd = process.cwd(),
@@ -27,10 +28,6 @@ module.exports = async function reset({
     let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
     let { blueprints } = emberCliUpdateJson;
-
-    if (!blueprints.length) {
-      throw 'no blueprints found';
-    }
 
     let blueprint;
     let packageInfo;
@@ -49,15 +46,19 @@ module.exports = async function reset({
       packageInfo = _packageInfo;
       blueprint = existingBlueprint;
     } else {
-      let {
-        blueprint: _blueprint
-      } = await chooseBlueprintUpdates({
-        cwd,
-        emberCliUpdateJson,
-        reset: true
-      });
+      if (emberCliUpdateJson.blueprints.length) {
+        let {
+          blueprint: _blueprint
+        } = await chooseBlueprintUpdates({
+          cwd,
+          emberCliUpdateJson,
+          reset: true
+        });
 
-      blueprint = _blueprint;
+        blueprint = _blueprint;
+      } else {
+        blueprint = await loadDefaultBlueprintFromDisk(cwd);
+      }
 
       let parsedPackage = await parseBlueprintPackage({
         cwd,
