@@ -8,6 +8,7 @@ const isDefaultBlueprint = require('./is-default-blueprint');
 const getProjectOptions = require('./get-project-options');
 const path = require('path');
 const utils = require('./utils');
+const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 
 module.exports = async function stats({
   cwd = process.cwd(),
@@ -19,10 +20,6 @@ module.exports = async function stats({
 
   let { blueprints } = emberCliUpdateJson;
 
-  if (!blueprints.length) {
-    throw 'no blueprints found';
-  }
-
   if (blueprint) {
     let {
       existingBlueprint
@@ -33,6 +30,10 @@ module.exports = async function stats({
     });
 
     blueprints = [existingBlueprint];
+  } else if (!blueprints.length) {
+    blueprint = await loadDefaultBlueprintFromDisk(cwd);
+
+    blueprints = [blueprint];
   }
 
   let blueprintUpdates = await checkForBlueprintUpdates({
