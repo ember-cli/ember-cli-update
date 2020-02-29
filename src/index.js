@@ -48,7 +48,6 @@ async function _resolvePackage(blueprint, url, range) {
 module.exports = async function emberCliUpdate({
   cwd = process.cwd(),
   blueprint: _blueprint,
-  blueprintOptions,
   from,
   to,
   resolveConflicts
@@ -83,8 +82,7 @@ module.exports = async function emberCliUpdate({
       blueprint = loadSafeBlueprint({
         packageName,
         name: packageName,
-        location: parsedPackage.location,
-        options: blueprintOptions
+        location: parsedPackage.location
       });
     }
 

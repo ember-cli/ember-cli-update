@@ -27,10 +27,7 @@ module.exports.handler = async function handler(argv) {
         sourceJson: argv.codemodsJson
       });
     } else {
-      result = await emberCliUpdate({
-        ...argv,
-        blueprintOptions: argv._.slice(0)
-      });
+      result = await emberCliUpdate(argv);
     }
 
     let ps = result.resolveConflictsProcess;
