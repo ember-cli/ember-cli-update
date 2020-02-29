@@ -134,22 +134,34 @@ applicable codemods: testCodemod1, testCodemod2`);
     expect(stderr).to.equal('blueprint "missing" was not found');
   });
 
-  it('handles no blueprints', async function() {
+  it('works for the default blueprint without a state file', async function() {
+    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves([
+      '2.11.1',
+      '3.15.0'
+    ]);
+
     let {
-      stderr,
-      status
+      result
     } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app'
     });
 
-    assertNoStaged(status);
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
-    expect(stderr).to.equal('no blueprints found');
+    expect(result).to.equal(`package name: ember-cli
+blueprint name: app
+current version: 2.11.1
+latest version: 3.15.0
+output repo: https://github.com/ember-cli/ember-new-output
+codemods source: ember-app-codemods-manifest@1
+applicable codemods: `);
   });
 
-  it('works for the default blueprint', async function() {
-    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves(['3.15.0']);
+  it('works for the default blueprint with a state file', async function() {
+    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves([
+      '3.15.0'
+    ]);
 
     let {
       result
