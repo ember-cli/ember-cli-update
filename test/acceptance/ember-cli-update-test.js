@@ -36,7 +36,6 @@ describe(function() {
     to = '3.11.0-beta.1',
     listCodemods,
     runCodemods,
-    subDir,
     commitMessage,
     init,
     reset,
@@ -50,8 +49,7 @@ describe(function() {
     beforeMerge = () => Promise.resolve()
   }) {
     tmpPath = await buildTmp({
-      fixturesPath,
-      subDir
+      fixturesPath
     });
 
     await beforeMerge();
@@ -211,22 +209,6 @@ describe(function() {
     fixtureCompare({
       mergeFixtures
     });
-  });
-
-  it('scopes to sub dir if run from there', async function() {
-    let {
-      status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app',
-      subDir: 'foo/bar'
-    })).promise;
-
-    fixtureCompare({
-      mergeFixtures: 'test/fixtures/app/merge/my-app'
-    });
-
-    assertNoUnstaged(status);
   });
 
   it('has all up-to-date blueprints', async function() {
