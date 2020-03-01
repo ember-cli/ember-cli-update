@@ -18,7 +18,7 @@ describe(saveBlueprintFile, function() {
     let emberCliUpdateJsonPath = path.join(tmpPath, 'ember-cli-update.json');
 
     await saveBlueprintFile(emberCliUpdateJsonPath, {
-      schemaVersion: 0,
+      schemaVersion: '1.0.0',
       blueprints: [
         {
           packageName: 'test-blueprint',

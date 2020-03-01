@@ -12,7 +12,7 @@ describe(loadSafeBlueprintFile, function() {
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 
     expect(emberCliUpdateJson).to.deep.equal({
-      schemaVersion: 0,
+      schemaVersion: '1.0.0',
       blueprints: []
     });
   });
@@ -23,7 +23,7 @@ describe(loadSafeBlueprintFile, function() {
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 
     expect(emberCliUpdateJson).to.deep.equal({
-      schemaVersion: 0,
+      schemaVersion: '1.0.0',
       blueprints: []
     });
   });
@@ -34,7 +34,7 @@ describe(loadSafeBlueprintFile, function() {
     let emberCliUpdateJson = await loadSafeBlueprintFile(dir);
 
     expect(emberCliUpdateJson).to.deep.equal({
-      schemaVersion: 0,
+      schemaVersion: '1.0.0',
       blueprints: [loadSafeBlueprint({
         packageName: 'test-blueprint',
         name: 'test-blueprint',

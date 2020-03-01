@@ -10,7 +10,7 @@ async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
     emberCliUpdateJson = {};
   }
 
-  emberCliUpdateJson.schemaVersion = 0;
+  emberCliUpdateJson.schemaVersion = '1.0.0';
 
   if (!emberCliUpdateJson.packages) {
     emberCliUpdateJson.packages = [];
