@@ -2,6 +2,9 @@
 
 const loadBlueprintFile = require('./load-blueprint-file');
 const loadSafeBlueprint = require('./load-safe-blueprint');
+const semver = require('semver');
+
+const currentSchemaVersion = '1.0.0';
 
 async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
   let emberCliUpdateJson = await loadBlueprintFile(emberCliUpdateJsonPath);
@@ -10,7 +13,17 @@ async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
     emberCliUpdateJson = {};
   }
 
-  emberCliUpdateJson.schemaVersion = '1.0.0';
+  if ('schemaVersion' in emberCliUpdateJson) {
+    if (emberCliUpdateJson.schemaVersion === 0) {
+    // if (semver.lt(emberCliUpdateJson.schemaVersion, currentSchemaVersion)) {
+      // eslint-disable-next-line no-console
+      console.warn(`Updating schemaVersion from ${emberCliUpdateJson.schemaVersion} to ${currentSchemaVersion}.`);
+    } else if (semver.gt(emberCliUpdateJson.schemaVersion, currentSchemaVersion)) {
+      throw new Error(`schemaVersion ${emberCliUpdateJson.schemaVersion} is unexpectedly newer than the current ${currentSchemaVersion}.`);
+    }
+  }
+
+  emberCliUpdateJson.schemaVersion = currentSchemaVersion;
 
   if (!emberCliUpdateJson.packages) {
     emberCliUpdateJson.packages = [];
