@@ -79,6 +79,9 @@ module.exports = {
   ],
 
   async run(options) {
+    // eslint-disable-next-line no-console
+    console.warn('Running as an Ember addon is deprecated. Please run as a global install instead.');
+
     let result;
     if (options.reset) {
       result = await reset(options);
