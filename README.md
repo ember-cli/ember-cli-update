@@ -4,11 +4,13 @@
 ![](https://github.com/ember-cli/ember-cli-update/workflows/CI/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/iguxxyxkiu9kyeyo/branch/master?svg=true)](https://ci.appveyor.com/project/embercli/ember-cli-update/branch/master)
 
-Update [Ember CLI](https://ember-cli.com/) [Ember.js](https://www.emberjs.com/) apps and addons (and [Glimmer.js](https://glimmerjs.com/) apps)
+Update [Ember CLI](https://ember-cli.com/) projects
+
+Check out [the new guides](https://github.com/ember-cli/ember-cli-update/wiki).
 
 You can run this either as a global executable available to all projects or an Ember CLI command in a single project.
 
-Fetches list of codemods and instructions from [ember-cli-update-codemods-manifest](https://github.com/ember-cli/ember-cli-update-codemods-manifest)
+Fetches list of codemods and instructions for your projects
 
 This attempts to be a thin wrapper of [boilerplate-update](https://github.com/kellyselden/boilerplate-update).
 
