@@ -17,15 +17,17 @@ module.exports.handler = async function handler(argv) {
     if (argv.reset) {
       result = await reset(argv);
     } else if (argv.statsOnly) {
-      result = await stats(argv);
+      result = { promise: await stats(argv) };
     } else if (argv.compareOnly) {
-      result = await compare(argv);
+      result = { promise: await compare(argv) };
     } else if (argv.listCodemods || argv.runCodemods) {
-      result = await codemods({
-        ...argv,
-        list: argv.listCodemods,
-        sourceJson: argv.codemodsJson
-      });
+      result = {
+        promise: await codemods({
+          ...argv,
+          list: argv.listCodemods,
+          sourceJson: argv.codemodsJson
+        })
+      };
     } else {
       result = await emberCliUpdate(argv);
     }
