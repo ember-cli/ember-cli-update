@@ -141,6 +141,11 @@ module.exports = async function emberCliUpdate({
     to = defaultTo;
   }
 
+  if (resolveConflicts) {
+    // eslint-disable-next-line no-console
+    console.warn('`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.');
+  }
+
   let endBlueprint;
 
   let {
