@@ -17,12 +17,12 @@ module.exports.handler = async function handler(argv) {
     if (argv.reset) {
       result = await reset(argv);
     } else if (argv.statsOnly) {
-      result = { promise: await stats(argv) };
+      result = { promise: stats(argv) };
     } else if (argv.compareOnly) {
-      result = { promise: await compare(argv) };
+      result = { promise: compare(argv) };
     } else if (argv.listCodemods || argv.runCodemods) {
       result = {
-        promise: await codemods({
+        promise: codemods({
           ...argv,
           list: argv.listCodemods,
           sourceJson: argv.codemodsJson
