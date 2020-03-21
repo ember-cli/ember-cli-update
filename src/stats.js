@@ -12,6 +12,7 @@ const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk
 
 module.exports = async function stats({
   cwd = process.cwd(),
+  packageName,
   blueprint
 } = {}) {
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
@@ -26,6 +27,7 @@ module.exports = async function stats({
     } = await getBlueprintFromArgs({
       cwd,
       emberCliUpdateJson,
+      packageName,
       blueprint
     });
 

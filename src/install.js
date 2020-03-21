@@ -21,7 +21,7 @@ module.exports = async function install({
 
   let parsedPackage = await parseBlueprintPackage({
     cwd,
-    blueprint: addon
+    packageName: addon
   });
 
   let {

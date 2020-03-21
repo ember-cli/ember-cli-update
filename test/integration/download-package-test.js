@@ -41,7 +41,7 @@ describe(downloadPackage, function() {
     });
 
     let { url } = await parseBlueprintPackage({
-      blueprint: blueprintPath
+      packageName: blueprintPath
     });
 
     let downloadedPackage = await downloadPackage(null, url, range);

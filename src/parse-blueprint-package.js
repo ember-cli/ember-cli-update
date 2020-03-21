@@ -16,31 +16,31 @@ function toPosixAbsolutePath(path) {
 
 async function parseBlueprintPackage({
   cwd = '.',
-  blueprint
+  packageName
 }) {
   let name;
   let location;
   let url;
   let blueprintPath;
 
-  if (blueprint.startsWith('.')) {
-    blueprintPath = path.resolve(cwd, blueprint);
-  } else if (path.isAbsolute(blueprint) && await fs.pathExists(blueprint)) {
-    blueprintPath = blueprint;
+  if (packageName.startsWith('.')) {
+    blueprintPath = path.resolve(cwd, packageName);
+  } else if (path.isAbsolute(packageName) && await fs.pathExists(packageName)) {
+    blueprintPath = packageName;
   }
 
   if (blueprintPath) {
     let posixBlueprintPath = toPosixAbsolutePath(blueprintPath);
     url = `git+file://${posixBlueprintPath}`;
-    location = blueprint;
+    location = packageName;
   } else {
     try {
       // This matches Window's paths, so it can't be done first.
-      new URL(blueprint);
-      url = blueprint;
-      location = blueprint;
+      new URL(packageName);
+      url = packageName;
+      location = packageName;
     } catch (err) {
-      name = blueprint;
+      name = packageName;
     }
   }
 

@@ -14,9 +14,11 @@ const getBaseBlueprint = require('./get-base-blueprint');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
+const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
 module.exports = async function init({
   cwd = process.cwd(),
+  packageName,
   blueprint: _blueprint,
   to = defaultTo,
   resolveConflicts,
@@ -29,23 +31,31 @@ module.exports = async function init({
   // We must rely on a lookup before the run.
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
-  let packageName;
-  let name;
+  let blueprintName;
   let location;
   let url;
   if (_blueprint) {
+    let blueprintArgs = normalizeBlueprintArgs({
+      packageName,
+      blueprintName: _blueprint
+    });
+
     let parsedPackage = await parseBlueprintPackage({
       cwd,
-      blueprint: _blueprint
+      packageName: blueprintArgs.packageName
     });
     packageName = parsedPackage.name;
-    name = parsedPackage.name;
+    if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
+      blueprintName = blueprintArgs.blueprintName;
+    } else {
+      blueprintName = packageName;
+    }
     location = parsedPackage.location;
     url = parsedPackage.url;
   } else {
     let defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
     packageName = defaultBlueprint.packageName;
-    name = defaultBlueprint.name;
+    blueprintName = defaultBlueprint.name;
     if (!outputRepo) {
       outputRepo = defaultBlueprint.outputRepo;
     }
@@ -61,8 +71,8 @@ module.exports = async function init({
   });
 
   packageName = packageInfo.name;
-  if (!name) {
-    name = packageInfo.name;
+  if (!blueprintName) {
+    blueprintName = packageName;
   }
   let version = packageInfo.version;
   let path = packageInfo.path;
@@ -73,13 +83,13 @@ module.exports = async function init({
 
   let blueprint;
 
-  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
+  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
   if (existingBlueprint) {
     blueprint = existingBlueprint;
   } else {
     blueprint = loadSafeBlueprint({
       packageName,
-      name,
+      name: blueprintName,
       location,
       options: blueprintOptions
     });

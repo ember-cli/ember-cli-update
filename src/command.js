@@ -14,6 +14,11 @@ module.exports = {
 
   availableOptions: [
     {
+      name: 'package-name',
+      description: args['package-name'].description,
+      type: String
+    },
+    {
       name: 'blueprint',
       aliases: args['blueprint'].alias,
       description: args['blueprint'].description,

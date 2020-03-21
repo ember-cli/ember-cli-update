@@ -25,7 +25,7 @@ async function checkForBlueprintUpdates({
     } else {
       let parsedPackage = await parseBlueprintPackage({
         cwd,
-        blueprint: blueprint.location || blueprint.packageName
+        packageName: blueprint.location || blueprint.packageName
       });
 
       let downloadedPackage = await downloadPackage(blueprint.packageName, parsedPackage.url, defaultTo);
