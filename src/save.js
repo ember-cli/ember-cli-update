@@ -6,9 +6,11 @@ const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
+const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
 module.exports = async function save({
   cwd = process.cwd(),
+  packageName,
   blueprint: _blueprint,
   from,
   outputRepo,
@@ -24,25 +26,35 @@ module.exports = async function save({
   // We must rely on a lookup before the run.
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
-  let parsedPackage = await parseBlueprintPackage({
-    cwd,
-    blueprint: _blueprint
+  let blueprintArgs = normalizeBlueprintArgs({
+    packageName,
+    blueprintName: _blueprint
   });
 
-  let {
-    name: packageName,
-    version
-  } = await resolvePackage({
-    name: _blueprint,
+  let parsedPackage = await parseBlueprintPackage({
+    cwd,
+    packageName: blueprintArgs.packageName
+  });
+
+  let packageInfo = await resolvePackage({
+    name: parsedPackage.name,
     url: parsedPackage.url,
     range: from
   });
 
+  packageName = packageInfo.name;
+  let blueprintName;
+  if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
+    blueprintName = blueprintArgs.blueprintName;
+  } else {
+    blueprintName = packageName;
+  }
+
   let blueprint = loadSafeBlueprint({
     packageName,
-    name: packageName,
+    name: blueprintName,
     location: parsedPackage.location,
-    version,
+    version: packageInfo.version,
     options: blueprintOptions
   });
 

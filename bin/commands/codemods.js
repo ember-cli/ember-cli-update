@@ -8,6 +8,7 @@ module.exports.command = 'codemods';
 module.exports.describe = args['run-codemods'].description;
 
 module.exports.builder = {
+  packageName: args['package-name'],
   blueprint: args['blueprint'],
   'source-json': args['codemods-json'],
   list: args['list-codemods']

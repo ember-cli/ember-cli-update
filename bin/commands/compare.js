@@ -8,6 +8,7 @@ module.exports.command = 'compare';
 module.exports.describe = args['compare-only'].description;
 
 module.exports.builder = {
+  packageName: args['package-name'],
   blueprint: args['blueprint'],
   to: args['to']
 };

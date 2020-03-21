@@ -23,6 +23,7 @@ const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
+const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
 async function _resolvePackage(blueprint, url, range) {
   if (blueprint.version && !url) {
@@ -47,6 +48,7 @@ async function _resolvePackage(blueprint, url, range) {
 
 module.exports = async function emberCliUpdate({
   cwd = process.cwd(),
+  packageName,
   blueprint: _blueprint,
   from,
   to,
@@ -65,25 +67,36 @@ module.exports = async function emberCliUpdate({
   let packageUrl;
 
   if (_blueprint) {
+    let blueprintArgs = normalizeBlueprintArgs({
+      packageName,
+      blueprintName: _blueprint
+    });
+
     let parsedPackage = await parseBlueprintPackage({
       cwd,
-      blueprint: _blueprint
+      packageName: blueprintArgs.packageName
     });
     packageUrl = parsedPackage.url;
 
-    let packageName = parsedPackage.name;
+    packageName = parsedPackage.name;
     if (!packageName) {
       let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
       packageName = downloadedPackage.name;
     }
+    let blueprintName;
+    if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
+      blueprintName = blueprintArgs.blueprintName;
+    } else {
+      blueprintName = packageName;
+    }
 
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, packageName);
+    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
     if (existingBlueprint) {
       blueprint = existingBlueprint;
     } else {
       blueprint = loadSafeBlueprint({
         packageName,
-        name: packageName,
+        name: blueprintName,
         location: parsedPackage.location
       });
     }
@@ -119,7 +132,7 @@ module.exports = async function emberCliUpdate({
   if (blueprint.location && !packageUrl) {
     let parsedPackage = await parseBlueprintPackage({
       cwd,
-      blueprint: blueprint.location
+      packageName: blueprint.location
     });
     packageUrl = parsedPackage.url;
   }

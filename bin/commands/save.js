@@ -8,6 +8,7 @@ module.exports.command = 'save';
 module.exports.describe = 'save old blueprint state';
 
 module.exports.builder = {
+  packageName: args['package-name'],
   blueprint: args['blueprint'],
   from: args['from'],
   outputRepo: args['output-repo'],

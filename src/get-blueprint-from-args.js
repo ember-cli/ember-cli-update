@@ -4,16 +4,23 @@ const parseBlueprintPackage = require('./parse-blueprint-package');
 const resolvePackage = require('./resolve-package');
 const findBlueprint = require('./find-blueprint');
 const { defaultTo } = require('./constants');
+const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
 async function getBlueprintFromArgs({
   cwd,
   emberCliUpdateJson,
+  packageName,
   blueprint,
   to = defaultTo
 }) {
+  let blueprintArgs = normalizeBlueprintArgs({
+    packageName,
+    blueprintName: blueprint
+  });
+
   let parsedPackage = await parseBlueprintPackage({
     cwd,
-    blueprint
+    packageName: blueprintArgs.packageName
   });
   let url = parsedPackage.url;
 
@@ -23,10 +30,15 @@ async function getBlueprintFromArgs({
     range: to
   });
 
-  let packageName = packageInfo.name;
-  let name = packageInfo.name;
+  packageName = packageInfo.name;
+  let blueprintName;
+  if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
+    blueprintName = blueprintArgs.blueprintName;
+  } else {
+    blueprintName = packageName;
+  }
 
-  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, name);
+  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
   if (!existingBlueprint) {
     throw `blueprint "${blueprint}" was not found`;
   }

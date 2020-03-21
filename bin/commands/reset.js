@@ -8,6 +8,7 @@ module.exports.command = 'reset';
 module.exports.describe = 'reset a blueprint';
 
 module.exports.builder = {
+  packageName: args['package-name'],
   blueprint: args['blueprint'],
   to: args['to']
 };

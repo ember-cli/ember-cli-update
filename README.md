@@ -75,6 +75,10 @@ ember-cli-update --run-codemods
 ```
   --help               Show help                                       [boolean]
   --version            Show version number                             [boolean]
+  --package-name       Provide a package that can contain many blueprints
+                       ("@glimmer/blueprint",
+                       "git+https://git@github.com/tildeio/libkit.git",
+                       "../blueprint")                                  [string]
   --blueprint, -b      Provide a custom blueprint for use in the update
                        ("@glimmer/blueprint",
                        "git+https://git@github.com/tildeio/libkit.git",

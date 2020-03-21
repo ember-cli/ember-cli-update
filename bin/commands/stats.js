@@ -8,6 +8,7 @@ module.exports.command = 'stats';
 module.exports.describe = 'list blueprint version updates';
 
 module.exports.builder = {
+  packageName: args['package-name'],
   blueprint: args['blueprint']
 };
 
