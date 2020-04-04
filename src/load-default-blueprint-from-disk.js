@@ -2,13 +2,11 @@
 
 const path = require('path');
 const getProjectOptions = require('./get-project-options');
+const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const utils = require('./utils');
-const {
-  defaultPackageName
-} = require('./constants');
 
 async function loadDefaultBlueprintFromDisk(cwd, version) {
   let packageJson;
@@ -22,7 +20,7 @@ async function loadDefaultBlueprintFromDisk(cwd, version) {
     projectOptions = await getProjectOptions(packageJson);
 
     if (!version) {
-      let packageName = defaultPackageName;
+      let packageName = getPackageName(projectOptions);
       let packageVersion = getPackageVersion(packageJson, packageName);
 
       let versions = await utils.getVersions(packageName);
