@@ -1,12 +1,15 @@
 'use strict';
 
+const fs = require('fs-extra');
+const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const sinon = require('sinon');
 const {
   buildTmp,
   processExit,
-  fixtureCompare: _fixtureCompare
+  fixtureCompare: _fixtureCompare,
+  commit
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
@@ -20,6 +23,7 @@ const {
   defaultAddonBlueprintName,
   defaultTo
 } = require('../../src/constants');
+const { EOL } = require('os');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -237,6 +241,44 @@ describe(function() {
           commitMessage: 'my-addon',
           packageName: defaultPackageName,
           blueprint: defaultAddonBlueprintName
+        });
+
+        fixtureCompare({
+          mergeFixtures: 'test/fixtures/addon/merge/my-addon'
+        });
+
+        assertNoUnstaged(status);
+      });
+
+      it('ignores package.json version of ember-cli', async function() {
+        let {
+          packageName,
+          name: blueprint
+        } = (await loadSafeBlueprintFile('test/fixtures/ember-cli-update-json/addon/config/ember-cli-update.json')).blueprints[0];
+
+        let commitMessage = 'my-addon';
+
+        let {
+          status
+        } = await merge({
+          fixturesPath: 'test/fixtures/addon/local',
+          commitMessage,
+          packageName,
+          blueprint,
+          // from: '2.11.1',
+          async beforeMerge() {
+            await fs.copy(
+              path.resolve(__dirname, '../fixtures/ember-cli-update-json/addon/config/ember-cli-update.json'),
+              path.join(tmpPath, 'tests/dummy/config/ember-cli-update.json')
+            );
+
+            let packageJsonPath = path.join(tmpPath, 'package.json');
+            let packageJson = require(packageJsonPath);
+            packageJson.devDependencies['ember-cli'] = '~3.11.0-beta.1';
+            await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
+
+            await commit({ m: commitMessage, cwd: tmpPath });
+          }
         });
 
         fixtureCompare({
