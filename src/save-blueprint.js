@@ -12,7 +12,9 @@ async function saveBlueprint({
   blueprint
 }) {
   if (!(blueprint && blueprint.version)) {
-    blueprint = await utils.loadDefaultBlueprintFromDisk(emberCliUpdateJsonPath);
+    blueprint = await utils.loadDefaultBlueprintFromDisk({
+      cwd: emberCliUpdateJsonPath
+    });
   }
 
   let {

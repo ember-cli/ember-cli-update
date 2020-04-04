@@ -54,7 +54,7 @@ module.exports = async function init({
     location = parsedPackage.location;
     url = parsedPackage.url;
   } else {
-    let defaultBlueprint = await loadDefaultBlueprintFromDisk(cwd);
+    let defaultBlueprint = await loadDefaultBlueprintFromDisk({ cwd });
     packageName = defaultBlueprint.packageName;
     blueprintName = defaultBlueprint.name;
     if (!outputRepo) {
@@ -96,7 +96,10 @@ module.exports = async function init({
     });
 
     if (isDefaultBlueprint(blueprint)) {
-      blueprint = await loadDefaultBlueprintFromDisk(cwd, to);
+      blueprint = await loadDefaultBlueprintFromDisk({
+        cwd,
+        version: to
+      });
     }
   }
 

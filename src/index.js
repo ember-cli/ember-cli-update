@@ -99,7 +99,10 @@ module.exports = async function emberCliUpdate({
       });
 
       if (isDefaultBlueprint(blueprint)) {
-        blueprint = await loadDefaultBlueprintFromDisk(cwd, from);
+        blueprint = await loadDefaultBlueprintFromDisk({
+          cwd,
+          version: from
+        });
       }
     }
 
@@ -128,7 +131,10 @@ module.exports = async function emberCliUpdate({
     blueprint = _blueprint;
     to = _to;
   } else {
-    blueprint = await loadDefaultBlueprintFromDisk(cwd, from);
+    blueprint = await loadDefaultBlueprintFromDisk({
+      cwd,
+      version: from
+    });
   }
 
   if (blueprint.location && !packageUrl) {

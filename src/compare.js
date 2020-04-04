@@ -54,7 +54,7 @@ module.exports = async function compare({
 
       blueprint = _blueprint;
     } else {
-      blueprint = await loadDefaultBlueprintFromDisk(cwd);
+      blueprint = await loadDefaultBlueprintFromDisk({ cwd });
     }
 
     let parsedPackage = await parseBlueprintPackage({

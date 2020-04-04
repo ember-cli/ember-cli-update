@@ -9,7 +9,7 @@ module.exports = async function bootstrap({
 } = {}) {
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
-  let blueprint = await loadDefaultBlueprintFromDisk(cwd);
+  let blueprint = await loadDefaultBlueprintFromDisk({ cwd });
 
   await saveBlueprint({
     emberCliUpdateJsonPath,

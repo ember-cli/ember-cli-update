@@ -20,7 +20,7 @@ describe(_saveBlueprint, function() {
 
   beforeEach(function() {
     loadDefaultBlueprintFromDisk = sinon.stub(utils, 'loadDefaultBlueprintFromDisk')
-      .withArgs(emberCliUpdateJsonPath).resolves(loadSafeBlueprint({
+      .withArgs({ cwd: emberCliUpdateJsonPath }).resolves(loadSafeBlueprint({
         packageName: defaultPackageName,
         name: defaultAppBlueprintName,
         version: '0.0.1'

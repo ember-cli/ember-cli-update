@@ -33,7 +33,7 @@ module.exports = async function stats({
 
     blueprints = [existingBlueprint];
   } else if (!blueprints.length) {
-    blueprint = await loadDefaultBlueprintFromDisk(cwd);
+    blueprint = await loadDefaultBlueprintFromDisk({ cwd });
 
     blueprints = [blueprint];
   }
