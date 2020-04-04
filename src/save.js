@@ -16,7 +16,7 @@ module.exports = async function save({
   blueprintOptions
 }) {
   if (!from) {
-    throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+    throw 'A custom blueprint cannot detect --from. You must supply it.';
   }
 
   // A custom config location in package.json may be reset/init away,
