@@ -22,6 +22,15 @@
         "<node_internals>/**"
       ],
       "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach",
+      "port": 9229,
+      "skipFiles": [
+        "<node_internals>/**"
+      ]
     }
   ]
 }
