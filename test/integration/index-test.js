@@ -236,8 +236,7 @@ describe(function() {
           fixturesPath: 'test/fixtures/addon/local',
           commitMessage: 'my-addon',
           packageName: defaultPackageName,
-          blueprint: defaultAddonBlueprintName,
-          from: '2.11.1'
+          blueprint: defaultAddonBlueprintName
         });
 
         fixtureCompare({
