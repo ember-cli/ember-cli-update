@@ -21,6 +21,11 @@ describe(compare, function() {
   this.timeout(30 * 1000);
 
   let tmpPath;
+  let open;
+
+  beforeEach(function() {
+    open = sinon.stub(utils, 'open');
+  });
 
   afterEach(function() {
     sinon.restore();
@@ -54,8 +59,6 @@ describe(compare, function() {
   }
 
   it('works', async function() {
-    let open = sinon.stub(utils, 'open');
-
     let {
       location
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
@@ -103,8 +106,6 @@ describe(compare, function() {
   });
 
   it('works for the default blueprint without a state file', async function() {
-    let open = sinon.stub(utils, 'open');
-
     await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app'
@@ -117,8 +118,6 @@ describe(compare, function() {
   });
 
   it('works for the default blueprint with a state file', async function() {
-    let open = sinon.stub(utils, 'open');
-
     sinon.stub(inquirer, 'prompt').withArgs([{
       type: 'list',
       message: 'Which blueprint would you like to compare?',
