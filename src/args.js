@@ -2,6 +2,7 @@
 
 module.exports = {
   'package-name': {
+    alias: ['package', 'p'],
     type: 'string',
     description: 'Provide a package that can contain many blueprints ("@glimmer/blueprint", "git+https://git@github.com/tildeio/libkit.git", "../blueprint")'
   },
