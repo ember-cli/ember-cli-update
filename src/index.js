@@ -2,9 +2,7 @@
 
 const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
-const getPackageVersion = require('./get-package-version');
 const getVersions = require('./get-versions');
-const getProjectVersion = require('./get-project-version');
 const _getTagVersion = require('./get-tag-version');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
@@ -181,31 +179,14 @@ module.exports = async function emberCliUpdate({
 
       if (isCustomBlueprint) {
         await Promise.all([
-          startBlueprint ? _resolvePackage(startBlueprint, packageUrl, startBlueprint.version) : null,
+          _resolvePackage(startBlueprint, packageUrl, startBlueprint.version),
           _resolvePackage(endBlueprint, packageUrl, to)
         ]);
       } else {
         let packageName = getPackageName(projectOptions);
-        let packageVersion = getPackageVersion(packageJson, packageName);
-
         let versions = await getVersions(packageName);
-
         let getTagVersion = _getTagVersion(versions, packageName);
-
-        await Promise.all([
-          (async() => {
-            if (startBlueprint) {
-              if (from) {
-                startBlueprint.version = await getTagVersion(from);
-              } else {
-                startBlueprint.version = getProjectVersion(packageVersion, versions, projectOptions);
-              }
-            }
-          })(),
-          (async() => {
-            endBlueprint.version = await getTagVersion(to);
-          })()
-        ]);
+        endBlueprint.version = await getTagVersion(to);
       }
 
       let customDiffOptions = getStartAndEndCommands({
@@ -216,7 +197,7 @@ module.exports = async function emberCliUpdate({
       });
 
       return {
-        startVersion: startBlueprint && startBlueprint.version,
+        startVersion: startBlueprint.version,
         endVersion: endBlueprint.version,
         customDiffOptions
       };
