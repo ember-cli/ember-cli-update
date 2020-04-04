@@ -15,6 +15,7 @@ module.exports = {
   availableOptions: [
     {
       name: 'package-name',
+      aliases: args['package-name'].alias,
       description: args['package-name'].description,
       type: String
     },
