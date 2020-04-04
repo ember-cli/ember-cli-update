@@ -23,7 +23,10 @@ describe(loadDefaultBlueprintFromDisk, function() {
   it('handles missing package.json', async function() {
     require = require.withArgs(path.normalize('/test/path/package')).throws();
 
-    let blueprint = await loadDefaultBlueprintFromDisk('/test/path', '0.0.1');
+    let blueprint = await loadDefaultBlueprintFromDisk({
+      cwd: '/test/path',
+      version: '0.0.1'
+    });
 
     expect(require).to.be.calledOnce;
     expect(getVersions).to.not.be.called;
@@ -46,7 +49,10 @@ describe(loadDefaultBlueprintFromDisk, function() {
       }
     });
 
-    let blueprint = await loadDefaultBlueprintFromDisk('/test/path', '0.0.1');
+    let blueprint = await loadDefaultBlueprintFromDisk({
+      cwd: '/test/path',
+      version: '0.0.1'
+    });
 
     expect(require).to.be.calledOnce;
     expect(getVersions).to.not.be.called;
@@ -71,7 +77,9 @@ describe(loadDefaultBlueprintFromDisk, function() {
 
     getVersions = getVersions.withArgs('ember-cli').resolves(['0.0.1']);
 
-    let blueprint = await loadDefaultBlueprintFromDisk('/test/path');
+    let blueprint = await loadDefaultBlueprintFromDisk({
+      cwd: '/test/path'
+    });
 
     expect(require).to.be.calledOnce;
     expect(getVersions).to.be.calledOnce;

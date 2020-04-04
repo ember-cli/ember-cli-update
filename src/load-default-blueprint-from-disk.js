@@ -8,7 +8,10 @@ const getProjectVersion = require('./get-project-version');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const utils = require('./utils');
 
-async function loadDefaultBlueprintFromDisk(cwd, version) {
+async function loadDefaultBlueprintFromDisk({
+  cwd,
+  version
+}) {
   let packageJson;
   try {
     packageJson = utils.require(path.join(cwd, 'package'));
