@@ -15,6 +15,7 @@ const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
+const isDefaultBlueprint = require('./is-default-blueprint');
 
 module.exports = async function init({
   cwd = process.cwd(),
@@ -93,6 +94,10 @@ module.exports = async function init({
       location,
       options: blueprintOptions
     });
+
+    if (isDefaultBlueprint(blueprint)) {
+      blueprint = await loadDefaultBlueprintFromDisk(cwd, to);
+    }
   }
 
   blueprint.version = version;

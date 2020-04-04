@@ -21,12 +21,14 @@ async function loadDefaultBlueprintFromDisk(cwd, version) {
   if (packageJson) {
     projectOptions = await getProjectOptions(packageJson);
 
-    let packageName = defaultPackageName;
-    let packageVersion = getPackageVersion(packageJson, packageName);
+    if (!version) {
+      let packageName = defaultPackageName;
+      let packageVersion = getPackageVersion(packageJson, packageName);
 
-    let versions = await utils.getVersions(packageName);
+      let versions = await utils.getVersions(packageName);
 
-    version = getProjectVersion(packageVersion, versions, projectOptions);
+      version = getProjectVersion(packageVersion, versions, projectOptions);
+    }
   }
 
   let blueprint = loadDefaultBlueprint(projectOptions, version);

@@ -99,6 +99,10 @@ module.exports = async function emberCliUpdate({
         name: blueprintName,
         location: parsedPackage.location
       });
+
+      if (isDefaultBlueprint(blueprint)) {
+        blueprint = await loadDefaultBlueprintFromDisk(cwd, from);
+      }
     }
 
     if (from) {

@@ -14,6 +14,10 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const {
+  defaultPackageName,
+  defaultAppBlueprintName
+} = require('../../src/constants');
 
 describe(init, function() {
   this.timeout(30 * 1000);
@@ -22,6 +26,7 @@ describe(init, function() {
 
   async function merge({
     fixturesPath,
+    packageName,
     blueprint,
     to,
     outputRepo,
@@ -38,6 +43,7 @@ describe(init, function() {
 
     let { promise } = await init({
       cwd: tmpPath,
+      packageName,
       blueprint,
       to,
       outputRepo,
@@ -94,6 +100,24 @@ describe(init, function() {
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/blueprint/app/local-app/init/merge/my-app'
+    });
+
+    assertNoStaged(status);
+  });
+
+  it('can initialize a default blueprint by name', async function() {
+    let {
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage: 'my-app',
+      packageName: defaultPackageName,
+      blueprint: defaultAppBlueprintName,
+      to: '2.11.1'
+    });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/init/my-app'
     });
 
     assertNoStaged(status);
