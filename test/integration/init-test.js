@@ -10,7 +10,7 @@ const {
 } = require('git-fixtures');
 const init = require('../../src/init');
 const {
-  assertNoUnstaged
+  assertNoStaged
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
@@ -96,6 +96,6 @@ describe(init, function() {
       mergeFixtures: 'test/fixtures/blueprint/app/local-app/init/merge/my-app'
     });
 
-    assertNoUnstaged(status);
+    assertNoStaged(status);
   });
 });
