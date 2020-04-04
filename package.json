@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-update",
-  "version": "0.54.0",
+  "version": "0.54.1",
   "description": "Update Ember CLI projects",
   "main": "src/index.js",
   "bin": {
