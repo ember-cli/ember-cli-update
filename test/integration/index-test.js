@@ -15,7 +15,11 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
-const { defaultTo } = require('../../src/constants');
+const {
+  defaultPackageName,
+  defaultAddonBlueprintName,
+  defaultTo
+} = require('../../src/constants');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -29,6 +33,7 @@ describe(function() {
   async function merge({
     fixturesPath,
     dirty,
+    packageName,
     blueprint,
     from,
     to = '3.11.0-beta.1',
@@ -46,6 +51,7 @@ describe(function() {
     let promise = (async() => {
       let result = await (await emberCliUpdate({
         cwd: tmpPath,
+        packageName,
         blueprint,
         from,
         to
@@ -218,6 +224,24 @@ describe(function() {
 
         fixtureCompare({
           mergeFixtures: 'test/fixtures/blueprint/app/legacy-app/merge/my-app'
+        });
+
+        assertNoUnstaged(status);
+      });
+
+      it('can update a default blueprint by name', async function() {
+        let {
+          status
+        } = await merge({
+          fixturesPath: 'test/fixtures/addon/local',
+          commitMessage: 'my-addon',
+          packageName: defaultPackageName,
+          blueprint: defaultAddonBlueprintName,
+          from: '2.11.1'
+        });
+
+        fixtureCompare({
+          mergeFixtures: 'test/fixtures/addon/merge/my-addon'
         });
 
         assertNoUnstaged(status);

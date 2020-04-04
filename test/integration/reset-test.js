@@ -24,6 +24,7 @@ describe(reset, function() {
 
   async function merge({
     fixturesPath,
+    packageName,
     blueprint,
     to,
     commitMessage,
@@ -37,6 +38,7 @@ describe(reset, function() {
 
     let { promise } = await reset({
       cwd: tmpPath,
+      packageName,
       blueprint,
       to
     });
@@ -144,6 +146,30 @@ describe(reset, function() {
     });
 
     expect(status).to.match(/^ D app\/controllers\/application\.js$/m);
+
+    assertNoStaged(status);
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/app/reset/my-app'
+    });
+  });
+
+  it('can reset a default blueprint by name', async function() {
+    let {
+      packageName,
+      name: blueprint,
+      version: to
+    } = (await loadSafeBlueprintFile('test/fixtures/app/reset/my-app/config/ember-cli-update.json')).blueprints[0];
+
+    let {
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/merge',
+      commitMessage: 'my-app',
+      packageName,
+      blueprint,
+      to
+    });
 
     assertNoStaged(status);
 

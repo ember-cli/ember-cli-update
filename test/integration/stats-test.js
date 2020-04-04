@@ -15,6 +15,10 @@ const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const utils = require('../../src/utils');
 const sinon = require('sinon');
+const {
+  defaultPackageName,
+  defaultAppBlueprintName
+} = require('../../src/constants');
 
 describe(stats, function() {
   this.timeout(30 * 1000);
@@ -26,6 +30,7 @@ describe(stats, function() {
   });
 
   async function merge({
+    packageName,
     blueprint,
     fixturesPath,
     commitMessage,
@@ -39,6 +44,7 @@ describe(stats, function() {
 
     let promise = stats({
       cwd: tmpPath,
+      packageName,
       blueprint
     });
 
@@ -168,6 +174,31 @@ applicable codemods: `);
     } = await merge({
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app'
+    });
+
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
+
+    expect(result).to.equal(`package name: ember-cli
+blueprint name: app
+current version: 3.11.0-beta.1
+latest version: 3.15.0
+output repo: https://github.com/ember-cli/ember-new-output
+codemods source: ember-app-codemods-manifest@1
+applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, notify-property-change, qunit-dom-codemod, deprecate-merge-codemod, deprecate-router-events-codemod, cp-property-codemod, cp-volatile-codemod, cp-property-map-codemod, ember-angle-brackets-codemod, ember-data-codemod`);
+  });
+
+  it('works for a default blueprint by name', async function() {
+    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves([
+      '3.15.0'
+    ]);
+
+    let {
+      result
+    } = await merge({
+      fixturesPath: 'test/fixtures/app/merge',
+      commitMessage: 'my-app',
+      packageName: defaultPackageName,
+      blueprint: defaultAppBlueprintName
     });
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;

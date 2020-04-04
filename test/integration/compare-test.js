@@ -32,6 +32,7 @@ describe(compare, function() {
   });
 
   async function merge({
+    packageName,
     blueprint,
     to = '3.11.0-beta.1',
     fixturesPath,
@@ -46,6 +47,7 @@ describe(compare, function() {
 
     let promise = compare({
       cwd: tmpPath,
+      packageName,
       blueprint,
       to
     });
@@ -130,6 +132,35 @@ describe(compare, function() {
     await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage,
+      async beforeMerge() {
+        await fs.copy(
+          path.resolve(__dirname, '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'),
+          path.join(tmpPath, 'config/ember-cli-update.json')
+        );
+
+        await commit({ m: commitMessage, cwd: tmpPath });
+      }
+    });
+
+    expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
+
+    expect(open).to.have.been.calledOnce
+      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
+  });
+
+  it('works for a default blueprint by name', async function() {
+    let {
+      packageName,
+      name: blueprint
+    } = (await loadSafeBlueprintFile('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json')).blueprints[0];
+
+    let commitMessage = 'my-app';
+
+    await merge({
+      fixturesPath: 'test/fixtures/app/local',
+      commitMessage,
+      packageName,
+      blueprint,
       async beforeMerge() {
         await fs.copy(
           path.resolve(__dirname, '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'),
