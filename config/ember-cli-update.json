@@ -20,7 +20,8 @@
           "options": [
             "--repo-slug=ember-cli/ember-cli-update",
             "--appveryor=iguxxyxkiu9kyeyo",
-            "--github-actions"
+            "--github-actions",
+            "--renovate"
           ]
         }
       ]
