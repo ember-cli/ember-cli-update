@@ -254,7 +254,7 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: startVersion
           },
-          packageRange: '>=3.11.0-beta.1'
+          packageRange: '>=3.11.0-beta.1 <3.16'
         },
         endOptions: {
           baseBlueprint: {
@@ -265,7 +265,7 @@ describe(_getStartAndEndCommands, function() {
             name: blueprint,
             version: endVersion
           },
-          packageRange: '>=3.11.0-beta.1'
+          packageRange: '>=3.11.0-beta.1 <3.16'
         }
       });
     });
@@ -335,7 +335,7 @@ describe(_getStartAndEndCommands, function() {
 
       expect(npxStub.args).to.deep.equal([[
         [
-          packageName,
+          `${packageName}@3.16`,
           'new',
           projectName,
           '-sg',
