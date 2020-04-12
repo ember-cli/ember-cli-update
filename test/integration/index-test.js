@@ -40,7 +40,7 @@ describe(function() {
     packageName,
     blueprint,
     from,
-    to = '3.11.0-beta.1',
+    to = '3.11.0',
     commitMessage,
     beforeMerge = () => Promise.resolve(),
     afterMerge = () => Promise.resolve()
@@ -274,7 +274,7 @@ describe(function() {
 
             let packageJsonPath = path.join(tmpPath, 'package.json');
             let packageJson = require(packageJsonPath);
-            packageJson.devDependencies['ember-cli'] = '~3.11.0-beta.1';
+            packageJson.devDependencies['ember-cli'] = '~3.11.0';
             await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
 
             await commit({ m: commitMessage, cwd: tmpPath });

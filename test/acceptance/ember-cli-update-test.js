@@ -33,7 +33,7 @@ describe(function() {
   async function merge({
     fixturesPath,
     from,
-    to = '3.11.0-beta.1',
+    to = '3.11.0',
     listCodemods,
     runCodemods,
     commitMessage,
