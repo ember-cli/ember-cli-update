@@ -25,7 +25,7 @@ describe(function() {
 
   async function merge({
     fixturesPath,
-    to = '3.11.0-beta.1',
+    to = '3.11.0',
     commitMessage,
     beforeMerge = () => Promise.resolve()
   }) {

@@ -34,7 +34,7 @@ describe(compare, function() {
   async function merge({
     packageName,
     blueprint,
-    to = '3.11.0-beta.1',
+    to = '3.11.0',
     fixturesPath,
     commitMessage,
     beforeMerge = () => Promise.resolve()
@@ -116,7 +116,7 @@ describe(compare, function() {
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
+      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0');
   });
 
   it('works for the default blueprint with a state file', async function() {
@@ -145,7 +145,7 @@ describe(compare, function() {
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
+      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0');
   });
 
   it('works for a default blueprint by name', async function() {
@@ -174,6 +174,6 @@ describe(compare, function() {
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
+      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0');
   });
 });
