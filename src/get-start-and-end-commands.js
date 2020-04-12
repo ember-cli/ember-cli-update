@@ -45,10 +45,10 @@ module.exports = function getStartAndEndCommands({
   } else if (!endBlueprint.isBaseBlueprint && isDefaultBlueprint(baseBlueprint)) {
     startRange = endRange = baseBlueprint.version;
   } else {
-    // first stable version that supports blueprints with versions
+    // first version that supports blueprints with versions
     // `-b foo@1.2.3`
     // https://github.com/ember-cli/ember-cli/pull/8571
-    startRange = endRange = '>=3.11.0';
+    startRange = endRange = '>=3.11.0-beta.1';
   }
 
   return {
