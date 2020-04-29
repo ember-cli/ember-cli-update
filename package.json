@@ -46,7 +46,7 @@
     "npm-package-arg": "^7.0.0",
     "resolve": "^1.10.0",
     "semver": "^6.0.0",
-    "tmp": "0.1.0",
+    "tmp": "0.2.1",
     "update-notifier": "^4.0.0",
     "yargs": "^15.1.0"
   },
