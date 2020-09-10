@@ -17,9 +17,7 @@ install:
   # for test cache hits
   - npm i -g ember-cli@2.11.1
   - ps: >-
-      if ($env:nodejs_version -eq "8") {
-        [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
-      }
+      [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
   - RefreshEnv
   - where npx
   # don't accidentally use the global npx
