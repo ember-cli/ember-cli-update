@@ -144,6 +144,8 @@ describe(function() {
 
   it('runs codemods', async function() {
     if (process.platform === 'darwin') {
+      this.timeout(1.5 * 60 * 1000);
+    } else {
       this.timeout(60 * 1000);
     }
 
