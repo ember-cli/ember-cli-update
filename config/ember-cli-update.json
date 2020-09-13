@@ -19,7 +19,7 @@
           "name": "@kellyselden/node-template",
           "options": [
             "--repo-slug=ember-cli/ember-cli-update",
-            "--appveryor=iguxxyxkiu9kyeyo",
+            "--appveyor=iguxxyxkiu9kyeyo",
             "--github-actions",
             "--renovate"
           ]
