@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/ember-cli/ember-cli-update#readme",
   "engines": {
-    "node": ">=8.10"
+    "node": ">=10.12"
   },
   "files": [
     "bin",
