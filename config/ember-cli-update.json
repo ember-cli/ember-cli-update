@@ -13,7 +13,7 @@
     },
     {
       "name": "@kellyselden/node-template",
-      "version": "0.12.3",
+      "version": "1.1.0",
       "blueprints": [
         {
           "name": "@kellyselden/node-template",
