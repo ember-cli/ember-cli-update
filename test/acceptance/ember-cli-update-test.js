@@ -471,7 +471,7 @@ describe(function() {
   // in existing npm addons
   // https://github.com/salsify/ember-cli-dependency-lint/blob/v1.0.3/lib/commands/dependency-lint.js#L5
   it('can update a npm addon blueprint with implicit peer dep', async function() {
-    this.timeout(3 * 60 * 1000);
+    this.timeout(5 * 60 * 1000);
 
     let {
       name,
