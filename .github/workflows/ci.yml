@@ -20,48 +20,8 @@ jobs:
     - run: npm ci
     - run: npm run lint
 
-  test:
-    needs: lint
-
-    strategy:
-      matrix:
-        os:
-        - ubuntu-latest
-        - macos-latest
-        node:
-        - 10
-        - '*'
-        test-command:
-        - test:bin
-        - test:command
-        - test:fast
-        exclude:
-        - os: macos-latest
-          node: '*'
-        - os: macos-latest
-          node: 10
-          test-command: test:fast
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        version: ${{ matrix.node }}
-
-    # for test cache hits
-    - run: npm i -g ember-cli@2.11.1
-
-    - run: npm ci
-    - run: npm run ${{ matrix.test-command }} -- --retries 1
-      timeout-minutes: 15
-      env:
-        NODE_LTS: ${{ matrix.node != '*' }}
-        DEBUG: ember-cli-update,boilerplate-update,git-diff-apply,git-fixtures
-
   ember-cli-update:
-    needs: test
+    needs: lint
     if: github.event_name == 'pull_request'
 
     runs-on: ubuntu-latest
@@ -70,7 +30,6 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.head_ref }}
-        token: ${{ secrets.GitHubToken }}
     - uses: actions/setup-node@v1
     - uses: kellyselden/ember-cli-update-action@v2
       with:
