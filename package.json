@@ -47,7 +47,7 @@
     "resolve": "^1.10.0",
     "semver": "^7.0.0",
     "tmp": "0.2.1",
-    "update-notifier": "^4.0.0",
+    "update-notifier": "^5.0.0",
     "yargs": "^16.0.0"
   },
   "devDependencies": {
