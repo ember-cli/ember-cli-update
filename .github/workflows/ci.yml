@@ -48,7 +48,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
-        version: ${{ matrix.node }}
+        node-version: ${{ matrix.node }}
 
     # for test cache hits
     - run: npm i -g ember-cli@2.11.1
