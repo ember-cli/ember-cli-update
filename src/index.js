@@ -64,6 +64,7 @@ module.exports = async function emberCliUpdate({
   let blueprint;
   let packageUrl;
 
+  debugger;
   if (_blueprint) {
     let blueprintArgs = normalizeBlueprintArgs({
       packageName,
@@ -72,38 +73,48 @@ module.exports = async function emberCliUpdate({
 
     let parsedPackage = await parseBlueprintPackage({
       cwd,
-      packageName: blueprintArgs.packageName
+      packageName: blueprintArgs.packageName,
+      localLocation: blueprintArgs.localLocation
     });
     packageUrl = parsedPackage.url;
 
     packageName = parsedPackage.name;
-    if (!packageName) {
-      let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
-      packageName = downloadedPackage.name;
-    }
-    let blueprintName;
-    if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
-      blueprintName = blueprintArgs.blueprintName;
-    } else {
-      blueprintName = packageName;
-    }
 
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
-    if (existingBlueprint) {
-      blueprint = existingBlueprint;
-    } else {
-      blueprint = loadSafeBlueprint({
-        packageName,
-        name: blueprintName,
-        location: parsedPackage.location
+    if (blueprintArgs.localLocation) {
+      blueprint = await loadDefaultBlueprintFromDisk({
+        cwd: blueprintArgs.localLocation,
+        version: from
       });
-
-      if (isDefaultBlueprint(blueprint)) {
-        blueprint = await loadDefaultBlueprintFromDisk({
-          cwd,
-          version: from
-        });
+    } else {
+      if (!packageName) {
+        let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
+        packageName = downloadedPackage.name;
       }
+      let blueprintName;
+      if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
+        blueprintName = blueprintArgs.blueprintName;
+      } else {
+        blueprintName = packageName;
+      }
+
+      let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
+      if (existingBlueprint) {
+        blueprint = existingBlueprint;
+      } else {
+        blueprint = loadSafeBlueprint({
+          packageName,
+          name: blueprintName,
+          location: parsedPackage.location
+        });
+
+        if (isDefaultBlueprint(blueprint)) {
+          blueprint = await loadDefaultBlueprintFromDisk({
+            cwd,
+            version: from
+          });
+        }
+      }
+
     }
 
     if (from) {

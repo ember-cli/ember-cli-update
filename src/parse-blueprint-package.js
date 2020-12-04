@@ -16,12 +16,20 @@ function toPosixAbsolutePath(path) {
 
 async function parseBlueprintPackage({
   cwd = '.',
-  packageName
+  packageName,
+  localLocation,
 }) {
   let name;
   let location;
   let url;
   let blueprintPath;
+
+  if (localLocation) {
+    return {
+      name: packageName,
+      location: localLocation,
+    };
+  }
 
   if (packageName.startsWith('.')) {
     blueprintPath = path.resolve(cwd, packageName);
