@@ -34,14 +34,14 @@ async function chooseBlueprint({
 }
 
 /**
- * Facilitate prompting the user for which bllueprint that want to update
+ * Facilitate prompting the user for which bllueprint they want to update
  *
- * @param cwd
- * @param emberCliUpdateJson
- * @param reset
- * @param compare
- * @param codemods
- * @param to
+ * @param {string} cwd - Used in `checkForBlueprintUpdates` in order to generate url or path to it if on local disk
+ * @param {object} emberCliUpdateJson - Use the `blueprints` property from this
+ * @param {boolean} reset  - Optional
+ * @param {boolean} compare - Optional
+ * @param {boolean} codemods - Optional
+ * @param {string} to - Optional (could be undefined).
  * @returns {Promise<{blueprint: (*|{}), areAllUpToDate, to: string}>}
  */
 async function chooseBlueprintUpdates({
