@@ -23,6 +23,82 @@ const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
+/**
+ * Build an object of configurations based on contents of the package containing the blueprint specified
+ * by the user
+ */
+async function setupParamPassedBlueprint(
+  selectedPackageName,
+  selectedBlueprintName,
+  emberCliUpdateJson,
+  fromVersion,
+  cwd
+) {
+  let blueprintArgs = normalizeBlueprintArgs({
+    selectedPackageName,
+    blueprintName: selectedBlueprintName
+  });
+  let parsedPackage = await parseBlueprintPackage({
+    cwd,
+    packageName: blueprintArgs.packageName
+  });
+  let blueprint;
+  let packageUrl = parsedPackage.url;
+  let packageName = parsedPackage.name;
+
+  if (!packageName) {
+    let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
+    packageName = downloadedPackage.name;
+  }
+
+  let blueprintName;
+  if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
+    blueprintName = blueprintArgs.blueprintName;
+  } else {
+    blueprintName = packageName;
+  }
+
+  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
+
+  if (existingBlueprint) {
+    blueprint = existingBlueprint;
+  } else {
+    blueprint = loadSafeBlueprint({
+      packageName,
+      name: blueprintName,
+      location: parsedPackage.location
+    });
+
+    if (isDefaultBlueprint(blueprint)) {
+      blueprint = await loadDefaultBlueprintFromDisk({
+        cwd,
+        version: fromVersion
+      });
+    }
+  }
+
+  if (fromVersion) {
+    blueprint.version = fromVersion;
+  }
+
+  if (!blueprint.version) {
+    throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+  }
+
+  return blueprint;
+}
+
+/**
+ * If `version` attribute exists in the `blueprint` object and URL is empty, skip. Otherwise resolve the details of
+ * the blueprint
+ *
+ * @param {Object} blueprint - Expected to contain `name`, `options` array, `packageName`, `location`, and `version`
+ * attributes
+ * @param {String} url - Optional parameter that links to package
+ * @param {String} range - Version range i.e. 1.0.2
+ * @returns {Promise<void>}
+ * @private
+ */
 async function _resolvePackage(blueprint, url, range) {
   if (blueprint.version && !url) {
     return;
@@ -44,6 +120,16 @@ async function _resolvePackage(blueprint, url, range) {
   }
 }
 
+/**
+ *
+ * @param cwd
+ * @param packageName - User passed package name
+ * @param _blueprint - User passed blueprint name
+ * @param from
+ * @param to
+ * @param resolveConflicts
+ * @returns {Promise<{promise: Promise<*>, resolveConflictsProcess}|{promise: Promise<void>}>}
+ */
 module.exports = async function emberCliUpdate({
   cwd = process.cwd(),
   packageName,
@@ -65,54 +151,13 @@ module.exports = async function emberCliUpdate({
   let packageUrl;
 
   if (_blueprint) {
-    let blueprintArgs = normalizeBlueprintArgs({
+    blueprint = await setupParamPassedBlueprint(
       packageName,
-      blueprintName: _blueprint
-    });
-
-    let parsedPackage = await parseBlueprintPackage({
-      cwd,
-      packageName: blueprintArgs.packageName
-    });
-    packageUrl = parsedPackage.url;
-
-    packageName = parsedPackage.name;
-    if (!packageName) {
-      let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
-      packageName = downloadedPackage.name;
-    }
-    let blueprintName;
-    if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
-      blueprintName = blueprintArgs.blueprintName;
-    } else {
-      blueprintName = packageName;
-    }
-
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
-    if (existingBlueprint) {
-      blueprint = existingBlueprint;
-    } else {
-      blueprint = loadSafeBlueprint({
-        packageName,
-        name: blueprintName,
-        location: parsedPackage.location
-      });
-
-      if (isDefaultBlueprint(blueprint)) {
-        blueprint = await loadDefaultBlueprintFromDisk({
-          cwd,
-          version: from
-        });
-      }
-    }
-
-    if (from) {
-      blueprint.version = from;
-    }
-
-    if (!blueprint.version) {
-      throw new Error('A custom blueprint cannot detect --from. You must supply it.');
-    }
+      _blueprint,
+      emberCliUpdateJson,
+      from,
+      cwd
+    );
   } else if (blueprints.length) {
     let {
       areAllUpToDate,
@@ -137,6 +182,7 @@ module.exports = async function emberCliUpdate({
     });
   }
 
+  // If blueprint is located on disk
   if (blueprint.location && !packageUrl) {
     let parsedPackage = await parseBlueprintPackage({
       cwd,
@@ -153,6 +199,9 @@ module.exports = async function emberCliUpdate({
     blueprint
   });
 
+  // If no base blueprint is found, set the selected one as the base blueprint.
+  // `glimmer`, `app`, and `addon` blueprints as well as ones whose `isBaseBlueprint` attribute is
+  // set to true will also have baseBlueprint undefined
   if (!baseBlueprint) {
     // for non-existing blueprints
     blueprint.isBaseBlueprint = true;

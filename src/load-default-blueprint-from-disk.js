@@ -8,6 +8,14 @@ const getProjectVersion = require('./get-project-version');
 const loadDefaultBlueprint = require('./load-default-blueprint');
 const utils = require('./utils');
 
+/**
+ * Generate the configuration for the "base blueprint" which is the blueprint that first created
+ * the ember project
+ *
+ * @param {string} cwd - Current working directory expected to be a node project path
+ * @param {string} version - Optional. if not pass will use the one specified in package json
+ * @returns {Promise<*|{}>}
+ */
 async function loadDefaultBlueprintFromDisk({
   cwd,
   version
@@ -32,9 +40,7 @@ async function loadDefaultBlueprintFromDisk({
     }
   }
 
-  let blueprint = loadDefaultBlueprint(projectOptions, version);
-
-  return blueprint;
+  return loadDefaultBlueprint(projectOptions, version);
 }
 
 module.exports = loadDefaultBlueprintFromDisk;

@@ -6,6 +6,22 @@ const semver = require('semver');
 
 const currentSchemaVersion = '1.0.0';
 
+/**
+ * Iterate through the `packages` attribute of the `ember-cli-update.json` file and ensure each
+ * configuration has an `options` attribute
+ *
+ * `emberCliUpdateJson.blueprints` is expected to have at least the following attributes:
+ * {
+ *   packageName: 'package name',
+ *   location: 'Path on disk if local',
+ *   version: '1.2.3',
+ *   options: [],
+ *   ... Any other values
+ * }
+ *
+ * @param {String} emberCliUpdateJsonPath - Path to `ember-cli-update.json` file
+ * @returns {Promise<*>} - Contains object with `blueprints` attribute that is an array
+ */
 async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
   let emberCliUpdateJson = await loadBlueprintFile(emberCliUpdateJsonPath);
 
