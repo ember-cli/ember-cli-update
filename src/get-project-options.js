@@ -37,10 +37,10 @@ function getProjectType(checkForDep, keywords) {
 /**
  * Determine what kind of ember flavor this project is and if it uses yarn or npm
  *
- * @param keywords
- * @param dependencies
- * @param devDependencies
- * @param blueprint
+ * @param {array} keywords - the `keywords` attribute from a `package.json`
+ * @param {object} dependencies - the `dependencies` attribute from a `package.json`
+ * @param {object} devDependencies - the `devDependencies` attribute  from a `package.json`
+ * @param {object} blueprint - Expected to contain `packageName` and `name`
  * @returns {Promise<[string]|string[]>} - Array of strings containing keywords
  */
 module.exports = async function getProjectOptions({
