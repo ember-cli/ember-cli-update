@@ -34,7 +34,7 @@ async function chooseBlueprint({
 }
 
 /**
- * Facilitate prompting the user for which bllueprint they want to update
+ * Facilitate prompting the user for which blueprint they want to update
  *
  * @param {string} cwd - Used in `checkForBlueprintUpdates` in order to generate url or path to it if on local disk
  * @param {object} emberCliUpdateJson - Use the `blueprints` property from this
