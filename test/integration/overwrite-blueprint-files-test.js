@@ -10,7 +10,7 @@ const { spawn } = require('../../src/run');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const sinon = require('sinon');
-const { ember } = require('../../src/ember-install-addon');
+const { ember } = require('../../src/install-and-generate-blueprint');
 
 describe(overwriteBlueprintFiles, function() {
   this.timeout(60 * 1000);

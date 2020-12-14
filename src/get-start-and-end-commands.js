@@ -6,7 +6,7 @@ const execa = require('execa');
 const { spawn } = require('./run');
 const utils = require('./utils');
 const isDefaultBlueprint = require('./is-default-blueprint');
-const emberInstallAddon = require('./ember-install-addon');
+const installAndGenerateBlueprint = require('./install-and-generate-blueprint');
 const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('./debug');
 const npm = require('boilerplate-update/src/npm');
@@ -255,6 +255,13 @@ function createProject(runEmber) {
   };
 }
 
+/**
+ * There are 3 types of packages
+ *
+ * @param {string} projectRoot - Used as cwd for running npm commands as well directory to make file modifications
+ * @param {object} blueprint - Expected to have `packageName`, `version`, and `path` (nullable) attributes
+ * @returns {Promise<void>}
+ */
 module.exports.installAddonBlueprint = async function installAddonBlueprint({
   projectRoot,
   blueprint
@@ -262,11 +269,13 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   // `not found: ember` without this
   await spawn('npm', ['install'], { cwd: projectRoot });
 
-  let { ps } = await emberInstallAddon({
+  let { ps } = await installAndGenerateBlueprint({
     cwd: projectRoot,
     packageName: blueprint.packageName,
     version: blueprint.version,
     blueprintPath: blueprint.path,
+    blueprintName: blueprint.name,
+    blueprintOptions: blueprint.options || [],
     stdin: 'pipe'
   });
 

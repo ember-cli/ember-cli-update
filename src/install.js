@@ -5,14 +5,15 @@ const loadSafeBlueprint = require('./load-safe-blueprint');
 const saveBlueprint = require('./save-blueprint');
 const loadBlueprintFile = require('./load-blueprint-file');
 const bootstrap = require('./bootstrap');
-const emberInstallAddon = require('./ember-install-addon');
+const installAndGenerateBlueprint = require('./install-and-generate-blueprint');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 
 module.exports = async function install({
   cwd = process.cwd(),
-  addon
+  addon,
+  blueprint: _blueprintName
 }) {
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
@@ -39,10 +40,11 @@ module.exports = async function install({
   // if location is specified, and the below is needed to allow
   // NPM/yarn to resolve the package.json version for us.
   // This may be able to be combined somehow...
-  let { ps } = await emberInstallAddon({
+  let { ps } = await installAndGenerateBlueprint({
     cwd,
     addonNameOverride: addon,
     packageName,
+    blueprintName: _blueprintName || addon,
     blueprintPath: path
   });
 
@@ -50,7 +52,7 @@ module.exports = async function install({
 
   let blueprint = loadSafeBlueprint({
     packageName,
-    name: packageName,
+    name: _blueprintName || packageName,
     location: parsedPackage.location,
     version
   });
