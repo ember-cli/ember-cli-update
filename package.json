@@ -58,7 +58,7 @@
     "chai-string": "^1.5.0",
     "ember-cli": "3.11.0-beta.1",
     "eslint": "^7.8.1",
-    "eslint-config-sane": "0.8.5",
+    "eslint-config-sane": "1.0.0",
     "eslint-config-sane-node": "0.3.0",
     "eslint-plugin-json-files": "0.8.1",
     "eslint-plugin-mocha": "^8.0.0",
