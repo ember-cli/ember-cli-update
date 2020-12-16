@@ -24,71 +24,6 @@ const { defaultTo } = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
 /**
- * Build an object of configurations based on contents of the package containing the blueprint specified
- * by the user
- */
-async function setupParamPassedBlueprint(
-  selectedPackageName,
-  selectedBlueprintName,
-  emberCliUpdateJson,
-  fromVersion,
-  cwd
-) {
-  let blueprintArgs = normalizeBlueprintArgs({
-    selectedPackageName,
-    blueprintName: selectedBlueprintName
-  });
-  let parsedPackage = await parseBlueprintPackage({
-    cwd,
-    packageName: blueprintArgs.packageName
-  });
-  let blueprint;
-  let packageUrl = parsedPackage.url;
-  let packageName = parsedPackage.name;
-
-  if (!packageName) {
-    let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
-    packageName = downloadedPackage.name;
-  }
-
-  let blueprintName;
-  if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
-    blueprintName = blueprintArgs.blueprintName;
-  } else {
-    blueprintName = packageName;
-  }
-
-  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
-
-  if (existingBlueprint) {
-    blueprint = existingBlueprint;
-  } else {
-    blueprint = loadSafeBlueprint({
-      packageName,
-      name: blueprintName,
-      location: parsedPackage.location
-    });
-
-    if (isDefaultBlueprint(blueprint)) {
-      blueprint = await loadDefaultBlueprintFromDisk({
-        cwd,
-        version: fromVersion
-      });
-    }
-  }
-
-  if (fromVersion) {
-    blueprint.version = fromVersion;
-  }
-
-  if (!blueprint.version) {
-    throw new Error('A custom blueprint cannot detect --from. You must supply it.');
-  }
-
-  return blueprint;
-}
-
-/**
  * If `version` attribute exists in the `blueprint` object and URL is empty, skip. Otherwise resolve the details of
  * the blueprint
  *
@@ -120,24 +55,14 @@ async function _resolvePackage(blueprint, url, range) {
   }
 }
 
-/**
- *
- * @param cwd
- * @param packageName - User passed package name
- * @param _blueprint - User passed blueprint name
- * @param from
- * @param to
- * @param resolveConflicts
- * @returns {Promise<{promise: Promise<*>, resolveConflictsProcess}|{promise: Promise<void>}>}
- */
 module.exports = async function emberCliUpdate({
-  cwd = process.cwd(),
-  packageName,
-  blueprint: _blueprint,
-  from,
-  to,
-  resolveConflicts
-} = {}) {
+                                                 cwd = process.cwd(),
+                                                 packageName,
+                                                 blueprint: _blueprint,
+                                                 from,
+                                                 to,
+                                                 resolveConflicts
+                                               } = {}) {
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.
@@ -151,13 +76,54 @@ module.exports = async function emberCliUpdate({
   let packageUrl;
 
   if (_blueprint) {
-    blueprint = await setupParamPassedBlueprint(
+    let blueprintArgs = normalizeBlueprintArgs({
       packageName,
-      _blueprint,
-      emberCliUpdateJson,
-      from,
-      cwd
-    );
+      blueprintName: _blueprint
+    });
+
+    let parsedPackage = await parseBlueprintPackage({
+      cwd,
+      packageName: blueprintArgs.packageName
+    });
+    packageUrl = parsedPackage.url;
+
+    packageName = parsedPackage.name;
+    if (!packageName) {
+      let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
+      packageName = downloadedPackage.name;
+    }
+    let blueprintName;
+    if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
+      blueprintName = blueprintArgs.blueprintName;
+    } else {
+      blueprintName = packageName;
+    }
+
+    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
+    if (existingBlueprint) {
+      blueprint = existingBlueprint;
+    } else {
+      blueprint = loadSafeBlueprint({
+        packageName,
+        name: blueprintName,
+        location: parsedPackage.location
+      });
+
+      if (isDefaultBlueprint(blueprint)) {
+        blueprint = await loadDefaultBlueprintFromDisk({
+          cwd,
+          version: from
+        });
+      }
+    }
+
+    if (from) {
+      blueprint.version = from;
+    }
+
+    if (!blueprint.version) {
+      throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+    }
   } else if (blueprints.length) {
     let {
       areAllUpToDate,
@@ -225,9 +191,9 @@ module.exports = async function emberCliUpdate({
     cwd,
     projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),
     mergeOptions: async function mergeOptions({
-      packageJson,
-      projectOptions
-    }) {
+                                                packageJson,
+                                                projectOptions
+                                              }) {
       let startBlueprint = { ...blueprint };
       endBlueprint = { ...blueprint };
       delete endBlueprint.version;
