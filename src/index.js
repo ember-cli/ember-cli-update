@@ -56,13 +56,13 @@ async function _resolvePackage(blueprint, url, range) {
 }
 
 module.exports = async function emberCliUpdate({
-                                                 cwd = process.cwd(),
-                                                 packageName,
-                                                 blueprint: _blueprint,
-                                                 from,
-                                                 to,
-                                                 resolveConflicts
-                                               } = {}) {
+  cwd = process.cwd(),
+  packageName,
+  blueprint: _blueprint,
+  from,
+  to,
+  resolveConflicts
+} = {}) {
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.
@@ -191,9 +191,9 @@ module.exports = async function emberCliUpdate({
     cwd,
     projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),
     mergeOptions: async function mergeOptions({
-                                                packageJson,
-                                                projectOptions
-                                              }) {
+      packageJson,
+      projectOptions
+    }) {
       let startBlueprint = { ...blueprint };
       endBlueprint = { ...blueprint };
       delete endBlueprint.version;
