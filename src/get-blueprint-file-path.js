@@ -9,6 +9,13 @@ async function getBlueprintFilePath(cwd) {
   return path.join(cwd, relative);
 }
 
+/**
+ * Use `config` as the parent directory of `ember-cli-update.json` unless a different config
+ * folder is set in the a `package.json` file at the root of the project directory
+ *
+ * @param {String} cwd - Current working directory path where a `package.json` file could exist
+ * @returns {Promise<string>}
+ */
 async function getBlueprintRelativeFilePath(cwd) {
   let configDir = 'config';
 

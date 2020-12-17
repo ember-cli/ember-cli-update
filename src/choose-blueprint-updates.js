@@ -5,6 +5,13 @@ const inquirer = require('inquirer');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const { defaultTo } = require('./constants');
 
+/**
+ * Format the string that is displayed when user is prompted for a blueprint
+ *
+ * @param {object} blueprint - Expected to contain `name` and `version` attributes
+ * @param {string} latestVersion - Latest version for the blueprint
+ * @returns {string}
+ */
 function formatBlueprintLine({
   blueprint,
   latestVersion
@@ -26,6 +33,17 @@ async function chooseBlueprint({
   return choicesByName[answer.blueprint];
 }
 
+/**
+ * Facilitate prompting the user for which blueprint they want to update
+ *
+ * @param {string} cwd - Used in `checkForBlueprintUpdates` in order to generate url or path to it if on local disk
+ * @param {object} emberCliUpdateJson - Use the `blueprints` property from this
+ * @param {boolean} reset  - Optional
+ * @param {boolean} compare - Optional
+ * @param {boolean} codemods - Optional
+ * @param {string} to - Optional (could be undefined).
+ * @returns {Promise<{blueprint: (*|{}), areAllUpToDate, to: string}>}
+ */
 async function chooseBlueprintUpdates({
   cwd,
   emberCliUpdateJson,

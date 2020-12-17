@@ -14,6 +14,13 @@ function toPosixAbsolutePath(path) {
   return posixPath;
 }
 
+/**
+ * Accommodate situations where `packageName` is a URL or path on local disk.
+ *
+ * @param {string} cwd - Check if path exists concatenated with `packageName` if that is a local path
+ * @param {string} packageName - Can be local path (absolute or relative) or url
+ * @returns {Promise<{name: string, location: string, url: string}>}
+ */
 async function parseBlueprintPackage({
   cwd = '.',
   packageName
