@@ -26,6 +26,7 @@ describe(install, function() {
     fixturesPath,
     addon,
     commitMessage,
+    blueprintName,
     beforeMerge = () => Promise.resolve(),
     afterMerge = () => Promise.resolve()
   }) {
@@ -38,7 +39,8 @@ describe(install, function() {
     let promise = (async() => {
       let result = await install({
         cwd: tmpPath,
-        addon
+        addon,
+        blueprint: blueprintName
       });
 
       await afterMerge();
@@ -67,7 +69,7 @@ describe(install, function() {
     });
   }
 
-  it('can install an addon with a default blueprint and no state file', async function() {
+  it('can install an addon with a defined blueprint and no state file', async function() {
     let {
       location
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
@@ -78,6 +80,7 @@ describe(install, function() {
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
       commitMessage: 'my-app',
       addon: location,
+      blueprintName: 'ember-cli-update-git-addon-test',
       async beforeMerge() {
         await initBlueprint({
           fixturesPath: 'test/fixtures/blueprint/addon/legacy',

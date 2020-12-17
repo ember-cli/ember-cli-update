@@ -51,7 +51,7 @@ function resolvePackageName(
 }
 
 /**
- * If blueprint is located on disk, `ember install <path>` else install package and generate the specific blueprint.
+ * Install package and generate the specific blueprint.
  *
  * @param {string} cwd - Use this folder as thee current working directory for execa calls
  * @param {string} addonNameOverride - Optional. If passed use this string as the package bane
@@ -79,14 +79,9 @@ async function installAndGenerateBlueprint({
     version,
     packageName
   );
-  let generateProcess;
 
-  if (!blueprintPath) {
-    generateProcess = ember(['i', resolvedPackageName], { cwd, stdin });
-  } else {
-    await run(`npm install ${resolvedPackageName}`, { cwd });
-    generateProcess = ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
-  }
+  await run(`npm install -D ${resolvedPackageName}`, { cwd });
+  let generateProcess = ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
 
   return {
     ps: generateProcess
