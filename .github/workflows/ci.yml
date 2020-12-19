@@ -15,7 +15,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v2
 
     - run: npm ci
     - run: npm run lint
@@ -46,9 +46,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v2
       with:
-        version: ${{ matrix.node }}
+        node-version: ${{ matrix.node }}
 
     # for test cache hits
     - run: npm i -g ember-cli@2.11.1
@@ -71,7 +71,7 @@ jobs:
       with:
         ref: ${{ github.head_ref }}
         token: ${{ secrets.GitHubToken }}
-    - uses: actions/setup-node@v1
+    - uses: actions/setup-node@v2
     - uses: kellyselden/ember-cli-update-action@v2
       with:
         autofix_command: npm run lint -- --fix
