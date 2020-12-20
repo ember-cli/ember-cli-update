@@ -16,7 +16,7 @@ const {
   assertCodemodRan
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
-const run = require('../../src/run');
+const { spawn } = require('../../src/run');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const overwriteBlueprintFiles = require('../../src/overwrite-blueprint-files');
 const { defaultTo } = require('../../src/constants');
@@ -408,7 +408,7 @@ describe(function() {
           relativeDir: location
         });
 
-        await run('npm install', { cwd: tmpPath });
+        await spawn('npm', ['install'], { cwd: tmpPath });
       }
     });
 

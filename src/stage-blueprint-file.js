@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const run = require('./run');
+const { spawn } = require('./run');
 
 async function stageBlueprintFile({
   cwd,
@@ -9,7 +9,7 @@ async function stageBlueprintFile({
 }) {
   let relative = path.relative(cwd, emberCliUpdateJsonPath);
 
-  await run(`git add ${relative}`, {
+  await spawn('git', ['add', relative], {
     cwd
   });
 }
