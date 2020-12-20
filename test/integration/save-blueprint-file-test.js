@@ -3,15 +3,14 @@
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const path = require('path');
-const { promisify } = require('util');
-const tmpDir = promisify(require('tmp').dir);
+const { createTmpDir } = require('../../src/tmp');
 const saveBlueprintFile = require('../../src/save-blueprint-file');
 
 describe(saveBlueprintFile, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = await tmpDir();
+    tmpPath = await createTmpDir();
   });
 
   it('works', async function() {
