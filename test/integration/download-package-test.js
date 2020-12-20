@@ -8,8 +8,7 @@ const { initBlueprint } = require('../helpers/blueprint');
 const parseBlueprintPackage = require('../../src/parse-blueprint-package');
 const downloadPackage = require('../../src/download-package');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
-const { promisify } = require('util');
-const tmpDir = promisify(require('tmp').dir);
+const { createTmpDir } = require('../../src/tmp');
 const fs = require('fs-extra');
 
 describe(downloadPackage, function() {
@@ -18,7 +17,7 @@ describe(downloadPackage, function() {
   let tmpPath;
 
   beforeEach(async function() {
-    tmpPath = path.join(await tmpDir(), 'app');
+    tmpPath = path.join(await createTmpDir(), 'app');
     await fs.mkdir(tmpPath);
   });
 

@@ -1,8 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { promisify } = require('util');
-const tmpDir = promisify(require('tmp').dir);
+const { createTmpDir } = require('./tmp');
 const npa = require('npm-package-arg');
 const run = require('./run');
 
@@ -17,7 +16,7 @@ async function downloadPackage(name, url, range) {
     url += `#semver:${range}`;
   }
 
-  let newTmpDir = await tmpDir();
+  let newTmpDir = await createTmpDir();
   let output = await run(`npm install ${url}`, { cwd: newTmpDir });
   // if (!name) {
   //   name = output.match(/^\+ (.*)@\d\.\d\.\d.*$/m)[1];
