@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const execa = require('execa');
-const run = require('./run');
+const { spawn } = require('./run');
 const utils = require('./utils');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const emberInstallAddon = require('./ember-install-addon');
@@ -260,7 +260,7 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   blueprint
 }) {
   // `not found: ember` without this
-  await run('npm install', { cwd: projectRoot });
+  await spawn('npm', ['install'], { cwd: projectRoot });
 
   let { ps } = await emberInstallAddon({
     cwd: projectRoot,

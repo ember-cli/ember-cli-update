@@ -10,7 +10,7 @@ const {
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const install = require('../../src/install');
-const run = require('../../src/run');
+const { spawn } = require('../../src/run');
 const {
   assertNoStaged
 } = require('../helpers/assertions');
@@ -85,7 +85,7 @@ describe(install, function() {
           relativeDir: location
         });
 
-        await run('npm install', { cwd: tmpPath });
+        await spawn('npm', ['install'], { cwd: tmpPath });
       },
       async afterMerge() {
         await fs.remove(path.join(tmpPath, 'package-lock.json'));

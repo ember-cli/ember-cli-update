@@ -3,14 +3,18 @@
 const execa = require('execa');
 const debug = require('./debug');
 
-module.exports = async function run() {
-  debug(...arguments);
+function spawn(bin, args = [], options) {
+  debug(bin, ...args.map(arg => `"${arg}"`), options);
 
-  let { stdout } = await execa.command(...arguments);
+  let ps = execa(...arguments);
 
-  if (stdout) {
-    debug(stdout);
-  }
+  ps.stdout.on('data', data => {
+    debug(data.toString());
+  });
 
-  return stdout;
+  return ps;
+}
+
+module.exports = {
+  spawn
 };

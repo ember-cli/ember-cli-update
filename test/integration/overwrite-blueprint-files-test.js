@@ -6,7 +6,7 @@ const {
   buildTmp
 } = require('git-fixtures');
 const overwriteBlueprintFiles = require('../../src/overwrite-blueprint-files');
-const run = require('../../src/run');
+const { spawn } = require('../../src/run');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const sinon = require('sinon');
@@ -31,9 +31,9 @@ describe(overwriteBlueprintFiles, function() {
       relativeDir: location
     });
 
-    await run('npm install', { cwd: tmpPath });
+    await spawn('npm', ['install'], { cwd: tmpPath });
 
-    await run(`npm install ${blueprintPath}`, { cwd: tmpPath });
+    await spawn('npm', ['install', blueprintPath], { cwd: tmpPath });
 
     let ps = ember(['g', packageName], { cwd: tmpPath, stdin: 'pipe' });
 
