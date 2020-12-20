@@ -8,7 +8,7 @@ const utils = require('./utils');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const emberInstallAddon = require('./ember-install-addon');
 const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
-const debug = require('debug')('ember-cli-update');
+const debug = require('./debug');
 const npm = require('boilerplate-update/src/npm');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
 const {

@@ -2,7 +2,7 @@
 
 const execa = require('execa');
 const semver = require('semver');
-const debug = require('debug')('ember-cli-update');
+const debug = require('./debug');
 
 // not fixed yet
 // https://github.com/ember-cli/ember-cli/issues/8937
