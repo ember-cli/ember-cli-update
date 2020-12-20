@@ -38,7 +38,7 @@
     "src"
   ],
   "dependencies": {
-    "boilerplate-update": "^1.0.0",
+    "boilerplate-update": "^1.0.1",
     "debug": "^4.1.1",
     "execa": "^5.0.0",
     "fs-extra": "^9.0.0",
@@ -64,7 +64,7 @@
     "eslint-plugin-mocha": "^8.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-let": "^1.1.0",
-    "git-diff-apply": "^1.0.0",
+    "git-diff-apply": "^2.0.1",
     "git-fixtures": "^3.0.0",
     "mocha": "^8.2.1",
     "mocha-helpers": "^5.1.0",
