@@ -4,15 +4,17 @@
 ![](https://github.com/ember-cli/ember-cli-update/workflows/CI/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/iguxxyxkiu9kyeyo/branch/master?svg=true)](https://ci.appveyor.com/project/embercli/ember-cli-update/branch/master)
 
-Update [Ember CLI](https://ember-cli.com/) projects
+Ember-cli-update helps you update the bootstrapped boilerplate files for [Ember CLI](https://ember-cli.com/) projects and addon blueprints for newer versions while trying to maintain your changes. It also facilitates codemods by fetching the list of codemods and instructions for your projects.
 
-Check out [the new guides](https://github.com/ember-cli/ember-cli-update/wiki).
+The 2 use cases are:
+1. Updating a project's boilerplate code from an older Ember version to a newer one like 3.4.0 to 3.20.0 for example. These are called base blueprints and there are 3 types officially provided by ember-cli: `app`, `addon`, and `glimmer`.
+2. Updating boilerplate code for a blueprint from an Ember addon from an older version to a newer one. These are called custom blueprints.
 
-You can run this either as a global executable available to all projects or an Ember CLI command in a single project.
+Check out [the wiki guide](https://github.com/ember-cli/ember-cli-update/wiki) for more details.
 
-Fetches list of codemods and instructions for your projects
+You can run the CLI either as a global executable available to all projects or an Ember CLI command in a single project.
 
-This attempts to be a thin wrapper of [boilerplate-update](https://github.com/kellyselden/boilerplate-update).
+The CLI attempts to be a thin wrapper of [boilerplate-update](https://github.com/kellyselden/boilerplate-update).
 
 ## Installation
 
@@ -38,13 +40,36 @@ or if you installed as an Ember CLI command run
 
 `ember update`
 
-This will update your app or addon to the latest Ember CLI version. It does this by fetching the latest version and comparing it to your project's Ember CLI version. It then applies a diff of the changes from the latest version to your project. It will only modify the files if there are changes between your project's version and the latest version, and it will only change the section necessary, not the entire file.
 
-This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
+An example output would be:
+
+```bash
+# In an ember project directory
+> ember-cli-update
+? Blueprint updates have been found. Which one would you like to update? (Use arrow keys)
+❯ app, current: 3.7.0, latest: 3.23.0
+  ember-bootstrap, current: 2.8.0, latest: 4.5.0
+  ember-cli-mirage, current: 1.1.8, latest: 2.0.0
+```
+
+You'll be prompted to update to the latest version or a specific one.
 
 You will probably encounter merge conflicts, in which the default behavior is to let you resolve conflicts on your own. You can supply the `--resolve-conflicts` option to run your system's git merge tool if any conflicts are found.
 
 This tool can also run codemods for you. The option `--run-codemods` will figure out what codemods apply to your current version of Ember.js, and download and run them for you.
+
+## How does it work?
+Modern Emberjs projects have [`config/ember-cli-update.json`](https://github.com/ember-cli/ember-cli-update/wiki/Config-Schema) in the boilerplate template for `addon` and `app` types. This file tells this CLI what type of project is being updated and what custom blueprints from what package are installed and generated.
+
+If this CLI is run on an older project, or the json file doesn't exist, it'll just prompt for ember-cli project boilerplate update (`addon`, `app`, or `glimmer`).
+
+Generally, the CLI creates 2 new ember-cli projects with the current and specified versions in order to figure out the diff between the two and applies the diff to your project. It will only modify the files if there are changes between your project's version and the specified version, and it will only change the section necessary, not the entire file.
+
+### ember-cli project (addon, app, and glimmer) boilerplate updates
+When updating an ember-cli project, the CLI will create a new project (ember new) with the current version of your project and another one with the version specified.
+
+### Custom blueprint
+The CLI will create 2 new projects using the same version of the baseBlueprint (the `addon`, `app`, or `glimmer` type). For one of the projects, it will install the current version of the addon containing the desired blueprint and generate it. For the other, it will install the specified version and generate the blueprint.
 
 ## Examples
 
