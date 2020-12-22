@@ -403,7 +403,8 @@ describe(_getStartAndEndCommands, function() {
         blueprint: {
           path: blueprintPath,
           options: []
-        }
+        },
+        packageManager: 'npm'
       }]]);
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
@@ -458,7 +459,8 @@ describe(_getStartAndEndCommands, function() {
         blueprint: {
           path: blueprintPath,
           options: []
-        }
+        },
+        packageManager: 'npm'
       }]]);
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
@@ -513,7 +515,8 @@ describe(_getStartAndEndCommands, function() {
         blueprint: {
           path: blueprintPath,
           options: []
-        }
+        },
+        packageManager: 'npm'
       }]]);
 
       expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{

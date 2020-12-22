@@ -11,9 +11,8 @@ const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('./debug');
 const npm = require('boilerplate-update/src/npm');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
-const {
-  glimmerPackageName
-} = require('./constants');
+const { glimmerPackageName } = require('./constants');
+const { hasYarn } = require('./get-project-options');
 
 const nodeModulesIgnore = `
 
@@ -233,11 +232,13 @@ function createProject(runEmber) {
       }
 
       if (await isDefaultAddonBlueprint(blueprint)) {
+        let isYarnProject = await hasYarn(projectRoot);
         await _runEmber(baseBlueprint);
 
         await module.exports.installAddonBlueprint({
           projectRoot,
-          blueprint
+          blueprint,
+          packageManager: isYarnProject ? 'yarn' : 'npm'
         });
       } else {
         await _runEmber(blueprint);
@@ -256,18 +257,20 @@ function createProject(runEmber) {
 }
 
 /**
- * There are 3 types of packages
+ * Install packages from package.json then install the specified package and generate blueprint
  *
  * @param {string} projectRoot - Used as cwd for running npm commands as well directory to make file modifications
  * @param {object} blueprint - Expected to have `packageName`, `version`, and `path` (nullable) attributes
+ * @param {string} packageManager - Expected to be either `npm` or `yarn`
  * @returns {Promise<void>}
  */
 module.exports.installAddonBlueprint = async function installAddonBlueprint({
   projectRoot,
-  blueprint
+  blueprint,
+  packageManager = 'npm'
 }) {
   // `not found: ember` without this
-  await spawn('npm', ['install'], { cwd: projectRoot });
+  await spawn(packageManager, ['install'], { cwd: projectRoot });
 
   let { ps } = await installAndGenerateBlueprint({
     cwd: projectRoot,
@@ -276,7 +279,8 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
     blueprintPath: blueprint.path,
     blueprintName: blueprint.name,
     blueprintOptions: blueprint.options || [],
-    stdin: 'pipe'
+    stdin: 'pipe',
+    packageManager
   });
 
   overwriteBlueprintFiles(ps);

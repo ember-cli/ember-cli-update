@@ -9,12 +9,14 @@ const installAndGenerateBlueprint = require('./install-and-generate-blueprint');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
+const { hasYarn } = require('./get-project-options');
 
 module.exports = async function install({
   cwd = process.cwd(),
   addon,
   blueprint: _blueprintName
 }) {
+  let isYarnProject = await hasYarn(cwd);
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.
@@ -45,7 +47,8 @@ module.exports = async function install({
     addonNameOverride: addon,
     packageName,
     blueprintName: _blueprintName || addon,
-    blueprintPath: path
+    blueprintPath: path,
+    packageManager: isYarnProject ? 'yarn' : 'npm'
   });
 
   await ps;

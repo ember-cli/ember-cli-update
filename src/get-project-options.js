@@ -35,6 +35,22 @@ function getProjectType(checkForDep, keywords) {
 }
 
 /**
+ * Check if there is a yarn.lock file to indicate if the project uses yarn as the package manager
+ *
+ * @param {string} projectRoot - Path to the project root to check for yarn usage
+ * @returns {Promise<boolean>}
+ */
+module.exports.hasYarn = async function hasYarn(projectRoot) {
+  let isYarn = false;
+  try {
+    await fs.access(path.join(projectRoot, 'yarn.lock'), fs.constants.F_OK);
+    isYarn = true;
+  } catch (err) {}
+  return isYarn;
+};
+
+
+/**
  * Determine what kind of ember flavor this project is and if it uses yarn or npm
  *
  * @param {array} keywords - the `keywords` attribute from a `package.json`
@@ -43,7 +59,7 @@ function getProjectType(checkForDep, keywords) {
  * @param {object} blueprint - Expected to contain `packageName` and `name`
  * @returns {Promise<[string]|string[]>} - Array of strings containing keywords
  */
-module.exports = async function getProjectOptions({
+module.exports.getProjectOptions = async function getProjectOptions({
   keywords,
   dependencies,
   devDependencies
@@ -64,11 +80,7 @@ module.exports = async function getProjectOptions({
 
   let cwd = process.cwd();
 
-  let isYarn;
-  try {
-    await fs.access(path.join(cwd, 'yarn.lock'), fs.constants.F_OK);
-    isYarn = true;
-  } catch (err) {}
+  let isYarn = await module.exports.hasYarn(cwd);
 
   if (isYarn) {
     options.push('yarn');

@@ -1,6 +1,6 @@
 'use strict';
 
-const getProjectOptions = require('./get-project-options');
+const { getProjectOptions } = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getVersions = require('./get-versions');
 const _getTagVersion = require('./get-tag-version');

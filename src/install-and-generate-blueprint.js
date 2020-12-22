@@ -60,7 +60,8 @@ function resolvePackageName(
  * @param {string} blueprintPath - Optional. Path on local disk of package or git uri
  * @param {string} blueprintName - Optional. Name of the blueprint to run `ember g <blueprintName>`
  * @param {array<string>} blueprintOptions - Options used for `ember g <blueprintName>`
- * @param stdin
+ * @param {object} stdin - Use this as stdin for child process runs
+ * @param {string} packageManager - Expected to be either `npm` or `yarn`
  * @returns {Promise<{ps: *}>}
  */
 async function installAndGenerateBlueprint({
@@ -71,7 +72,8 @@ async function installAndGenerateBlueprint({
   blueprintPath,
   blueprintName,
   blueprintOptions = [],
-  stdin
+  stdin,
+  packageManager = 'npm'
 }) {
   let resolvedPackageName = resolvePackageName(
     addonNameOverride,
@@ -80,7 +82,7 @@ async function installAndGenerateBlueprint({
     packageName
   );
 
-  await run(`npm install -D ${resolvedPackageName}`, { cwd });
+  await run(`${packageManager} install -D ${resolvedPackageName}`, { cwd });
   let generateProcess = ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
 
   return {

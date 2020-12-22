@@ -5,6 +5,11 @@ const blueprintOverwriteRegex = /^\? Overwrite (.+)\? /m;
 const yes = 'y';
 const enter = '\n';
 
+/**
+ * Ensure to answer `yes` when asked to overwrite files from console
+ *
+ * @param ps - A child_process instance from `execa`
+ */
 function overwriteBlueprintFiles(ps) {
   let existingMatches = [];
 

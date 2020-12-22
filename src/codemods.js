@@ -6,7 +6,7 @@ const getBlueprintFilePath = require('./get-blueprint-file-path');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFromArgs = require('./get-blueprint-from-args');
 const isDefaultBlueprint = require('./is-default-blueprint');
-const getProjectOptions = require('./get-project-options');
+const { getProjectOptions } = require('./get-project-options');
 const loadDefaultBlueprintFromDisk = require('./load-default-blueprint-from-disk');
 
 module.exports = async function codemods({
