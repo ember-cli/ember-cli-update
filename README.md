@@ -8,9 +8,11 @@ Ember-cli-update helps you update the bootstrapped boilerplate files for [Ember 
 
 The 2 use cases are:
 1. Updating a project's boilerplate code from an older Ember version to a newer one like 3.4.0 to 3.20.0 for example. These are called base blueprints and there are 3 types officially provided by ember-cli: `app`, `addon`, and `glimmer`.
+   - This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
 2. Updating boilerplate code for a blueprint from an Ember addon from an older version to a newer one. These are called custom blueprints.
 
 Check out [the wiki guide](https://github.com/ember-cli/ember-cli-update/wiki) for more details.
+This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
 
 You can run the CLI either as a global executable available to all projects or an Ember CLI command in a single project.
 
