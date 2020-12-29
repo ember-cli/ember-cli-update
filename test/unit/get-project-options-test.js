@@ -1,18 +1,15 @@
 'use strict';
 
-const { describe, it } = require('../helpers/mocha');
+const { describe, it, setUpCwdReset } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const path = require('path');
 const _getProjectOptions = require('../../src/get-project-options');
 
 describe(_getProjectOptions, function() {
-  let cwd;
   let packageJson;
   let blueprint;
 
-  before(function() {
-    cwd = process.cwd();
-  });
+  setUpCwdReset();
 
   beforeEach(function() {
     packageJson = {};
@@ -21,10 +18,6 @@ describe(_getProjectOptions, function() {
       packageName: 'ember-cli',
       name: 'app'
     };
-  });
-
-  afterEach(function() {
-    process.chdir(cwd);
   });
 
   function getProjectOptions() {
