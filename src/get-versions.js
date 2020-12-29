@@ -12,5 +12,5 @@ const npm = require('boilerplate-update/src/npm');
  * @returns {Promise<Array<string>>}
  */
 module.exports = async function getVersions(packageName) {
-  return await npm.json(`view ${packageName} versions`);
+  return await npm.json('view', packageName, 'versions');
 };
