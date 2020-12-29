@@ -87,7 +87,7 @@ async function isDefaultAddonBlueprint(blueprint) {
     if (blueprint.path) {
       keywords = utils.require(path.join(blueprint.path, 'package')).keywords;
     } else {
-      keywords = await npm.json(`v ${blueprint.packageName} keywords`);
+      keywords = await npm.json('v', blueprint.packageName, 'keywords');
     }
 
     isDefaultAddonBlueprint = !(keywords && keywords.includes('ember-blueprint'));
