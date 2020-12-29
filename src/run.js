@@ -1,13 +1,12 @@
 'use strict';
 
-const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const execa = require('execa');
 const debug = require('./debug');
 
 module.exports = async function run() {
   debug(...arguments);
 
-  let { stdout } = await exec(...arguments);
+  let { stdout } = await execa.command(...arguments);
 
   if (stdout) {
     debug(stdout);
