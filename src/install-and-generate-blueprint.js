@@ -87,7 +87,7 @@ async function installAndGenerateBlueprint({
     packageName
   );
 
-  await spawn(`${INSTALL_COMMAND[packageManager]} --save-dev ${resolvedPackageName}`, { cwd });
+  await spawn(INSTALL_COMMAND[packageManager], ['--save-dev', resolvedPackageName], { cwd });
   let generateProcess = ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
 
   return {
