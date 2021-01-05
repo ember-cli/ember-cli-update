@@ -51,8 +51,8 @@ function resolvePackageName(
 }
 
 const INSTALL_COMMAND = {
-  npm: 'npm install',
-  yarn: 'yarn add'
+  npm: 'install',
+  yarn: 'add'
 };
 
 /**
@@ -87,7 +87,7 @@ async function installAndGenerateBlueprint({
     packageName
   );
 
-  await spawn(INSTALL_COMMAND[packageManager], ['--save-dev', resolvedPackageName], { cwd });
+  await spawn(packageManager, [INSTALL_COMMAND[packageManager], '--save-dev', resolvedPackageName], { cwd });
   let generateProcess = ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
 
   return {
