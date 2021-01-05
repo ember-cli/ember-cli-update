@@ -1,7 +1,7 @@
 'use strict';
 
 const execa = require('execa');
-const run = require('./run');
+const { spawn } = require('./run');
 const debug = require('debug')('ember-cli-update');
 
 function ember(args, {
@@ -87,7 +87,7 @@ async function installAndGenerateBlueprint({
     packageName
   );
 
-  await run(`${INSTALL_COMMAND[packageManager]} --save-dev ${resolvedPackageName}`, { cwd });
+  await spawn(`${INSTALL_COMMAND[packageManager]} --save-dev ${resolvedPackageName}`, { cwd });
   let generateProcess = ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
 
   return {
