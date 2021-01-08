@@ -12,7 +12,6 @@ The 2 use cases are:
 2. Updating boilerplate code for a blueprint from an Ember addon from an older version to a newer one. These are called custom blueprints.
 
 Check out [the wiki guide](https://github.com/ember-cli/ember-cli-update/wiki) for more details.
-This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
 
 You can run the CLI either as a global executable available to all projects or an Ember CLI command in a single project.
 
