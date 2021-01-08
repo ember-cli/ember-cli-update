@@ -4,7 +4,7 @@
 ![](https://github.com/ember-cli/ember-cli-update/workflows/CI/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/iguxxyxkiu9kyeyo/branch/master?svg=true)](https://ci.appveyor.com/project/embercli/ember-cli-update/branch/master)
 
-Ember-cli-update helps you update the bootstrapped boilerplate files for [Ember CLI](https://ember-cli.com/) projects and addon blueprints for newer versions while trying to maintain your changes. It also facilitates codemods by fetching the list of codemods and instructions for your projects.
+Ember-cli-update helps you update the bootstrapped boilerplate files for [Ember CLI](https://ember-cli.com/) projects and addon blueprints to newer versions while trying to maintain your local changes that have purposefully diverged from the blueprint. It also facilitates codemods by fetching the list of codemods and instructions for your projects.
 
 The 2 use cases are:
 1. Updating a project's boilerplate code from an older Ember version to a newer one like 3.4.0 to 3.20.0 for example. These are called base blueprints and there are 3 types officially provided by ember-cli: `app`, `addon`, and `glimmer`.
