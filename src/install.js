@@ -30,7 +30,8 @@ module.exports = async function install({
   let {
     name: packageName,
     version,
-    path
+    path,
+    defaultBlueprintOverride
   } = await resolvePackage({
     name: addon,
     url: parsedPackage.url,
@@ -46,7 +47,7 @@ module.exports = async function install({
     cwd,
     addonNameOverride: addon,
     packageName,
-    blueprintName: _blueprintName || addon,
+    blueprintName: _blueprintName || defaultBlueprintOverride || packageName,
     blueprintPath: path,
     packageManager: isYarnProject ? 'yarn' : 'npm'
   });

@@ -401,7 +401,6 @@ describe(function() {
       commitMessage: 'my-app',
       install: true,
       addon: location,
-      blueprint: 'ember-cli-update-git-addon-test',
       async beforeMerge() {
         await initBlueprint({
           fixturesPath: 'test/fixtures/blueprint/addon/legacy',
