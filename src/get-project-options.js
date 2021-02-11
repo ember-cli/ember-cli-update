@@ -1,8 +1,7 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs-extra');
 const isDefaultBlueprint = require('./is-default-blueprint');
+const hasYarn = require('./has-yarn');
 
 /**
  * Determine if project is a `addon`, `app`, or `glimmer` type
@@ -33,21 +32,6 @@ function getProjectType(checkForDep, keywords) {
 
   throw new Error('Ember CLI project type could not be determined');
 }
-
-/**
- * Check if there is a yarn.lock file to indicate if the project uses yarn as the package manager
- *
- * @param {string} projectRoot - Path to the project root to check for yarn usage
- * @returns {Promise<boolean>}
- */
-module.exports.hasYarn = async function hasYarn(projectRoot) {
-  let isYarn = false;
-  try {
-    await fs.access(path.join(projectRoot, 'yarn.lock'), fs.constants.F_OK);
-    isYarn = true;
-  } catch (err) {}
-  return isYarn;
-};
 
 
 /**
@@ -80,7 +64,7 @@ module.exports.getProjectOptions = async function getProjectOptions({
 
   let cwd = process.cwd();
 
-  let isYarn = await module.exports.hasYarn(cwd);
+  let isYarn = await hasYarn(cwd);
 
   if (isYarn) {
     options.push('yarn');

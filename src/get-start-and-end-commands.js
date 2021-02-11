@@ -12,7 +12,7 @@ const debug = require('./debug');
 const npm = require('boilerplate-update/src/npm');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
 const { glimmerPackageName } = require('./constants');
-const { hasYarn } = require('./get-project-options');
+const hasYarn = require('./has-yarn');
 
 const nodeModulesIgnore = `
 

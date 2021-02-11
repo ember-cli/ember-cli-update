@@ -9,7 +9,7 @@ const installAndGenerateBlueprint = require('./install-and-generate-blueprint');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
-const { hasYarn } = require('./get-project-options');
+const hasYarn = require('./has-yarn');
 
 module.exports = async function install({
   cwd = process.cwd(),
