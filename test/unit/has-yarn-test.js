@@ -17,7 +17,7 @@ describe(hashYarn, function() {
 
   it('project with yarn.lock returns true', function() {
     fixturify.writeSync(this.tempDir, {
-      'package.lock': ''
+      'yarn.lock': ''
     });
     let result = hashYarn(this.tempDir);
     expect(result).to.be.true;
