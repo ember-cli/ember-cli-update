@@ -16,7 +16,7 @@ module.exports = async function install({
   addon,
   blueprint: _blueprintName
 }) {
-  let isYarnProject = await hasYarn(cwd);
+  let isYarnProject = hasYarn(cwd);
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.

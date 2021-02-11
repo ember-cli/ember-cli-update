@@ -232,7 +232,7 @@ function createProject(runEmber) {
       }
 
       if (await isDefaultAddonBlueprint(blueprint)) {
-        let isYarnProject = await hasYarn(projectRoot);
+        let isYarnProject = hasYarn(projectRoot);
         await _runEmber(baseBlueprint);
 
         await module.exports.installAddonBlueprint({

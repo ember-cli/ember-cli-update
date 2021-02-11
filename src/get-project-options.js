@@ -64,7 +64,7 @@ module.exports.getProjectOptions = async function getProjectOptions({
 
   let cwd = process.cwd();
 
-  let isYarn = await hasYarn(cwd);
+  let isYarn = hasYarn(cwd);
 
   if (isYarn) {
     options.push('yarn');
