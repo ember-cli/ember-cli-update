@@ -80,15 +80,15 @@ async function installAndGenerateBlueprint({
   stdin,
   packageManager = 'npm'
 }) {
-  let resolvedPackageName = resolvePackageName(
+  let resolvedPackageName = module.exports.resolvePackageName(
     addonNameOverride,
     blueprintPath,
     version,
     packageName
   );
 
-  await spawn(packageManager, [INSTALL_COMMAND[packageManager], '--save-dev', resolvedPackageName], { cwd });
-  let generateProcess = ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
+  await module.exports.spawn(packageManager, [INSTALL_COMMAND[packageManager], '--save-dev', resolvedPackageName], { cwd });
+  let generateProcess = module.exports.ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
 
   return {
     ps: generateProcess
@@ -97,3 +97,5 @@ async function installAndGenerateBlueprint({
 
 module.exports = installAndGenerateBlueprint;
 module.exports.ember = ember;
+module.exports.resolvePackageName = resolvePackageName;
+module.exports.spawn = spawn;
