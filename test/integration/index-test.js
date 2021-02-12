@@ -24,6 +24,10 @@ const {
   defaultTo
 } = require('../../src/constants');
 const { EOL } = require('os');
+const installAndGenerateBlueprint = require('../../src/install-and-generate-blueprint');
+const { spawn } = require('../../src/run');
+const cliUpdateCommandModule = require('../../src/index');
+const getStartAndEndModule = require('../../src/get-start-and-end-commands');
 
 describe(function() {
   this.timeout(30 * 1000);
@@ -243,6 +247,59 @@ describe(function() {
           blueprint: defaultAddonBlueprintName
         });
 
+        fixtureCompare({
+          mergeFixtures: 'test/fixtures/addon/merge/my-addon'
+        });
+
+        assertNoUnstaged(status);
+      });
+
+      it('can update a custom blueprint for an ember app project', async function() {
+        const originalSpawn = installAndGenerateBlueprint.spawn;
+        const originalResolvePackage = cliUpdateCommandModule.resolvePackage;
+        const originalIsDefaultAddonBlueprint = getStartAndEndModule.isDefaultAddonBlueprint;
+        const fakeAddonName = 'some-addon-with-blueprint';
+
+        getStartAndEndModule.isDefaultAddonBlueprint = (blueprint) => {
+          if (blueprint.packageName === fakeAddonName) {
+            return false;
+          }
+          return originalIsDefaultAddonBlueprint(blueprint);
+        };
+        // Mock this for the fake addon
+        cliUpdateCommandModule.resolvePackage = ({name, url, range}) => {
+          if (name  === fakeAddonName) {
+            return {
+              version: range,
+              path: '',
+            };
+          } else {
+            return originalResolvePackage({ name, url, range });
+          }
+        };
+        // Mock out the spawn to install a local blueprint
+        installAndGenerateBlueprint.spawn = (bin, args, options) => {
+          if (args.indexOf(fakeAddonName) > -1) {
+            spawn(bin, args, options);
+          } else {
+            spawn(bin, args, options);
+          }
+        };
+
+        let {
+          status,
+        } = await merge({
+          fixturesPath: 'test/fixtures/app/init',
+          commitMessage: 'my-app',
+          packageName: fakeAddonName,
+          from: '0.0.1',
+          to: '0.0.2',
+          blueprint: 'custom-blueprint',
+        });
+
+        installAndGenerateBlueprint.spawn = originalSpawn;
+        cliUpdateCommandModule.resolvePackage = originalResolvePackage;
+        getStartAndEndModule.isDefaultAddonBlueprint = originalIsDefaultAddonBlueprint;
         fixtureCompare({
           mergeFixtures: 'test/fixtures/addon/merge/my-addon'
         });

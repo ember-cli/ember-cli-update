@@ -23,6 +23,9 @@ const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
+// Export this so that testing can mock it
+module.exports.resolvePackage = resolvePackage;
+
 /**
  * If `version` attribute exists in the `blueprint` object and URL is empty, skip. Otherwise resolve the details of
  * the blueprint
@@ -42,7 +45,7 @@ async function _resolvePackage(blueprint, url, range) {
   let {
     version,
     path
-  } = await resolvePackage({
+  } = await module.exports.resolvePackage({
     name: blueprint.packageName,
     url,
     range
