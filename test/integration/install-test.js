@@ -100,4 +100,37 @@ describe(install, function() {
 
     assertNoStaged(status);
   });
+
+  it('can install an addon with a custom default blueprint selected', async function() {
+    let {
+      location
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+
+    let {
+      status
+    } = await merge({
+      blueprintName: 'custom-blueprint',
+      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
+      commitMessage: 'my-app',
+      addon: location,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+
+        await spawn('npm', ['install'], { cwd: tmpPath });
+      },
+      async afterMerge() {
+        await fs.remove(path.join(tmpPath, 'package-lock.json'));
+      }
+    });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app-generated-custom-blueprint'
+    });
+
+    assertNoStaged(status);
+  });
 });
