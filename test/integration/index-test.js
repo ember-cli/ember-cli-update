@@ -255,10 +255,10 @@ describe(function() {
       });
 
       it('can update a custom blueprint for an ember app project', async function() {
-        const originalSpawn = installAndGenerateBlueprint.spawn;
-        const originalResolvePackage = cliUpdateCommandModule.resolvePackage;
-        const originalIsDefaultAddonBlueprint = getStartAndEndModule.isDefaultAddonBlueprint;
-        const fakeAddonName = 'some-addon-with-blueprint';
+        let originalSpawn = installAndGenerateBlueprint.spawn;
+        let originalResolvePackage = cliUpdateCommandModule.resolvePackage;
+        let originalIsDefaultAddonBlueprint = getStartAndEndModule.isDefaultAddonBlueprint;
+        let fakeAddonName = 'some-addon-with-blueprint';
 
         getStartAndEndModule.isDefaultAddonBlueprint = (blueprint) => {
           if (blueprint.packageName === fakeAddonName) {
@@ -267,11 +267,11 @@ describe(function() {
           return originalIsDefaultAddonBlueprint(blueprint);
         };
         // Mock this for the fake addon
-        cliUpdateCommandModule.resolvePackage = ({name, url, range}) => {
+        cliUpdateCommandModule.resolvePackage = ({ name, url, range }) => {
           if (name  === fakeAddonName) {
             return {
               version: range,
-              path: '',
+              path: ''
             };
           } else {
             return originalResolvePackage({ name, url, range });
@@ -287,14 +287,14 @@ describe(function() {
         };
 
         let {
-          status,
+          status
         } = await merge({
           fixturesPath: 'test/fixtures/app/init',
           commitMessage: 'my-app',
           packageName: fakeAddonName,
           from: '0.0.1',
           to: '0.0.2',
-          blueprint: 'custom-blueprint',
+          blueprint: 'custom-blueprint'
         });
 
         installAndGenerateBlueprint.spawn = originalSpawn;
