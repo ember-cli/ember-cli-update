@@ -37,7 +37,7 @@ describe('install-and-generate-blueprint module', function() {
       installAndGenerateBlueprint.resolvePackageName = this.originalResolvePackageName;
     });
 
-    it('ensure the expected params are passed for blueprint', async function() {
+    it('the expected params are passed for blueprint', async function() {
       installAndGenerateBlueprint.spawn = (packageManager, args) => {
         expect(packageManager).to.equal('yarn');
         expect(args).to.include.members(['add', '--save-dev', 'hello-world']);
@@ -52,6 +52,24 @@ describe('install-and-generate-blueprint module', function() {
         packageName: '',
         version: '',
         blueprintPath: '',
+        blueprintName: 'custom-blueprint',
+        packageManager: 'yarn'
+      });
+    });
+
+    it('blueprint options were used to generate blueprint', async function() {
+      installAndGenerateBlueprint.spawn = () => {};
+      installAndGenerateBlueprint.ember = (args) => {
+        expect(args).to.include.members(['g', 'custom-blueprint', '--hello', 'world', '--another', 'option']);
+      };
+      installAndGenerateBlueprint.resolvePackageName = () => 'hello-world';
+      await installAndGenerateBlueprint({
+        cwd: 'fake/path',
+        addonNameOverride: '',
+        packageName: '',
+        version: '',
+        blueprintPath: '',
+        blueprintOptions: ['--hello', 'world', '--another', 'option'],
         blueprintName: 'custom-blueprint',
         packageManager: 'yarn'
       });
