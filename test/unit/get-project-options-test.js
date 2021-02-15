@@ -3,7 +3,7 @@
 const { describe, it, setUpCwdReset } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const path = require('path');
-const { getProjectOptions: _getProjectOptions } = require('../../src/get-project-options');
+const _getProjectOptions = require('../../src/get-project-options');
 
 describe(_getProjectOptions, function() {
   let packageJson;
