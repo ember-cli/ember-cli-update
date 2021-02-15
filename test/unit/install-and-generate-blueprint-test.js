@@ -32,8 +32,8 @@ describe('install-and-generate-blueprint module', function() {
     });
 
     it('the expected params are passed for blueprint', async function() {
-      const stubbedSpawn = sinon.stub(installAndGenerateBlueprint, 'spawn').resolves();
-      const stubbedEmber = sinon.stub(installAndGenerateBlueprint, 'ember').resolves();
+      let stubbedSpawn = sinon.stub(installAndGenerateBlueprint, 'spawn').resolves();
+      let stubbedEmber = sinon.stub(installAndGenerateBlueprint, 'ember').resolves();
       sinon.stub(installAndGenerateBlueprint, 'resolvePackageName').returns('hello-world');
 
       await installAndGenerateBlueprint({
