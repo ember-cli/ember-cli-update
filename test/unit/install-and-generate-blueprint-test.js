@@ -4,6 +4,7 @@ const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const installAndGenerateBlueprint = require('../../src/install-and-generate-blueprint');
 const { resolvePackageName } = installAndGenerateBlueprint;
+const sinon = require('sinon');
 
 describe('install-and-generate-blueprint module', function() {
   describe('#resolvePackageName', function() {
@@ -26,26 +27,15 @@ describe('install-and-generate-blueprint module', function() {
   });
 
   describe('#installAndGenerateBlueprint', function() {
-    beforeEach(function() {
-      this.originalSpawn = installAndGenerateBlueprint.spawn;
-      this.originalEmber = installAndGenerateBlueprint.ember;
-      this.originalResolvePackageName = installAndGenerateBlueprint.resolvePackageName;
-    });
     afterEach(function() {
-      installAndGenerateBlueprint.spawn = this.originalSpawn;
-      installAndGenerateBlueprint.ember = this.originalEmber;
-      installAndGenerateBlueprint.resolvePackageName = this.originalResolvePackageName;
+      sinon.restore();
     });
 
     it('the expected params are passed for blueprint', async function() {
-      installAndGenerateBlueprint.spawn = (packageManager, args) => {
-        expect(packageManager).to.equal('yarn');
-        expect(args).to.include.members(['add', '--save-dev', 'hello-world']);
-      };
-      installAndGenerateBlueprint.ember = (args) => {
-        expect(args).to.include.members(['g', 'custom-blueprint']);
-      };
-      installAndGenerateBlueprint.resolvePackageName = () => 'hello-world';
+      const stubbedSpawn = sinon.stub(installAndGenerateBlueprint, 'spawn').resolves();
+      const stubbedEmber = sinon.stub(installAndGenerateBlueprint, 'ember').resolves();
+      sinon.stub(installAndGenerateBlueprint, 'resolvePackageName').returns('hello-world');
+
       await installAndGenerateBlueprint({
         cwd: 'fake/path',
         addonNameOverride: '',
@@ -55,6 +45,9 @@ describe('install-and-generate-blueprint module', function() {
         blueprintName: 'custom-blueprint',
         packageManager: 'yarn'
       });
+      expect(stubbedSpawn.getCall(0).args[0]).to.equal('yarn');
+      expect(stubbedSpawn.getCall(0).args[1]).to.include.members(['add', '--save-dev', 'hello-world']);
+      expect(stubbedEmber.getCall(0).args[0]).to.include.members(['g', 'custom-blueprint']);
     });
 
     it('blueprint options were used to generate blueprint', async function() {
