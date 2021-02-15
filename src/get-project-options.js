@@ -43,7 +43,7 @@ function getProjectType(checkForDep, keywords) {
  * @param {object} blueprint - Expected to contain `packageName` and `name`
  * @returns {Promise<[string]|string[]>} - Array of strings containing keywords
  */
-module.exports.getProjectOptions = async function getProjectOptions({
+module.exports = async function getProjectOptions({
   keywords,
   dependencies,
   devDependencies

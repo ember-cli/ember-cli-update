@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { getProjectOptions } = require('./get-project-options');
+const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getPackageVersion = require('./get-package-version');
 const getProjectVersion = require('./get-project-version');

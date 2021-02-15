@@ -4,14 +4,14 @@ const os = require('os');
 const fixturify = require('fixturify');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const hashYarn = require('../../src/has-yarn');
+const hasYarn = require('../../src/has-yarn');
 
-describe(hashYarn, function() {
+describe(hasYarn, function() {
   beforeEach(function() {
     this.tempDir = os.tmpdir();
   });
   it('project with no yarn.lock returns false', function() {
-    let result = hashYarn(this.tempDir);
+    let result = hasYarn(this.tempDir);
     expect(result).to.be.false;
   });
 
@@ -19,7 +19,7 @@ describe(hashYarn, function() {
     fixturify.writeSync(this.tempDir, {
       'yarn.lock': ''
     });
-    let result = hashYarn(this.tempDir);
+    let result = hasYarn(this.tempDir);
     expect(result).to.be.true;
   });
 });
