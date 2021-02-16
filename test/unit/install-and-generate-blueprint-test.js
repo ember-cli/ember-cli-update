@@ -47,6 +47,7 @@ describe('install-and-generate-blueprint module', function() {
       });
       expect(stubbedSpawn.getCall(0).args[0]).to.equal('yarn');
       expect(stubbedSpawn.getCall(0).args[1]).to.include.members(['add', '--save-dev', 'hello-world']);
+      expect(stubbedEmber.getCall(0).args[0]).to.include.members(['g', 'custom-blueprint']);
     });
 
     it('blueprint options were used to generate blueprint', async function() {
