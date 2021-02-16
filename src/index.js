@@ -23,9 +23,6 @@ const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
 
-// Export this so that testing can mock it
-module.exports.resolvePackage = resolvePackage;
-
 /**
  * If `version` attribute exists in the `blueprint` object and URL is empty, skip. Otherwise resolve the details of
  * the blueprint
@@ -250,3 +247,6 @@ module.exports = async function emberCliUpdate({
     resolveConflictsProcess
   };
 };
+
+// // Export this so that testing can mock it
+module.exports.resolvePackage = resolvePackage;

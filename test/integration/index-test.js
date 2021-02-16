@@ -25,12 +25,11 @@ const {
 } = require('../../src/constants');
 const { EOL } = require('os');
 const installAndGenerateBlueprint = require('../../src/install-and-generate-blueprint');
-const { spawn } = require('../../src/run');
 const cliUpdateCommandModule = require('../../src/index');
 const getStartAndEndModule = require('../../src/get-start-and-end-commands');
 
 describe(function() {
-  this.timeout(30 * 1000);
+  this.timeout(30000 * 1000);
 
   let tmpPath;
 
@@ -65,7 +64,7 @@ describe(function() {
         to
       })).promise;
 
-      await afterMerge();
+      await afterMerge(tmpPath);
 
       return result;
     })();
@@ -260,14 +259,14 @@ describe(function() {
         let originalIsDefaultAddonBlueprint = getStartAndEndModule.isDefaultAddonBlueprint;
         let fakeAddonName = 'some-addon-with-blueprint';
 
-        getStartAndEndModule.isDefaultAddonBlueprint = (blueprint) => {
+        sinon.stub(getStartAndEndModule, 'isDefaultAddonBlueprint').callsFake((blueprint) => {
           if (blueprint.packageName === fakeAddonName) {
-            return false;
+            return true;
           }
           return originalIsDefaultAddonBlueprint(blueprint);
-        };
+        });
         // Mock this for the fake addon
-        cliUpdateCommandModule.resolvePackage = ({ name, url, range }) => {
+        sinon.stub(cliUpdateCommandModule, 'resolvePackage').callsFake(({ name, url, range }) => {
           if (name  === fakeAddonName) {
             return {
               version: range,
@@ -276,20 +275,26 @@ describe(function() {
           } else {
             return originalResolvePackage({ name, url, range });
           }
-        };
+        });
         // Mock out the spawn to install a local blueprint
-        installAndGenerateBlueprint.spawn = (bin, args, options) => {
-          if (args.indexOf(fakeAddonName) > -1) {
-            spawn(bin, args, options);
+        sinon.stub(installAndGenerateBlueprint, 'spawn').callsFake((bin, args, options) => {
+          if (args.some(arg => {
+            return arg.indexOf(fakeAddonName) > -1;
+          })
+          ) {
+            let [installCmd, saveDev, resolvedPackageName] = args;
+            let packageNameAndVersion = resolvedPackageName.split('@');
+            let absolutePath = path.resolve(path.join('test/fixtures/blueprint/addon/legacy', `v${packageNameAndVersion[1]}`));
+            return originalSpawn(bin, [installCmd, saveDev, absolutePath], options);
           } else {
-            spawn(bin, args, options);
+            return originalSpawn(bin, args, options);
           }
-        };
+        });
 
         let {
           status
         } = await merge({
-          fixturesPath: 'test/fixtures/app/init',
+          fixturesPath: 'test/fixtures/app/simple-app-custom-blueprint-test',
           commitMessage: 'my-app',
           packageName: fakeAddonName,
           from: '0.0.1',
@@ -297,11 +302,8 @@ describe(function() {
           blueprint: 'custom-blueprint'
         });
 
-        installAndGenerateBlueprint.spawn = originalSpawn;
-        cliUpdateCommandModule.resolvePackage = originalResolvePackage;
-        getStartAndEndModule.isDefaultAddonBlueprint = originalIsDefaultAddonBlueprint;
         fixtureCompare({
-          mergeFixtures: 'test/fixtures/addon/merge/my-addon'
+          mergeFixtures: 'test/fixtures/app/simple-app-custom-blueprint-test-merge/my-app'
         });
 
         assertNoUnstaged(status);
