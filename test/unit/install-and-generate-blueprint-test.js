@@ -51,11 +51,11 @@ describe('install-and-generate-blueprint module', function() {
     });
 
     it('blueprint options were used to generate blueprint', async function() {
-      installAndGenerateBlueprint.spawn = () => {};
-      installAndGenerateBlueprint.ember = (args) => {
+      sinon.stub(installAndGenerateBlueprint, 'spawn').resolves();
+      sinon.stub(installAndGenerateBlueprint, 'ember').callsFake((args) => {
         expect(args).to.include.members(['g', 'custom-blueprint', '--hello', 'world', '--another', 'option']);
-      };
-      installAndGenerateBlueprint.resolvePackageName = () => 'hello-world';
+      });
+      sinon.stub(installAndGenerateBlueprint, 'resolvePackageName').returns('hello-world');
       await installAndGenerateBlueprint({
         cwd: 'fake/path',
         addonNameOverride: '',
