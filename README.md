@@ -4,6 +4,8 @@
 ![](https://github.com/ember-cli/ember-cli-update/workflows/CI/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/iguxxyxkiu9kyeyo/branch/master?svg=true)](https://ci.appveyor.com/project/embercli/ember-cli-update/branch/master)
 
+![logo](./public/ecu-final.svg)
+
 Update [Ember CLI](https://ember-cli.com/) projects
 
 Check out [the new guides](https://github.com/ember-cli/ember-cli-update/wiki).
