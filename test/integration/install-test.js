@@ -18,7 +18,7 @@ const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
 describe(install, function() {
-  this.timeout(60 * 1000);
+  this.timeout(60e3);
 
   let tmpPath;
 

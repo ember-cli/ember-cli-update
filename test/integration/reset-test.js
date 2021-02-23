@@ -18,7 +18,7 @@ const sinon = require('sinon');
 const inquirer = require('inquirer');
 
 describe(reset, function() {
-  this.timeout(30 * 1000);
+  this.timeout(30e3);
 
   let tmpPath;
 
