@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 800 583" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
+    <g>
+        <g transform="matrix(1,0,0,1.20018,-239.368,-533.236)">
+            <path d="M984.339,547.377C984.339,526.576 964.071,509.689 939.107,509.689L357.998,509.689C333.033,509.689 312.765,526.576 312.765,547.377L312.765,853.285C312.765,874.086 333.033,890.974 357.998,890.974L939.107,890.974C964.071,890.974 984.339,874.086 984.339,853.285L984.339,547.377Z" style="fill:none;stroke:rgb(0,12,104);stroke-width:9.94px;"/>
+        </g>
+        <g id="Layer1" transform="matrix(1,0,0,1,-235.772,-357.881)">
+            <path d="M360,480L410,530L360,580" style="fill:none;stroke:rgb(0,12,104);stroke-width:10.98px;"/>
+            <g transform="matrix(1,0,0,1,1.32687,-3.00102)">
+                <path d="M428.673,583.001L518.673,583.001" style="fill:none;stroke:rgb(0,12,104);stroke-width:10.98px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1.6514,0,0,1.6514,-615.617,-806.722)">
+            <g id="Layer2">
+                <text x="479.692px" y="768.527px" style="font-family:'DINAlternate-Bold', 'DIN Alternate', sans-serif;font-weight:700;font-size:193.71px;fill:rgb(0,12,104);stroke:rgb(0,12,104);stroke-width:0.61px;stroke-linecap:butt;stroke-miterlimit:2;">ecu</text>
+            </g>
+        </g>
+        <g id="Layer3" transform="matrix(1,0,0,1,-239.115,-322.773)">
+            <path d="M428.8,595L428.8,815.1" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:7.5,8.25,0,0;"/>
+        </g>
+        <g id="Layer31" serif:id="Layer3" transform="matrix(1,0,0,1,-106.427,-315.936)">
+            <path d="M430,588.163L430,808.263" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:7.5,8.25,0,0;"/>
+        </g>
+        <g id="Layer32" serif:id="Layer3" transform="matrix(1,0,0,1,201.601,-320.237)">
+            <path d="M430,592.464L430,812.564" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:7.5,8.4,0,0;"/>
+        </g>
+        <g id="Layer4" transform="matrix(1,0,0,1,-238.632,-322.773)">
+            <path d="M359.816,787.1L933.632,787.1" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:8,8,0,0;"/>
+            <path d="M359.816,623L933.632,623" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:8,8,0,0;"/>
+        </g>
+        <g id="Layer33" serif:id="Layer3" transform="matrix(1,0,0,1,163.921,-326.796)">
+            <path d="M430,599.023L430,819.123" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:7.5,8.25,0,0;"/>
+        </g>
+        <g id="Layer34" serif:id="Layer3" transform="matrix(1,0,0,1,100.791,-325.74)">
+            <path d="M430,597.967L430,818.067" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:7.5,8.25,0,0;"/>
+        </g>
+        <g id="Layer35" serif:id="Layer3" transform="matrix(1,0,0,1,67.9368,-332.133)">
+            <path d="M430,604.36L430,824.46" style="fill:none;stroke:rgb(0,12,104);stroke-width:4px;stroke-dasharray:7.5,8.25,0,0;"/>
+        </g>
+        <g transform="matrix(0.707107,-0.707107,1.03403,1.03403,-607.852,-40.2139)">
+            <g id="Layer36" serif:id="Layer3">
+                <path d="M425.888,593.397L430.511,802.595" style="fill:none;stroke:rgb(0,12,104);stroke-width:3.19px;stroke-dasharray:5.99,6.59,0,0;"/>
+            </g>
+        </g>
+        <g transform="matrix(0.707107,0.707107,-1.00122,1.00122,822.12,-626.141)">
+            <path d="M429,594.293L426.943,719.316L427.282,808.754" style="fill:none;stroke:rgb(0,12,104);stroke-width:3.26px;stroke-dasharray:6.12,6.73,0,0;"/>
+        </g>
+    </g>
+    <g id="Layer37" serif:id="Layer3">
+    </g>
+</svg>

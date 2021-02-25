@@ -29,7 +29,7 @@ const cliUpdateCommandModule = require('../../src/index');
 const getStartAndEndModule = require('../../src/get-start-and-end-commands');
 
 describe(function() {
-  this.timeout(30 * 1000);
+  this.timeout(30e3);
 
   let tmpPath;
 
