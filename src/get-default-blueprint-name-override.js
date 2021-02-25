@@ -16,7 +16,7 @@ module.exports = async function getBlueprintNameOverride(packageName) {
     return null;
   }
 
-  const packageJson = JSON.parse(ps.stdout);
+  let packageJson = JSON.parse(ps.stdout);
 
   if (packageJson['ember-addon'] && packageJson['ember-addon']['defaultBlueprint']) {
     return packageJson['ember-addon']['defaultBlueprint'];
