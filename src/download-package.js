@@ -34,17 +34,11 @@ async function downloadPackage(name, url, range) {
   name = parsed.name;
   let version = parsed.rawSpec;
   let _path = path.join(newTmpDir, 'node_modules', name);
-  let defaultBlueprintOverride;
-
-  if (parsed['ember-addon'] && parsed['ember-addon']['defaultBlueprint']) {
-    defaultBlueprintOverride = parsed['ember-addon']['defaultBlueprint'];
-  }
 
   return {
     name,
     path: _path,
-    version,
-    defaultBlueprintOverride
+    version
   };
 }
 
