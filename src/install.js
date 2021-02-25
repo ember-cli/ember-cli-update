@@ -49,7 +49,8 @@ module.exports = async function install({
     packageName,
     blueprintName: _blueprintName || defaultBlueprintOverride || packageName,
     blueprintPath: path,
-    packageManager: isYarnProject ? 'yarn' : 'npm'
+    packageManager: isYarnProject ? 'yarn' : 'npm',
+    blueprintOptions: []
   });
 
   await ps;

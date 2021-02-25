@@ -267,7 +267,7 @@ function createProject(runEmber) {
 module.exports.installAddonBlueprint = async function installAddonBlueprint({
   projectRoot,
   blueprint,
-  packageManager = 'npm'
+  packageManager
 }) {
   // `not found: ember` without this
   await spawn(packageManager, ['install'], { cwd: projectRoot });
@@ -278,7 +278,7 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
     version: blueprint.version,
     blueprintPath: blueprint.path,
     blueprintName: blueprint.name,
-    blueprintOptions: blueprint.options || [],
+    blueprintOptions: blueprint.options,
     stdin: 'pipe',
     packageManager
   });

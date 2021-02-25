@@ -64,7 +64,7 @@ describe(function() {
         to
       })).promise;
 
-      await afterMerge(tmpPath);
+      await afterMerge();
 
       return result;
     })();

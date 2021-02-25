@@ -2,7 +2,7 @@
 
 const execa = require('execa');
 const { spawn } = require('./run');
-const debug = require('debug')('ember-cli-update');
+const debug = require('./debug');
 
 function ember(args, {
   cwd,
@@ -76,9 +76,9 @@ async function installAndGenerateBlueprint({
   version,
   blueprintPath,
   blueprintName,
-  blueprintOptions = [],
+  blueprintOptions,
   stdin,
-  packageManager = 'npm'
+  packageManager
 }) {
   let resolvedPackageName = module.exports.resolvePackageName(
     addonNameOverride,

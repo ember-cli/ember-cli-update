@@ -43,7 +43,8 @@ describe('install-and-generate-blueprint module', function() {
         version: '',
         blueprintPath: '',
         blueprintName: 'custom-blueprint',
-        packageManager: 'yarn'
+        packageManager: 'yarn',
+        blueprintOptions: []
       });
       expect(stubbedSpawn.getCall(0).args[0]).to.equal('yarn');
       expect(stubbedSpawn.getCall(0).args[1]).to.include.members(['add', '--save-dev', 'hello-world']);
