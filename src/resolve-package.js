@@ -31,7 +31,7 @@ async function resolvePackage({
     let versions = await getVersions(name);
     let getTagVersion = _getTagVersion(versions, name);
     version = await getTagVersion(range);
-    defaultBlueprintOverride = getBlueprintNameOverride(name);
+    defaultBlueprintOverride = module.exports.getBlueprintNameOverride(name);
   }
 
   return {
@@ -43,3 +43,4 @@ async function resolvePackage({
 }
 
 module.exports = resolvePackage;
+module.exports.getBlueprintNameOverride = getBlueprintNameOverride;

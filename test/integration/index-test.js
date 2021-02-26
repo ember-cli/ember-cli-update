@@ -29,7 +29,7 @@ const cliUpdateCommandModule = require('../../src/index');
 const getStartAndEndModule = require('../../src/get-start-and-end-commands');
 
 describe(function() {
-  this.timeout(30e3);
+  this.timeout(240e3);
 
   let tmpPath;
 
@@ -265,6 +265,7 @@ describe(function() {
           }
           return originalIsDefaultAddonBlueprint(blueprint);
         });
+        sinon.stub(cliUpdateCommandModule.resolvePackage, 'getBlueprintNameOverride').returns(null);
         // Mock this for the fake addon
         sinon.stub(cliUpdateCommandModule, 'resolvePackage').callsFake(({ name, url, range }) => {
           if (name  === fakeAddonName) {
