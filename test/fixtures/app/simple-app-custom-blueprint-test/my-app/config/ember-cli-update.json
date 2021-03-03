@@ -3,7 +3,7 @@
   "packages": [
     {
       "name": "ember-cli",
-      "version": "2.11.1",
+      "version": "3.11.0-beta.1",
       "blueprints": [
         {
           "name": "app",
@@ -14,7 +14,8 @@
       ]
     },
     {
-      "name": "some-addon-with-blueprint",
+      "name": "ember-cli-update-git-addon-test",
+      "location": "../local-blueprint",
       "version": "0.0.1",
       "blueprints": [
         {

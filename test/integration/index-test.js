@@ -24,9 +24,6 @@ const {
   defaultTo
 } = require('../../src/constants');
 const { EOL } = require('os');
-const installAndGenerateBlueprint = require('../../src/install-and-generate-blueprint');
-const cliUpdateCommandModule = require('../../src/index');
-const getStartAndEndModule = require('../../src/get-start-and-end-commands');
 
 describe(function() {
   this.timeout(240e3);
@@ -254,53 +251,26 @@ describe(function() {
       });
 
       it('can update a custom blueprint for an ember app project', async function() {
-        let originalSpawn = installAndGenerateBlueprint.spawn;
-        let originalResolvePackage = cliUpdateCommandModule.resolvePackage;
-        let originalIsDefaultAddonBlueprint = getStartAndEndModule.isDefaultAddonBlueprint;
-        let fakeAddonName = 'some-addon-with-blueprint';
-
-        sinon.stub(getStartAndEndModule, 'isDefaultAddonBlueprint').callsFake((blueprint) => {
-          if (blueprint.packageName === fakeAddonName) {
-            return true;
-          }
-          return originalIsDefaultAddonBlueprint(blueprint);
-        });
-        sinon.stub(cliUpdateCommandModule.resolvePackage, 'getBlueprintNameOverride').returns(null);
-        // Mock this for the fake addon
-        sinon.stub(cliUpdateCommandModule, 'resolvePackage').callsFake(({ name, url, range }) => {
-          if (name  === fakeAddonName) {
-            return {
-              version: range,
-              path: ''
-            };
-          } else {
-            return originalResolvePackage({ name, url, range });
-          }
-        });
-        // Mock out the spawn to install a local blueprint
-        sinon.stub(installAndGenerateBlueprint, 'spawn').callsFake((bin, args, options) => {
-          if (args.some(arg => {
-            return arg.indexOf(fakeAddonName) > -1;
-          })
-          ) {
-            let [installCmd, saveDev, resolvedPackageName] = args;
-            let packageNameAndVersion = resolvedPackageName.split('@');
-            let absolutePath = path.resolve(path.join('test/fixtures/blueprint/addon/legacy', `v${packageNameAndVersion[1]}`));
-            return originalSpawn(bin, [installCmd, saveDev, absolutePath], options);
-          } else {
-            return originalSpawn(bin, args, options);
-          }
-        });
+        let {
+          location,
+          version: to
+        } = (await loadSafeBlueprintFile('test/fixtures/app/simple-app-custom-blueprint-test-merge/my-app/config/ember-cli-update.json')).blueprints[1];
 
         let {
           status
         } = await merge({
           fixturesPath: 'test/fixtures/app/simple-app-custom-blueprint-test',
           commitMessage: 'my-app',
-          packageName: fakeAddonName,
-          from: '0.0.1',
-          to: '0.0.2',
-          blueprint: 'custom-blueprint'
+          packageName: location,
+          to,
+          blueprint: 'custom-blueprint',
+          async beforeMerge() {
+            await initBlueprint({
+              fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+              resolvedFrom: tmpPath,
+              relativeDir: location
+            });
+          }
         });
 
         fixtureCompare({
