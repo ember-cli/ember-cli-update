@@ -3,7 +3,6 @@
 const downloadPackage = require('./download-package');
 const getVersions = require('./get-versions');
 const _getTagVersion = require('./get-tag-version');
-const getBlueprintNameOverride = require('./get-default-blueprint-name-override');
 
 /**
  * Read the contents from the package.json for the remote or local package
@@ -20,7 +19,6 @@ async function resolvePackage({
 }) {
   let version;
   let path;
-  let defaultBlueprintOverride;
 
   if (url) {
     let downloadedPackage = await downloadPackage(name, url, range);
@@ -31,16 +29,13 @@ async function resolvePackage({
     let versions = await getVersions(name);
     let getTagVersion = _getTagVersion(versions, name);
     version = await getTagVersion(range);
-    defaultBlueprintOverride = await module.exports.getBlueprintNameOverride(name);
   }
 
   return {
     name,
     version,
-    path,
-    defaultBlueprintOverride
+    path
   };
 }
 
 module.exports = resolvePackage;
-module.exports.getBlueprintNameOverride = getBlueprintNameOverride;

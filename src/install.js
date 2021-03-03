@@ -10,6 +10,7 @@ const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
 const { defaultTo } = require('./constants');
 const hasYarn = require('./has-yarn');
+const getBlueprintNameOverride = require('./get-default-blueprint-name-override');
 
 module.exports = async function install({
   cwd = process.cwd(),
@@ -30,13 +31,14 @@ module.exports = async function install({
   let {
     name: packageName,
     version,
-    path,
-    defaultBlueprintOverride
+    path
   } = await resolvePackage({
     name: addon,
     url: parsedPackage.url,
     range: defaultTo
   });
+
+  let defaultBlueprintOverride = await module.exports.getBlueprintNameOverride(packageName);
 
   // We are double installing it, via the above and the below.
   // The above is needed to resolve the real package name
@@ -71,3 +73,5 @@ module.exports = async function install({
     blueprint
   });
 };
+
+module.exports.getBlueprintNameOverride = getBlueprintNameOverride;

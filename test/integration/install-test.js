@@ -16,6 +16,7 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
+const sinon = require('sinon');
 
 describe(install, function() {
   this.timeout(60e3);
@@ -68,6 +69,15 @@ describe(install, function() {
       expected
     });
   }
+
+  afterEach(function() {
+    sinon.restore();
+  });
+
+  beforeEach(function() {
+    sinon.stub(install, 'getBlueprintNameOverride').resolves();
+  });
+
 
   it('can install an addon with a default blueprint and no state file', async function() {
     let {

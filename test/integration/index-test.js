@@ -26,7 +26,7 @@ const {
 const { EOL } = require('os');
 
 describe(function() {
-  this.timeout(240e3);
+  this.timeout(30e3);
 
   let tmpPath;
 
@@ -250,36 +250,6 @@ describe(function() {
         assertNoUnstaged(status);
       });
 
-      it('can update a custom blueprint for an ember app project', async function() {
-        let {
-          location,
-          version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/app/simple-app-custom-blueprint-test-merge/my-app/config/ember-cli-update.json')).blueprints[1];
-
-        let {
-          status
-        } = await merge({
-          fixturesPath: 'test/fixtures/app/simple-app-custom-blueprint-test',
-          commitMessage: 'my-app',
-          packageName: location,
-          to,
-          blueprint: 'custom-blueprint',
-          async beforeMerge() {
-            await initBlueprint({
-              fixturesPath: 'test/fixtures/blueprint/addon/legacy',
-              resolvedFrom: tmpPath,
-              relativeDir: location
-            });
-          }
-        });
-
-        fixtureCompare({
-          mergeFixtures: 'test/fixtures/app/simple-app-custom-blueprint-test-merge/my-app'
-        });
-
-        assertNoUnstaged(status);
-      });
-
       it('ignores package.json version of ember-cli', async function() {
         let {
           packageName,
@@ -375,6 +345,42 @@ describe(function() {
 
         assertNoUnstaged(status);
       });
+    });
+  });
+
+  describe('Long running tests', function() {
+    this.timeout(240e3);
+
+    it('can update a custom blueprint for an ember app project', async function() {
+      let fixturePath = 'test/fixtures/app/non-default-addon-blueprint/local/my-app/config/ember-cli-update.json';
+
+      let {
+        location,
+        version: to
+      } = (await loadSafeBlueprintFile(fixturePath)).blueprints[1];
+
+      let {
+        status
+      } = await merge({
+        fixturesPath: 'test/fixtures/app/non-default-addon-blueprint/local',
+        commitMessage: 'my-app',
+        packageName: location,
+        to,
+        blueprint: 'custom-blueprint',
+        async beforeMerge() {
+          await initBlueprint({
+            fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+            resolvedFrom: tmpPath,
+            relativeDir: location
+          });
+        }
+      });
+
+      fixtureCompare({
+        mergeFixtures: 'test/fixtures/app/non-default-addon-blueprint/merge/my-app'
+      });
+
+      assertNoUnstaged(status);
     });
   });
 });
