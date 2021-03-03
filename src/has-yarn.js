@@ -9,10 +9,10 @@ const fs = require('fs-extra');
  * @param {string} projectRoot - Path to the project root to check for yarn usage
  * @returns {boolean}
  */
-module.exports = function hasYarn(projectRoot) {
+module.exports = async function hasYarn(projectRoot) {
   let isYarn = false;
   try {
-    fs.accessSync(path.join(projectRoot, 'yarn.lock'), fs.constants.F_OK);
+    await fs.access(path.join(projectRoot, 'yarn.lock'), fs.constants.F_OK);
     isYarn = true;
   } catch (err) {}
   return isYarn;
