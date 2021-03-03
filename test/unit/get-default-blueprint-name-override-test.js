@@ -8,7 +8,7 @@ const sinon = require('sinon');
 const packageName = 'a-package-name';
 
 describe(getBlueprintNameOverride, function() {
-  afterEach(async function() {
+  afterEach(function() {
     sinon.restore();
   });
 
