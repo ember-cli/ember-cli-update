@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { spawn } = require('./run');
+const npm = require('boilerplate-update/src/npm');
 
 /**
  * Run npm view to get the package.json and parse it to check if it contains property
@@ -14,19 +14,17 @@ const { spawn } = require('./run');
  */
 module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd = process.cwd()) {
   let localPackageJsonPath = path.join(path.resolve(cwd, packageNameOrPath), 'package.json');
-  let packageJsonStr;
+  let packageJson;
 
   if (fs.existsSync(localPackageJsonPath)) {
-    packageJsonStr = fs.readFileSync(localPackageJsonPath);
+    packageJson = JSON.parse(fs.readFileSync(localPackageJsonPath));
   } else {
-    let ps = await module.exports.spawn('npm', ['view', packageNameOrPath, '--json']);
-    if (ps.exitCode > 0) {
+    try {
+      packageJson = await module.exports.npmJson('view', packageNameOrPath, '--json');
+    } catch (err) {
       return null;
     }
-    packageJsonStr = ps.stdout;
   }
-
-  let packageJson = JSON.parse(packageJsonStr);
 
   if (packageJson['ember-addon'] && packageJson['ember-addon']['defaultBlueprint']) {
     return packageJson['ember-addon']['defaultBlueprint'];
@@ -35,4 +33,4 @@ module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd 
   return null;
 };
 
-module.exports.spawn = spawn;
+module.exports.npmJson = npm.json;

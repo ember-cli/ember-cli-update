@@ -13,14 +13,11 @@ describe(getBlueprintNameOverride, function() {
   });
 
   it('returns default blueprint override name if it exists', async function() {
-    sinon.stub(getBlueprintNameOverride, 'spawn').returns({
-      stdout: JSON.stringify({
-        name: packageName,
-        'ember-addon': {
-          defaultBlueprint: 'not-the-same-name'
-        }
-      }),
-      exitCode: 0
+    sinon.stub(getBlueprintNameOverride, 'npmJson').returns({
+      name: packageName,
+      'ember-addon': {
+        defaultBlueprint: 'not-the-same-name'
+      }
     });
 
     let defaultBlueprintOverride = await getBlueprintNameOverride(packageName);
@@ -28,11 +25,8 @@ describe(getBlueprintNameOverride, function() {
   });
 
   it('Null if property does not exist in package.json', async function() {
-    sinon.stub(getBlueprintNameOverride, 'spawn').returns({
-      stdout: JSON.stringify({
-        name: packageName
-      }),
-      exitCode: 0
+    sinon.stub(getBlueprintNameOverride, 'npmJson').returns({
+      name: packageName
     });
 
     let defaultBlueprintOverride = await getBlueprintNameOverride(packageName);
@@ -40,10 +34,7 @@ describe(getBlueprintNameOverride, function() {
   });
 
   it('Error in spawn returns null', async function() {
-    sinon.stub(getBlueprintNameOverride, 'spawn').returns({
-      stdout: '',
-      exitCode: 1
-    });
+    sinon.stub(getBlueprintNameOverride, 'npmJson').throwsException();
 
     let defaultBlueprintOverride = await getBlueprintNameOverride(packageName);
     expect(defaultBlueprintOverride).to.be.null;
