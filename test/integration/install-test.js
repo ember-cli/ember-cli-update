@@ -136,20 +136,21 @@ describe(install, function() {
 
   it('can install an addon with a custom blueprint that does not match package name', async function() {
     let addonContainingBlueprint = 'test/fixtures/blueprint/addon/default-blueprint-different-than-name';
-    // In the package.json, the package version value will be 'file:../legacy-blueprint'
-    let copiedAddonPackagePath = '../legacy-blueprint';
+    let {
+      location
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app-install-blueprint-different-than-name/config/ember-cli-update.json')).blueprints[1];
 
     let {
       status
     } = await merge({
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
       commitMessage: 'my-app',
-      addon: copiedAddonPackagePath,
+      addon: location,
       async beforeMerge() {
         await initBlueprint({
           fixturesPath: addonContainingBlueprint,
           resolvedFrom: tmpPath,
-          relativeDir: copiedAddonPackagePath
+          relativeDir: location
         });
 
         await spawn('npm', ['install'], { cwd: tmpPath });

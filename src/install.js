@@ -38,7 +38,7 @@ module.exports = async function install({
     range: defaultTo
   });
 
-  let defaultBlueprintOverride = await module.exports.getBlueprintNameOverride(addon, cwd);
+  let defaultBlueprintOverride = await module.exports.getBlueprintNameOverride(path || packageName, cwd);
   let blueprintName = _blueprintName || defaultBlueprintOverride || packageName;
 
   // We are double installing it, via the above and the below.
