@@ -356,7 +356,7 @@ describe(function() {
 
       let {
         location,
-        version: to
+        version: from
       } = (await loadSafeBlueprintFile(fixturePath)).blueprints[1];
 
       let {
@@ -365,7 +365,8 @@ describe(function() {
         fixturesPath: 'test/fixtures/app/non-default-addon-blueprint/local',
         commitMessage: 'my-app',
         packageName: location,
-        to,
+        from,
+        to: '0.0.2',
         blueprint: 'custom-blueprint',
         async beforeMerge() {
           await initBlueprint({

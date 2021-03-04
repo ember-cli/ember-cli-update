@@ -1,0 +1,11 @@
+{
+  "name": "default-blueprint-different-than-name",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [
+    "ember-addon"
+  ],
+  "ember-addon": {
+    "defaultBlueprint": "custom-blueprint"
+  }
+}

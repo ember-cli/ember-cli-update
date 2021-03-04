@@ -38,7 +38,8 @@ module.exports = async function install({
     range: defaultTo
   });
 
-  let defaultBlueprintOverride = await module.exports.getBlueprintNameOverride(packageName);
+  let defaultBlueprintOverride = await module.exports.getBlueprintNameOverride(addon, cwd);
+  let blueprintName = _blueprintName || defaultBlueprintOverride || packageName;
 
   // We are double installing it, via the above and the below.
   // The above is needed to resolve the real package name
@@ -49,7 +50,7 @@ module.exports = async function install({
     cwd,
     addonNameOverride: addon,
     packageName,
-    blueprintName: _blueprintName || defaultBlueprintOverride || packageName,
+    blueprintName,
     blueprintPath: path,
     packageManager: isYarnProject ? 'yarn' : 'npm',
     blueprintOptions: []
@@ -59,7 +60,7 @@ module.exports = async function install({
 
   let blueprint = loadSafeBlueprint({
     packageName,
-    name: _blueprintName || packageName,
+    name: blueprintName,
     location: parsedPackage.location,
     version
   });
