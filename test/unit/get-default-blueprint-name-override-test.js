@@ -45,4 +45,9 @@ describe(getBlueprintNameOverride, function() {
     let defaultBlueprintOverride = await getBlueprintNameOverride(localPackageFixture);
     expect(defaultBlueprintOverride).to.be.equal('custom-blueprint');
   });
+
+  it('NPM package with nondefault returns expected value', async function() {
+    let defaultBlueprintOverride = await getBlueprintNameOverride('ember-cli-update-default-blueprint-override-test');
+    expect(defaultBlueprintOverride).to.be.equal('hello-world');
+  });
 });

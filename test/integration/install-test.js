@@ -16,7 +16,6 @@ const {
 } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
-const sinon = require('sinon');
 
 describe(install, function() {
   this.timeout(60e3);
@@ -70,12 +69,7 @@ describe(install, function() {
     });
   }
 
-  afterEach(function() {
-    sinon.restore();
-  });
-
   it('can install an addon with a default blueprint and no state file', async function() {
-    sinon.stub(install, 'getBlueprintNameOverride').resolves();
     let {
       location
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
@@ -108,7 +102,6 @@ describe(install, function() {
   });
 
   it('can install an addon with a custom default blueprint selected', async function() {
-    sinon.stub(install, 'getBlueprintNameOverride').resolves();
     let {
       location
     } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
