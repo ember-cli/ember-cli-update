@@ -352,12 +352,11 @@ describe(function() {
     this.timeout(240e3);
 
     it('can update a custom blueprint for an ember app project', async function() {
-      let fixturePath = 'test/fixtures/app/non-default-addon-blueprint/local/my-app/config/ember-cli-update.json';
-
+      let finalStateFixturePath = 'test/fixtures/app/non-default-addon-blueprint/local/my-app';
       let {
         location,
-        version: from
-      } = (await loadSafeBlueprintFile(fixturePath)).blueprints[1];
+        version: to
+      } = (await loadSafeBlueprintFile(path.join(finalStateFixturePath, '/config/ember-cli-update.json'))).blueprints[1];
 
       let {
         status
@@ -365,8 +364,7 @@ describe(function() {
         fixturesPath: 'test/fixtures/app/non-default-addon-blueprint/local',
         commitMessage: 'my-app',
         packageName: location,
-        from,
-        to: '0.0.2',
+        to,
         blueprint: 'custom-blueprint',
         async beforeMerge() {
           await initBlueprint({
@@ -378,7 +376,7 @@ describe(function() {
       });
 
       fixtureCompare({
-        mergeFixtures: 'test/fixtures/app/non-default-addon-blueprint/merge/my-app'
+        mergeFixtures: finalStateFixturePath
       });
 
       assertNoUnstaged(status);
