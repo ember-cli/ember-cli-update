@@ -20,8 +20,6 @@ const { spawn } = require('../../src/run');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const overwriteBlueprintFiles = require('../../src/overwrite-blueprint-files');
 const { defaultTo } = require('../../src/constants');
-const sinon = require('sinon');
-const install = require('../../src/install');
 
 const select = ' ';
 const down = '\u001b[B';
@@ -129,14 +127,6 @@ describe(function() {
       expected
     });
   }
-
-  afterEach(function() {
-    sinon.restore();
-  });
-
-  beforeEach(function() {
-    sinon.stub(install, 'getBlueprintNameOverride').resolves();
-  });
 
   it('works', async function() {
     let {
