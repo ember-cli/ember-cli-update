@@ -1,6 +1,6 @@
 'use strict';
 
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const npm = require('boilerplate-update/src/npm');
 
@@ -16,11 +16,11 @@ module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd 
   let localPackageJsonPath = path.join(path.resolve(cwd, packageNameOrPath), 'package.json');
   let packageJson;
 
-  if (fs.existsSync(localPackageJsonPath)) {
-    packageJson = JSON.parse(fs.readFileSync(localPackageJsonPath));
+  if (await fs.pathExists(localPackageJsonPath)) {
+    packageJson = JSON.parse(await fs.readFile(localPackageJsonPath));
   } else {
     try {
-      packageJson = await module.exports.npmJson('view', packageNameOrPath, '--json');
+      packageJson = await npm.json('view', packageNameOrPath, '--json');
     } catch (err) {
       return null;
     }
@@ -32,5 +32,3 @@ module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd 
 
   return null;
 };
-
-module.exports.npmJson = npm.json;
