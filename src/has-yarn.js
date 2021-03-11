@@ -10,10 +10,9 @@ const fs = require('fs-extra');
  * @returns {boolean}
  */
 module.exports = async function hasYarn(projectRoot) {
-  let isYarn = false;
   try {
     await fs.access(path.join(projectRoot, 'yarn.lock'), fs.constants.F_OK);
-    isYarn = true;
+    return true;
   } catch (err) {}
-  return isYarn;
+  return false;
 };

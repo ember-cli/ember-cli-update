@@ -42,7 +42,7 @@ async function _resolvePackage(blueprint, url, range) {
   let {
     version,
     path
-  } = await module.exports.resolvePackage({
+  } = await resolvePackage({
     name: blueprint.packageName,
     url,
     range
@@ -247,6 +247,3 @@ module.exports = async function emberCliUpdate({
     resolveConflictsProcess
   };
 };
-
-// // Export this so that testing can mock it
-module.exports.resolvePackage = resolvePackage;

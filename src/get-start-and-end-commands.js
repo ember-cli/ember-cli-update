@@ -231,8 +231,9 @@ function createProject(runEmber) {
         }
       }
 
-      if (await module.exports.isDefaultAddonBlueprint(blueprint)) {
+      if (await isDefaultAddonBlueprint(blueprint)) {
         let isYarnProject = await hasYarn(projectRoot);
+
         await _runEmber(baseBlueprint);
 
         await module.exports.installAddonBlueprint({
@@ -315,5 +316,3 @@ async function appendNodeModulesIgnore({
 
 module.exports.appendNodeModulesIgnore = appendNodeModulesIgnore;
 module.exports.getArgs = getArgs;
-// Export this to mock during testing
-module.exports.isDefaultAddonBlueprint = isDefaultAddonBlueprint;

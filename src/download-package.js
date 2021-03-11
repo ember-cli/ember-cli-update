@@ -34,6 +34,7 @@ async function downloadPackage(name, url, range) {
   name = parsed.name;
   let version = parsed.rawSpec;
   let _path = path.join(newTmpDir, 'node_modules', name);
+  // let version = require(path.join(_path, 'package')).version;
 
   return {
     name,

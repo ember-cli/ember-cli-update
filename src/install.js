@@ -18,6 +18,7 @@ module.exports = async function install({
   blueprint: _blueprintName
 }) {
   let isYarnProject = await hasYarn(cwd);
+
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.
@@ -38,8 +39,13 @@ module.exports = async function install({
     range: defaultTo
   });
 
-  let defaultBlueprintOverride = await module.exports.getBlueprintNameOverride(path || packageName, cwd);
-  let blueprintName = _blueprintName || defaultBlueprintOverride || packageName;
+  let blueprintName = _blueprintName;
+
+  if (!blueprintName) {
+    let defaultBlueprintOverride = await getBlueprintNameOverride(path || packageName, cwd);
+
+    blueprintName = defaultBlueprintOverride || packageName;
+  }
 
   // We are double installing it, via the above and the below.
   // The above is needed to resolve the real package name
@@ -74,5 +80,3 @@ module.exports = async function install({
     blueprint
   });
 };
-
-module.exports.getBlueprintNameOverride = getBlueprintNameOverride;

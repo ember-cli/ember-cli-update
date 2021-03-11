@@ -88,6 +88,7 @@ async function installAndGenerateBlueprint({
   );
 
   await module.exports.spawn(packageManager, [INSTALL_COMMAND[packageManager], '--save-dev', resolvedPackageName], { cwd });
+
   let generateProcess = module.exports.ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
 
   return {

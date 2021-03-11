@@ -33,7 +33,6 @@ function getProjectType(checkForDep, keywords) {
   throw new Error('Ember CLI project type could not be determined');
 }
 
-
 /**
  * Determine what kind of ember flavor this project is and if it uses yarn or npm
  *

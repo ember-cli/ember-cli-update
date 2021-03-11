@@ -22,6 +22,7 @@ describe(getBlueprintNameOverride, function() {
     });
 
     let defaultBlueprintOverride = await getBlueprintNameOverride(packageName);
+
     expect(defaultBlueprintOverride).to.equal('not-the-same-name');
   });
 
@@ -31,6 +32,7 @@ describe(getBlueprintNameOverride, function() {
     });
 
     let defaultBlueprintOverride = await getBlueprintNameOverride(packageName);
+
     expect(defaultBlueprintOverride).to.be.null;
   });
 
@@ -38,6 +40,7 @@ describe(getBlueprintNameOverride, function() {
     sinon.stub(npm, 'json').throwsException();
 
     let defaultBlueprintOverride = await getBlueprintNameOverride(packageName);
+
     expect(defaultBlueprintOverride).to.be.null;
   });
 });
