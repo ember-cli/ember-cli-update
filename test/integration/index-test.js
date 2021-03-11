@@ -347,4 +347,39 @@ describe(function() {
       });
     });
   });
+
+  describe('Long running tests', function() {
+    this.timeout(240e3);
+
+    it('can update a custom blueprint for an ember app project', async function() {
+      let finalStateFixturePath = 'test/fixtures/app/non-default-addon-blueprint/local/my-app';
+      let {
+        location,
+        version: to
+      } = (await loadSafeBlueprintFile(path.join(finalStateFixturePath, '/config/ember-cli-update.json'))).blueprints[1];
+
+      let {
+        status
+      } = await merge({
+        fixturesPath: 'test/fixtures/app/non-default-addon-blueprint/local',
+        commitMessage: 'my-app',
+        packageName: location,
+        to,
+        blueprint: 'custom-blueprint',
+        async beforeMerge() {
+          await initBlueprint({
+            fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+            resolvedFrom: tmpPath,
+            relativeDir: location
+          });
+        }
+      });
+
+      fixtureCompare({
+        mergeFixtures: finalStateFixturePath
+      });
+
+      assertNoUnstaged(status);
+    });
+  });
 });

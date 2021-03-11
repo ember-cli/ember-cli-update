@@ -26,6 +26,7 @@ describe(install, function() {
     fixturesPath,
     addon,
     commitMessage,
+    blueprintName,
     beforeMerge = () => Promise.resolve(),
     afterMerge = () => Promise.resolve()
   }) {
@@ -38,7 +39,8 @@ describe(install, function() {
     let promise = (async() => {
       let result = await install({
         cwd: tmpPath,
-        addon
+        addon,
+        blueprint: blueprintName
       });
 
       await afterMerge();
@@ -94,6 +96,72 @@ describe(install, function() {
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app'
+    });
+
+    assertNoStaged(status);
+  });
+
+  it('can install an addon with a custom default blueprint selected', async function() {
+    let {
+      location
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+
+    let {
+      status
+    } = await merge({
+      blueprintName: 'custom-blueprint',
+      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
+      commitMessage: 'my-app',
+      addon: location,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: 'test/fixtures/blueprint/addon/legacy',
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+
+        await spawn('npm', ['install'], { cwd: tmpPath });
+      },
+      async afterMerge() {
+        await fs.remove(path.join(tmpPath, 'package-lock.json'));
+      }
+    });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app-generated-custom-blueprint'
+    });
+
+    assertNoStaged(status);
+  });
+
+  it('can install an addon with a custom blueprint that does not match package name', async function() {
+    let addonContainingBlueprint = 'test/fixtures/blueprint/addon/default-blueprint-different-than-name';
+    let {
+      location
+    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app-install-blueprint-different-than-name/config/ember-cli-update.json')).blueprints[1];
+
+    let {
+      status
+    } = await merge({
+      fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
+      commitMessage: 'my-app',
+      addon: location,
+      async beforeMerge() {
+        await initBlueprint({
+          fixturesPath: addonContainingBlueprint,
+          resolvedFrom: tmpPath,
+          relativeDir: location
+        });
+
+        await spawn('npm', ['install'], { cwd: tmpPath });
+      },
+      async afterMerge() {
+        await fs.remove(path.join(tmpPath, 'package-lock.json'));
+      }
+    });
+
+    fixtureCompare({
+      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app-install-blueprint-different-than-name'
     });
 
     assertNoStaged(status);

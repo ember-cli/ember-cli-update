@@ -5,6 +5,14 @@ const { createTmpDir } = require('./tmp');
 const npa = require('npm-package-arg');
 const { spawn } = require('./run');
 
+/**
+ * Download the package in a temporary location and read the contents of the package.json
+ *
+ * @param {string} name - name of package
+ * @param {string} url - URL to package
+ * @param {string} range - Version range
+ * @returns {Promise<{path: string, defaultBlueprintOverride, name, version: (*|string)}>}
+ */
 async function downloadPackage(name, url, range) {
   if (!range) {
     throw new Error('Missing a range when downloading blueprint');

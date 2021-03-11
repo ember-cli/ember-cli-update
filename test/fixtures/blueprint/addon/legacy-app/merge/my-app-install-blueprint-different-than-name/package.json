@@ -1,0 +1,9 @@
+{
+  "name": "my-app",
+  "version": "0.0.0",
+  "description": "",
+  "devDependencies": {
+    "default-blueprint-different-than-name": "file:../legacy-blueprint",
+    "ember-cli": "~3.11.0-beta.1"
+  }
+}

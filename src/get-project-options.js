@@ -1,8 +1,7 @@
 'use strict';
 
-const path = require('path');
-const fs = require('fs-extra');
 const isDefaultBlueprint = require('./is-default-blueprint');
+const hasYarn = require('./has-yarn');
 
 /**
  * Determine if project is a `addon`, `app`, or `glimmer` type
@@ -64,11 +63,7 @@ module.exports = async function getProjectOptions({
 
   let cwd = process.cwd();
 
-  let isYarn;
-  try {
-    await fs.access(path.join(cwd, 'yarn.lock'), fs.constants.F_OK);
-    isYarn = true;
-  } catch (err) {}
+  let isYarn = await hasYarn(cwd);
 
   if (isYarn) {
     options.push('yarn');

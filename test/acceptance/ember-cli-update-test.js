@@ -98,6 +98,7 @@ describe(function() {
       ];
     }
     if (blueprint) {
+      // Keep this to `-b` to test the short alias
       args.push(`-b=${blueprint}`);
     }
     if (from) {

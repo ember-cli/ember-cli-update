@@ -4,6 +4,14 @@ const downloadPackage = require('./download-package');
 const getVersions = require('./get-versions');
 const _getTagVersion = require('./get-tag-version');
 
+/**
+ * Read the contents from the package.json for the remote or local package
+ *
+ * @param {string} name - Name of the package
+ * @param {string} url - URL to project such as `git+file:///xyz` or `xyz`
+ * @param {string} range - Version string such as ^1.2.3 or 2.0.0
+ * @returns {Promise<{path, name, version: *, defaultBlueprintOverride}>}
+ */
 async function resolvePackage({
   name,
   url,
