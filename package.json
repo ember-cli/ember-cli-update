@@ -44,7 +44,7 @@
     "fs-extra": "^9.0.0",
     "inquirer": "^7.0.0",
     "npm-package-arg": "^8.0.0",
-    "resolve": "^1.10.0",
+    "resolve": "^1.17.0",
     "semver": "^7.0.0",
     "tmp": "0.2.1",
     "update-notifier": "^5.0.0",
