@@ -29,6 +29,7 @@ jobs:
         - ubuntu-latest
         - macos-latest
         node:
+<<<<<<< HEAD
         - 10
         - '*'
         test-command:
@@ -41,6 +42,9 @@ jobs:
         - os: macos-latest
           node: 10
           test-command: test:fast
+=======
+        - 12
+>>>>>>> 700abbf (v1.4.5...v2.0.0)
 
     runs-on: ${{ matrix.os }}
 
