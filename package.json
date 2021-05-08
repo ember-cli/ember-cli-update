@@ -51,7 +51,7 @@
     "yargs": "^16.0.0"
   },
   "devDependencies": {
-    "@kellyselden/node-template": "1.4.5",
+    "@kellyselden/node-template": "2.0.0",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "chai-fs": "^2.0.0",
