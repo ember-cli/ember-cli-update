@@ -1,11 +1,7 @@
 environment:
   matrix:
-<<<<<<< HEAD
-    - nodejs_version: "10"
-  DEBUG: "ember-cli-update,boilerplate-update,git-diff-apply"
-=======
     - nodejs_version: "12"
->>>>>>> 700abbf (v1.4.5...v2.0.0)
+  DEBUG: "ember-cli-update,boilerplate-update,git-diff-apply"
 
 branches:
   only:
