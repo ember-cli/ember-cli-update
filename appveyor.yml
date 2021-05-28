@@ -1,6 +1,9 @@
 environment:
   matrix:
-    - nodejs_version: "10"
+    # node 12.18 has a regression
+    # npm ERR! cb.apply is not a function
+    # - nodejs_version: "12"
+    - nodejs_version: "12.17"
   DEBUG: "ember-cli-update,boilerplate-update,git-diff-apply"
 
 branches:
