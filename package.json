@@ -61,7 +61,7 @@
     "eslint-config-sane": "^1.0.0",
     "eslint-config-sane-node": "^1.0.1",
     "eslint-plugin-json-files": "^1.0.0",
-    "eslint-plugin-mocha": "^8.1.0",
+    "eslint-plugin-mocha": "^9.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-let": "^1.1.0",
     "git-diff-apply": "^2.0.4",
