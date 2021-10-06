@@ -108,37 +108,57 @@ All blueprints are up-to-date!`);
         };
         return choices;
       }, {});
+      
+       if (typeof to === "string" && to == "latest") {
+        let keys = Object.keys(choicesByName);
+        if (
+          keys.length > 0 &&
+          choicesByName[keys[0]]?.blueprintUpdate?.latestVersion &&
+          choicesByName[keys[0]]?.blueprintUpdate?.blueprint
+        ) {
+          to = choicesByName[keys[0]].blueprintUpdate.latestVersion;
+          existingBlueprint = choicesByName[keys[0]].blueprintUpdate.blueprint;
+        }
+      } else if (typeof to === "string" && to !== "latest") {
+        let keys = Object.keys(choicesByName);
+        if (
+          keys.length > 0 &&
+          choicesByName[keys[0]]?.blueprintUpdate?.blueprint
+        ) {
+          existingBlueprint = choicesByName[keys[0]].blueprintUpdate.blueprint;
+        }
+      } else {
+        let { blueprintUpdate } = await chooseBlueprint({
+          choicesByName,
+          message: 'Blueprint updates have been found. Which one would you like to update?'
+        });
 
-      let { blueprintUpdate } = await chooseBlueprint({
-        choicesByName,
-        message: 'Blueprint updates have been found. Which one would you like to update?'
-      });
+        existingBlueprint = blueprintUpdate.blueprint;
 
-      existingBlueprint = blueprintUpdate.blueprint;
+        if (typeof to !== 'string') {
+          let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
 
-      if (typeof to !== 'string') {
-        let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
-
-        let answer = await inquirer.prompt([{
-          type: 'list',
-          message: 'Do you want the latest version?',
-          name: 'choice',
-          choices: [
-            latestVersion,
-            'SemVer string'
-          ]
-        }]);
-
-        if (answer.choice === latestVersion) {
-          to = defaultTo;
-        } else {
-          answer = await inquirer.prompt([{
-            type: 'input',
-            message: 'What version?',
-            name: 'semver'
+          let answer = await inquirer.prompt([{
+            type: 'list',
+            message: 'Do you want the latest version?',
+            name: 'choice',
+            choices: [
+              latestVersion,
+              'SemVer string'
+            ]
           }]);
 
-          to = answer.semver;
+          if (answer.choice === latestVersion) {
+            to = defaultTo;
+          } else {
+            answer = await inquirer.prompt([{
+              type: 'input',
+              message: 'What version?',
+              name: 'semver'
+            }]);
+
+            to = answer.semver;
+          }
         }
       }
     }
