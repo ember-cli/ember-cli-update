@@ -43,7 +43,7 @@
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.0.0",
-    "npm-package-arg": "^8.0.1",
+    "pacote": "^13.5.0",
     "resolve": "^1.10.0",
     "semver": "^7.3.2",
     "tmp": "0.2.1",

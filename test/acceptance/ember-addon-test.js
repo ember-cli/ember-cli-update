@@ -19,7 +19,7 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const saveBlueprintFile = require('../../src/save-blueprint-file');
 
 describe(function() {
-  this.timeout(60e3);
+  this.timeout(2 * 60e3);
 
   let tmpPath;
 

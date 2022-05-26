@@ -290,6 +290,8 @@ describe(function() {
     });
 
     describe('ember-cli-update.json', function() {
+      this.timeout(60e3);
+
       it('can update a remote blueprint', async function() {
         let {
           name,
@@ -349,7 +351,7 @@ describe(function() {
   });
 
   describe('Long running tests', function() {
-    this.timeout(240e3);
+    this.timeout(4 * 60e3);
 
     it('can update a custom blueprint for an ember app project', async function() {
       let finalStateFixturePath = 'test/fixtures/app/non-default-addon-blueprint/local/my-app';

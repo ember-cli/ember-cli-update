@@ -46,7 +46,7 @@ describe(downloadPackage, function() {
     let downloadedPackage = await downloadPackage(null, url, range);
 
     expect(downloadedPackage.name).to.equal(name);
-    expect(downloadedPackage.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
+    expect(downloadedPackage.path).to.startWith(tmpdir()).and.endWith(name);
     expect(downloadedPackage.version).to.equal(range);
   });
 
@@ -60,7 +60,7 @@ describe(downloadPackage, function() {
     let downloadedPackage = await downloadPackage(null, url, range);
 
     expect(downloadedPackage.name).to.equal(name);
-    expect(downloadedPackage.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
+    expect(downloadedPackage.path).to.startWith(tmpdir()).and.endWith(name);
     expect(downloadedPackage.version).to.equal(range);
   });
 
@@ -73,7 +73,7 @@ describe(downloadPackage, function() {
     let downloadedPackage = await downloadPackage(name, null, range);
 
     expect(downloadedPackage.name).to.equal(name);
-    expect(downloadedPackage.path).to.startWith(tmpdir()).and.endWith(path.join('node_modules', name));
+    expect(downloadedPackage.path).to.startWith(tmpdir()).and.endWith(name);
     expect(downloadedPackage.version).to.equal(range);
   });
 });
