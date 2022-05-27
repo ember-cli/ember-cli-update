@@ -19,11 +19,6 @@ module.exports = {
     type: 'string',
     description: 'Update to a version that isn\'t latest ("2.14.1", "~2.15", "latest", "beta")'
   },
-  'resolve-conflicts': {
-    type: 'boolean',
-    default: false,
-    description: 'Automatically run git mergetool if conflicts found'
-  },
   'run-codemods': {
     type: 'boolean',
     default: false,

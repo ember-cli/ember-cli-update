@@ -88,8 +88,7 @@ module.exports = async function reset({
     }
 
     let {
-      promise,
-      resolveConflictsProcess
+      promise
     } = await boilerplateUpdate({
       cwd,
       endVersion: blueprint.version,
@@ -115,8 +114,7 @@ module.exports = async function reset({
         });
 
         return result;
-      })(),
-      resolveConflictsProcess
+      })()
     };
   } catch (err) {
     return { promise: Promise.reject(err) };

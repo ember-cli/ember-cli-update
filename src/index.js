@@ -60,8 +60,7 @@ module.exports = async function emberCliUpdate({
   packageName,
   blueprint: _blueprint,
   from,
-  to,
-  resolveConflicts
+  to
 } = {}) {
   // A custom config location in package.json may be reset/init away,
   // so we can no longer look it up on the fly after the run.
@@ -177,16 +176,10 @@ module.exports = async function emberCliUpdate({
     to = defaultTo;
   }
 
-  if (resolveConflicts) {
-    // eslint-disable-next-line no-console
-    console.warn('`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.');
-  }
-
   let endBlueprint;
 
   let {
-    promise,
-    resolveConflictsProcess
+    promise
   } = await boilerplateUpdate({
     cwd,
     projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),
@@ -223,7 +216,6 @@ module.exports = async function emberCliUpdate({
         customDiffOptions
       };
     },
-    resolveConflicts,
     createCustomDiff: true,
     ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
   });
@@ -243,7 +235,6 @@ module.exports = async function emberCliUpdate({
       });
 
       return result;
-    })(),
-    resolveConflictsProcess
+    })()
   };
 };

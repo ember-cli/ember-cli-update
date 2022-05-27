@@ -55,8 +55,7 @@ describe(function() {
     await beforeMerge();
 
     let args = [
-      ...to ? [`--to=${to}`] : [],
-      '--resolve-conflicts'
+      ...to ? [`--to=${to}`] : []
     ];
     if (listCodemods || runCodemods) {
       args = [
