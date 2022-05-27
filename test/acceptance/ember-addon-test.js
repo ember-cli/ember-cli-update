@@ -39,8 +39,7 @@ describe(function() {
       bin: 'ember',
       args: [
         'update',
-        `--to=${to}`,
-        '--resolve-conflicts'
+        `--to=${to}`
       ],
       cwd: tmpPath,
       commitMessage,

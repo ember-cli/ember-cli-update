@@ -37,12 +37,6 @@ module.exports = {
       default: args['to'].default
     },
     {
-      name: 'resolve-conflicts',
-      description: args['resolve-conflicts'].description,
-      type: Boolean,
-      default: args['resolve-conflicts'].default
-    },
-    {
       name: 'run-codemods',
       description: args['run-codemods'].description,
       type: Boolean,
@@ -103,13 +97,6 @@ module.exports = {
       });
     } else {
       result = await emberCliUpdate(options);
-    }
-
-    let ps = result.resolveConflictsProcess;
-    if (ps) {
-      process.stdin.pipe(ps.stdin);
-      ps.stdout.pipe(process.stdout);
-      ps.stderr.pipe(process.stderr);
     }
 
     await result.promise;

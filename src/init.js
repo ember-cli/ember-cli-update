@@ -22,7 +22,6 @@ module.exports = async function init({
   packageName,
   blueprint: _blueprint,
   to = defaultTo,
-  resolveConflicts,
   outputRepo,
   codemodsSource,
   blueprintOptions = []
@@ -127,18 +126,11 @@ module.exports = async function init({
     init = true;
   }
 
-  if (resolveConflicts) {
-    // eslint-disable-next-line no-console
-    console.warn('`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.');
-  }
-
   let {
-    promise,
-    resolveConflictsProcess
+    promise
   } = await boilerplateUpdate({
     cwd,
     endVersion: blueprint.version,
-    resolveConflicts,
     init,
     createCustomDiff: true,
     customDiffOptions: ({
@@ -168,7 +160,6 @@ module.exports = async function init({
       }
 
       return result;
-    })(),
-    resolveConflictsProcess
+    })()
   };
 };
