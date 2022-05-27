@@ -35,7 +35,6 @@ test_script:
   - node --version
   - npm --version
   - npm run test:bin
-  - npm run test:command
 
 # http://help.appveyor.com/discussions/questions/1310-delete-cache
 cache:
