@@ -26,7 +26,7 @@ const {
 const { EOL } = require('os');
 
 describe(function() {
-  this.timeout(30e3);
+  this.timeout(60e3);
 
   let tmpPath;
 

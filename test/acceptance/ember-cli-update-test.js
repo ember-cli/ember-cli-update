@@ -26,7 +26,7 @@ const down = '\u001b[B';
 const enter = '\n';
 
 describe(function() {
-  this.timeout(30e3);
+  this.timeout(60e3);
 
   let tmpPath;
 
@@ -144,11 +144,7 @@ describe(function() {
   });
 
   it('runs codemods', async function() {
-    if (process.platform === 'darwin') {
-      this.timeout(1.5 * 60e3);
-    } else {
-      this.timeout(60e3);
-    }
+    this.timeout(1.5 * 60e3);
 
     async function _merge(src, dest) {
       await fs.copy(
@@ -246,6 +242,8 @@ describe(function() {
   });
 
   it('can pick from multiple blueprints', async function() {
+    this.timeout(1.5 * 60e3);
+
     let {
       location,
       version: to
@@ -388,7 +386,7 @@ describe(function() {
   });
 
   it('can install an addon with a default blueprint and a state file', async function() {
-    this.timeout((process.platform === 'darwin' ? 3 : 1) * 60e3);
+    this.timeout(3 * 60e3);
 
     let {
       location
