@@ -30,14 +30,13 @@ jobs:
         - macos-latest
         node:
         - 12
-        - '*'
+        # - '*'
         test-command:
         - test:bin
-        - test:command
         - test:fast
         exclude:
-        - os: macos-latest
-          node: '*'
+        # - os: macos-latest
+        #   node: '*'
         - os: macos-latest
           node: 12
           test-command: test:fast
