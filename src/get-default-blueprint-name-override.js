@@ -20,7 +20,7 @@ module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd 
     packageJson = JSON.parse(await fs.readFile(localPackageJsonPath));
   } else {
     try {
-      packageJson = await npm.json('view', packageNameOrPath, '--json');
+      packageJson = await npm.json('view', packageNameOrPath);
     } catch (err) {
       return null;
     }
