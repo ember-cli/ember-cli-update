@@ -75,7 +75,9 @@ To run codemods:
 ember-cli-update --run-codemods
 ```
 
-## Options
+## Commands
+
+<!-- CODEGEN_CLI_HELP -->
 
 ```
   --help                         Show help                             [boolean]
@@ -113,6 +115,8 @@ ember-cli-update --run-codemods
   --output-repo                  An output repository of changes over time
                                                                         [string]
 ```
+
+<!-- CODEGEN_CLI_HELP -->
 
 ## Power User Guide
 
