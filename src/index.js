@@ -2,7 +2,7 @@
 
 const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
-const getVersions = require('./get-versions');
+const getVersions = require('boilerplate-update/src/get-versions');
 const _getTagVersion = require('./get-tag-version');
 const boilerplateUpdate = require('boilerplate-update');
 const getStartAndEndCommands = require('./get-start-and-end-commands');
