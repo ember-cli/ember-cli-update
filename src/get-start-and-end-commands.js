@@ -9,7 +9,7 @@ const isDefaultBlueprint = require('./is-default-blueprint');
 const installAndGenerateBlueprint = require('./install-and-generate-blueprint');
 const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('./debug');
-const npm = require('boilerplate-update/src/npm');
+const pacote = require('pacote');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
 const { glimmerPackageName } = require('./constants');
 const hasYarn = require('./has-yarn');
@@ -86,7 +86,7 @@ async function isDefaultAddonBlueprint(blueprint) {
     if (blueprint.path) {
       keywords = utils.require(path.join(blueprint.path, 'package')).keywords;
     } else {
-      keywords = await npm.json('v', blueprint.packageName, 'keywords');
+      keywords = (await pacote.manifest(blueprint.packageName)).keywords;
     }
 
     isDefaultAddonBlueprint = !(keywords && keywords.includes('ember-blueprint'));
