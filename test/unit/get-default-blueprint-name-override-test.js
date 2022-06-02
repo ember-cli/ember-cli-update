@@ -14,7 +14,7 @@ describe(getBlueprintNameOverride, function() {
   });
 
   it('returns default blueprint override name if it exists', async function() {
-    sinon.stub(npm, 'json').returns({
+    sinon.stub(npm, 'json').resolves({
       name: packageName,
       'ember-addon': {
         defaultBlueprint: 'not-the-same-name'
@@ -27,7 +27,7 @@ describe(getBlueprintNameOverride, function() {
   });
 
   it('Null if property does not exist in package.json', async function() {
-    sinon.stub(npm, 'json').returns({
+    sinon.stub(npm, 'json').resolves({
       name: packageName
     });
 
@@ -37,7 +37,7 @@ describe(getBlueprintNameOverride, function() {
   });
 
   it('Error in spawn returns null', async function() {
-    sinon.stub(npm, 'json').throwsException();
+    sinon.stub(npm, 'json').rejects();
 
     let defaultBlueprintOverride = await getBlueprintNameOverride(packageName);
 
