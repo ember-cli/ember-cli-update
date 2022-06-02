@@ -2,7 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const npm = require('boilerplate-update/src/npm');
+const pacote = require('pacote');
 
 /**
  * Run npm view to get the package.json and parse it to check if it contains property
@@ -20,9 +20,13 @@ module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd 
     packageJson = JSON.parse(await fs.readFile(localPackageJsonPath));
   } else {
     try {
-      packageJson = await npm.json('view', packageNameOrPath);
+      packageJson = await pacote.manifest(packageNameOrPath, { fullMetadata: true });
     } catch (err) {
-      return null;
+      if (err.statusCode !== 404) {
+        throw err;
+      }
+
+      packageJson = {};
     }
   }
 
