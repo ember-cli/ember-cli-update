@@ -38,7 +38,7 @@
     "src"
   ],
   "dependencies": {
-    "boilerplate-update": "^2.0.0",
+    "boilerplate-update": "^2.1.0",
     "debug": "^4.2.0",
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
