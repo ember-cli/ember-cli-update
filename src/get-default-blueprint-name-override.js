@@ -26,9 +26,5 @@ module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd 
     }
   }
 
-  if (packageJson['ember-addon'] && packageJson['ember-addon']['defaultBlueprint']) {
-    return packageJson['ember-addon']['defaultBlueprint'];
-  }
-
-  return null;
+  return packageJson['ember-addon']?.defaultBlueprint ?? null;
 };
