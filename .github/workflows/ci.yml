@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  # allow manual running
+  workflow_dispatch:
   push:
     branches:
     - master
@@ -14,8 +16,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 12
 
     - run: npm ci
     - run: npm run lint
@@ -44,8 +48,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v2
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node }}
 
@@ -66,11 +70,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         ref: ${{ github.head_ref }}
         token: ${{ secrets.GitHubToken }}
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 12
 
     - uses: kellyselden/ember-cli-update-action@v3
       with:
