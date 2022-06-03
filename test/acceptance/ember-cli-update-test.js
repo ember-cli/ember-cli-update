@@ -26,7 +26,7 @@ const down = '\u001b[B';
 const enter = '\n';
 
 describe(function() {
-  this.timeout(60e3);
+  this.timeout(1.5 * 60e3);
 
   let tmpPath;
 
@@ -144,7 +144,7 @@ describe(function() {
   });
 
   it('runs codemods', async function() {
-    this.timeout(1.5 * 60e3);
+    this.timeout(2 * 60e3);
 
     async function _merge(src, dest) {
       await fs.copy(
@@ -242,8 +242,6 @@ describe(function() {
   });
 
   it('can pick from multiple blueprints', async function() {
-    this.timeout(1.5 * 60e3);
-
     let {
       location,
       version: to
