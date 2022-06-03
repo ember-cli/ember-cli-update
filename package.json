@@ -10,9 +10,9 @@
   "scripts": {
     "lint": "eslint . --ext js,json",
     "start": "node bin/ember-cli-update",
-    "test": "mocha \"test/!(fixtures)/**/*-test.js\"",
-    "test:bin": "mocha test/acceptance/ember-cli-update-test.js",
-    "test:fast": "mocha \"test/+(integration|unit)/**/*-test.js\"",
+    "test": "mocha",
+    "test:bin": "mocha --config .mocharc.bin.js",
+    "test:fast": "mocha --config .mocharc.fast.js",
     "preversion": "yargs-help-output README.md --npm-script-name start",
     "version": "git add README.md"
   },
