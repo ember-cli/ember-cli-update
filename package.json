@@ -10,7 +10,7 @@
   "scripts": {
     "lint": "eslint . --ext js,json",
     "start": "node bin/ember-cli-update",
-    "test": "mocha \"test/!(fixtures)/**/*-test.js\"",
+    "test": "mocha",
     "test:bin": "mocha test/acceptance/ember-cli-update-test.js",
     "test:fast": "mocha \"test/+(integration|unit)/**/*-test.js\"",
     "preversion": "yargs-help-output README.md --npm-script-name start",
@@ -51,7 +51,7 @@
     "yargs": "^17.0.0"
   },
   "devDependencies": {
-    "@kellyselden/node-template": "2.1.1",
+    "@kellyselden/node-template": "2.2.0",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "chai-fs": "^2.0.0",
