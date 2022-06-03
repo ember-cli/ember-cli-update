@@ -33,6 +33,7 @@ module.exports = {
       ],
       rules: {
         'mocha/no-exclusive-tests': 'error',
+        'mocha/no-empty-description': 'off',
         'mocha/no-setup-in-describe': 'off',
         'mocha/no-hooks-for-single-case': 'off'
       }
