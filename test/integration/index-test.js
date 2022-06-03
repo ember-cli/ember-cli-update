@@ -291,6 +291,8 @@ describe(function() {
 
     describe('ember-cli-update.json', function() {
       it('can update a remote blueprint', async function() {
+        this.timeout(1.5 * 60e3);
+
         let {
           name,
           version: to
