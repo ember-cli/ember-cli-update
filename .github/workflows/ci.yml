@@ -54,7 +54,7 @@ jobs:
 
     - run: npm ci
     - run: npm run ${{ matrix.test-command }} -- --retries 1
-      timeout-minutes: 15
+      timeout-minutes: 20
       env:
         NODE_LTS: ${{ matrix.node != '*' }}
         DEBUG: ember-cli-update,boilerplate-update,git-diff-apply
