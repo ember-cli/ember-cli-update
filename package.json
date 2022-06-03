@@ -70,7 +70,7 @@
     "mocha-helpers": "^6.2.1",
     "renovate-config-standard": "2.1.2",
     "sinon": "^11.0.0",
-    "sinon-chai": "^3.3.0",
+    "sinon-chai": "^3.7.0",
     "standard-node-template": "2.1.0",
     "yargs-help-output": "^2.0.0"
   }
