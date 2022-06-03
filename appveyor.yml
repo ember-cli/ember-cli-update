@@ -1,9 +1,9 @@
 environment:
   matrix:
-    # node 12.18 has a regression
+    # node 14.5 has a regression
     # npm ERR! cb.apply is not a function
-    # - nodejs_version: "12"
-    - nodejs_version: "12.17"
+    # - nodejs_version: "14"
+    - nodejs_version: "14.4"
   DEBUG: "ember-cli-update,boilerplate-update,git-diff-apply"
 
 branches:
@@ -24,7 +24,7 @@ install:
   - RefreshEnv
   - where npx
   # don't accidentally use the global npx
-  - ps: rm "C:\Program Files (x86)\nodejs\npx*"
+  - ps: rm "C:\Program Files\nodejs\npx*"
   - ps: rm C:\Users\appveyor\AppData\Roaming\npm\npx*
   # test that we can't find it
   - ps: if (gcm npx) { exit }
