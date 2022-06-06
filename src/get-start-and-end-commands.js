@@ -3,7 +3,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const execa = require('execa');
-const { spawn } = require('./run');
+const { spawn: _spawn } = require('./run');
 const utils = require('./utils');
 const isDefaultBlueprint = require('./is-default-blueprint');
 const installAndGenerateBlueprint = require('./install-and-generate-blueprint');
@@ -22,7 +22,7 @@ const nodeModulesIgnore = `
 // remove when node 8 is dropped
 const lastNode8Version = '3.16';
 
-module.exports = function getStartAndEndCommands({
+function getStartAndEndCommands({
   packageJson: { name: projectName },
   baseBlueprint,
   startBlueprint,
@@ -74,7 +74,7 @@ module.exports = function getStartAndEndCommands({
       packageRange: endRange
     }
   };
-};
+}
 
 async function isDefaultAddonBlueprint(blueprint) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
@@ -138,7 +138,7 @@ function getArgs({
   ];
 }
 
-module.exports.spawn = function spawn(command, args, options) {
+function spawn(command, args, options) {
   debug(`${command} ${args.join(' ')}`);
 
   let ps = execa(command, args, {
@@ -149,11 +149,11 @@ module.exports.spawn = function spawn(command, args, options) {
   ps.stdout.pipe(process.stdout);
 
   return ps;
-};
+}
 
-module.exports.npx = function npx(args, options) {
+function npx(args, options) {
   return utils.npx(args.join(' '), options);
-};
+}
 
 function runEmberLocally({
   packageRoot,
@@ -265,13 +265,13 @@ function createProject(runEmber) {
  * @param {string} packageManager - Expected to be either `npm` or `yarn`
  * @returns {Promise<void>}
  */
-module.exports.installAddonBlueprint = async function installAddonBlueprint({
+async function installAddonBlueprint({
   projectRoot,
   blueprint,
   packageManager
 }) {
   // `not found: ember` without this
-  await spawn(packageManager, ['install'], { cwd: projectRoot });
+  await _spawn(packageManager, ['install'], { cwd: projectRoot });
 
   let { ps } = await installAndGenerateBlueprint({
     cwd: projectRoot,
@@ -293,7 +293,7 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   });
 
   await fs.remove(path.join(projectRoot, 'package-lock.json'));
-};
+}
 
 async function appendNodeModulesIgnore({
   projectRoot
@@ -314,5 +314,10 @@ async function appendNodeModulesIgnore({
   }
 }
 
-module.exports.appendNodeModulesIgnore = appendNodeModulesIgnore;
-module.exports.getArgs = getArgs;
+module.exports = Object.assign(getStartAndEndCommands, {
+  spawn,
+  npx,
+  installAddonBlueprint,
+  appendNodeModulesIgnore,
+  getArgs
+});
