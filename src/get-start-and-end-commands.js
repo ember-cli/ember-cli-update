@@ -77,7 +77,7 @@ function getStartAndEndCommands({
 }
 
 async function isDefaultAddonBlueprint(blueprint) {
-  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
+  let isCustomBlueprint = !module.exports.isDefaultBlueprint(blueprint);
 
   let isDefaultAddonBlueprint;
 
@@ -319,5 +319,7 @@ module.exports = Object.assign(getStartAndEndCommands, {
   npx,
   installAddonBlueprint,
   appendNodeModulesIgnore,
-  getArgs
+  getArgs,
+  isDefaultAddonBlueprint,
+  isDefaultBlueprint
 });

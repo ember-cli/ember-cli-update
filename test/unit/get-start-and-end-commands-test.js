@@ -10,7 +10,8 @@ const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 const loadDefaultBlueprint = require('../../src/load-default-blueprint');
 
 const {
-  getArgs: _getArgs
+  getArgs: _getArgs,
+  isDefaultAddonBlueprint
 } = _getStartAndEndCommands;
 
 const projectName = 'my-custom-project';
@@ -701,6 +702,18 @@ describe(_getStartAndEndCommands, function() {
         '--my-option-1',
         '--my-option-2'
       ]);
+    });
+  });
+
+  describe(isDefaultAddonBlueprint, function() {
+    let isDefaultBlueprintStub;
+
+    beforeEach(function() {
+      isDefaultBlueprintStub = sinon.stub(_getStartAndEndCommands, 'isDefaultBlueprint');
+    });
+
+    it('works', function() {
+      isDefaultBlueprintStub.resolves(true);
     });
   });
 });
