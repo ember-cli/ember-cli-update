@@ -26,7 +26,7 @@ const down = '\u001b[B';
 const enter = '\n';
 
 describe(function() {
-  this.timeout(2 * 60e3);
+  this.timeout(3 * 60e3);
 
   let tmpPath;
 
