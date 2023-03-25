@@ -40,7 +40,7 @@
   "dependencies": {
     "boilerplate-update": "^2.1.0",
     "debug": "^4.2.0",
-    "execa": "^5.0.0",
+    "execa": "^7.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.0.0",
     "npm-package-arg": "^9.0.0",
