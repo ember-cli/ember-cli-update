@@ -172,7 +172,7 @@ function runEmberRemotely({
   let isGlimmer = blueprint.packageName === glimmerPackageName && blueprint.name === glimmerPackageName;
 
   if (isCustomBlueprint || isGlimmer) {
-    args = ['ember-cli', ...args];
+    args = ['ember-cli@latest', ...args];
     // args = ['-p', 'github:ember-cli/ember-cli#cfb9780', 'ember', 'new', projectName, `-dir=${directoryName}, '-sg', -sn', '-b', `${blueprint.packageName}@${blueprint.version}`];
   } else {
     args = ['-p', `ember-cli@${blueprint.version}`, 'ember', ...args];
