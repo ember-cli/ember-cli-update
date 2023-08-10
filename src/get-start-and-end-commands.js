@@ -131,7 +131,6 @@ function getArgs({
   return [
     ...args,
     '-sn',
-    '-sb',
     '-b',
     _blueprint,
     ...blueprint.options
