@@ -109,7 +109,7 @@ function getArgs({
     args.push(`-dir=${directoryName}`);
   }
 
-  args.push('-sg');
+  args.push('--skip-git');
 
   let _blueprint;
   if (blueprint.path) {
@@ -130,7 +130,7 @@ function getArgs({
 
   return [
     ...args,
-    '-sn',
+    '--skip-npm',
     '-b',
     _blueprint,
     ...blueprint.options
