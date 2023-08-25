@@ -31,20 +31,22 @@ jobs:
       fail-fast: false
       matrix:
         os:
-        - ubuntu-latest
-        - macos-latest
+          - ubuntu-latest
+          - macos-latest
         node:
-        - 14
-        # - '*'
+          - 14
+          - 16
+          - 18
+          - 20
         test-command:
-        - test:bin
-        - test:fast
+          - test:bin
+          - test:fast
         exclude:
         # - os: macos-latest
         #   node: '*'
-        - os: macos-latest
-          node: 14
-          test-command: test:fast
+          - os: macos-latest
+            node: 14
+            test-command: test:fast
 
     runs-on: ${{ matrix.os }}
 
