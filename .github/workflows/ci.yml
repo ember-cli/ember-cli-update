@@ -42,10 +42,7 @@ jobs:
           - test:bin
           - test:fast
         exclude:
-        # - os: macos-latest
-        #   node: '*'
           - os: macos-latest
-            node: 14
             test-command: test:fast
 
     runs-on: ${{ matrix.os }}
