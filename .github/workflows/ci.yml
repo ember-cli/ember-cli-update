@@ -20,6 +20,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 14
+        cache: 'npm'
 
     - run: npm ci
     - run: npm run lint
@@ -52,6 +53,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node }}
+        cache: 'npm'
 
     # for test cache hits
     - run: npm i -g ember-cli@2.11.1
@@ -77,6 +79,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: 14
+        cache: 'npm'
 
     - uses: kellyselden/ember-cli-update-action@v5
       with:
