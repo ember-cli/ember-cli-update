@@ -74,7 +74,7 @@
     "yargs-help-output": "^2.0.0"
   },
   "engines": {
-    "node": ">=14.15"
+    "node": ">=16"
   },
   "release-it": {
     "plugins": {
