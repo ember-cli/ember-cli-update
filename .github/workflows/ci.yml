@@ -34,6 +34,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
+          - windows-latest
         node:
           - 16
           - 18
@@ -43,6 +44,8 @@ jobs:
           - test:fast
         exclude:
           - os: macos-latest
+            test-command: test:fast
+          - os: windows-latest
             test-command: test:fast
 
     runs-on: ${{ matrix.os }}
