@@ -121,9 +121,8 @@ describe(_getStartAndEndCommands, function() {
         path.normalize(`${packageRoot}/bin/ember`),
         'new',
         projectName,
-        '-sg',
-        '-sn',
-        '-sb',
+        '--skip-git',
+        '--skip-npm',
         '-b',
         'app'
       ],
@@ -152,9 +151,8 @@ describe(_getStartAndEndCommands, function() {
         commandName,
         'new',
         projectName,
-        '-sg',
-        '-sn',
-        '-sb',
+        '--skip-git',
+        '--skip-npm',
         '-b',
         'app'
       ],
@@ -296,9 +294,8 @@ describe(_getStartAndEndCommands, function() {
           path.normalize(`${packageRoot}/bin/ember`),
           'new',
           projectName,
-          '-sg',
-          '-sn',
-          '-sb',
+          '--skip-git',
+          '--skip-npm',
           '-b',
           blueprintPath
         ],
@@ -335,12 +332,11 @@ describe(_getStartAndEndCommands, function() {
 
       expect(npxStub.args).to.deep.equal([[
         [
-          `${packageName}@3.16`,
+          `${packageName}@latest`,
           'new',
           projectName,
-          '-sg',
-          '-sn',
-          '-sb',
+          '--skip-git',
+          '--skip-npm',
           '-b',
           blueprintPath
         ],
@@ -385,9 +381,8 @@ describe(_getStartAndEndCommands, function() {
             path.normalize(`${packageRoot}/bin/ember`),
             'new',
             projectName,
-            '-sg',
-            '-sn',
-            '-sb',
+            '--skip-git',
+            '--skip-npm',
             '-b',
             baseBlueprint.name,
             ...baseBlueprint.options
@@ -441,9 +436,8 @@ describe(_getStartAndEndCommands, function() {
             commandName,
             'new',
             projectName,
-            '-sg',
-            '-sn',
-            '-sb',
+            '--skip-git',
+            '--skip-npm',
             '-b',
             baseBlueprint.name,
             ...baseBlueprint.options
@@ -498,9 +492,8 @@ describe(_getStartAndEndCommands, function() {
           commandName,
           'new',
           'my-project',
-          '-sg',
-          '-sn',
-          '-sb',
+          '--skip-git',
+          '--skip-npm',
           '-b',
           baseBlueprint.name,
           ...baseBlueprint.options
@@ -610,9 +603,8 @@ describe(_getStartAndEndCommands, function() {
       expect(args).to.deep.equal([
         'new',
         projectName,
-        '-sg',
-        '-sn',
-        '-sb',
+        '--skip-git',
+        '--skip-npm',
         '-b',
         'app'
       ]);
@@ -628,9 +620,8 @@ describe(_getStartAndEndCommands, function() {
       expect(args).to.deep.equal([
         'new',
         projectName,
-        '-sg',
-        '-sn',
-        '-sb',
+        '--skip-git',
+        '--skip-npm',
         '-b',
         'addon',
         '--no-welcome'
@@ -649,9 +640,8 @@ describe(_getStartAndEndCommands, function() {
         'new',
         `@my-scope/${projectName}`,
         `-dir=${projectName}`,
-        '-sg',
-        '-sn',
-        '-sb',
+        '--skip-git',
+        '--skip-npm',
         '-b',
         'app'
       ]);
@@ -669,9 +659,8 @@ describe(_getStartAndEndCommands, function() {
       expect(args).to.deep.equal([
         'new',
         projectName,
-        '-sg',
-        '-sn',
-        '-sb',
+        '--skip-git',
+        '--skip-npm',
         '-b',
         '/path/to/my-blueprint'
       ]);
@@ -693,9 +682,8 @@ describe(_getStartAndEndCommands, function() {
       expect(args).to.deep.equal([
         'new',
         projectName,
-        '-sg',
-        '-sn',
-        '-sb',
+        '--skip-git',
+        '--skip-npm',
         '-b',
         'app',
         '--my-option-1',
