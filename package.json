@@ -2,11 +2,29 @@
   "name": "ember-cli-update",
   "version": "1.0.1",
   "description": "Update Ember CLI projects",
+  "keywords": [
+    "ember.js",
+    "ember-cli"
+  ],
+  "homepage": "https://github.com/ember-cli/ember-cli-update#readme",
+  "bugs": {
+    "url": "https://github.com/ember-cli/ember-cli-update/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ember-cli/ember-cli-update.git"
+  },
+  "license": "MIT",
+  "author": "Kelly Selden",
   "main": "src/index.js",
   "bin": {
-    "ember-cli-update": "bin/ember-cli-update.js",
-    "ecu": "bin/ember-cli-update.js"
+    "ecu": "bin/ember-cli-update.js",
+    "ember-cli-update": "bin/ember-cli-update.js"
   },
+  "files": [
+    "bin",
+    "src"
+  ],
   "scripts": {
     "lint": "eslint . --ext js,json",
     "start": "node bin/ember-cli-update",
@@ -16,27 +34,6 @@
     "preversion": "yargs-help-output README.md --npm-script-name start",
     "version": "git add README.md"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ember-cli/ember-cli-update.git"
-  },
-  "keywords": [
-    "ember.js",
-    "ember-cli"
-  ],
-  "author": "Kelly Selden",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ember-cli/ember-cli-update/issues"
-  },
-  "homepage": "https://github.com/ember-cli/ember-cli-update#readme",
-  "engines": {
-    "node": ">=14.15"
-  },
-  "files": [
-    "bin",
-    "src"
-  ],
   "dependencies": {
     "boilerplate-update": "^2.1.1",
     "debug": "^4.2.0",
@@ -52,6 +49,7 @@
   },
   "devDependencies": {
     "@kellyselden/node-template": "3.0.0",
+    "@release-it-plugins/lerna-changelog": "^5.0.0",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "chai-fs": "^2.0.0",
@@ -68,10 +66,32 @@
     "git-fixtures": "^6.0.0",
     "mocha": "^10.0.0",
     "mocha-helpers": "^6.2.1",
+    "release-it": "^15.5.0",
     "renovate-config-standard": "2.1.2",
     "sinon": "^14.0.0",
     "sinon-chai": "^3.7.0",
     "standard-node-template": "3.0.0",
     "yargs-help-output": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=14.15"
+  },
+  "release-it": {
+    "plugins": {
+      "@release-it-plugins/lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": true
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
+    },
+    "npm": {
+      "publish": false
+    }
   }
 }
