@@ -109,7 +109,7 @@ function getArgs({
     args.push(`-dir=${directoryName}`);
   }
 
-  args.push('-sg');
+  args.push('--skip-git');
 
   let _blueprint;
   if (blueprint.path) {
@@ -130,8 +130,7 @@ function getArgs({
 
   return [
     ...args,
-    '-sn',
-    '-sb',
+    '--skip-npm',
     '-b',
     _blueprint,
     ...blueprint.options
@@ -175,7 +174,7 @@ function runEmberRemotely({
   let isGlimmer = blueprint.packageName === glimmerPackageName && blueprint.name === glimmerPackageName;
 
   if (isCustomBlueprint || isGlimmer) {
-    args = [`ember-cli@${lastNode8Version}`, ...args];
+    args = ['ember-cli@latest', ...args];
     // args = ['-p', 'github:ember-cli/ember-cli#cfb9780', 'ember', 'new', projectName, `-dir=${directoryName}, '-sg', -sn', '-b', `${blueprint.packageName}@${blueprint.version}`];
   } else {
     args = ['-p', `ember-cli@${blueprint.version}`, 'ember', ...args];
