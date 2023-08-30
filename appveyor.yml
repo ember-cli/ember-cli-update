@@ -1,9 +1,6 @@
 environment:
   matrix:
-    # node 14.5 has a regression
-    # npm ERR! cb.apply is not a function
-    # - nodejs_version: "14"
-    - nodejs_version: "14.4"
+    - nodejs_version: "14"
   DEBUG: "ember-cli-update,boilerplate-update,git-diff-apply"
 
 branches:
@@ -19,15 +16,6 @@ install:
   - ps: Install-Product node $env:nodejs_version
   # for test cache hits
   - npm i -g ember-cli@2.11.1
-  - ps: >-
-      [Environment]::SetEnvironmentVariable("NODE_LTS", "true", "User")
-  - RefreshEnv
-  - where npx
-  # don't accidentally use the global npx
-  - ps: rm "C:\Program Files\nodejs\npx*"
-  - ps: rm C:\Users\appveyor\AppData\Roaming\npm\npx*
-  # test that we can't find it
-  - ps: if (gcm npx) { exit }
   - npm ci
 
 # Post-install test scripts.
@@ -38,7 +26,7 @@ test_script:
 
 # http://help.appveyor.com/discussions/questions/1310-delete-cache
 cache:
-  - node_modules -> package.json
+  - node_modules -> package-lock.json
 
 # Don't actually build.
 build: off

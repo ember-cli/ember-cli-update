@@ -38,12 +38,11 @@
     "src"
   ],
   "dependencies": {
-    "boilerplate-update": "^2.1.0",
+    "boilerplate-update": "^2.1.1",
     "debug": "^4.2.0",
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.0.0",
-    "npm-package-arg": "^9.0.0",
     "pacote": "^13.6.0",
     "resolve": "^1.10.0",
     "semver": "^7.3.2",
@@ -66,7 +65,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prefer-let": "^3.0.1",
     "git-diff-apply": "^3.0.0",
-    "git-fixtures": "^4.0.0",
+    "git-fixtures": "^6.0.0",
     "mocha": "^10.0.0",
     "mocha-helpers": "^6.2.1",
     "renovate-config-standard": "2.1.2",

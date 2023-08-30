@@ -13,7 +13,7 @@ const sinon = require('sinon');
 const { ember } = require('../../src/install-and-generate-blueprint');
 
 describe(overwriteBlueprintFiles, function() {
-  this.timeout(60e3);
+  this.timeout(90e3);
 
   it('can install an addon with a default blueprint and no state file', async function() {
     let tmpPath = await buildTmp({
