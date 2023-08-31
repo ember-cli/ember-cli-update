@@ -35,12 +35,13 @@
     "version": "git add README.md"
   },
   "dependencies": {
+    "@npmcli/arborist": "^6.3.0",
     "boilerplate-update": "^2.1.1",
     "debug": "^4.2.0",
     "execa": "^5.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.0.0",
-    "pacote": "^13.6.0",
+    "pacote": "^17.0.4",
     "resolve": "^1.10.0",
     "semver": "^7.3.2",
     "tmp": "0.2.1",
