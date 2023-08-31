@@ -1,6 +1,6 @@
 environment:
   matrix:
-    - nodejs_version: "14"
+    - nodejs_version: "16"
   DEBUG: "ember-cli-update,boilerplate-update,git-diff-apply"
 
 branches:

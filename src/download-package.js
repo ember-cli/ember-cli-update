@@ -4,6 +4,7 @@ const path = require('path');
 const { createTmpDir } = require('./tmp');
 const pacote = require('pacote');
 const { mkdir } = require('fs/promises');
+const Arborist = require('@npmcli/arborist');
 
 /**
  * Download the package in a temporary location and read the contents of the package.json
@@ -32,7 +33,9 @@ async function downloadPackage(name, url, range) {
 
   await mkdir(_path);
 
-  await pacote.extract(url, _path);
+  await pacote.extract(url, _path, {
+    Arborist
+  });
 
   return {
     name: manifest.name,
