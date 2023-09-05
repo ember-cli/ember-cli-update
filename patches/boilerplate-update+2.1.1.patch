@@ -1,0 +1,20 @@
+diff --git a/node_modules/boilerplate-update/src/get-start-and-end-commands.js b/node_modules/boilerplate-update/src/get-start-and-end-commands.js
+index 772e9c3..9c2c486 100644
+--- a/node_modules/boilerplate-update/src/get-start-and-end-commands.js
++++ b/node_modules/boilerplate-update/src/get-start-and-end-commands.js
+@@ -31,13 +31,8 @@ module.exports = async function getStartAndEndCommands({
+     });
+   }
+ 
+-  let [
+-    startCommand,
+-    endCommand
+-  ] = await Promise.all([
+-    reset || init ? null : _prepareCommand(startOptions),
+-    _prepareCommand(endOptions)
+-  ]);
++  let startCommand = await (reset || init ? null : _prepareCommand(startOptions));
++  let endCommand = await _prepareCommand(endOptions);
+ 
+   return {
+     startCommand,
