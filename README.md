@@ -80,40 +80,191 @@ ember-cli-update --run-codemods
 <!-- CODEGEN_CLI_HELP -->
 
 ```
-  --help                         Show help                             [boolean]
-  --version                      Show version number                   [boolean]
-  --package-name, --package, -p  Provide a package that can contain many
+ember-cli-update
+
+Commands:
+  ember-cli-update bootstrap        saves the detected blueprint state
+  ember-cli-update codemods         Run codemods to help update your code
+  ember-cli-update compare          Show the changes between different versions
+                                    without updating
+  ember-cli-update init             initialize a blueprint
+  ember-cli-update install <addon>  install an addon
+  ember-cli-update reset            reset a blueprint
+  ember-cli-update save             save old blueprint state
+  ember-cli-update stats            list blueprint version updates
+
+Options:
+      --help                     Show help                             [boolean]
+      --version                  Show version number                   [boolean]
+  -p, --package-name, --package  Provide a package that can contain many
                                  blueprints ("@glimmer/blueprint", "git+https://
                                  git@github.com/tildeio/libkit.git",
                                  "../blueprint")                        [string]
-  --blueprint, -b                Provide a custom blueprint for use in the
+  -b, --blueprint                Provide a custom blueprint for use in the
                                  update ("@glimmer/blueprint", "git+https://git@
                                  github.com/tildeio/libkit.git", "../blueprint")
                                                                         [string]
-  --from                         Use a starting version that is different than
+      --from                     Use a starting version that is different than
                                  what is in your package.json ("2.9.1") [string]
-  --to                           Update to a version that isn't latest
+      --to                       Update to a version that isn't latest
                                  ("2.14.1", "~2.15", "latest", "beta")  [string]
-  --resolve-conflicts            Automatically run git mergetool if conflicts
+      --resolve-conflicts        Automatically run git mergetool if conflicts
                                  found                [boolean] [default: false]
-  --run-codemods                 Run codemods to help update your code
+      --run-codemods             Run codemods to help update your code
                                                       [boolean] [default: false]
-  --codemods-source              Supply your own codemods manifest via URL
+      --codemods-source          Supply your own codemods manifest via URL
                                  ("ember-app-codemods-manifest@*",
                                  "git+https://github.com/ember-cli/ember-app-cod
                                  emods-manifest.git#semver:*")          [string]
-  --codemods-json                Supply your own codemods manifest via JSON (`{
+      --codemods-json            Supply your own codemods manifest via JSON (`{
                                  /* json */ }`)                         [string]
-  --reset                        Reset your code to the default blueprint at the
+      --reset                    Reset your code to the default blueprint at the
                                  new version          [boolean] [default: false]
-  --compare-only                 Show the changes between different versions
+      --compare-only             Show the changes between different versions
                                  without updating     [boolean] [default: false]
-  --stats-only                   Show all calculated values regarding your
+      --stats-only               Show all calculated values regarding your
                                  project              [boolean] [default: false]
-  --list-codemods                List available codemods
+      --list-codemods            List available codemods
                                                       [boolean] [default: false]
-  --output-repo                  An output repository of changes over time
+      --output-repo              An output repository of changes over time
                                                                         [string]
+
+ember-cli-update bootstrap
+
+saves the detected blueprint state
+
+Options:
+  --help     Show help                                                 [boolean]
+  --version  Show version number                                       [boolean]
+
+ember-cli-update codemods
+
+Run codemods to help update your code
+
+Options:
+      --help                    Show help                              [boolean]
+      --version                 Show version number                    [boolean]
+  -p, --packageName, --package  Provide a package that can contain many
+                                blueprints ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+  -b, --blueprint               Provide a custom blueprint for use in the update
+                                ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+      --source-json             Supply your own codemods manifest via JSON (`{
+                                /* json */ }`)                          [string]
+      --list                    List available codemods
+                                                      [boolean] [default: false]
+
+ember-cli-update compare
+
+Show the changes between different versions without updating
+
+Options:
+      --help                    Show help                              [boolean]
+      --version                 Show version number                    [boolean]
+  -p, --packageName, --package  Provide a package that can contain many
+                                blueprints ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+  -b, --blueprint               Provide a custom blueprint for use in the update
+                                ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+      --to                      Update to a version that isn't latest ("2.14.1",
+                                "~2.15", "latest", "beta")              [string]
+
+ember-cli-update init
+
+initialize a blueprint
+
+Options:
+      --help              Show help                                    [boolean]
+      --version           Show version number                          [boolean]
+  -b, --blueprint         Provide a custom blueprint for use in the update
+                          ("@glimmer/blueprint",
+                          "git+https://git@github.com/tildeio/libkit.git",
+                          "../blueprint")                               [string]
+      --to                Update to a version that isn't latest ("2.14.1",
+                          "~2.15", "latest", "beta")                    [string]
+      --resolveConflicts  Automatically run git mergetool if conflicts found
+                                                      [boolean] [default: false]
+      --outputRepo        An output repository of changes over time     [string]
+      --codemodsSource    Supply your own codemods manifest via URL
+                          ("ember-app-codemods-manifest@*",
+                          "git+https://github.com/ember-cli/ember-app-codemods-m
+                          anifest.git#semver:*")                        [string]
+
+ember-cli-update install <addon>
+
+install an addon
+
+Options:
+      --help       Show help                                           [boolean]
+      --version    Show version number                                 [boolean]
+  -b, --blueprint  Provide a custom blueprint for use in the update
+                   ("@glimmer/blueprint",
+                   "git+https://git@github.com/tildeio/libkit.git",
+                   "../blueprint")                                      [string]
+
+ember-cli-update reset
+
+reset a blueprint
+
+Options:
+      --help                    Show help                              [boolean]
+      --version                 Show version number                    [boolean]
+  -p, --packageName, --package  Provide a package that can contain many
+                                blueprints ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+  -b, --blueprint               Provide a custom blueprint for use in the update
+                                ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+      --to                      Update to a version that isn't latest ("2.14.1",
+                                "~2.15", "latest", "beta")              [string]
+
+ember-cli-update save
+
+save old blueprint state
+
+Options:
+      --help                    Show help                              [boolean]
+      --version                 Show version number                    [boolean]
+  -p, --packageName, --package  Provide a package that can contain many
+                                blueprints ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+  -b, --blueprint               Provide a custom blueprint for use in the update
+                                ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+      --from                    Use a starting version that is different than
+                                what is in your package.json ("2.9.1")  [string]
+      --outputRepo              An output repository of changes over time
+                                                                        [string]
+      --codemodsSource          Supply your own codemods manifest via URL
+                                ("ember-app-codemods-manifest@*",
+                                "git+https://github.com/ember-cli/ember-app-code
+                                mods-manifest.git#semver:*")            [string]
+
+ember-cli-update stats
+
+list blueprint version updates
+
+Options:
+      --help                    Show help                              [boolean]
+      --version                 Show version number                    [boolean]
+  -p, --packageName, --package  Provide a package that can contain many
+                                blueprints ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
+  -b, --blueprint               Provide a custom blueprint for use in the update
+                                ("@glimmer/blueprint",
+                                "git+https://git@github.com/tildeio/libkit.git",
+                                "../blueprint")                         [string]
 ```
 
 <!-- CODEGEN_CLI_HELP -->
