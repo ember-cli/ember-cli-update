@@ -23,11 +23,22 @@ const nodeModulesIgnore = `
 const lastNode8Version = '3.16';
 
 module.exports = function getStartAndEndCommands({
-  packageJson: { name: projectName },
+  packageJson,
   baseBlueprint,
   startBlueprint,
-  endBlueprint
+  endBlueprint,
+  emberCliUpdateJson
 }) {
+  // ember-cli-update.json can override projectName and we should use the name field in package.json if it doesn't exist
+  let projectName = emberCliUpdateJson?.projectName ?? packageJson.name;
+
+  // if we haven't overridden projectName in ember-cli-update or we don't have a name in the package.json file
+  // default to containing dir name
+  if (!projectName) {
+    let pathParts = process.cwd().split(path.sep);
+    projectName = pathParts[pathParts.length - 1];
+  }
+
   if (baseBlueprint && !baseBlueprint.isBaseBlueprint) {
     throw new Error('The intended base blueprint is not actually a base blueprint.');
   }
