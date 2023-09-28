@@ -37,7 +37,7 @@
   "dependencies": {
     "boilerplate-update": "^2.1.1",
     "debug": "^4.2.0",
-    "execa": "^5.0.0",
+    "execa": "^8.0.0",
     "fs-extra": "^10.0.0",
     "inquirer": "^8.0.0",
     "pacote": "^13.6.0",
