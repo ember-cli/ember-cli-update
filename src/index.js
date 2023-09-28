@@ -214,7 +214,8 @@ module.exports = async function emberCliUpdate({
         packageJson,
         baseBlueprint,
         startBlueprint,
-        endBlueprint
+        endBlueprint,
+        emberCliUpdateJson
       });
 
       return {
