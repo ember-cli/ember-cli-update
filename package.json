@@ -65,7 +65,7 @@
     "git-diff-apply": "^3.0.0",
     "git-fixtures": "^6.0.0",
     "mocha": "^10.0.0",
-    "mocha-helpers": "^6.2.1",
+    "mocha-helpers": "^8.0.0",
     "release-it": "^15.5.0",
     "renovate-config-standard": "2.1.2",
     "sinon": "^14.0.0",
