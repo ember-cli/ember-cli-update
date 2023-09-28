@@ -1,4 +1,13 @@
 
+
+## v2.0.1 (2023-09-28)
+
+#### :bug: Bug Fix
+* [#1249](https://github.com/ember-cli/ember-cli-update/pull/1249) fix projectName if there is no package.json name ([@mansona](https://github.com/mansona))
+
+#### Committers: 1
+- Chris Manson ([@mansona](https://github.com/mansona))
+
 ## v2.0.0 (2023-09-27)
 
 #### :boom: Breaking Change
