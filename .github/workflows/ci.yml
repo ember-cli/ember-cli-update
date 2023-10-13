@@ -58,6 +58,12 @@ jobs:
     # for test cache hits
     - run: npm i -g ember-cli@2.11.1
 
+    # don't accidentally use the global npx
+    - run: rm $(which npx) # /opt/hostedtoolcache/node/10.23.0/x64/bin/npx
+    - run: rm $(which npx) # /usr/local/bin/npx
+    # test that we can't find it
+    - run: '! which npx'
+
     - run: npm ci
     - run: npm run ${{ matrix.test-command }} -- --retries 1
       timeout-minutes: 20
