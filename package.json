@@ -48,7 +48,7 @@
     "yargs": "^17.0.0"
   },
   "devDependencies": {
-    "@kellyselden/node-template": "3.0.0",
+    "@kellyselden/node-template": "5.2.0",
     "@release-it-plugins/lerna-changelog": "^5.0.0",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
