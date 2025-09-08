@@ -7,10 +7,7 @@
  * @param {string} blueprintName - Name of blueprint
  * @returns {{blueprintName, packageName}}
  */
-function normalizeBlueprintArgs({
-  packageName,
-  blueprintName
-}) {
+function normalizeBlueprintArgs({ packageName, blueprintName }) {
   if (!packageName) {
     packageName = blueprintName;
   }

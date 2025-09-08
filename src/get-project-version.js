@@ -13,11 +13,18 @@ const glimmerVersionCutoff = '0.6.3';
  * @param {object} projectOptions - Glimmer projects are a special case
  * @returns {string}
  */
-module.exports = function getProjectVersion(packageVersion, versions, projectOptions) {
+module.exports = function getProjectVersion(
+  packageVersion,
+  versions,
+  projectOptions
+) {
   // _getProjectVersion gets the minimum version that satisfies the given packageVersion string
   let projectVersion = _getProjectVersion(packageVersion, versions);
 
-  if (projectOptions.includes('glimmer') && semver.lt(projectVersion, glimmerVersionCutoff)) {
+  if (
+    projectOptions.includes('glimmer') &&
+    semver.lt(projectVersion, glimmerVersionCutoff)
+  ) {
     throw `This Glimmer app was generated using a blueprint version older than v${glimmerVersionCutoff}, and therefore the version cannot be determined. Please use the "--from" option to indicate your starting version.`;
   }
 

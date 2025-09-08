@@ -9,6 +9,7 @@
 Update [Ember CLI](https://ember-cli.com/) projects
 
 The 2 use cases are:
+
 1. Updating a project's boilerplate code from an older Ember version to a newer one like 3.4.0 to 3.20.0 for example. These are called base blueprints and there are 3 types officially provided by ember-cli: `app`, `addon`, and `glimmer`.
    - This is different from the existing `ember init` command. That command tries to reset your project back to a brand new project. It removes all your changes and additions.
 2. Updating boilerplate code for a blueprint from an Ember addon from an older version to a newer one. These are called custom blueprints.
@@ -315,8 +316,8 @@ And then you're done! You have a freshly updated app (or addon). As noted, you c
 
 Need help using `git mergetool`? Here are some starting points:
 
-* https://git-scm.com/docs/git-mergetool
-* https://gist.github.com/karenyyng/f19ff75c60f18b4b8149
+- https://git-scm.com/docs/git-mergetool
+- https://gist.github.com/karenyyng/f19ff75c60f18b4b8149
 
 If you made a mistake during the update/conflict resolution, run these commands to undo everything and get you back to before the update:
 
@@ -335,9 +336,9 @@ If you run into an error like `error: unrecognized input`, you may need to updat
 
 If you are getting an error or unexpected results, running the command with the debug flag:
 
-* Unix (global):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,boilerplate-update,git-diff-apply ember-cli-update`
-* Windows (global):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,boilerplate-update,git-diff-apply && ember-cli-update`
-* Unix (command):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,boilerplate-update,git-diff-apply ember update`
-* Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,boilerplate-update,git-diff-apply && ember update`
+- Unix (global):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,boilerplate-update,git-diff-apply ember-cli-update`
+- Windows (global):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,boilerplate-update,git-diff-apply && ember-cli-update`
+- Unix (command):&nbsp;&nbsp;&nbsp;`DEBUG=ember-cli-update,boilerplate-update,git-diff-apply ember update`
+- Windows (command):&nbsp;&nbsp;&nbsp;`set DEBUG=ember-cli-update,boilerplate-update,git-diff-apply && ember update`
 
 will give you more detailed logging.

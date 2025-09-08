@@ -6,14 +6,14 @@ const path = require('path');
 const { createTmpDir } = require('../../src/tmp');
 const saveBlueprintFile = require('../../src/save-blueprint-file');
 
-describe(saveBlueprintFile, function() {
+describe(saveBlueprintFile, function () {
   let tmpPath;
 
-  beforeEach(async function() {
+  beforeEach(async function () {
     tmpPath = await createTmpDir();
   });
 
-  it('works', async function() {
+  it('works', async function () {
     let emberCliUpdateJsonPath = path.join(tmpPath, 'ember-cli-update.json');
 
     await saveBlueprintFile(emberCliUpdateJsonPath, {
@@ -33,7 +33,10 @@ describe(saveBlueprintFile, function() {
       ]
     });
 
-    expect(emberCliUpdateJsonPath).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/normal/ember-cli-update.json');
+    expect(emberCliUpdateJsonPath)
+      .to.be.a.file()
+      .and.equal(
+        'test/fixtures/ember-cli-update-json/normal/ember-cli-update.json'
+      );
   });
 });

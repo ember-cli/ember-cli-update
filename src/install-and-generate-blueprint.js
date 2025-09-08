@@ -4,10 +4,7 @@ const execa = require('execa');
 const { spawn } = require('./run');
 const debug = require('./debug');
 
-function ember(args, {
-  cwd,
-  stdin = 'inherit'
-}) {
+function ember(args, { cwd, stdin = 'inherit' }) {
   debug(`ember ${args.join(' ')}`);
 
   let ps = execa('ember', args, {
@@ -87,9 +84,21 @@ async function installAndGenerateBlueprint({
     packageName
   );
 
-  await module.exports.spawn(packageManager, [INSTALL_COMMAND[packageManager], '--save-dev', resolvedPackageName], { cwd });
+  await module.exports.spawn(
+    packageManager,
+    [INSTALL_COMMAND[packageManager], '--save-dev', resolvedPackageName],
+    {
+      cwd
+    }
+  );
 
-  let generateProcess = module.exports.ember(['g', blueprintName, ...blueprintOptions], { cwd, stdin });
+  let generateProcess = module.exports.ember(
+    ['g', blueprintName, ...blueprintOptions],
+    {
+      cwd,
+      stdin
+    }
+  );
 
   return {
     ps: generateProcess

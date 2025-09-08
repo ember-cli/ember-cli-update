@@ -26,7 +26,9 @@ module.exports = async function reset({
     // We must rely on a lookup before the run.
     let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
-    let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
+    let emberCliUpdateJson = await loadSafeBlueprintFile(
+      emberCliUpdateJsonPath
+    );
 
     let { blueprints } = emberCliUpdateJson;
 
@@ -34,24 +36,20 @@ module.exports = async function reset({
     let packageInfo;
 
     if (_blueprint) {
-      let {
-        packageInfo: _packageInfo,
-        existingBlueprint
-      } = await getBlueprintFromArgs({
-        cwd,
-        emberCliUpdateJson,
-        packageName,
-        blueprint: _blueprint,
-        to
-      });
+      let { packageInfo: _packageInfo, existingBlueprint } =
+        await getBlueprintFromArgs({
+          cwd,
+          emberCliUpdateJson,
+          packageName,
+          blueprint: _blueprint,
+          to
+        });
 
       packageInfo = _packageInfo;
       blueprint = existingBlueprint;
     } else {
       if (blueprints.length) {
-        let {
-          blueprint: _blueprint
-        } = await chooseBlueprintUpdates({
+        let { blueprint: _blueprint } = await chooseBlueprintUpdates({
           cwd,
           emberCliUpdateJson,
           reset: true
@@ -87,26 +85,22 @@ module.exports = async function reset({
       });
     }
 
-    let {
-      promise,
-      resolveConflictsProcess
-    } = await boilerplateUpdate({
+    let { promise, resolveConflictsProcess } = await boilerplateUpdate({
       cwd,
       endVersion: blueprint.version,
       reset: true,
       createCustomDiff: true,
-      customDiffOptions: ({
-        packageJson
-      }) => getStartAndEndCommands({
-        packageJson,
-        baseBlueprint,
-        endBlueprint: blueprint
-      }),
+      customDiffOptions: ({ packageJson }) =>
+        getStartAndEndCommands({
+          packageJson,
+          baseBlueprint,
+          endBlueprint: blueprint
+        }),
       ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
     });
 
     return {
-      promise: (async() => {
+      promise: (async () => {
         let result = await promise;
 
         await saveBlueprint({

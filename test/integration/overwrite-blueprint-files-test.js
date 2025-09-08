@@ -2,9 +2,7 @@
 
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const {
-  buildTmp
-} = require('git-fixtures');
+const { buildTmp } = require('git-fixtures');
 const overwriteBlueprintFiles = require('../../src/overwrite-blueprint-files');
 const { spawn } = require('../../src/run');
 const { initBlueprint } = require('../helpers/blueprint');
@@ -12,18 +10,19 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const sinon = require('sinon');
 const { ember } = require('../../src/install-and-generate-blueprint');
 
-describe(overwriteBlueprintFiles, function() {
+describe(overwriteBlueprintFiles, function () {
   this.timeout(90e3);
 
-  it('can install an addon with a default blueprint and no state file', async function() {
+  it('can install an addon with a default blueprint and no state file', async function () {
     let tmpPath = await buildTmp({
       fixturesPath: 'test/fixtures/app/local'
     });
 
-    let {
-      packageName,
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+    let { packageName, location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
     let blueprintPath = await initBlueprint({
       fixturesPath: 'test/fixtures/blueprint/addon/legacy',

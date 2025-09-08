@@ -84,7 +84,11 @@ module.exports = async function init({
 
   let blueprint;
 
-  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
+  let existingBlueprint = findBlueprint(
+    emberCliUpdateJson,
+    packageName,
+    blueprintName
+  );
   if (existingBlueprint) {
     blueprint = existingBlueprint;
   } else {
@@ -129,30 +133,28 @@ module.exports = async function init({
 
   if (resolveConflicts) {
     // eslint-disable-next-line no-console
-    console.warn('`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.');
+    console.warn(
+      '`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.'
+    );
   }
 
-  let {
-    promise,
-    resolveConflictsProcess
-  } = await boilerplateUpdate({
+  let { promise, resolveConflictsProcess } = await boilerplateUpdate({
     cwd,
     endVersion: blueprint.version,
     resolveConflicts,
     init,
     createCustomDiff: true,
-    customDiffOptions: ({
-      packageJson
-    }) => getStartAndEndCommands({
-      packageJson,
-      baseBlueprint,
-      endBlueprint: blueprint
-    }),
+    customDiffOptions: ({ packageJson }) =>
+      getStartAndEndCommands({
+        packageJson,
+        baseBlueprint,
+        endBlueprint: blueprint
+      }),
     ignoredFiles: [await getBlueprintRelativeFilePath(cwd)]
   });
 
   return {
-    promise: (async() => {
+    promise: (async () => {
       let result = await promise;
 
       await saveBlueprint({

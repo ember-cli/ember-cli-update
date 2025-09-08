@@ -2,15 +2,10 @@
 
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const {
-  buildTmp,
-  processExit
-} = require('git-fixtures');
+const { buildTmp, processExit } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const stats = require('../../src/stats');
-const {
-  assertNoStaged
-} = require('../helpers/assertions');
+const { assertNoStaged } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const utils = require('../../src/utils');
@@ -20,12 +15,12 @@ const {
   defaultAppBlueprintName
 } = require('../../src/constants');
 
-describe(stats, function() {
+describe(stats, function () {
   this.timeout(30e3);
 
   let tmpPath;
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
@@ -56,13 +51,9 @@ describe(stats, function() {
     });
   }
 
-  it('works', async function() {
+  it('works', async function () {
     let [
-      {
-        packageName: packageName1,
-        name: blueprintName1,
-        version: from1
-      },
+      { packageName: packageName1, name: blueprintName1, version: from1 },
       {
         packageName: packageName2,
         name: blueprintName2,
@@ -72,30 +63,31 @@ describe(stats, function() {
         codemodsSource,
         options
       }
-    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints;
+    ] = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints;
 
-    sinon.stub(utils, 'getApplicableCodemods').withArgs({
-      source: codemodsSource,
-      projectOptions: options,
-      packageJson: require('../fixtures/blueprint/app/local-app/local/my-app/package')
-    }).resolves({
-      testCodemod1: {},
-      testCodemod2: {}
-    });
+    sinon
+      .stub(utils, 'getApplicableCodemods')
+      .withArgs({
+        source: codemodsSource,
+        projectOptions: options,
+        packageJson: require('../fixtures/blueprint/app/local-app/local/my-app/package')
+      })
+      .resolves({
+        testCodemod1: {},
+        testCodemod2: {}
+      });
 
-    let [
-      {
-        version: to1
-      },
-      {
-        version: to2
-      }
-    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints;
+    let [{ version: to1 }, { version: to2 }] = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints;
 
-    let {
-      result,
-      status
-    } = await merge({
+    let { result, status } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       async beforeMerge() {
@@ -125,11 +117,8 @@ codemods source: ${codemodsSource}
 applicable codemods: testCodemod1, testCodemod2`);
   });
 
-  it('handles missing blueprint', async function() {
-    let {
-      stderr,
-      status
-    } = await merge({
+  it('handles missing blueprint', async function () {
+    let { stderr, status } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       blueprint: 'missing'
@@ -140,15 +129,13 @@ applicable codemods: testCodemod1, testCodemod2`);
     expect(stderr).to.equal('blueprint "missing" was not found');
   });
 
-  it('works for the default blueprint without a state file', async function() {
-    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves([
-      '2.11.1',
-      '3.15.0'
-    ]);
+  it('works for the default blueprint without a state file', async function () {
+    sinon
+      .stub(utils, 'getVersions')
+      .withArgs('ember-cli')
+      .resolves(['2.11.1', '3.15.0']);
 
-    let {
-      result
-    } = await merge({
+    let { result } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app'
     });
@@ -164,14 +151,10 @@ codemods source: ember-app-codemods-manifest@1
 applicable codemods: `);
   });
 
-  it('works for the default blueprint with a state file', async function() {
-    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves([
-      '3.15.0'
-    ]);
+  it('works for the default blueprint with a state file', async function () {
+    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves(['3.15.0']);
 
-    let {
-      result
-    } = await merge({
+    let { result } = await merge({
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app'
     });
@@ -187,14 +170,10 @@ codemods source: ember-app-codemods-manifest@1
 applicable codemods: ember-modules-codemod, ember-qunit-codemod, ember-test-helpers-codemod, es5-getter-ember-codemod, notify-property-change, qunit-dom-codemod, deprecate-merge-codemod, deprecate-router-events-codemod, cp-property-codemod, cp-volatile-codemod, cp-property-map-codemod, ember-angle-brackets-codemod, ember-data-codemod`);
   });
 
-  it('works for a default blueprint by name', async function() {
-    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves([
-      '3.15.0'
-    ]);
+  it('works for a default blueprint by name', async function () {
+    sinon.stub(utils, 'getVersions').withArgs('ember-cli').resolves(['3.15.0']);
 
-    let {
-      result
-    } = await merge({
+    let { result } = await merge({
       fixturesPath: 'test/fixtures/app/merge',
       commitMessage: 'my-app',
       packageName: defaultPackageName,

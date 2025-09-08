@@ -4,10 +4,10 @@ const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const findBlueprint = require('../../src/find-blueprint');
 
-describe(findBlueprint, function() {
+describe(findBlueprint, function () {
   let emberCliUpdateJson;
 
-  beforeEach(function() {
+  beforeEach(function () {
     emberCliUpdateJson = {
       blueprints: [
         {
@@ -29,7 +29,7 @@ describe(findBlueprint, function() {
     };
   });
 
-  it('finds blueprint', function() {
+  it('finds blueprint', function () {
     let packageName = 'test-blueprint';
     let name = 'test-blueprint';
 
@@ -46,7 +46,7 @@ describe(findBlueprint, function() {
     expect(actual).to.equal(expected);
   });
 
-  it('package mismatch', function() {
+  it('package mismatch', function () {
     let packageName = 'test-blueprint-3';
     let name = 'test-blueprint';
 
@@ -55,7 +55,7 @@ describe(findBlueprint, function() {
     expect(actual).to.be.undefined;
   });
 
-  it('blueprint mismatch', function() {
+  it('blueprint mismatch', function () {
     let packageName = 'test-blueprint';
     let name = 'test-blueprint-3';
 

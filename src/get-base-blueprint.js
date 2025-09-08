@@ -15,11 +15,7 @@ const isDefaultBlueprint = require('./is-default-blueprint');
  * @param blueprint - Figure out if this is a base blueprint
  * @returns {Promise<*>}
  */
-async function getBaseBlueprint({
-  cwd,
-  blueprints,
-  blueprint
-}) {
+async function getBaseBlueprint({ cwd, blueprints, blueprint }) {
   let baseBlueprint;
 
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);

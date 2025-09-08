@@ -25,7 +25,7 @@ const select = ' ';
 const down = '\u001b[B';
 const enter = '\n';
 
-describe(function() {
+describe(function () {
   this.timeout(3 * 60e3);
 
   let tmpPath;
@@ -54,48 +54,27 @@ describe(function() {
 
     await beforeMerge();
 
-    let args = [
-      ...to ? [`--to=${to}`] : [],
-      '--resolve-conflicts'
-    ];
+    let args = [...(to ? [`--to=${to}`] : []), '--resolve-conflicts'];
     if (listCodemods || runCodemods) {
-      args = [
-        'codemods',
-        ...listCodemods ? ['--list'] : []
-      ];
+      args = ['codemods', ...(listCodemods ? ['--list'] : [])];
     }
     if (init) {
-      args = [
-        'init',
-        ...to ? [`--to=${to}`] : []
-      ];
+      args = ['init', ...(to ? [`--to=${to}`] : [])];
     }
     if (install) {
-      args = [
-        'install',
-        addon
-      ];
+      args = ['install', addon];
     }
     if (bootstrap) {
-      args = [
-        'bootstrap'
-      ];
+      args = ['bootstrap'];
     }
     if (stats) {
-      args = [
-        'stats'
-      ];
+      args = ['stats'];
     }
     if (save) {
-      args = [
-        'save'
-      ];
+      args = ['save'];
     }
     if (reset) {
-      args = [
-        'reset',
-        ...to ? [`--to=${to}`] : []
-      ];
+      args = ['reset', ...(to ? [`--to=${to}`] : [])];
     }
     if (blueprint) {
       // Keep this to `-b` to test the short alias
@@ -115,10 +94,7 @@ describe(function() {
     });
   }
 
-  function fixtureCompare({
-    actual = tmpPath,
-    mergeFixtures
-  }) {
+  function fixtureCompare({ actual = tmpPath, mergeFixtures }) {
     let expected = mergeFixtures;
 
     _fixtureCompare({
@@ -128,13 +104,13 @@ describe(function() {
     });
   }
 
-  it('works', async function() {
-    let {
-      status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app'
-    })).promise;
+  it('works', async function () {
+    let { status } = await (
+      await merge({
+        fixturesPath: 'test/fixtures/app/local',
+        commitMessage: 'my-app'
+      })
+    ).promise;
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/merge/my-app'
@@ -143,10 +119,13 @@ describe(function() {
     assertNoUnstaged(status);
   });
 
-  it('runs codemods', async function() {
+  it('runs codemods', async function () {
     async function _merge(src, dest) {
       await fs.copy(
-        path.resolve(__dirname, `../fixtures/codemod/codemods/ember-modules-codemod/${src}/my-app`),
+        path.resolve(
+          __dirname,
+          `../fixtures/codemod/codemods/ember-modules-codemod/${src}/my-app`
+        ),
         dest,
         {
           overwrite: true,
@@ -155,10 +134,7 @@ describe(function() {
       );
     }
 
-    let {
-      ps,
-      promise
-    } = await merge({
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
       runCodemods: true,
@@ -181,9 +157,7 @@ describe(function() {
       ps.stdout.on('data', stdoutData);
     });
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     assertNoUnstaged(status);
     assertCodemodRan(status);
@@ -208,11 +182,8 @@ describe(function() {
     });
   });
 
-  it('has all up-to-date blueprints', async function() {
-    let {
-      ps,
-      promise
-    } = await merge({
+  it('has all up-to-date blueprints', async function () {
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/remote-app/merge',
       commitMessage: 'my.app'
     });
@@ -230,25 +201,21 @@ describe(function() {
       ps.stdout.on('data', stdoutData);
     });
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
     expect(status).to.equal('');
   });
 
-  it('can pick from multiple blueprints', async function() {
-    let {
-      location,
-      version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+  it('can pick from multiple blueprints', async function () {
+    let { location, version: to } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      ps,
-      promise
-    } = await merge({
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       to: null,
@@ -299,9 +266,7 @@ describe(function() {
     await whichVersion;
     await customVersion;
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/blueprint/app/local-app/merge/my-app'
@@ -312,19 +277,20 @@ describe(function() {
     assertNoUnstaged(status);
   });
 
-  it('can reset from multiple blueprint', async function() {
-    let {
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/local/my-app/config/ember-cli-update.json')).blueprints[1];
+  it('can reset from multiple blueprint', async function () {
+    let { location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/reset/local/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/reset/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+    let { version: to } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/reset/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      ps,
-      promise
-    } = await merge({
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/reset/local',
       commitMessage: 'my-app',
       reset: true,
@@ -351,9 +317,7 @@ describe(function() {
     });
     await whichBlueprint;
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/blueprint/app/local-app/reset/merge/my-app'
@@ -362,15 +326,15 @@ describe(function() {
     assertNoStaged(status);
   });
 
-  it('can init the default blueprint', async function() {
-    let {
-      status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app',
-      init: true,
-      to: '2.11.1'
-    })).promise;
+  it('can init the default blueprint', async function () {
+    let { status } = await (
+      await merge({
+        fixturesPath: 'test/fixtures/app/local',
+        commitMessage: 'my-app',
+        init: true,
+        to: '2.11.1'
+      })
+    ).promise;
 
     fixtureCompare({
       mergeFixtures: 'test/fixtures/app/init/my-app'
@@ -381,17 +345,16 @@ describe(function() {
     assertNoStaged(status);
   });
 
-  it('can install an addon with a default blueprint and a state file', async function() {
+  it('can install an addon with a default blueprint and a state file', async function () {
     this.timeout(3 * 60e3);
 
-    let {
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+    let { location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      ps,
-      promise
-    } = await merge({
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/ideal',
       commitMessage: 'my-app',
       install: true,
@@ -409,9 +372,7 @@ describe(function() {
 
     overwriteBlueprintFiles(ps);
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     await fs.remove(path.join(tmpPath, 'package-lock.json'));
 
@@ -422,18 +383,16 @@ describe(function() {
     assertNoStaged(status);
   });
 
-  it('can update a legacy addon blueprint', async function() {
+  it('can update a legacy addon blueprint', async function () {
     this.timeout(5 * 60e3);
 
-    let {
-      name,
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app/config/ember-cli-update.json')).blueprints[1];
+    let { name, location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/addon/legacy-app/local/ideal/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      ps,
-      promise
-    } = await merge({
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/ideal',
       commitMessage: 'my-app',
       blueprint: name,
@@ -450,9 +409,7 @@ describe(function() {
 
     overwriteBlueprintFiles(ps);
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     assertNoUnstaged(status);
 
@@ -465,18 +422,16 @@ describe(function() {
   // that peer-deps (requiring ember-cli internals) works
   // in existing npm addons
   // https://github.com/salsify/ember-cli-dependency-lint/blob/v1.0.3/lib/commands/dependency-lint.js#L5
-  it('can update a npm addon blueprint with implicit peer dep', async function() {
+  it('can update a npm addon blueprint with implicit peer dep', async function () {
     this.timeout(5 * 60e3);
 
-    let {
-      name,
-      version
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+    let { name, version } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/addon/npm-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      ps,
-      promise
-    } = await merge({
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/blueprint/addon/npm-app/local',
       commitMessage: 'my-app',
       blueprint: name,
@@ -485,9 +440,7 @@ describe(function() {
 
     overwriteBlueprintFiles(ps);
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     assertNoUnstaged(status);
 
@@ -496,19 +449,22 @@ describe(function() {
     });
   });
 
-  it('can bootstrap the default blueprint', async function() {
-    let {
-      status
-    } = await (await merge({
-      fixturesPath: 'test/fixtures/app/local',
-      commitMessage: 'my-app',
-      bootstrap: true
-    })).promise;
+  it('can bootstrap the default blueprint', async function () {
+    let { status } = await (
+      await merge({
+        fixturesPath: 'test/fixtures/app/local',
+        commitMessage: 'my-app',
+        bootstrap: true
+      })
+    ).promise;
 
     assertNoStaged(status);
 
-    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
+    expect(path.join(tmpPath, 'config/ember-cli-update.json'))
+      .to.be.a.file()
+      .and.equal(
+        'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'
+      );
 
     await fs.remove(path.join(tmpPath, 'config/ember-cli-update.json'));
 
@@ -517,30 +473,27 @@ describe(function() {
     });
   });
 
-  it('can save an old blueprint\'s state', async function() {
+  it("can save an old blueprint's state", async function () {
     let [
-      {
-        packageName,
-        version: base
-      },
-      {
-        location,
-        version: partial,
-        outputRepo,
-        codemodsSource,
-        options
-      }
-    ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints;
+      { packageName, version: base },
+      { location, version: partial, outputRepo, codemodsSource, options }
+    ] = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints;
 
     let commitMessage = 'my-app';
 
-    await (await merge({
-      fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
-      commitMessage,
-      save: true,
-      from: base,
-      blueprint: packageName
-    })).promise;
+    await (
+      await merge({
+        fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
+        commitMessage,
+        save: true,
+        from: base,
+        blueprint: packageName
+      })
+    ).promise;
 
     await initBlueprint({
       fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
@@ -548,22 +501,22 @@ describe(function() {
       relativeDir: location
     });
 
-    let {
-      status
-    } = await (await processBin({
-      binFile: 'ember-cli-update',
-      args: [
-        'save',
-        `-b=${location}`,
-        `--from=${partial}`,
-        `--output-repo=${outputRepo}`,
-        `--codemods-source=${codemodsSource}`,
-        ...options
-      ],
-      cwd: tmpPath,
-      commitMessage,
-      expect
-    })).promise;
+    let { status } = await (
+      await processBin({
+        binFile: 'ember-cli-update',
+        args: [
+          'save',
+          `-b=${location}`,
+          `--from=${partial}`,
+          `--output-repo=${outputRepo}`,
+          `--codemods-source=${codemodsSource}`,
+          ...options
+        ],
+        cwd: tmpPath,
+        commitMessage,
+        expect
+      })
+    ).promise;
 
     assertNoStaged(status);
 
@@ -573,21 +526,24 @@ describe(function() {
     });
   });
 
-  it('can show single blueprint stats', async function() {
+  it('can show single blueprint stats', async function () {
     let {
       packageName,
       name,
       version: from
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[0];
+    } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[0];
 
-    let {
-      version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[0];
+    let { version: to } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[0];
 
-    let {
-      ps,
-      promise
-    } = await merge({
+    let { ps, promise } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       stats: true,
@@ -601,9 +557,7 @@ describe(function() {
       result += str;
     });
 
-    let {
-      status
-    } = await promise;
+    let { status } = await promise;
 
     assertNoStaged(status);
 

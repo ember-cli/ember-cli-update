@@ -31,11 +31,17 @@ async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
 
   if ('schemaVersion' in emberCliUpdateJson) {
     if (emberCliUpdateJson.schemaVersion === 0) {
-    // if (semver.lt(emberCliUpdateJson.schemaVersion, currentSchemaVersion)) {
+      // if (semver.lt(emberCliUpdateJson.schemaVersion, currentSchemaVersion)) {
       // eslint-disable-next-line no-console
-      console.warn(`Updating schemaVersion from ${emberCliUpdateJson.schemaVersion} to ${currentSchemaVersion}.`);
-    } else if (semver.gt(emberCliUpdateJson.schemaVersion, currentSchemaVersion)) {
-      throw new Error(`schemaVersion ${emberCliUpdateJson.schemaVersion} is unexpectedly newer than the current ${currentSchemaVersion}.`);
+      console.warn(
+        `Updating schemaVersion from ${emberCliUpdateJson.schemaVersion} to ${currentSchemaVersion}.`
+      );
+    } else if (
+      semver.gt(emberCliUpdateJson.schemaVersion, currentSchemaVersion)
+    ) {
+      throw new Error(
+        `schemaVersion ${emberCliUpdateJson.schemaVersion} is unexpectedly newer than the current ${currentSchemaVersion}.`
+      );
     }
   }
 
@@ -45,19 +51,22 @@ async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
     emberCliUpdateJson.packages = [];
   }
 
-  emberCliUpdateJson.blueprints = emberCliUpdateJson.packages.reduce((blueprints, _package) => {
-    for (let blueprint of _package.blueprints) {
-      blueprint.packageName = _package.name;
-      blueprint.location = _package.location;
-      blueprint.version = _package.version;
+  emberCliUpdateJson.blueprints = emberCliUpdateJson.packages.reduce(
+    (blueprints, _package) => {
+      for (let blueprint of _package.blueprints) {
+        blueprint.packageName = _package.name;
+        blueprint.location = _package.location;
+        blueprint.version = _package.version;
 
-      blueprint = loadSafeBlueprint(blueprint);
+        blueprint = loadSafeBlueprint(blueprint);
 
-      blueprints.push(blueprint);
-    }
+        blueprints.push(blueprint);
+      }
 
-    return blueprints;
-  }, []);
+      return blueprints;
+    },
+    []
+  );
 
   delete emberCliUpdateJson.packages;
 

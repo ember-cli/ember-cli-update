@@ -1,13 +1,10 @@
 #!/usr/bin/env node
 'use strict';
 
-require('yargs')
-  .commandDir('commands')
-  .parserConfiguration({
-    'populate--': true,
-    'unknown-options-as-args': true
-  })
-  .argv;
+require('yargs').commandDir('commands').parserConfiguration({
+  'populate--': true,
+  'unknown-options-as-args': true
+}).argv;
 
 // Displays a message on the terminal if a new version of the package is available.
 const updateNotifier = require('update-notifier');

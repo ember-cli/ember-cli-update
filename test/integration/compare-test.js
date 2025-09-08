@@ -4,11 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const {
-  buildTmp,
-  processExit,
-  commit
-} = require('git-fixtures');
+const { buildTmp, processExit, commit } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const compare = require('../../src/compare');
 const { initBlueprint } = require('../helpers/blueprint');
@@ -17,17 +13,17 @@ const utils = require('boilerplate-update/src/utils');
 const sinon = require('sinon');
 const inquirer = require('inquirer');
 
-describe(compare, function() {
+describe(compare, function () {
   this.timeout(30e3);
 
   let tmpPath;
   let open;
 
-  beforeEach(function() {
+  beforeEach(function () {
     open = sinon.stub(utils, 'open');
   });
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
@@ -60,25 +56,30 @@ describe(compare, function() {
     });
   }
 
-  it('works', async function() {
-    let {
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json')).blueprints[1];
+  it('works', async function () {
+    let { location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/local/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      version: to
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+    let { version: to } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      result
-    } = await merge({
+    let { result } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       blueprint: location,
       to,
       async beforeMerge() {
         await initBlueprint({
-          fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
+          fixturesPath: path.resolve(
+            __dirname,
+            '../fixtures/blueprint/app/local'
+          ),
           resolvedFrom: tmpPath,
           relativeDir: location
         });
@@ -87,16 +88,16 @@ describe(compare, function() {
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
-    expect(result, 'don\'t accidentally print anything to the console').to.be.undefined;
+    expect(result, "don't accidentally print anything to the console").to.be
+      .undefined;
 
-    expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/test/output-repo/compare/v0.0.1...v0.0.2');
+    expect(open).to.have.been.calledOnce.and.to.have.been.calledWith(
+      'https://github.com/test/output-repo/compare/v0.0.1...v0.0.2'
+    );
   });
 
-  it('handles missing blueprint', async function() {
-    let {
-      stderr
-    } = await merge({
+  it('handles missing blueprint', async function () {
+    let { stderr } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       blueprint: 'missing'
@@ -107,7 +108,7 @@ describe(compare, function() {
     expect(stderr).to.equal('blueprint "missing" was not found');
   });
 
-  it('works for the default blueprint without a state file', async function() {
+  it('works for the default blueprint without a state file', async function () {
     await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app'
@@ -115,17 +116,23 @@ describe(compare, function() {
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
-    expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
+    expect(open).to.have.been.calledOnce.and.to.have.been.calledWith(
+      'https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1'
+    );
   });
 
-  it('works for the default blueprint with a state file', async function() {
-    sinon.stub(inquirer, 'prompt').withArgs([{
-      type: 'list',
-      message: 'Which blueprint would you like to compare?',
-      name: 'blueprint',
-      choices: [{ name: 'ember-cli' }]
-    }]).resolves({ blueprint: 'ember-cli' });
+  it('works for the default blueprint with a state file', async function () {
+    sinon
+      .stub(inquirer, 'prompt')
+      .withArgs([
+        {
+          type: 'list',
+          message: 'Which blueprint would you like to compare?',
+          name: 'blueprint',
+          choices: [{ name: 'ember-cli' }]
+        }
+      ])
+      .resolves({ blueprint: 'ember-cli' });
 
     let commitMessage = 'my-app';
 
@@ -134,7 +141,10 @@ describe(compare, function() {
       commitMessage,
       async beforeMerge() {
         await fs.copy(
-          path.resolve(__dirname, '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'),
+          path.resolve(
+            __dirname,
+            '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'
+          ),
           path.join(tmpPath, 'config/ember-cli-update.json')
         );
 
@@ -144,15 +154,17 @@ describe(compare, function() {
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
-    expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
+    expect(open).to.have.been.calledOnce.and.to.have.been.calledWith(
+      'https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1'
+    );
   });
 
-  it('works for a default blueprint by name', async function() {
-    let {
-      packageName,
-      name: blueprint
-    } = (await loadSafeBlueprintFile('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json')).blueprints[0];
+  it('works for a default blueprint by name', async function () {
+    let { packageName, name: blueprint } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'
+      )
+    ).blueprints[0];
 
     let commitMessage = 'my-app';
 
@@ -163,7 +175,10 @@ describe(compare, function() {
       blueprint,
       async beforeMerge() {
         await fs.copy(
-          path.resolve(__dirname, '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'),
+          path.resolve(
+            __dirname,
+            '../fixtures/ember-cli-update-json/default/config/ember-cli-update.json'
+          ),
           path.join(tmpPath, 'config/ember-cli-update.json')
         );
 
@@ -173,7 +188,8 @@ describe(compare, function() {
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
-    expect(open).to.have.been.calledOnce
-      .and.to.have.been.calledWith('https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1');
+    expect(open).to.have.been.calledOnce.and.to.have.been.calledWith(
+      'https://github.com/ember-cli/ember-new-output/compare/v2.11.1...v3.11.0-beta.1'
+    );
   });
 });

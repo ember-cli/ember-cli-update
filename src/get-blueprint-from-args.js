@@ -38,7 +38,11 @@ async function getBlueprintFromArgs({
     blueprintName = packageName;
   }
 
-  let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
+  let existingBlueprint = findBlueprint(
+    emberCliUpdateJson,
+    packageName,
+    blueprintName
+  );
   if (!existingBlueprint) {
     throw `blueprint "${blueprint}" was not found`;
   }

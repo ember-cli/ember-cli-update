@@ -58,7 +58,7 @@ module.exports = async function save({
     options: blueprintOptions
   });
 
-  if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
+  if (!(await loadBlueprintFile(emberCliUpdateJsonPath))) {
     blueprint.isBaseBlueprint = true;
   }
 

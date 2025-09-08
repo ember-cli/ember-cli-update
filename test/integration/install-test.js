@@ -11,13 +11,11 @@ const {
 } = require('git-fixtures');
 const install = require('../../src/install');
 const { spawn } = require('../../src/run');
-const {
-  assertNoStaged
-} = require('../helpers/assertions');
+const { assertNoStaged } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
-describe(install, function() {
+describe(install, function () {
   this.timeout(60e3);
 
   let tmpPath;
@@ -36,7 +34,7 @@ describe(install, function() {
 
     await beforeMerge();
 
-    let promise = (async() => {
+    let promise = (async () => {
       let result = await install({
         cwd: tmpPath,
         addon,
@@ -56,9 +54,7 @@ describe(install, function() {
     });
   }
 
-  function fixtureCompare({
-    mergeFixtures
-  }) {
+  function fixtureCompare({ mergeFixtures }) {
     let actual = tmpPath;
     let expected = mergeFixtures;
 
@@ -69,14 +65,14 @@ describe(install, function() {
     });
   }
 
-  it('can install an addon with a default blueprint and no state file', async function() {
-    let {
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+  it('can install an addon with a default blueprint and no state file', async function () {
+    let { location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      status
-    } = await merge({
+    let { status } = await merge({
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
       commitMessage: 'my-app',
       addon: location,
@@ -101,14 +97,14 @@ describe(install, function() {
     assertNoStaged(status);
   });
 
-  it('can install an addon with a custom default blueprint selected', async function() {
-    let {
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+  it('can install an addon with a custom default blueprint selected', async function () {
+    let { location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/addon/legacy-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      status
-    } = await merge({
+    let { status } = await merge({
       blueprintName: 'custom-blueprint',
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
       commitMessage: 'my-app',
@@ -128,21 +124,23 @@ describe(install, function() {
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app-generated-custom-blueprint'
+      mergeFixtures:
+        'test/fixtures/blueprint/addon/legacy-app/merge/my-app-generated-custom-blueprint'
     });
 
     assertNoStaged(status);
   });
 
-  it('can install an addon with a custom blueprint that does not match package name', async function() {
-    let addonContainingBlueprint = 'test/fixtures/blueprint/addon/default-blueprint-different-than-name';
-    let {
-      location
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/addon/legacy-app/merge/my-app-install-blueprint-different-than-name/config/ember-cli-update.json')).blueprints[1];
+  it('can install an addon with a custom blueprint that does not match package name', async function () {
+    let addonContainingBlueprint =
+      'test/fixtures/blueprint/addon/default-blueprint-different-than-name';
+    let { location } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/addon/legacy-app/merge/my-app-install-blueprint-different-than-name/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
-    let {
-      status
-    } = await merge({
+    let { status } = await merge({
       fixturesPath: 'test/fixtures/blueprint/addon/legacy-app/local/no-addon',
       commitMessage: 'my-app',
       addon: location,
@@ -161,7 +159,8 @@ describe(install, function() {
     });
 
     fixtureCompare({
-      mergeFixtures: 'test/fixtures/blueprint/addon/legacy-app/merge/my-app-install-blueprint-different-than-name'
+      mergeFixtures:
+        'test/fixtures/blueprint/addon/legacy-app/merge/my-app-install-blueprint-different-than-name'
     });
 
     assertNoStaged(status);

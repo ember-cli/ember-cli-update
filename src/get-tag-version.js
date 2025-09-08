@@ -8,10 +8,7 @@ module.exports = function getTagVersion(versions, packageName) {
       range,
       versions,
       packageName,
-      distTags: [
-        'latest',
-        'beta'
-      ]
+      distTags: ['latest', 'beta']
     });
   };
 };

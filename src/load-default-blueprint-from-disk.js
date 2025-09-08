@@ -16,10 +16,7 @@ const utils = require('./utils');
  * @param {string} version - Optional. if not pass will use the one specified in package json
  * @returns {Promise<*|{}>}
  */
-async function loadDefaultBlueprintFromDisk({
-  cwd,
-  version
-}) {
+async function loadDefaultBlueprintFromDisk({ cwd, version }) {
   let packageJson;
   try {
     packageJson = utils.require(path.join(cwd, 'package'));

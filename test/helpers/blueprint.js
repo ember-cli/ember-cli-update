@@ -4,11 +4,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const { buildTmp } = require('git-fixtures');
 
-async function initBlueprint({
-  fixturesPath,
-  resolvedFrom,
-  relativeDir
-}) {
+async function initBlueprint({ fixturesPath, resolvedFrom, relativeDir }) {
   let blueprintPath = await buildTmp({
     fixturesPath
   });

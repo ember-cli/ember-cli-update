@@ -21,14 +21,14 @@ module.exports = async function codemods({
   if (!sourceJson) {
     let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
 
-    let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
+    let emberCliUpdateJson = await loadSafeBlueprintFile(
+      emberCliUpdateJsonPath
+    );
 
     let { blueprints } = emberCliUpdateJson;
 
     if (_blueprint) {
-      let {
-        existingBlueprint
-      } = await getBlueprintFromArgs({
+      let { existingBlueprint } = await getBlueprintFromArgs({
         cwd,
         emberCliUpdateJson,
         blueprint: _blueprint
@@ -36,9 +36,7 @@ module.exports = async function codemods({
 
       blueprint = existingBlueprint;
     } else if (blueprints.length) {
-      let {
-        blueprint: _blueprint
-      } = await chooseBlueprintUpdates({
+      let { blueprint: _blueprint } = await chooseBlueprintUpdates({
         cwd,
         emberCliUpdateJson,
         codemods: true
@@ -58,11 +56,9 @@ module.exports = async function codemods({
     }
   }
 
-  let {
-    promise
-  } = await boilerplateUpdate({
+  let { promise } = await boilerplateUpdate({
     cwd,
-    projectOptions: async({ packageJson }) => {
+    projectOptions: async ({ packageJson }) => {
       if (!blueprint) {
         return [];
       }

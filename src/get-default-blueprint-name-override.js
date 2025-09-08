@@ -12,15 +12,23 @@ const pacote = require('pacote');
  * @param {string} cwd - Default to the process's CWD. Parent functions can override
  * @returns {Promise<Array<string>>}
  */
-module.exports = async function getBlueprintNameOverride(packageNameOrPath, cwd = process.cwd()) {
-  let localPackageJsonPath = path.join(path.resolve(cwd, packageNameOrPath), 'package.json');
+module.exports = async function getBlueprintNameOverride(
+  packageNameOrPath,
+  cwd = process.cwd()
+) {
+  let localPackageJsonPath = path.join(
+    path.resolve(cwd, packageNameOrPath),
+    'package.json'
+  );
   let packageJson;
 
   if (await fs.pathExists(localPackageJsonPath)) {
     packageJson = JSON.parse(await fs.readFile(localPackageJsonPath));
   } else {
     try {
-      packageJson = await pacote.manifest(packageNameOrPath, { fullMetadata: true });
+      packageJson = await pacote.manifest(packageNameOrPath, {
+        fullMetadata: true
+      });
     } catch (err) {
       if (err.statusCode !== 404) {
         throw err;

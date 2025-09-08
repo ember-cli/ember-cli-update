@@ -13,9 +13,7 @@ const {
 } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const emberCliUpdate = require('../../src');
-const {
-  assertNoUnstaged
-} = require('../helpers/assertions');
+const { assertNoUnstaged } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const {
@@ -25,12 +23,12 @@ const {
 } = require('../../src/constants');
 const { EOL } = require('os');
 
-describe(function() {
+describe(function () {
   this.timeout(90e3);
 
   let tmpPath;
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
@@ -52,14 +50,16 @@ describe(function() {
 
     await beforeMerge();
 
-    let promise = (async() => {
-      let result = await (await emberCliUpdate({
-        cwd: tmpPath,
-        packageName,
-        blueprint,
-        from,
-        to
-      })).promise;
+    let promise = (async () => {
+      let result = await (
+        await emberCliUpdate({
+          cwd: tmpPath,
+          packageName,
+          blueprint,
+          from,
+          to
+        })
+      ).promise;
 
       await afterMerge();
 
@@ -74,9 +74,7 @@ describe(function() {
     });
   }
 
-  function fixtureCompare({
-    mergeFixtures
-  }) {
+  function fixtureCompare({ mergeFixtures }) {
     let actual = tmpPath;
     let expected = mergeFixtures;
 
@@ -87,11 +85,8 @@ describe(function() {
     });
   }
 
-  it('handles dirty', async function() {
-    let {
-      status,
-      stderr
-    } = await merge({
+  it('handles dirty', async function () {
+    let { status, stderr } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       dirty: true
@@ -104,22 +99,21 @@ describe(function() {
     expect(stderr).to.not.contain('UnhandledPromiseRejectionWarning');
   });
 
-  it('handles non-ember-cli app', async function() {
+  it('handles non-ember-cli app', async function () {
     let promise = merge({
       fixturesPath: 'test/fixtures/package-json/non-ember-cli',
       commitMessage: 'my-app'
     });
 
-    await expect(promise)
-      .to.eventually.be.rejectedWith('Ember CLI project type could not be determined');
+    await expect(promise).to.eventually.be.rejectedWith(
+      'Ember CLI project type could not be determined'
+    );
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
   });
 
-  it('handles non-npm dir', async function() {
-    let {
-      stderr
-    } = await merge({
+  it('handles non-npm dir', async function () {
+    let { stderr } = await merge({
       fixturesPath: 'test/fixtures/package-json/missing',
       commitMessage: 'my-app'
     });
@@ -129,10 +123,8 @@ describe(function() {
     expect(stderr).to.contain('No package.json was found in this directory');
   });
 
-  it('handles malformed package.json', async function() {
-    let {
-      stderr
-    } = await merge({
+  it('handles malformed package.json', async function () {
+    let { stderr } = await merge({
       fixturesPath: 'test/fixtures/package-json/malformed',
       commitMessage: 'my-app'
     });
@@ -142,10 +134,8 @@ describe(function() {
     expect(stderr).to.contain('The package.json is malformed');
   });
 
-  it('updates glimmer app', async function() {
-    let {
-      status
-    } = await merge({
+  it('updates glimmer app', async function () {
+    let { status } = await merge({
       fixturesPath: 'test/fixtures/glimmer/local',
       commitMessage: 'glimmer-app',
       from: '0.5.0',
@@ -161,10 +151,8 @@ describe(function() {
     assertNoUnstaged(status);
   });
 
-  it('needs --from if glimmer app before 0.6.3', async function() {
-    let {
-      stderr
-    } = await merge({
+  it('needs --from if glimmer app before 0.6.3', async function () {
+    let { stderr } = await merge({
       fixturesPath: 'test/fixtures/glimmer/local',
       commitMessage: 'glimmer-app',
       to: '0.6.1'
@@ -175,10 +163,8 @@ describe(function() {
     expect(stderr).to.contain('version cannot be determined');
   });
 
-  it('updates addon', async function() {
-    let {
-      status
-    } = await merge({
+  it('updates addon', async function () {
+    let { status } = await merge({
       fixturesPath: 'test/fixtures/addon/local',
       commitMessage: 'my-addon'
     });
@@ -190,29 +176,30 @@ describe(function() {
     assertNoUnstaged(status);
   });
 
-  describe('blueprints', function() {
-    describe('--blueprint', function() {
-      it('throws if missing --from', async function() {
+  describe('blueprints', function () {
+    describe('--blueprint', function () {
+      it('throws if missing --from', async function () {
         let promise = merge({
           fixturesPath: 'test/fixtures/app/local',
           commitMessage: 'my-app',
           blueprint: 'test-blueprint'
         });
 
-        await expect(promise).to.eventually.be.rejectedWith('A custom blueprint cannot detect --from. You must supply it.');
+        await expect(promise).to.eventually.be.rejectedWith(
+          'A custom blueprint cannot detect --from. You must supply it.'
+        );
 
         expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
       });
 
-      it('can update a legacy blueprint', async function() {
-        let {
-          location,
-          version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json')).blueprints[1];
+      it('can update a legacy blueprint', async function () {
+        let { location, version: to } = (
+          await loadSafeBlueprintFile(
+            'test/fixtures/blueprint/app/legacy-app/merge/my-app/config2/ember-cli-update.json'
+          )
+        ).blueprints[1];
 
-        let {
-          status
-        } = await merge({
+        let { status } = await merge({
           fixturesPath: 'test/fixtures/blueprint/app/legacy-app/local',
           commitMessage: 'my-app',
           blueprint: location,
@@ -233,10 +220,8 @@ describe(function() {
         assertNoUnstaged(status);
       });
 
-      it('can update a default blueprint by name', async function() {
-        let {
-          status
-        } = await merge({
+      it('can update a default blueprint by name', async function () {
+        let { status } = await merge({
           fixturesPath: 'test/fixtures/addon/local',
           commitMessage: 'my-addon',
           packageName: defaultPackageName,
@@ -250,17 +235,16 @@ describe(function() {
         assertNoUnstaged(status);
       });
 
-      it('ignores package.json version of ember-cli', async function() {
-        let {
-          packageName,
-          name: blueprint
-        } = (await loadSafeBlueprintFile('test/fixtures/ember-cli-update-json/addon/config/ember-cli-update.json')).blueprints[0];
+      it('ignores package.json version of ember-cli', async function () {
+        let { packageName, name: blueprint } = (
+          await loadSafeBlueprintFile(
+            'test/fixtures/ember-cli-update-json/addon/config/ember-cli-update.json'
+          )
+        ).blueprints[0];
 
         let commitMessage = 'my-addon';
 
-        let {
-          status
-        } = await merge({
+        let { status } = await merge({
           fixturesPath: 'test/fixtures/addon/local',
           commitMessage,
           packageName,
@@ -268,14 +252,20 @@ describe(function() {
           // from: '2.11.1',
           async beforeMerge() {
             await fs.copy(
-              path.resolve(__dirname, '../fixtures/ember-cli-update-json/addon/config/ember-cli-update.json'),
+              path.resolve(
+                __dirname,
+                '../fixtures/ember-cli-update-json/addon/config/ember-cli-update.json'
+              ),
               path.join(tmpPath, 'tests/dummy/config/ember-cli-update.json')
             );
 
             let packageJsonPath = path.join(tmpPath, 'package.json');
             let packageJson = require(packageJsonPath);
             packageJson.devDependencies['ember-cli'] = '~3.11.0-beta.1';
-            await fs.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2) + EOL);
+            await fs.writeFile(
+              packageJsonPath,
+              JSON.stringify(packageJson, null, 2) + EOL
+            );
 
             await commit({ m: commitMessage, cwd: tmpPath });
           }
@@ -289,18 +279,17 @@ describe(function() {
       });
     });
 
-    describe('ember-cli-update.json', function() {
-      it('can update a remote blueprint', async function() {
+    describe('ember-cli-update.json', function () {
+      it('can update a remote blueprint', async function () {
         this.timeout(1.5 * 60e3);
 
-        let {
-          name,
-          version: to
-        } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my.app/config/ember-cli-update.json')).blueprints[0];
+        let { name, version: to } = (
+          await loadSafeBlueprintFile(
+            'test/fixtures/blueprint/app/remote-app/merge/my.app/config/ember-cli-update.json'
+          )
+        ).blueprints[0];
 
-        let {
-          status
-        } = await merge({
+        let { status } = await merge({
           fixturesPath: 'test/fixtures/blueprint/app/remote-app/local',
           commitMessage: 'my.app',
           blueprint: name,
@@ -314,19 +303,14 @@ describe(function() {
         assertNoUnstaged(status);
       });
 
-      it('can update an npm blueprint', async function() {
-        let [
-          {
-            location
-          },
-          {
-            name
-          }
-        ] = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints;
+      it('can update an npm blueprint', async function () {
+        let [{ location }, { name }] = (
+          await loadSafeBlueprintFile(
+            'test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json'
+          )
+        ).blueprints;
 
-        let {
-          status
-        } = await merge({
+        let { status } = await merge({
           fixturesPath: 'test/fixtures/blueprint/app/npm-app/local',
           commitMessage: 'my-app',
           blueprint: name,
@@ -350,19 +334,19 @@ describe(function() {
     });
   });
 
-  describe('Long running tests', function() {
+  describe('Long running tests', function () {
     this.timeout(4 * 60e3);
 
-    it('can update a custom blueprint for an ember app project', async function() {
-      let finalStateFixturePath = 'test/fixtures/app/non-default-addon-blueprint/local/my-app';
-      let {
-        location,
-        version: to
-      } = (await loadSafeBlueprintFile(path.join(finalStateFixturePath, '/config/ember-cli-update.json'))).blueprints[1];
+    it('can update a custom blueprint for an ember app project', async function () {
+      let finalStateFixturePath =
+        'test/fixtures/app/non-default-addon-blueprint/local/my-app';
+      let { location, version: to } = (
+        await loadSafeBlueprintFile(
+          path.join(finalStateFixturePath, '/config/ember-cli-update.json')
+        )
+      ).blueprints[1];
 
-      let {
-        status
-      } = await merge({
+      let { status } = await merge({
         fixturesPath: 'test/fixtures/app/non-default-addon-blueprint/local',
         commitMessage: 'my-app',
         packageName: location,

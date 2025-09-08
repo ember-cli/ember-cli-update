@@ -42,11 +42,10 @@ function getProjectType(checkForDep, keywords) {
  * @param {object} blueprint - Expected to contain `packageName` and `name`
  * @returns {Promise<[string]|string[]>} - Array of strings containing keywords
  */
-module.exports = async function getProjectOptions({
-  keywords,
-  dependencies,
-  devDependencies
-}, blueprint) {
+module.exports = async function getProjectOptions(
+  { keywords, dependencies, devDependencies },
+  blueprint
+) {
   if (blueprint && !isDefaultBlueprint(blueprint)) {
     return ['blueprint'];
   }

@@ -12,11 +12,7 @@ const _getTagVersion = require('./get-tag-version');
  * @param {string} range - Version string such as ^1.2.3 or 2.0.0
  * @returns {Promise<{path, name, version: *, defaultBlueprintOverride}>}
  */
-async function resolvePackage({
-  name,
-  url,
-  range
-}) {
+async function resolvePackage({ name, url, range }) {
   let version;
   let path;
 

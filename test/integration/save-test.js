@@ -3,18 +3,13 @@
 const path = require('path');
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const {
-  buildTmp,
-  processExit
-} = require('git-fixtures');
+const { buildTmp, processExit } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const save = require('../../src/save');
-const {
-  assertNoStaged
-} = require('../helpers/assertions');
+const { assertNoStaged } = require('../helpers/assertions');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 
-describe(save, function() {
+describe(save, function () {
   this.timeout(5e3);
 
   let tmpPath;
@@ -51,32 +46,27 @@ describe(save, function() {
     });
   }
 
-  it('handles missing version', async function() {
-    let {
-      stderr
-    } = await merge({
+  it('handles missing version', async function () {
+    let { stderr } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app'
     });
 
     expect(await isGitClean({ cwd: tmpPath })).to.be.ok;
 
-    expect(stderr).to.equal('A custom blueprint cannot detect --from. You must supply it.');
+    expect(stderr).to.equal(
+      'A custom blueprint cannot detect --from. You must supply it.'
+    );
   });
 
-  it('works for custom blueprint with package name', async function() {
-    let {
-      packageName,
-      name,
-      version,
-      outputRepo,
-      codemodsSource,
-      options
-    } = (await loadSafeBlueprintFile('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json')).blueprints[0];
+  it('works for custom blueprint with package name', async function () {
+    let { packageName, name, version, outputRepo, codemodsSource, options } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'
+      )
+    ).blueprints[0];
 
-    let {
-      status
-    } = await merge({
+    let { status } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       packageName,
@@ -89,7 +79,10 @@ describe(save, function() {
 
     assertNoStaged(status);
 
-    expect(path.join(tmpPath, 'config/ember-cli-update.json')).to.be.a.file()
-      .and.equal('test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json');
+    expect(path.join(tmpPath, 'config/ember-cli-update.json'))
+      .to.be.a.file()
+      .and.equal(
+        'test/fixtures/ember-cli-update-json/default/config/ember-cli-update.json'
+      );
   });
 });

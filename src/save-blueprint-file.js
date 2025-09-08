@@ -4,32 +4,35 @@ const fs = require('fs-extra');
 const path = require('path');
 
 async function saveBlueprintFile(emberCliUpdateJsonPath, emberCliUpdateJson) {
-  emberCliUpdateJson.packages = emberCliUpdateJson.blueprints.reduce((packages, blueprint) => {
-    let _package = packages.find(p => p.name === blueprint.packageName);
+  emberCliUpdateJson.packages = emberCliUpdateJson.blueprints.reduce(
+    (packages, blueprint) => {
+      let _package = packages.find(p => p.name === blueprint.packageName);
 
-    if (!_package) {
-      _package = {
-        name: blueprint.packageName,
-        location: blueprint.location,
-        version: blueprint.version,
-        blueprints: []
-      };
+      if (!_package) {
+        _package = {
+          name: blueprint.packageName,
+          location: blueprint.location,
+          version: blueprint.version,
+          blueprints: []
+        };
 
-      packages.push(_package);
-    }
+        packages.push(_package);
+      }
 
-    _package.blueprints.push(blueprint);
+      _package.blueprints.push(blueprint);
 
-    delete blueprint.packageName;
-    delete blueprint.location;
-    delete blueprint.version;
+      delete blueprint.packageName;
+      delete blueprint.location;
+      delete blueprint.version;
 
-    if (!blueprint.options.length) {
-      delete blueprint.options;
-    }
+      if (!blueprint.options.length) {
+        delete blueprint.options;
+      }
 
-    return packages;
-  }, []);
+      return packages;
+    },
+    []
+  );
 
   delete emberCliUpdateJson.blueprints;
 

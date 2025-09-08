@@ -40,7 +40,9 @@ module.exports = function getStartAndEndCommands({
   }
 
   if (baseBlueprint && !baseBlueprint.isBaseBlueprint) {
-    throw new Error('The intended base blueprint is not actually a base blueprint.');
+    throw new Error(
+      'The intended base blueprint is not actually a base blueprint.'
+    );
   }
 
   if (endBlueprint.isBaseBlueprint && baseBlueprint) {
@@ -48,14 +50,19 @@ module.exports = function getStartAndEndCommands({
   }
 
   let isCustomBlueprint = !isDefaultBlueprint(endBlueprint);
-  let isGlimmer = endBlueprint.packageName === glimmerPackageName && endBlueprint.name === glimmerPackageName;
+  let isGlimmer =
+    endBlueprint.packageName === glimmerPackageName &&
+    endBlueprint.name === glimmerPackageName;
 
   let startRange;
   let endRange;
   if (!isCustomBlueprint && !isGlimmer) {
     startRange = startBlueprint && startBlueprint.version;
     endRange = endBlueprint.version;
-  } else if (!endBlueprint.isBaseBlueprint && isDefaultBlueprint(baseBlueprint)) {
+  } else if (
+    !endBlueprint.isBaseBlueprint &&
+    isDefaultBlueprint(baseBlueprint)
+  ) {
     startRange = endRange = baseBlueprint.version;
   } else {
     // first version that supports blueprints with versions
@@ -100,21 +107,16 @@ async function isDefaultAddonBlueprint(blueprint) {
       keywords = await npm.json('v', blueprint.packageName, 'keywords');
     }
 
-    isDefaultAddonBlueprint = !(keywords && keywords.includes('ember-blueprint'));
+    isDefaultAddonBlueprint = !(
+      keywords && keywords.includes('ember-blueprint')
+    );
   }
 
   return isDefaultAddonBlueprint;
 }
 
-function getArgs({
-  projectName,
-  directoryName,
-  blueprint
-}) {
-  let args = [
-    'new',
-    projectName
-  ];
+function getArgs({ projectName, directoryName, blueprint }) {
+  let args = ['new', projectName];
 
   if (directoryName !== projectName) {
     args.push(`-dir=${directoryName}`);
@@ -130,7 +132,9 @@ function getArgs({
     _blueprint = blueprint.path;
   } else {
     let isCustomBlueprint = !isDefaultBlueprint(blueprint);
-    let isGlimmer = blueprint.packageName === glimmerPackageName && blueprint.name === glimmerPackageName;
+    let isGlimmer =
+      blueprint.packageName === glimmerPackageName &&
+      blueprint.name === glimmerPackageName;
 
     if (isCustomBlueprint || isGlimmer) {
       _blueprint = `${blueprint.packageName}@${blueprint.version}`;
@@ -139,13 +143,7 @@ function getArgs({
     }
   }
 
-  return [
-    ...args,
-    '--skip-npm',
-    '-b',
-    _blueprint,
-    ...blueprint.options
-  ];
+  return [...args, '--skip-npm', '-b', _blueprint, ...blueprint.options];
 }
 
 module.exports.spawn = function spawn(command, args, options) {
@@ -165,24 +163,19 @@ module.exports.npx = function npx(args, options) {
   return utils.npx(args.join(' '), options);
 };
 
-function runEmberLocally({
-  packageRoot,
-  cwd,
-  args
-}) {
-  return module.exports.spawn('node', [
-    path.join(packageRoot, 'bin/ember'),
-    ...args
-  ], { cwd });
+function runEmberLocally({ packageRoot, cwd, args }) {
+  return module.exports.spawn(
+    'node',
+    [path.join(packageRoot, 'bin/ember'), ...args],
+    { cwd }
+  );
 }
 
-function runEmberRemotely({
-  cwd,
-  blueprint,
-  args
-}) {
+function runEmberRemotely({ cwd, blueprint, args }) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
-  let isGlimmer = blueprint.packageName === glimmerPackageName && blueprint.name === glimmerPackageName;
+  let isGlimmer =
+    blueprint.packageName === glimmerPackageName &&
+    blueprint.name === glimmerPackageName;
 
   if (isCustomBlueprint || isGlimmer) {
     args = ['ember-cli@latest', ...args];
@@ -197,11 +190,7 @@ function runEmberRemotely({
 function createProject(runEmber) {
   return ({
     packageRoot,
-    options: {
-      projectName,
-      baseBlueprint,
-      blueprint
-    }
+    options: { projectName, baseBlueprint, blueprint }
   }) => {
     return async function createProject(cwd) {
       if (!blueprint) {
@@ -305,10 +294,8 @@ module.exports.installAddonBlueprint = async function installAddonBlueprint({
   await fs.remove(path.join(projectRoot, 'package-lock.json'));
 };
 
-async function appendNodeModulesIgnore({
-  projectRoot
-}) {
-  if (!await fs.pathExists(path.join(projectRoot, 'node_modules'))) {
+async function appendNodeModulesIgnore({ projectRoot }) {
+  if (!(await fs.pathExists(path.join(projectRoot, 'node_modules')))) {
     return;
   }
 
@@ -320,7 +307,10 @@ async function appendNodeModulesIgnore({
     isIgnoringNodeModules = /^\/?node_modules\/?$/m.test(gitignore);
   } catch (err) {}
   if (!isIgnoringNodeModules) {
-    await fs.writeFile(path.join(projectRoot, '.gitignore'), `${gitignore}${nodeModulesIgnore}`);
+    await fs.writeFile(
+      path.join(projectRoot, '.gitignore'),
+      `${gitignore}${nodeModulesIgnore}`
+    );
   }
 }
 
