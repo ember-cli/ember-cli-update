@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: 14
+        node-version: 20
         cache: 'npm'
 
     - run: npm ci
@@ -32,10 +32,9 @@ jobs:
           - ubuntu-latest
           - macos-latest
         node:
-          - 14
-          - 16
-          - 18
           - 20
+          - 22
+          - 24
         test-command:
           - test:bin
           - test:fast
@@ -46,8 +45,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node }}
         cache: 'npm'
@@ -69,13 +68,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         ref: ${{ github.head_ref }}
 
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
-        node-version: 14
+        node-version: 20
         cache: 'npm'
 
     - uses: kellyselden/ember-cli-update-action@v5
