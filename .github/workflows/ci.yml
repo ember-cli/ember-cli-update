@@ -5,33 +5,31 @@ on:
   workflow_dispatch:
   push:
     branches:
-    - master
+      - master
   pull_request:
 
 jobs:
   lint:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
-
-    - run: npm ci
-    - run: npm run lint
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install
+      - run: pnpm run lint
 
   test:
-    needs: lint
-
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os:
           - ubuntu-latest
           - macos-latest
-        node:
+        node-version:
           - 20
           - 22
           - 24
@@ -41,43 +39,36 @@ jobs:
         exclude:
           - os: macos-latest
             test-command: test:fast
-
-    runs-on: ${{ matrix.os }}
-
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node }}
-        cache: 'npm'
-
-    # for test cache hits
-    - run: npm i -g ember-cli@2.11.1
-
-    - run: npm ci
-    - run: npm run ${{ matrix.test-command }} -- --retries 1
-      timeout-minutes: 20
-      env:
-        NODE_LTS: ${{ matrix.node != '*' }}
-        DEBUG: ember-cli-update,boilerplate-update,git-diff-apply
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: pnpm add -g ember-cli@2.11.1
+      - run: pnpm install
+      - run: pnpm run ${{ matrix.test-command }} -- --retries 1
+        timeout-minutes: 20
+        env:
+          NODE_LTS: ${{ matrix.node != '*' }}
+          DEBUG: ember-cli-update,boilerplate-update,git-diff-apply
 
   ember-cli-update:
     needs: test
     if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
 
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: ${{ github.head_ref }}
-
-    - uses: actions/setup-node@v4
-      with:
-        node-version: 20
-        cache: 'npm'
-
-    - uses: kellyselden/ember-cli-update-action@v5
-      with:
-        autofix_command: npm run lint -- --fix
-        ignore_to: true
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: kellyselden/ember-cli-update-action@v5
+        with:
+          autofix_command: npm run lint -- --fix
+          ignore_to: true

@@ -23,7 +23,7 @@ The CLI attempts to be a thin wrapper of [boilerplate-update](https://github.com
 
 As a global executable:
 
-`npm install -g ember-cli-update`
+`pnpm add -g ember-cli-update`
 
 As an Ember CLI command:
 
@@ -276,7 +276,7 @@ Let's update from Ember CLI 2.18.2 to Ember CLI 3.1.4
 First, make sure you are on the latest ember-cli-update version for good measure.
 
 ```
-npm install -g ember-cli-update
+pnpm add -g ember-cli-update
 ```
 
 Then, run all compatible codemods against your current version. Since codemods are downloaded on the fly, they can be updated (and new ones added) without even getting a new version of ember-cli-update. Also, we may add additional codemods targeting your older version of Ember.js.
