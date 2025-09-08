@@ -8,9 +8,7 @@ module.exports = {
   env: {
     es6: true
   },
-  extends: [
-    'sane-node'
-  ],
+  extends: ['sane-node', 'prettier'],
   overrides: [
     {
       files: ['bin/**/*.js'],
