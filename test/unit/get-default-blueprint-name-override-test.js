@@ -11,54 +11,64 @@ const pacote = require('pacote');
 const cwd = 'a/made/up/path';
 const packageNameOrPath = '../a-package-name';
 const defaultBlueprint = 'not-the-same-name';
-const localPackageJsonPath = path.join(path.resolve(cwd, packageNameOrPath), 'package.json');
+const localPackageJsonPath = path.join(
+  path.resolve(cwd, packageNameOrPath),
+  'package.json'
+);
 
-describe(getBlueprintNameOverride, function() {
+describe(getBlueprintNameOverride, function () {
   let pathExistsStub;
   let readFileStub;
   let manifestStub;
 
-  beforeEach(function() {
+  beforeEach(function () {
     pathExistsStub = sinon.stub(fs, 'pathExists');
     readFileStub = sinon.stub(fs, 'readFile');
     manifestStub = sinon.stub(pacote, 'manifest');
   });
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
-  it('returns default blueprint override name if it exists', async function() {
+  it('returns default blueprint override name if it exists', async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(true);
 
-    readFileStub.withArgs(localPackageJsonPath).resolves(JSON.stringify({
-      name: packageNameOrPath,
-      'ember-addon': {
-        defaultBlueprint
-      }
-    }));
+    readFileStub.withArgs(localPackageJsonPath).resolves(
+      JSON.stringify({
+        name: packageNameOrPath,
+        'ember-addon': {
+          defaultBlueprint
+        }
+      })
+    );
 
-    let defaultBlueprintOverride = await getBlueprintNameOverride(packageNameOrPath, cwd);
+    let defaultBlueprintOverride = await getBlueprintNameOverride(
+      packageNameOrPath,
+      cwd
+    );
 
     expect(defaultBlueprintOverride).to.equal(defaultBlueprint);
   });
 
-  it('doesn\'t use NPM if found locally', async function() {
+  it("doesn't use NPM if found locally", async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(true);
 
-    readFileStub.withArgs(localPackageJsonPath).resolves(JSON.stringify({
-      name: packageNameOrPath,
-      'ember-addon': {
-        defaultBlueprint
-      }
-    }));
+    readFileStub.withArgs(localPackageJsonPath).resolves(
+      JSON.stringify({
+        name: packageNameOrPath,
+        'ember-addon': {
+          defaultBlueprint
+        }
+      })
+    );
 
     await getBlueprintNameOverride(packageNameOrPath, cwd);
 
     expect(manifestStub).to.not.have.been.called;
   });
 
-  it('uses NPM if not found locally', async function() {
+  it('uses NPM if not found locally', async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(false);
 
     manifestStub.withArgs(packageNameOrPath).resolves({
@@ -68,12 +78,15 @@ describe(getBlueprintNameOverride, function() {
       }
     });
 
-    let defaultBlueprintOverride = await getBlueprintNameOverride(packageNameOrPath, cwd);
+    let defaultBlueprintOverride = await getBlueprintNameOverride(
+      packageNameOrPath,
+      cwd
+    );
 
     expect(defaultBlueprintOverride).to.equal(defaultBlueprint);
   });
 
-  it('doesn\'t read local file if using NPM', async function() {
+  it("doesn't read local file if using NPM", async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(false);
 
     manifestStub.withArgs(packageNameOrPath).resolves({
@@ -88,44 +101,57 @@ describe(getBlueprintNameOverride, function() {
     expect(readFileStub).to.not.have.been.called;
   });
 
-  it('null if ember-addon does not exist in package.json', async function() {
+  it('null if ember-addon does not exist in package.json', async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(true);
 
-    readFileStub.withArgs(localPackageJsonPath).resolves(JSON.stringify({
-      name: packageNameOrPath
-    }));
+    readFileStub.withArgs(localPackageJsonPath).resolves(
+      JSON.stringify({
+        name: packageNameOrPath
+      })
+    );
 
-    let defaultBlueprintOverride = await getBlueprintNameOverride(packageNameOrPath, cwd);
+    let defaultBlueprintOverride = await getBlueprintNameOverride(
+      packageNameOrPath,
+      cwd
+    );
 
     expect(defaultBlueprintOverride).to.be.null;
   });
 
-  it('null if defaultBlueprint does not exist in ember-addon', async function() {
+  it('null if defaultBlueprint does not exist in ember-addon', async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(true);
 
-    readFileStub.withArgs(localPackageJsonPath).resolves(JSON.stringify({
-      name: packageNameOrPath,
-      'ember-addon': {}
-    }));
+    readFileStub.withArgs(localPackageJsonPath).resolves(
+      JSON.stringify({
+        name: packageNameOrPath,
+        'ember-addon': {}
+      })
+    );
 
-    let defaultBlueprintOverride = await getBlueprintNameOverride(packageNameOrPath, cwd);
+    let defaultBlueprintOverride = await getBlueprintNameOverride(
+      packageNameOrPath,
+      cwd
+    );
 
     expect(defaultBlueprintOverride).to.be.null;
   });
 
-  it('missing NPM package returns null', async function() {
+  it('missing NPM package returns null', async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(false);
 
     manifestStub.withArgs(packageNameOrPath).rejects({
       statusCode: 404
     });
 
-    let defaultBlueprintOverride = await getBlueprintNameOverride(packageNameOrPath, cwd);
+    let defaultBlueprintOverride = await getBlueprintNameOverride(
+      packageNameOrPath,
+      cwd
+    );
 
     expect(defaultBlueprintOverride).to.be.null;
   });
 
-  it('doesn\'t swallow all NPM errors', async function() {
+  it("doesn't swallow all NPM errors", async function () {
     pathExistsStub.withArgs(localPackageJsonPath).resolves(false);
 
     let err = {

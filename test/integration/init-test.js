@@ -9,9 +9,7 @@ const {
   fixtureCompare: _fixtureCompare
 } = require('git-fixtures');
 const init = require('../../src/init');
-const {
-  assertNoStaged
-} = require('../helpers/assertions');
+const { assertNoStaged } = require('../helpers/assertions');
 const { initBlueprint } = require('../helpers/blueprint');
 const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const {
@@ -19,7 +17,7 @@ const {
   defaultAppBlueprintName
 } = require('../../src/constants');
 
-describe(init, function() {
+describe(init, function () {
   this.timeout(60e3);
 
   let tmpPath;
@@ -59,9 +57,7 @@ describe(init, function() {
     });
   }
 
-  function fixtureCompare({
-    mergeFixtures
-  }) {
+  function fixtureCompare({ mergeFixtures }) {
     let actual = tmpPath;
     let expected = mergeFixtures;
 
@@ -72,17 +68,14 @@ describe(init, function() {
     });
   }
 
-  it('can initialize a custom blueprint', async function() {
-    let {
-      location,
-      outputRepo,
-      codemodsSource,
-      options
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/init/merge/my-app/config/ember-cli-update.json')).blueprints[0];
+  it('can initialize a custom blueprint', async function () {
+    let { location, outputRepo, codemodsSource, options } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/init/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[0];
 
-    let {
-      status
-    } = await merge({
+    let { status } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/init/local',
       commitMessage: 'my-app',
       blueprint: location,
@@ -91,7 +84,10 @@ describe(init, function() {
       blueprintOptions: options,
       async beforeMerge() {
         await initBlueprint({
-          fixturesPath: path.resolve(__dirname, '../fixtures/blueprint/app/local'),
+          fixturesPath: path.resolve(
+            __dirname,
+            '../fixtures/blueprint/app/local'
+          ),
           resolvedFrom: tmpPath,
           relativeDir: location
         });
@@ -105,10 +101,8 @@ describe(init, function() {
     assertNoStaged(status);
   });
 
-  it('can initialize a default blueprint by name', async function() {
-    let {
-      status
-    } = await merge({
+  it('can initialize a default blueprint by name', async function () {
+    let { status } = await merge({
       fixturesPath: 'test/fixtures/app/local',
       commitMessage: 'my-app',
       packageName: defaultPackageName,

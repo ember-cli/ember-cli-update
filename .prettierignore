@@ -1,0 +1,3 @@
+test/fixtures/**
+pnpm-lock.yaml
+CHANGELOG.md

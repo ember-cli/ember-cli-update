@@ -11,27 +11,34 @@ const loadSafeBlueprintFile = require('../../src/load-safe-blueprint-file');
 const { createTmpDir } = require('../../src/tmp');
 const fs = require('fs-extra');
 
-describe(downloadPackage, function() {
+describe(downloadPackage, function () {
   this.timeout(30e3);
 
   let tmpPath;
 
-  beforeEach(async function() {
+  beforeEach(async function () {
     tmpPath = path.join(await createTmpDir(), 'app');
     await fs.mkdir(tmpPath);
   });
 
-  it('throws if missing a range', async function() {
-    await expect(downloadPackage('test-name', 'test-url', null))
-      .to.eventually.be.rejectedWith('Missing a range when downloading blueprint');
+  it('throws if missing a range', async function () {
+    await expect(
+      downloadPackage('test-name', 'test-url', null)
+    ).to.eventually.be.rejectedWith(
+      'Missing a range when downloading blueprint'
+    );
   });
 
-  it('downloads local paths as urls', async function() {
+  it('downloads local paths as urls', async function () {
     let {
       name,
       location,
       version: range
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+    } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/local-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
     let blueprintPath = await initBlueprint({
       fixturesPath: 'test/fixtures/blueprint/app/local',
@@ -50,12 +57,16 @@ describe(downloadPackage, function() {
     expect(downloadedPackage.version).to.equal(range);
   });
 
-  it('downloads urls', async function() {
+  it('downloads urls', async function () {
     let {
       name,
       location: url,
       version: range
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/remote-app/merge/my.app/config/ember-cli-update.json')).blueprints[0];
+    } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/remote-app/merge/my.app/config/ember-cli-update.json'
+      )
+    ).blueprints[0];
 
     let downloadedPackage = await downloadPackage(null, url, range);
 
@@ -64,11 +75,12 @@ describe(downloadPackage, function() {
     expect(downloadedPackage.version).to.equal(range);
   });
 
-  it('downloads npm packages', async function() {
-    let {
-      name,
-      version: range
-    } = (await loadSafeBlueprintFile('test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json')).blueprints[1];
+  it('downloads npm packages', async function () {
+    let { name, version: range } = (
+      await loadSafeBlueprintFile(
+        'test/fixtures/blueprint/app/npm-app/merge/my-app/config/ember-cli-update.json'
+      )
+    ).blueprints[1];
 
     let downloadedPackage = await downloadPackage(name, null, range);
 

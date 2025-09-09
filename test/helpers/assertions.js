@@ -2,14 +2,14 @@
 
 const { expect } = require('./chai');
 
-module.exports.assertNoUnstaged = function(status) {
+module.exports.assertNoUnstaged = function (status) {
   expect(status).to.not.match(/^.\w/m);
 };
 
-module.exports.assertNoStaged = function(status) {
+module.exports.assertNoStaged = function (status) {
   expect(status).to.not.match(/^\w/m);
 };
 
-module.exports.assertCodemodRan = function(status) {
+module.exports.assertCodemodRan = function (status) {
   expect(status).to.match(/^A {2}.*/m);
 };

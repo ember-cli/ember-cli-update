@@ -2,17 +2,12 @@
 
 const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
-const {
-  buildTmp,
-  processExit
-} = require('git-fixtures');
+const { buildTmp, processExit } = require('git-fixtures');
 const { isGitClean } = require('git-diff-apply');
 const codemods = require('../../src/codemods');
-const {
-  assertNoStaged
-} = require('../helpers/assertions');
+const { assertNoStaged } = require('../helpers/assertions');
 
-describe(codemods, function() {
+describe(codemods, function () {
   this.timeout(30e3);
 
   let tmpPath;
@@ -46,10 +41,8 @@ describe(codemods, function() {
     });
   }
 
-  it('lists codemods', async function() {
-    let {
-      result
-    } = await merge({
+  it('lists codemods', async function () {
+    let { result } = await merge({
       fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
       list: true
@@ -62,10 +55,8 @@ describe(codemods, function() {
     expect(JSON.parse(result)).to.have.own.property('ember-modules-codemod');
   });
 
-  it('accepts codemods via json string', async function() {
-    let {
-      result
-    } = await merge({
+  it('accepts codemods via json string', async function () {
+    let { result } = await merge({
       fixturesPath: 'test/fixtures/codemod/local',
       commitMessage: 'my-app',
       list: true,
@@ -86,11 +77,8 @@ describe(codemods, function() {
     expect(JSON.parse(result)).to.have.own.property('test-codemod-json');
   });
 
-  it('handles missing blueprint', async function() {
-    let {
-      stderr,
-      status
-    } = await merge({
+  it('handles missing blueprint', async function () {
+    let { stderr, status } = await merge({
       fixturesPath: 'test/fixtures/blueprint/app/local-app/local',
       commitMessage: 'my-app',
       blueprint: 'missing'

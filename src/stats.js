@@ -22,9 +22,7 @@ module.exports = async function stats({
   let { blueprints } = emberCliUpdateJson;
 
   if (blueprint) {
-    let {
-      existingBlueprint
-    } = await getBlueprintFromArgs({
+    let { existingBlueprint } = await getBlueprintFromArgs({
       cwd,
       emberCliUpdateJson,
       packageName,
@@ -50,31 +48,39 @@ module.exports = async function stats({
 
     let lines = [
       `package name: ${blueprint.packageName}`,
-      ...blueprint.location ? [`package location: ${blueprint.location}`] : [],
+      ...(blueprint.location
+        ? [`package location: ${blueprint.location}`]
+        : []),
       `blueprint name: ${blueprint.name}`,
       `current version: ${blueprint.version}`,
       `latest version: ${blueprintUpdate.latestVersion}`,
-      ...blueprint.outputRepo ? [`output repo: ${blueprint.outputRepo}`] : [],
-      ...blueprint.options.length ? [`options: ${blueprint.options.join(', ')}`] : [],
-      ...blueprint.codemodsSource ? [
-        `codemods source: ${blueprint.codemodsSource}`,
-        `applicable codemods: ${await (async() => {
-          let packageJson = require(path.join(cwd, 'package'));
-          let projectOptions = isDefaultBlueprint(blueprintUpdate.blueprint)
-            ? await getProjectOptions(packageJson, blueprint)
-            : blueprint.options;
-          let codemods = await utils.getApplicableCodemods({
-            source: blueprint.codemodsSource,
-            projectOptions,
-            packageJson
-          });
-          return Object.keys(codemods).join(', ');
-        })()}`
-      ] : []
+      ...(blueprint.outputRepo ? [`output repo: ${blueprint.outputRepo}`] : []),
+      ...(blueprint.options.length
+        ? [`options: ${blueprint.options.join(', ')}`]
+        : []),
+      ...(blueprint.codemodsSource
+        ? [
+            `codemods source: ${blueprint.codemodsSource}`,
+            `applicable codemods: ${await (async () => {
+              let packageJson = require(path.join(cwd, 'package'));
+              let projectOptions = isDefaultBlueprint(blueprintUpdate.blueprint)
+                ? await getProjectOptions(packageJson, blueprint)
+                : blueprint.options;
+              let codemods = await utils.getApplicableCodemods({
+                source: blueprint.codemodsSource,
+                projectOptions,
+                packageJson
+              });
+              return Object.keys(codemods).join(', ');
+            })()}`
+          ]
+        : [])
     ];
 
-    stats.push(lines.join(`
-`));
+    stats.push(
+      lines.join(`
+`)
+    );
   }
 
   return stats.join(`

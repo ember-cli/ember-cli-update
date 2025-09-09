@@ -5,7 +5,7 @@ const { URL } = require('url');
 const fs = require('fs-extra');
 
 function toPosixAbsolutePath(path) {
-  let posixPath = path.replace(/\\/g, '/').replace(/^(.+):/, function() {
+  let posixPath = path.replace(/\\/g, '/').replace(/^(.+):/, function () {
     return arguments[1].toLowerCase();
   });
   if (!posixPath.startsWith('/')) {
@@ -21,10 +21,7 @@ function toPosixAbsolutePath(path) {
  * @param {string} packageName - Can be local path (absolute or relative) or url
  * @returns {Promise<{name: string, location: string, url: string}>}
  */
-async function parseBlueprintPackage({
-  cwd = '.',
-  packageName
-}) {
+async function parseBlueprintPackage({ cwd = '.', packageName }) {
   let name;
   let location;
   let url;
@@ -32,7 +29,10 @@ async function parseBlueprintPackage({
 
   if (packageName.startsWith('.')) {
     blueprintPath = path.resolve(cwd, packageName);
-  } else if (path.isAbsolute(packageName) && await fs.pathExists(packageName)) {
+  } else if (
+    path.isAbsolute(packageName) &&
+    (await fs.pathExists(packageName))
+  ) {
     blueprintPath = packageName;
   }
 

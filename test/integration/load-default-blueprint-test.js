@@ -6,10 +6,10 @@ const _loadDefaultBlueprint = require('../../src/load-default-blueprint');
 
 const version = '1.2.3';
 
-describe(_loadDefaultBlueprint, function() {
+describe(_loadDefaultBlueprint, function () {
   let projectOptions;
 
-  beforeEach(function() {
+  beforeEach(function () {
     projectOptions = [];
   });
 
@@ -17,7 +17,7 @@ describe(_loadDefaultBlueprint, function() {
     return _loadDefaultBlueprint(projectOptions, version);
   }
 
-  it('returns blank blueprint if no params', async function() {
+  it('returns blank blueprint if no params', async function () {
     let blueprint = _loadDefaultBlueprint();
 
     expect(blueprint).to.deep.equal({
@@ -27,23 +27,21 @@ describe(_loadDefaultBlueprint, function() {
       outputRepo: 'https://github.com/undefined/undefined',
       codemodsSource: 'ember-app-codemods-manifest@1',
       isBaseBlueprint: true,
-      options: [
-        '--no-welcome'
-      ]
+      options: ['--no-welcome']
     });
   });
 
-  describe('app', function() {
-    beforeEach(function() {
+  describe('app', function () {
+    beforeEach(function () {
       projectOptions.push('app');
     });
 
-    describe('welcome', function() {
-      beforeEach(function() {
+    describe('welcome', function () {
+      beforeEach(function () {
         projectOptions.push('welcome');
       });
 
-      it('npm', async function() {
+      it('npm', async function () {
         let blueprint = loadDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
@@ -57,7 +55,7 @@ describe(_loadDefaultBlueprint, function() {
         });
       });
 
-      it('yarn', async function() {
+      it('yarn', async function () {
         projectOptions.push('yarn');
 
         let blueprint = loadDefaultBlueprint();
@@ -69,15 +67,13 @@ describe(_loadDefaultBlueprint, function() {
           outputRepo: 'https://github.com/ember-cli/ember-new-output',
           codemodsSource: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
-          options: [
-            '--yarn'
-          ]
+          options: ['--yarn']
         });
       });
     });
 
-    describe('no welcome', function() {
-      it('npm', async function() {
+    describe('no welcome', function () {
+      it('npm', async function () {
         let blueprint = loadDefaultBlueprint();
 
         expect(blueprint).to.deep.equal({
@@ -87,13 +83,11 @@ describe(_loadDefaultBlueprint, function() {
           outputRepo: 'https://github.com/ember-cli/ember-new-output',
           codemodsSource: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
-          options: [
-            '--no-welcome'
-          ]
+          options: ['--no-welcome']
         });
       });
 
-      it('yarn', async function() {
+      it('yarn', async function () {
         projectOptions.push('yarn');
 
         let blueprint = loadDefaultBlueprint();
@@ -105,21 +99,18 @@ describe(_loadDefaultBlueprint, function() {
           outputRepo: 'https://github.com/ember-cli/ember-new-output',
           codemodsSource: 'ember-app-codemods-manifest@1',
           isBaseBlueprint: true,
-          options: [
-            '--yarn',
-            '--no-welcome'
-          ]
+          options: ['--yarn', '--no-welcome']
         });
       });
     });
   });
 
-  describe('addon', function() {
-    beforeEach(function() {
+  describe('addon', function () {
+    beforeEach(function () {
       projectOptions.push('addon');
     });
 
-    it('npm', async function() {
+    it('npm', async function () {
       let blueprint = loadDefaultBlueprint();
 
       expect(blueprint).to.deep.equal({
@@ -129,13 +120,11 @@ describe(_loadDefaultBlueprint, function() {
         outputRepo: 'https://github.com/ember-cli/ember-addon-output',
         codemodsSource: 'ember-addon-codemods-manifest@1',
         isBaseBlueprint: true,
-        options: [
-          '--no-welcome'
-        ]
+        options: ['--no-welcome']
       });
     });
 
-    it('yarn', async function() {
+    it('yarn', async function () {
       projectOptions.push('yarn');
 
       let blueprint = loadDefaultBlueprint();
@@ -147,20 +136,17 @@ describe(_loadDefaultBlueprint, function() {
         outputRepo: 'https://github.com/ember-cli/ember-addon-output',
         codemodsSource: 'ember-addon-codemods-manifest@1',
         isBaseBlueprint: true,
-        options: [
-          '--yarn',
-          '--no-welcome'
-        ]
+        options: ['--yarn', '--no-welcome']
       });
     });
   });
 
-  describe('glimmer', function() {
-    beforeEach(function() {
+  describe('glimmer', function () {
+    beforeEach(function () {
       projectOptions.push('glimmer');
     });
 
-    it('works', async function() {
+    it('works', async function () {
       let blueprint = loadDefaultBlueprint();
 
       expect(blueprint).to.deep.equal({

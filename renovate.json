@@ -1,8 +1,4 @@
 {
-  "extends": [
-    "standard"
-  ],
-  "ignoreDeps": [
-    "ember-cli"
-  ]
+  "extends": ["standard"],
+  "ignoreDeps": ["ember-cli"]
 }

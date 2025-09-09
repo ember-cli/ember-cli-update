@@ -7,20 +7,20 @@ const sinon = require('sinon');
 const utils = require('../../src/utils');
 const loadDefaultBlueprintFromDisk = require('../../src/load-default-blueprint-from-disk');
 
-describe(loadDefaultBlueprintFromDisk, function() {
+describe(loadDefaultBlueprintFromDisk, function () {
   let require;
   let getVersions;
 
-  beforeEach(function() {
+  beforeEach(function () {
     require = sinon.stub(utils, 'require');
     getVersions = sinon.stub(utils, 'getVersions');
   });
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
-  it('handles missing package.json', async function() {
+  it('handles missing package.json', async function () {
     require = require.withArgs(path.normalize('/test/path/package')).throws();
 
     let blueprint = await loadDefaultBlueprintFromDisk({
@@ -42,7 +42,7 @@ describe(loadDefaultBlueprintFromDisk, function() {
     });
   });
 
-  it('doesn\'t load version if supplied', async function() {
+  it("doesn't load version if supplied", async function () {
     require = require.withArgs(path.normalize('/test/path/package')).returns({
       devDependencies: {
         'ember-cli': '0.0.1'
@@ -68,7 +68,7 @@ describe(loadDefaultBlueprintFromDisk, function() {
     });
   });
 
-  it('works', async function() {
+  it('works', async function () {
     require = require.withArgs(path.normalize('/test/path/package')).returns({
       devDependencies: {
         'ember-cli': '0.0.1'

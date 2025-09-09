@@ -4,8 +4,8 @@ const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 
-describe(loadSafeBlueprint, function() {
-  it('works', async function() {
+describe(loadSafeBlueprint, function () {
+  it('works', async function () {
     let blueprint = loadSafeBlueprint({
       foo: 'bar'
     });
@@ -16,7 +16,7 @@ describe(loadSafeBlueprint, function() {
     });
   });
 
-  it('doesn\'t remove existing options', async function() {
+  it("doesn't remove existing options", async function () {
     let blueprint = loadSafeBlueprint({
       options: ['foo']
     });
@@ -26,15 +26,12 @@ describe(loadSafeBlueprint, function() {
     });
   });
 
-  it('doesn\'t reorder existing options', async function() {
+  it("doesn't reorder existing options", async function () {
     let blueprint = loadSafeBlueprint({
       foo: 'bar',
       options: ['foo']
     });
 
-    expect(Object.keys(blueprint)).to.deep.equal([
-      'foo',
-      'options'
-    ]);
+    expect(Object.keys(blueprint)).to.deep.equal(['foo', 'options']);
   });
 });

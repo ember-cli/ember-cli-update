@@ -1,9 +1,6 @@
 'use strict';
 
-const {
-  defaultPackageName,
-  glimmerPackageName
-} = require('./constants');
+const { defaultPackageName, glimmerPackageName } = require('./constants');
 
 module.exports = function getPackageName(projectOptions) {
   let packageName;

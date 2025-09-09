@@ -12,23 +12,19 @@ const { defaultTo } = require('./constants');
  * @param {string} latestVersion - Latest version for the blueprint
  * @returns {string}
  */
-function formatBlueprintLine({
-  blueprint,
-  latestVersion
-}) {
+function formatBlueprintLine({ blueprint, latestVersion }) {
   return `${blueprint.name}, current: ${blueprint.version}, latest: ${latestVersion}`;
 }
 
-async function chooseBlueprint({
-  choicesByName,
-  message
-}) {
-  let answer = await inquirer.prompt([{
-    type: 'list',
-    message,
-    name: 'blueprint',
-    choices: Object.values(choicesByName).map(({ choice }) => choice)
-  }]);
+async function chooseBlueprint({ choicesByName, message }) {
+  let answer = await inquirer.prompt([
+    {
+      type: 'list',
+      message,
+      name: 'blueprint',
+      choices: Object.values(choicesByName).map(({ choice }) => choice)
+    }
+  ]);
 
   return choicesByName[answer.blueprint];
 }
@@ -78,17 +74,21 @@ async function chooseBlueprintUpdates({
       message = 'Which blueprint would you like to run codemods for?';
     }
 
-    existingBlueprint = (await chooseBlueprint({
-      choicesByName,
-      message
-    })).blueprint;
+    existingBlueprint = (
+      await chooseBlueprint({
+        choicesByName,
+        message
+      })
+    ).blueprint;
   } else {
     let blueprintUpdates = await checkForBlueprintUpdates({
       cwd,
       blueprints
     });
 
-    areAllUpToDate = blueprintUpdates.every(blueprintUpdate => blueprintUpdate.isUpToDate);
+    areAllUpToDate = blueprintUpdates.every(
+      blueprintUpdate => blueprintUpdate.isUpToDate
+    );
 
     if (areAllUpToDate) {
       // eslint-disable-next-line no-console
@@ -97,21 +97,25 @@ async function chooseBlueprintUpdates({
 
 All blueprints are up-to-date!`);
     } else {
-      let choicesByName = blueprintUpdates.reduce((choices, blueprintUpdate) => {
-        let name = formatBlueprintLine(blueprintUpdate);
-        choices[name] = {
-          blueprintUpdate,
-          choice: {
-            name,
-            disabled: blueprintUpdate.isUpToDate
-          }
-        };
-        return choices;
-      }, {});
+      let choicesByName = blueprintUpdates.reduce(
+        (choices, blueprintUpdate) => {
+          let name = formatBlueprintLine(blueprintUpdate);
+          choices[name] = {
+            blueprintUpdate,
+            choice: {
+              name,
+              disabled: blueprintUpdate.isUpToDate
+            }
+          };
+          return choices;
+        },
+        {}
+      );
 
       let { blueprintUpdate } = await chooseBlueprint({
         choicesByName,
-        message: 'Blueprint updates have been found. Which one would you like to update?'
+        message:
+          'Blueprint updates have been found. Which one would you like to update?'
       });
 
       existingBlueprint = blueprintUpdate.blueprint;
@@ -119,24 +123,25 @@ All blueprints are up-to-date!`);
       if (typeof to !== 'string') {
         let latestVersion = `${blueprintUpdate.latestVersion} (latest)`;
 
-        let answer = await inquirer.prompt([{
-          type: 'list',
-          message: 'Do you want the latest version?',
-          name: 'choice',
-          choices: [
-            latestVersion,
-            'SemVer string'
-          ]
-        }]);
+        let answer = await inquirer.prompt([
+          {
+            type: 'list',
+            message: 'Do you want the latest version?',
+            name: 'choice',
+            choices: [latestVersion, 'SemVer string']
+          }
+        ]);
 
         if (answer.choice === latestVersion) {
           to = defaultTo;
         } else {
-          answer = await inquirer.prompt([{
-            type: 'input',
-            message: 'What version?',
-            name: 'semver'
-          }]);
+          answer = await inquirer.prompt([
+            {
+              type: 'input',
+              message: 'What version?',
+              name: 'semver'
+            }
+          ]);
 
           to = answer.semver;
         }

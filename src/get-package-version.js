@@ -1,9 +1,9 @@
 'use strict';
 
-module.exports = function getPackageVersion({
-  dependencies,
-  devDependencies
-}, packageName) {
+module.exports = function getPackageVersion(
+  { dependencies, devDependencies },
+  packageName
+) {
   let allDeps = Object.assign({}, dependencies, devDependencies);
 
   let packageVersion = allDeps[packageName];

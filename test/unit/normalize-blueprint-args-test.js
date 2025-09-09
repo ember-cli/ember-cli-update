@@ -4,8 +4,8 @@ const { describe, it } = require('../helpers/mocha');
 const { expect } = require('../helpers/chai');
 const normalizeBlueprintArgs = require('../../src/normalize-blueprint-args');
 
-describe(normalizeBlueprintArgs, function() {
-  it('copies if missing', function() {
+describe(normalizeBlueprintArgs, function () {
+  it('copies if missing', function () {
     let blueprintArgs = normalizeBlueprintArgs({
       blueprintName: 'foo'
     });
@@ -16,7 +16,7 @@ describe(normalizeBlueprintArgs, function() {
     });
   });
 
-  it('ignores if present', function() {
+  it('ignores if present', function () {
     let blueprintArgs = normalizeBlueprintArgs({
       packageName: 'bar',
       blueprintName: 'foo'

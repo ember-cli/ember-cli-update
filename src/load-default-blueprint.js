@@ -29,7 +29,10 @@ function loadDefaultBlueprint(projectOptions = [], version) {
     if (projectOptions.includes('yarn')) {
       options.push('--yarn');
     }
-    if (!projectOptions.includes('welcome') || projectOptions.includes('addon')) {
+    if (
+      !projectOptions.includes('welcome') ||
+      projectOptions.includes('addon')
+    ) {
       // Why do addons always have --no-welcome?
       options.push('--no-welcome');
     }
@@ -40,7 +43,7 @@ function loadDefaultBlueprint(projectOptions = [], version) {
     name,
     version,
     outputRepo: getRemoteUrl(projectOptions),
-    ...codemodsSource ? { codemodsSource } : {},
+    ...(codemodsSource ? { codemodsSource } : {}),
     options,
     isBaseBlueprint: true
   });

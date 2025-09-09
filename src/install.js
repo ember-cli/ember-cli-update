@@ -42,7 +42,10 @@ module.exports = async function install({
   let blueprintName = _blueprintName;
 
   if (!blueprintName) {
-    let defaultBlueprintOverride = await getBlueprintNameOverride(path || packageName, cwd);
+    let defaultBlueprintOverride = await getBlueprintNameOverride(
+      path || packageName,
+      cwd
+    );
 
     blueprintName = defaultBlueprintOverride || packageName;
   }
@@ -71,7 +74,7 @@ module.exports = async function install({
     version
   });
 
-  if (!await loadBlueprintFile(emberCliUpdateJsonPath)) {
+  if (!(await loadBlueprintFile(emberCliUpdateJsonPath))) {
     await bootstrap({ cwd });
   }
 

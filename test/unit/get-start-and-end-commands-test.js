@@ -9,9 +9,7 @@ const utils = require('../../src/utils');
 const loadSafeBlueprint = require('../../src/load-safe-blueprint');
 const loadDefaultBlueprint = require('../../src/load-default-blueprint');
 
-const {
-  getArgs: _getArgs
-} = _getStartAndEndCommands;
+const { getArgs: _getArgs } = _getStartAndEndCommands;
 
 const projectName = 'my-custom-project';
 const startVersion = '0.0.1';
@@ -29,50 +27,65 @@ const baseBlueprint = loadDefaultBlueprint([], baseVersion);
 const defaultStartBlueprint = loadDefaultBlueprint([], startVersion);
 const defaultEndBlueprint = loadDefaultBlueprint([], endVersion);
 
-describe(_getStartAndEndCommands, function() {
+describe(_getStartAndEndCommands, function () {
   let npxStub;
   let spawnStub;
   let readdirStub;
   let installAddonBlueprintStub;
   let appendNodeModulesIgnoreStub;
 
-  beforeEach(function() {
+  beforeEach(function () {
     npxStub = sinon.stub(_getStartAndEndCommands, 'npx').returns('test npx');
-    spawnStub = sinon.stub(_getStartAndEndCommands, 'spawn').returns('test spawn');
+    spawnStub = sinon
+      .stub(_getStartAndEndCommands, 'spawn')
+      .returns('test spawn');
     readdirStub = sinon.stub(utils, 'readdir').resolves(['foo']);
-    installAddonBlueprintStub = sinon.stub(_getStartAndEndCommands, 'installAddonBlueprint').resolves();
-    appendNodeModulesIgnoreStub = sinon.stub(_getStartAndEndCommands, 'appendNodeModulesIgnore').resolves();
+    installAddonBlueprintStub = sinon
+      .stub(_getStartAndEndCommands, 'installAddonBlueprint')
+      .resolves();
+    appendNodeModulesIgnoreStub = sinon
+      .stub(_getStartAndEndCommands, 'appendNodeModulesIgnore')
+      .resolves();
   });
 
-  afterEach(function() {
+  afterEach(function () {
     sinon.restore();
   });
 
   function getStartAndEndCommands(options) {
-    return _getStartAndEndCommands(Object.assign({
-      packageJson: { name: projectName },
-      startBlueprint: defaultStartBlueprint,
-      endBlueprint: defaultEndBlueprint
-    }, options));
+    return _getStartAndEndCommands(
+      Object.assign(
+        {
+          packageJson: { name: projectName },
+          startBlueprint: defaultStartBlueprint,
+          endBlueprint: defaultEndBlueprint
+        },
+        options
+      )
+    );
   }
 
-  it('throws if base blueprint is not marked as such', function() {
-    let f = () => getStartAndEndCommands({
-      baseBlueprint: {}
-    });
+  it('throws if base blueprint is not marked as such', function () {
+    let f = () =>
+      getStartAndEndCommands({
+        baseBlueprint: {}
+      });
 
-    expect(f).to.throw('The intended base blueprint is not actually a base blueprint.');
+    expect(f).to.throw(
+      'The intended base blueprint is not actually a base blueprint.'
+    );
   });
 
-  it('throws if two layers of base blueprints', function() {
-    let f = () => getStartAndEndCommands({
-      baseBlueprint
-    });
+  it('throws if two layers of base blueprints', function () {
+    let f = () =>
+      getStartAndEndCommands({
+        baseBlueprint
+      });
 
     expect(f).to.throw('You supplied two layers of base blueprints.');
   });
 
-  it('returns an options object', function() {
+  it('returns an options object', function () {
     let options = getStartAndEndCommands();
 
     expect(options.createProjectFromCache).to.be.a('function');
@@ -98,7 +111,7 @@ describe(_getStartAndEndCommands, function() {
     });
   });
 
-  it('can create a project from cache', async function() {
+  it('can create a project from cache', async function () {
     let { createProjectFromCache } = getStartAndEndCommands();
 
     let createProject = createProjectFromCache({
@@ -109,30 +122,33 @@ describe(_getStartAndEndCommands, function() {
       }
     });
 
-    sinon.stub(utils, 'require')
+    sinon
+      .stub(utils, 'require')
       .withArgs(path.join(blueprintPath, 'package'))
       .returns({ keywords: ['ember-blueprint'] });
 
     expect(await createProject(cwd)).to.equal(projectRoot);
 
-    expect(spawnStub.args).to.deep.equal([[
-      'node',
+    expect(spawnStub.args).to.deep.equal([
       [
-        path.normalize(`${packageRoot}/bin/ember`),
-        'new',
-        projectName,
-        '--skip-git',
-        '--skip-npm',
-        '-b',
-        'app'
-      ],
-      {
-        cwd
-      }
-    ]]);
+        'node',
+        [
+          path.normalize(`${packageRoot}/bin/ember`),
+          'new',
+          projectName,
+          '--skip-git',
+          '--skip-npm',
+          '-b',
+          'app'
+        ],
+        {
+          cwd
+        }
+      ]
+    ]);
   });
 
-  it('can create a project from remote', async function() {
+  it('can create a project from remote', async function () {
     let { createProjectFromRemote } = getStartAndEndCommands();
 
     let createProject = createProjectFromRemote({
@@ -144,25 +160,27 @@ describe(_getStartAndEndCommands, function() {
 
     expect(await createProject(cwd)).to.equal(projectRoot);
 
-    expect(npxStub.args).to.deep.equal([[
+    expect(npxStub.args).to.deep.equal([
       [
-        '-p',
-        `${packageName}@${packageVersion}`,
-        commandName,
-        'new',
-        projectName,
-        '--skip-git',
-        '--skip-npm',
-        '-b',
-        'app'
-      ],
-      {
-        cwd
-      }
-    ]]);
+        [
+          '-p',
+          `${packageName}@${packageVersion}`,
+          commandName,
+          'new',
+          projectName,
+          '--skip-git',
+          '--skip-npm',
+          '-b',
+          'app'
+        ],
+        {
+          cwd
+        }
+      ]
+    ]);
   });
 
-  it('can create a project without a blueprint', async function() {
+  it('can create a project without a blueprint', async function () {
     let { createProjectFromRemote } = getStartAndEndCommands();
 
     let createProject = createProjectFromRemote({
@@ -174,8 +192,8 @@ describe(_getStartAndEndCommands, function() {
     expect(npxStub).to.not.be.called;
   });
 
-  describe('custom blueprint', function() {
-    it('returns an options object - base default', async function() {
+  describe('custom blueprint', function () {
+    it('returns an options object - base default', async function () {
       let options = getStartAndEndCommands({
         baseBlueprint,
         startBlueprint: {
@@ -217,7 +235,7 @@ describe(_getStartAndEndCommands, function() {
       });
     });
 
-    it('returns an options object - base custom', async function() {
+    it('returns an options object - base custom', async function () {
       let options = getStartAndEndCommands({
         baseBlueprint: {
           version: baseVersion,
@@ -268,7 +286,7 @@ describe(_getStartAndEndCommands, function() {
       });
     });
 
-    it('can create a project from cache', async function() {
+    it('can create a project from cache', async function () {
       let { createProjectFromCache } = getStartAndEndCommands();
 
       let createProject = createProjectFromCache({
@@ -282,36 +300,43 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
-      sinon.stub(utils, 'require')
+      sinon
+        .stub(utils, 'require')
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-blueprint'] });
 
       expect(await createProject(cwd)).to.equal(projectRoot);
 
-      expect(spawnStub.args).to.deep.equal([[
-        'node',
+      expect(spawnStub.args).to.deep.equal([
         [
-          path.normalize(`${packageRoot}/bin/ember`),
-          'new',
-          projectName,
-          '--skip-git',
-          '--skip-npm',
-          '-b',
-          blueprintPath
-        ],
-        {
-          cwd
-        }
-      ]]);
+          'node',
+          [
+            path.normalize(`${packageRoot}/bin/ember`),
+            'new',
+            projectName,
+            '--skip-git',
+            '--skip-npm',
+            '-b',
+            blueprintPath
+          ],
+          {
+            cwd
+          }
+        ]
+      ]);
 
       expect(installAddonBlueprintStub).to.not.be.called;
 
-      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        projectRoot
-      }]]);
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([
+        [
+          {
+            projectRoot
+          }
+        ]
+      ]);
     });
 
-    it('can create a project from remote', async function() {
+    it('can create a project from remote', async function () {
       let { createProjectFromRemote } = getStartAndEndCommands();
 
       let createProject = createProjectFromRemote({
@@ -324,35 +349,42 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
-      sinon.stub(utils, 'require')
+      sinon
+        .stub(utils, 'require')
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-blueprint'] });
 
       expect(await createProject(cwd)).to.equal(projectRoot);
 
-      expect(npxStub.args).to.deep.equal([[
+      expect(npxStub.args).to.deep.equal([
         [
-          `${packageName}@latest`,
-          'new',
-          projectName,
-          '--skip-git',
-          '--skip-npm',
-          '-b',
-          blueprintPath
-        ],
-        {
-          cwd
-        }
-      ]]);
+          [
+            `${packageName}@latest`,
+            'new',
+            projectName,
+            '--skip-git',
+            '--skip-npm',
+            '-b',
+            blueprintPath
+          ],
+          {
+            cwd
+          }
+        ]
+      ]);
 
       expect(installAddonBlueprintStub).to.not.be.called;
 
-      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        projectRoot
-      }]]);
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([
+        [
+          {
+            projectRoot
+          }
+        ]
+      ]);
     });
 
-    it('can install an addon blueprint from cache', async function() {
+    it('can install an addon blueprint from cache', async function () {
       let { createProjectFromCache } = getStartAndEndCommands();
 
       readdirStub.resolves([]);
@@ -368,7 +400,8 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
-      sinon.stub(utils, 'require')
+      sinon
+        .stub(utils, 'require')
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-addon'] });
 
@@ -393,21 +426,29 @@ describe(_getStartAndEndCommands, function() {
         ]
       ]);
 
-      expect(installAddonBlueprintStub.args).to.deep.equal([[{
-        projectRoot,
-        blueprint: {
-          path: blueprintPath,
-          options: []
-        },
-        packageManager: 'npm'
-      }]]);
+      expect(installAddonBlueprintStub.args).to.deep.equal([
+        [
+          {
+            projectRoot,
+            blueprint: {
+              path: blueprintPath,
+              options: []
+            },
+            packageManager: 'npm'
+          }
+        ]
+      ]);
 
-      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        projectRoot
-      }]]);
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([
+        [
+          {
+            projectRoot
+          }
+        ]
+      ]);
     });
 
-    it('can install an addon blueprint from remote', async function() {
+    it('can install an addon blueprint from remote', async function () {
       let { createProjectFromRemote } = getStartAndEndCommands();
 
       readdirStub.resolves([]);
@@ -422,7 +463,8 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
-      sinon.stub(utils, 'require')
+      sinon
+        .stub(utils, 'require')
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-addon'] });
 
@@ -448,21 +490,29 @@ describe(_getStartAndEndCommands, function() {
         ]
       ]);
 
-      expect(installAddonBlueprintStub.args).to.deep.equal([[{
-        projectRoot,
-        blueprint: {
-          path: blueprintPath,
-          options: []
-        },
-        packageManager: 'npm'
-      }]]);
+      expect(installAddonBlueprintStub.args).to.deep.equal([
+        [
+          {
+            projectRoot,
+            blueprint: {
+              path: blueprintPath,
+              options: []
+            },
+            packageManager: 'npm'
+          }
+        ]
+      ]);
 
-      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        projectRoot
-      }]]);
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([
+        [
+          {
+            projectRoot
+          }
+        ]
+      ]);
     });
 
-    it('falls back to safe project name if invalid', async function() {
+    it('falls back to safe project name if invalid', async function () {
       let { createProjectFromRemote } = getStartAndEndCommands();
 
       readdirStub.resolves([]);
@@ -477,7 +527,8 @@ describe(_getStartAndEndCommands, function() {
         }
       });
 
-      sinon.stub(utils, 'require')
+      sinon
+        .stub(utils, 'require')
         .withArgs(path.join(blueprintPath, 'package'))
         .returns({ keywords: ['ember-addon'] });
 
@@ -503,23 +554,31 @@ describe(_getStartAndEndCommands, function() {
         }
       ]);
 
-      expect(installAddonBlueprintStub.args).to.deep.equal([[{
-        projectRoot: path.join(cwd, 'my-project'),
-        blueprint: {
-          path: blueprintPath,
-          options: []
-        },
-        packageManager: 'npm'
-      }]]);
+      expect(installAddonBlueprintStub.args).to.deep.equal([
+        [
+          {
+            projectRoot: path.join(cwd, 'my-project'),
+            blueprint: {
+              path: blueprintPath,
+              options: []
+            },
+            packageManager: 'npm'
+          }
+        ]
+      ]);
 
-      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([[{
-        projectRoot: path.join(cwd, 'my-project')
-      }]]);
+      expect(appendNodeModulesIgnoreStub.args).to.deep.equal([
+        [
+          {
+            projectRoot: path.join(cwd, 'my-project')
+          }
+        ]
+      ]);
     });
   });
 
-  describe('init blueprint', function() {
-    it('returns an options object - default', function() {
+  describe('init blueprint', function () {
+    it('returns an options object - default', function () {
       let options = getStartAndEndCommands({
         startBlueprint: null
       });
@@ -547,7 +606,7 @@ describe(_getStartAndEndCommands, function() {
       });
     });
 
-    it('returns an options object - custom', async function() {
+    it('returns an options object - custom', async function () {
       let options = getStartAndEndCommands({
         baseBlueprint,
         startBlueprint: null,
@@ -584,7 +643,7 @@ describe(_getStartAndEndCommands, function() {
     });
   });
 
-  describe(_getArgs, function() {
+  describe(_getArgs, function () {
     function getArgs(options) {
       return _getArgs({
         projectName,
@@ -593,7 +652,7 @@ describe(_getStartAndEndCommands, function() {
       });
     }
 
-    it('works for default app', function() {
+    it('works for default app', function () {
       let blueprint = loadDefaultBlueprint(['welcome']);
 
       let args = getArgs({
@@ -610,7 +669,7 @@ describe(_getStartAndEndCommands, function() {
       ]);
     });
 
-    it('works for default addon', function() {
+    it('works for default addon', function () {
       let blueprint = loadDefaultBlueprint(['addon']);
 
       let args = getArgs({
@@ -628,7 +687,7 @@ describe(_getStartAndEndCommands, function() {
       ]);
     });
 
-    it('works for scoped project', function() {
+    it('works for scoped project', function () {
       let blueprint = loadDefaultBlueprint(['welcome']);
 
       let args = getArgs({
@@ -647,7 +706,7 @@ describe(_getStartAndEndCommands, function() {
       ]);
     });
 
-    it('works for custom blueprint', function() {
+    it('works for custom blueprint', function () {
       let blueprint = loadSafeBlueprint({
         path: '/path/to/my-blueprint'
       });
@@ -666,13 +725,10 @@ describe(_getStartAndEndCommands, function() {
       ]);
     });
 
-    it('handles options', function() {
+    it('handles options', function () {
       let blueprint = {
         ...loadDefaultBlueprint(['welcome']),
-        options: [
-          '--my-option-1',
-          '--my-option-2'
-        ]
+        options: ['--my-option-1', '--my-option-2']
       };
 
       let args = getArgs({

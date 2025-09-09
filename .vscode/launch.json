@@ -18,9 +18,7 @@
       "env": {
         "DEBUG": "ember-cli-update,boilerplate-update,git-diff-apply"
       },
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
+      "skipFiles": ["<node_internals>/**"],
       "outputCapture": "std"
     },
     {
@@ -28,9 +26,7 @@
       "request": "attach",
       "name": "Attach",
       "port": 9229,
-      "skipFiles": [
-        "<node_internals>/**"
-      ]
+      "skipFiles": ["<node_internals>/**"]
     }
   ]
 }

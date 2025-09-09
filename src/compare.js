@@ -29,24 +29,20 @@ module.exports = async function compare({
   let packageInfo;
 
   if (_blueprint) {
-    let {
-      packageInfo: _packageInfo,
-      existingBlueprint
-    } = await getBlueprintFromArgs({
-      cwd,
-      emberCliUpdateJson,
-      packageName,
-      blueprint: _blueprint,
-      to
-    });
+    let { packageInfo: _packageInfo, existingBlueprint } =
+      await getBlueprintFromArgs({
+        cwd,
+        emberCliUpdateJson,
+        packageName,
+        blueprint: _blueprint,
+        to
+      });
 
     packageInfo = _packageInfo;
     blueprint = existingBlueprint;
   } else {
     if (blueprints.length) {
-      let {
-        blueprint: _blueprint
-      } = await chooseBlueprintUpdates({
+      let { blueprint: _blueprint } = await chooseBlueprintUpdates({
         cwd,
         emberCliUpdateJson,
         compare: true
@@ -70,9 +66,7 @@ module.exports = async function compare({
     });
   }
 
-  let {
-    promise
-  } = await boilerplateUpdate({
+  let { promise } = await boilerplateUpdate({
     cwd,
     startVersion: blueprint.version,
     endVersion: packageInfo.version,

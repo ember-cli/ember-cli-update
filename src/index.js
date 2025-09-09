@@ -39,10 +39,7 @@ async function _resolvePackage(blueprint, url, range) {
     return;
   }
 
-  let {
-    version,
-    path
-  } = await resolvePackage({
+  let { version, path } = await resolvePackage({
     name: blueprint.packageName,
     url,
     range
@@ -89,7 +86,11 @@ module.exports = async function emberCliUpdate({
 
     packageName = parsedPackage.name;
     if (!packageName) {
-      let downloadedPackage = await downloadPackage(null, packageUrl, defaultTo);
+      let downloadedPackage = await downloadPackage(
+        null,
+        packageUrl,
+        defaultTo
+      );
       packageName = downloadedPackage.name;
     }
     let blueprintName;
@@ -99,7 +100,11 @@ module.exports = async function emberCliUpdate({
       blueprintName = packageName;
     }
 
-    let existingBlueprint = findBlueprint(emberCliUpdateJson, packageName, blueprintName);
+    let existingBlueprint = findBlueprint(
+      emberCliUpdateJson,
+      packageName,
+      blueprintName
+    );
     if (existingBlueprint) {
       blueprint = existingBlueprint;
     } else {
@@ -122,7 +127,9 @@ module.exports = async function emberCliUpdate({
     }
 
     if (!blueprint.version) {
-      throw new Error('A custom blueprint cannot detect --from. You must supply it.');
+      throw new Error(
+        'A custom blueprint cannot detect --from. You must supply it.'
+      );
     }
   } else if (blueprints.length) {
     let {
@@ -179,21 +186,18 @@ module.exports = async function emberCliUpdate({
 
   if (resolveConflicts) {
     // eslint-disable-next-line no-console
-    console.warn('`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.');
+    console.warn(
+      '`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.'
+    );
   }
 
   let endBlueprint;
 
-  let {
-    promise,
-    resolveConflictsProcess
-  } = await boilerplateUpdate({
+  let { promise, resolveConflictsProcess } = await boilerplateUpdate({
     cwd,
-    projectOptions: ({ packageJson }) => getProjectOptions(packageJson, blueprint),
-    mergeOptions: async function mergeOptions({
-      packageJson,
-      projectOptions
-    }) {
+    projectOptions: ({ packageJson }) =>
+      getProjectOptions(packageJson, blueprint),
+    mergeOptions: async function mergeOptions({ packageJson, projectOptions }) {
       let startBlueprint = { ...blueprint };
       endBlueprint = { ...blueprint };
       delete endBlueprint.version;
@@ -230,7 +234,7 @@ module.exports = async function emberCliUpdate({
   });
 
   return {
-    promise: (async() => {
+    promise: (async () => {
       let result = await promise;
 
       await saveBlueprint({

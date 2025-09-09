@@ -66,6 +66,9 @@ importers:
       eslint:
         specifier: ^8.16.0
         version: 8.57.1
+      eslint-config-prettier:
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@8.57.1)
       eslint-config-sane:
         specifier: ^1.0.2
         version: 1.0.2(eslint-plugin-prefer-let@3.0.1)(eslint@8.57.1)
@@ -96,6 +99,9 @@ importers:
       mocha-helpers:
         specifier: ^6.2.1
         version: 6.3.0
+      prettier:
+        specifier: ^3.6.2
+        version: 3.6.2
       release-it:
         specifier: ^15.5.0
         version: 15.11.0(encoding@0.1.13)
@@ -1956,6 +1962,12 @@ packages:
     resolution: {integrity: sha512-qFcX0XJkdg+PB3xjZZG/wKSuT1PnQWx57+TVSjIMmILd2yC/6ByYElPwJnslDsuWuSAp4AwJGumarAAmJch5Kw==}
     engines: {node: '>=4.0'}
     hasBin: true
+
+  eslint-config-prettier@10.1.8:
+    resolution: {integrity: sha512-82GZUjRS0p/jganf6q1rEO25VSoHH0hKPCTrgillPjdI/3bgBhAE1QzHrHTizjpRvy6pGAvKjDJtk2pF9NDq8w==}
+    hasBin: true
+    peerDependencies:
+      eslint: '>=7.0.0'
 
   eslint-config-sane-node@1.1.1:
     resolution: {integrity: sha512-scCanxuZrk9dvO+PPE5HwtrCyfovIvS+jIpKLtK81/VE9bRF6r9z5B8xxt1mpJF5brCSiIoAS0vyxnpJ0gxFUw==}
@@ -4253,6 +4265,11 @@ packages:
   prepend-http@2.0.0:
     resolution: {integrity: sha512-ravE6m9Atw9Z/jjttRUZ+clIXogdghyZAuWJ3qEzjT+jI/dL1ifAqhZeC5VHzQp1MSt1+jxKkFNemj/iO7tVUA==}
     engines: {node: '>=4'}
+
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
+    engines: {node: '>=14'}
+    hasBin: true
 
   printf@0.6.1:
     resolution: {integrity: sha512-is0ctgGdPJ5951KulgfzvHGwJtZ5ck8l042vRkV6jrkpBzTmb/lueTqguWHy2JfVA+RY6gFVlaZgUS0j7S/dsw==}
@@ -7831,6 +7848,10 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
+  eslint-config-prettier@10.1.8(eslint@8.57.1):
+    dependencies:
+      eslint: 8.57.1
+
   eslint-config-sane-node@1.1.1(eslint-config-sane@1.0.2(eslint-plugin-prefer-let@3.0.1)(eslint@8.57.1))(eslint-plugin-json-files@1.5.0(eslint@8.57.1))(eslint-plugin-node@11.1.0(eslint@8.57.1)):
     dependencies:
       eslint-config-sane: 1.0.2(eslint-plugin-prefer-let@3.0.1)(eslint@8.57.1)
@@ -10620,6 +10641,8 @@ snapshots:
   prelude-ls@1.2.1: {}
 
   prepend-http@2.0.0: {}
+
+  prettier@3.6.2: {}
 
   printf@0.6.1: {}
 
