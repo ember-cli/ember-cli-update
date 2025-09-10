@@ -52,7 +52,6 @@
   },
   "devDependencies": {
     "@kellyselden/node-template": "3.0.0",
-    "@release-it-plugins/lerna-changelog": "^5.0.0",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
     "chai-fs": "^2.0.0",
@@ -68,33 +67,15 @@
     "mocha": "^10.0.0",
     "mocha-helpers": "^6.2.1",
     "prettier": "^3.6.2",
-    "release-it": "^15.5.0",
+    "release-plan": "^0.17.2",
     "renovate-config-standard": "2.1.2",
     "sinon": "^14.0.0",
     "sinon-chai": "^3.7.0",
     "standard-node-template": "3.0.0",
     "yargs-help-output": "^2.0.0"
   },
+  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67",
   "engines": {
     "node": ">=20"
-  },
-  "release-it": {
-    "plugins": {
-      "@release-it-plugins/lerna-changelog": {
-        "infile": "CHANGELOG.md",
-        "launchEditor": true
-      }
-    },
-    "git": {
-      "tagName": "v${version}"
-    },
-    "github": {
-      "release": true,
-      "tokenRef": "GITHUB_AUTH"
-    },
-    "npm": {
-      "publish": false
-    }
-  },
-  "packageManager": "pnpm@10.15.1+sha512.34e538c329b5553014ca8e8f4535997f96180a1d0f614339357449935350d924e22f8614682191264ec33d1462ac21561aff97f6bb18065351c162c7e8f6de67"
+  }
 }
