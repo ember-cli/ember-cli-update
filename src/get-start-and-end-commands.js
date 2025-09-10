@@ -11,7 +11,7 @@ const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('./debug');
 const npm = require('boilerplate-update/src/npm');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
-const { glimmerPackageName } = require('./constants');
+const { glimmerPackageName, defaultAddonPackageName, defaultAppPackageName } = require('./constants');
 const hasYarn = require('./has-yarn');
 
 const nodeModulesIgnore = `
@@ -97,22 +97,29 @@ module.exports = function getStartAndEndCommands({
 async function isDefaultAddonBlueprint(blueprint) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
-  let isDefaultAddonBlueprint;
+  if (blueprint.packageName === defaultAppPackageName) {
+    return false;
+  }
+
+  if (blueprint.packageName === defaultAddonPackageName) {
+    return true;
+  }
 
   if (isCustomBlueprint) {
-    let keywords;
+    let keywords = [];
+
     if (blueprint.path) {
       keywords = utils.require(path.join(blueprint.path, 'package')).keywords;
     } else {
-      keywords = await npm.json('v', blueprint.packageName, 'keywords');
+      let packageInfo = await npm.json('v', blueprint.packageName);
+
+      keywords = packageInfo.keywords ?? [];
     }
 
-    isDefaultAddonBlueprint = !(
-      keywords && keywords.includes('ember-blueprint')
-    );
+    return !keywords.includes('ember-blueprint');
   }
 
-  return isDefaultAddonBlueprint;
+  return false;
 }
 
 function getArgs({ projectName, directoryName, blueprint }) {
