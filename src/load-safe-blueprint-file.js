@@ -32,7 +32,6 @@ async function loadSafeBlueprintFile(emberCliUpdateJsonPath) {
   if ('schemaVersion' in emberCliUpdateJson) {
     if (emberCliUpdateJson.schemaVersion === 0) {
       // if (semver.lt(emberCliUpdateJson.schemaVersion, currentSchemaVersion)) {
-      // eslint-disable-next-line no-console
       console.warn(
         `Updating schemaVersion from ${emberCliUpdateJson.schemaVersion} to ${currentSchemaVersion}.`
       );

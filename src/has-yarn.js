@@ -13,6 +13,8 @@ module.exports = async function hasYarn(projectRoot) {
   try {
     await fs.access(path.join(projectRoot, 'yarn.lock'), fs.constants.F_OK);
     return true;
-  } catch (err) {}
+  } catch {
+    // do nothing
+  }
   return false;
 };

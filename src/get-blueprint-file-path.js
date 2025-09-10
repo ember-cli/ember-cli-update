@@ -25,7 +25,9 @@ async function getBlueprintRelativeFilePath(cwd) {
     if (packageJson['ember-addon'] && packageJson['ember-addon'].configPath) {
       configDir = packageJson['ember-addon'].configPath;
     }
-  } catch (err) {}
+  } catch {
+    // do nothing
+  }
 
   return path.join(configDir, 'ember-cli-update.json');
 }

@@ -20,7 +20,9 @@ async function loadDefaultBlueprintFromDisk({ cwd, version }) {
   let packageJson;
   try {
     packageJson = utils.require(path.join(cwd, 'package'));
-  } catch (err) {}
+  } catch {
+    // do nothing
+  }
 
   let projectOptions;
 

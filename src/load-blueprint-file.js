@@ -6,7 +6,9 @@ async function loadBlueprintFile(emberCliUpdateJsonPath) {
   try {
     let emberCliUpdateJson = await fs.readJson(emberCliUpdateJsonPath);
     return emberCliUpdateJson;
-  } catch (err) {}
+  } catch {
+    // do nothing
+  }
 }
 
 module.exports = loadBlueprintFile;

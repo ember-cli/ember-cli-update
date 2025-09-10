@@ -91,7 +91,6 @@ async function chooseBlueprintUpdates({
     );
 
     if (areAllUpToDate) {
-      // eslint-disable-next-line no-console
       console.log(`${blueprintUpdates.map(formatBlueprintLine).join(`
 `)}
 

@@ -46,7 +46,7 @@ async function parseBlueprintPackage({ cwd = '.', packageName }) {
       new URL(packageName);
       url = packageName;
       location = packageName;
-    } catch (err) {
+    } catch {
       name = packageName;
     }
   }
