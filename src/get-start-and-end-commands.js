@@ -222,7 +222,7 @@ function createProject(runEmber) {
 
         try {
           await __runEmber();
-        } catch (err) {
+        } catch {
           // We currently do not support a name of `...`.
           projectName = 'my-project';
 
@@ -305,7 +305,10 @@ async function appendNodeModulesIgnore({ projectRoot }) {
     gitignore = await fs.readFile(path.join(projectRoot, '.gitignore'), 'utf8');
 
     isIgnoringNodeModules = /^\/?node_modules\/?$/m.test(gitignore);
-  } catch (err) {}
+  } catch {
+    // do nothing
+  }
+
   if (!isIgnoringNodeModules) {
     await fs.writeFile(
       path.join(projectRoot, '.gitignore'),

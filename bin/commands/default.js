@@ -47,7 +47,6 @@ module.exports.handler = async function handler(argv) {
     // since we are piping, not inheriting, the child process
     // doesn't have the power to close its parent
     if (ps) {
-      // eslint-disable-next-line no-process-exit
       process.exit();
     }
   } catch (err) {

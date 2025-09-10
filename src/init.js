@@ -132,7 +132,6 @@ module.exports = async function init({
   }
 
   if (resolveConflicts) {
-    // eslint-disable-next-line no-console
     console.warn(
       '`--resolve-conflicts` is deprecated. Please run `git mergetool` manually.'
     );
