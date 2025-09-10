@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   is-this-a-release:
-    name: "Is this a release?"
+    name: 'Is this a release?'
     runs-on: ubuntu-latest
     outputs:
       command: ${{ steps.check-release.outputs.command }}
@@ -57,7 +57,7 @@ jobs:
           node-version: 18
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - name: "Generate Explanation and Prep Changelogs"
+      - name: 'Generate Explanation and Prep Changelogs'
         id: explanation
         run: |
           set +e
@@ -83,7 +83,7 @@ jobs:
       - uses: peter-evans/create-pull-request@v7
         with:
           commit-message: "Prepare Release ${{ steps.explanation.outputs.new_version}} using 'release-plan'"
-          labels: "internal"
+          labels: 'internal'
           branch: release-preview
           title: Prepare Release ${{ steps.explanation.outputs.new_version }}
           body: |
