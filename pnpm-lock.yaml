@@ -49,8 +49,8 @@ importers:
         version: 17.7.2
     devDependencies:
       '@kellyselden/node-template':
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 6.11.1
+        version: 6.11.1
       chai:
         specifier: ^4.3.6
         version: 4.5.0
@@ -297,9 +297,9 @@ packages:
   '@jridgewell/trace-mapping@0.3.30':
     resolution: {integrity: sha512-GQ7Nw5G2lTu/BtHTKfXhKHok2WGetd4XYcVKGx00SjAk8GMwgJM3zr6zORiPGuOE+/vkc90KtTosSSvaCjKb2Q==}
 
-  '@kellyselden/node-template@3.0.0':
-    resolution: {integrity: sha512-PYbDGIQb+mNIBUXedVQsCoQr6C3S7A0HerxaIMYT/YYh7bca/yE0G8NNcQStInJzcPv/9zjYzGmCNd8lKf239A==}
-    engines: {node: '>=14.15'}
+  '@kellyselden/node-template@6.11.1':
+    resolution: {integrity: sha512-qeRU8u/RagTTRwphEIqK22YHHeis+9SFZXGdAihJ5HvncIjcO859spCeVntvE9MDQb8CyAJjZsKYGc98qr6jKA==}
+    engines: {node: '>=20.9'}
 
   '@manypkg/find-root@2.2.3':
     resolution: {integrity: sha512-jtEZKczWTueJYHjGpxU3KJQ08Gsrf4r6Q2GjmPp/RGk5leeYAA1eyDADSAF+KVCsQ6EwZd/FMcOFCoMhtqdCtQ==}
@@ -5227,7 +5227,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@kellyselden/node-template@3.0.0': {}
+  '@kellyselden/node-template@6.11.1': {}
 
   '@manypkg/find-root@2.2.3':
     dependencies:
