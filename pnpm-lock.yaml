@@ -109,8 +109,8 @@ importers:
         specifier: ^3.7.0
         version: 3.7.0(chai@4.5.0)(sinon@14.0.2)
       standard-node-template:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 3.3.0
+        version: 3.3.0
       yargs-help-output:
         specifier: ^2.0.0
         version: 2.0.1
@@ -4414,8 +4414,8 @@ packages:
     resolution: {integrity: sha512-o57Wcn66jMQvfHG1FlYbWeZWW/dHZhJXjpIcTfXldXEk5nz5lStPo3mK0OJQfGR3RbZUlbISexbljkJzuEj/8Q==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
 
-  standard-node-template@3.0.0:
-    resolution: {integrity: sha512-LJZZpCtM8OXIoLHh89TtzGHZoMRe099Exnt4PizmxVe5d55FZ3iH5uVhwXsr59d5Kn+sdNA6091dymdvdeHlsg==}
+  standard-node-template@3.3.0:
+    resolution: {integrity: sha512-yAa0J7s5kuxvDjQXHX0t2OczywnHXegEvi7sdINkvotgz7J+us5IDLWK4uoLIJbnYy6MMBrXOzH6rUA7nN8jHA==}
     engines: {node: '>=14.15'}
 
   static-extend@0.1.2:
@@ -10183,7 +10183,7 @@ snapshots:
     dependencies:
       minipass: 3.3.6
 
-  standard-node-template@3.0.0: {}
+  standard-node-template@3.3.0: {}
 
   static-extend@0.1.2:
     dependencies:
