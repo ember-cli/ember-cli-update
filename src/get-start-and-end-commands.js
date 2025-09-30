@@ -19,9 +19,6 @@ const nodeModulesIgnore = `
 /node_modules/
 `;
 
-// remove when node 8 is dropped
-const lastNode8Version = '3.16';
-
 module.exports = function getStartAndEndCommands({
   packageJson,
   baseBlueprint,
@@ -68,7 +65,7 @@ module.exports = function getStartAndEndCommands({
     // first version that supports blueprints with versions
     // `-b foo@1.2.3`
     // https://github.com/ember-cli/ember-cli/pull/8571
-    startRange = endRange = `>=3.11.0-beta.1 <${lastNode8Version}`;
+    startRange = endRange = `>=3.11.0-beta.1`;
   }
 
   return {
