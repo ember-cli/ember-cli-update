@@ -4,6 +4,7 @@ const checkForBlueprintUpdates = require('./check-for-blueprint-updates');
 const inquirer = require('inquirer');
 const loadSafeBlueprint = require('./load-safe-blueprint');
 const { defaultTo } = require('./constants');
+const semver = require('semver');
 
 /**
  * Format the string that is displayed when user is prompted for a blueprint
@@ -34,10 +35,10 @@ async function chooseBlueprint({ choicesByName, message }) {
  *
  * @param {string} cwd - Used in `checkForBlueprintUpdates` in order to generate url or path to it if on local disk
  * @param {object} emberCliUpdateJson - Use the `blueprints` property from this
- * @param {boolean} reset  - Optional
- * @param {boolean} compare - Optional
- * @param {boolean} codemods - Optional
- * @param {string} to - Optional (could be undefined).
+ * @param {boolean} [reset]
+ * @param {boolean} [compare]
+ * @param {boolean} [codemods]
+ * @param {string} [to] - Optional (could be undefined).
  * @returns {Promise<{blueprint: (*|{}), areAllUpToDate, to: string}>}
  */
 async function chooseBlueprintUpdates({
@@ -50,28 +51,28 @@ async function chooseBlueprintUpdates({
 }) {
   let existingBlueprint;
   let areAllUpToDate;
-
   let { blueprints } = emberCliUpdateJson;
 
   if (reset || compare || codemods) {
     let choicesByName = blueprints.reduce((choices, blueprint) => {
       let name = blueprint.packageName;
+
       choices[name] = {
         blueprint,
         choice: {
           name
         }
       };
+
       return choices;
     }, {});
 
-    let message;
+    let message = 'Which blueprint would you like to run codemods for?';
+
     if (reset) {
       message = 'Which blueprint would you like to reset?';
     } else if (compare) {
       message = 'Which blueprint would you like to compare?';
-    } else {
-      message = 'Which blueprint would you like to run codemods for?';
     }
 
     existingBlueprint = (
@@ -90,22 +91,35 @@ async function chooseBlueprintUpdates({
       blueprintUpdate => blueprintUpdate.isUpToDate
     );
 
-    if (areAllUpToDate) {
-      console.log(`${blueprintUpdates.map(formatBlueprintLine).join(`
-`)}
-
-All blueprints are up-to-date!`);
+    if (!to && areAllUpToDate) {
+      console.log(
+        `${blueprintUpdates.map(formatBlueprintLine).join('\n')}\n\nAll blueprints are up-to-date!`
+      );
     } else {
+      areAllUpToDate = false;
+
+      for (let update of blueprintUpdates) {
+        if (
+          update.blueprint.isBaseBlueprint &&
+          !!to &&
+          semver.gt(to, update.latestVersion)
+        ) {
+          update.isUpToDate = false;
+          update.latestVersion = to;
+        }
+      }
+
       let choicesByName = blueprintUpdates.reduce(
         (choices, blueprintUpdate) => {
           let name = formatBlueprintLine(blueprintUpdate);
+
           choices[name] = {
             blueprintUpdate,
             choice: {
-              name,
-              disabled: blueprintUpdate.isUpToDate
+              name
             }
           };
+
           return choices;
         },
         {}

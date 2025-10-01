@@ -57,11 +57,8 @@ module.exports = async function getProjectOptions(
   }
 
   let projectType = getProjectType(checkForDep, keywords);
-
   let options = [projectType];
-
   let cwd = process.cwd();
-
   let isYarn = await hasYarn(cwd);
 
   if (isYarn) {

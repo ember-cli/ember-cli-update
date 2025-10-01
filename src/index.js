@@ -1,5 +1,6 @@
 'use strict';
 
+const semver = require('semver');
 const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getVersions = require('boilerplate-update/src/get-versions');
@@ -19,15 +20,33 @@ const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const saveBlueprintFile = require('./save-blueprint-file');
 const resolvePackage = require('./resolve-package');
-const { defaultTo } = require('./constants');
+const {
+  defaultTo,
+  defaultPackageName,
+  defaultAppBlueprintName,
+  defaultAppPackageName
+} = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
+
+const EMBER_CLI_BLUEPRINT_VITE_BOUNDARY = '6.8.0-beta.1';
+
+/**
+ * @typedef {Object} Blueprint
+ * @property {string} name
+ * @property {string[]} options - args passed to the blueprint
+ * @property {string} packageName - The name of the package containing the blueprint
+ * @property {string} location
+ * @property {string} version
+ * @property {boolean} isBaseBlueprint
+ */
 
 /**
  * If `version` attribute exists in the `blueprint` object and URL is empty, skip. Otherwise resolve the details of
  * the blueprint
  *
- * @param {Object} blueprint - Expected to contain `name`, `options` array, `packageName`, `location`, and `version`
+ * @param {Blueprint} blueprint - Expected to contain `name`, `options` array, `packageName`, `location`, and `version`
  * attributes
  * @param {String} url - Optional parameter that links to package
  * @param {String} range - Version range i.e. 1.0.2
@@ -64,11 +83,11 @@ module.exports = async function emberCliUpdate({
   // so we can no longer look it up on the fly after the run.
   // We must rely on a lookup before the run.
   let emberCliUpdateJsonPath = await getBlueprintFilePath(cwd);
-
   let emberCliUpdateJson = await loadSafeBlueprintFile(emberCliUpdateJsonPath);
 
   let { blueprints } = emberCliUpdateJson;
 
+  /** @type {Blueprint} */
   let blueprint;
   let packageUrl;
 
@@ -77,14 +96,14 @@ module.exports = async function emberCliUpdate({
       packageName,
       blueprintName: _blueprint
     });
-
     let parsedPackage = await parseBlueprintPackage({
       cwd,
       packageName: blueprintArgs.packageName
     });
-    packageUrl = parsedPackage.url;
 
+    packageUrl = parsedPackage.url;
     packageName = parsedPackage.name;
+
     if (!packageName) {
       let downloadedPackage = await downloadPackage(
         null,
@@ -93,11 +112,11 @@ module.exports = async function emberCliUpdate({
       );
       packageName = downloadedPackage.name;
     }
-    let blueprintName;
+
+    let blueprintName = packageName;
+
     if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
       blueprintName = blueprintArgs.blueprintName;
-    } else {
-      blueprintName = packageName;
     }
 
     let existingBlueprint = findBlueprint(
@@ -105,9 +124,10 @@ module.exports = async function emberCliUpdate({
       packageName,
       blueprintName
     );
-    if (existingBlueprint) {
-      blueprint = existingBlueprint;
-    } else {
+
+    blueprint = existingBlueprint;
+
+    if (!existingBlueprint) {
       blueprint = loadSafeBlueprint({
         packageName,
         name: blueprintName,
@@ -164,8 +184,6 @@ module.exports = async function emberCliUpdate({
     packageUrl = parsedPackage.url;
   }
 
-  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
-
   let baseBlueprint = await getBaseBlueprint({
     cwd,
     blueprints,
@@ -190,27 +208,46 @@ module.exports = async function emberCliUpdate({
     );
   }
 
-  let endBlueprint;
+  /** @type {Blueprint} */
+  let startBlueprint = { ...blueprint };
+  /** @type {Blueprint} */
+  let endBlueprint = { ...blueprint };
+  delete endBlueprint.version;
 
   let { promise, resolveConflictsProcess } = await boilerplateUpdate({
     cwd,
     projectOptions: ({ packageJson }) =>
       getProjectOptions(packageJson, blueprint),
     mergeOptions: async function mergeOptions({ packageJson, projectOptions }) {
-      let startBlueprint = { ...blueprint };
-      endBlueprint = { ...blueprint };
-      delete endBlueprint.version;
+      if (isDefaultBlueprint(blueprint)) {
+        let packageName = getPackageName(projectOptions);
+        let versions = await getVersions(packageName);
+        let getTagVersion = _getTagVersion(versions, packageName);
 
-      if (isCustomBlueprint) {
+        endBlueprint.version = await getTagVersion(to);
+
+        if (
+          endBlueprint.packageName === defaultPackageName &&
+          endBlueprint.name === defaultAppBlueprintName &&
+          semver.gte(endBlueprint.version, EMBER_CLI_BLUEPRINT_VITE_BOUNDARY)
+        ) {
+          let { url } = await parseBlueprintPackage({
+            cwd,
+            packageName: defaultAppPackageName
+          });
+
+          endBlueprint.packageName = defaultAppPackageName;
+          endBlueprint.name = defaultAppPackageName;
+          delete endBlueprint.codemodsSource;
+          delete endBlueprint.outputRepo;
+
+          await _resolvePackage(endBlueprint, url, to);
+        }
+      } else {
         await Promise.all([
           _resolvePackage(startBlueprint, packageUrl, startBlueprint.version),
           _resolvePackage(endBlueprint, packageUrl, to)
         ]);
-      } else {
-        let packageName = getPackageName(projectOptions);
-        let versions = await getVersions(packageName);
-        let getTagVersion = _getTagVersion(versions, packageName);
-        endBlueprint.version = await getTagVersion(to);
       }
 
       let customDiffOptions = getStartAndEndCommands({
@@ -235,6 +272,20 @@ module.exports = async function emberCliUpdate({
   return {
     promise: (async () => {
       let result = await promise;
+
+      if (
+        endBlueprint.packageName === defaultAppPackageName &&
+        semver.gte(endBlueprint.version, EMBER_CLI_BLUEPRINT_VITE_BOUNDARY)
+      ) {
+        // Drop legacy ember-cli app blueprint from list of blueprints
+        emberCliUpdateJson.blueprints = emberCliUpdateJson.blueprints.filter(
+          ({ name, packageName }) =>
+            name !== defaultAppBlueprintName &&
+            packageName !== defaultPackageName
+        );
+
+        await saveBlueprintFile(emberCliUpdateJsonPath, emberCliUpdateJson);
+      }
 
       await saveBlueprint({
         emberCliUpdateJsonPath,
