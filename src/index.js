@@ -1,5 +1,6 @@
 'use strict';
 
+const semver = require('semver');
 const getProjectOptions = require('./get-project-options');
 const getPackageName = require('./get-package-name');
 const getVersions = require('boilerplate-update/src/get-versions');
@@ -19,9 +20,17 @@ const findBlueprint = require('./find-blueprint');
 const getBaseBlueprint = require('./get-base-blueprint');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
+const saveBlueprintFile = require('./save-blueprint-file');
 const resolvePackage = require('./resolve-package');
-const { defaultTo } = require('./constants');
+const {
+  defaultTo,
+  defaultPackageName,
+  defaultAppBlueprintName,
+  defaultAppPackageName
+} = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
+
+const EMBER_CLI_BLUEPRINT_VITE_BOUNDARY = '6.8.0-beta.1';
 
 /**
  * @typedef {Object} Blueprint
