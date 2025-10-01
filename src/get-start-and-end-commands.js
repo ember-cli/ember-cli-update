@@ -11,7 +11,11 @@ const overwriteBlueprintFiles = require('./overwrite-blueprint-files');
 const debug = require('./debug');
 const npm = require('boilerplate-update/src/npm');
 const mutatePackageJson = require('boilerplate-update/src/mutate-package-json');
-const { glimmerPackageName } = require('./constants');
+const {
+  glimmerPackageName,
+  defaultAddonPackageName,
+  defaultAppPackageName
+} = require('./constants');
 const hasYarn = require('./has-yarn');
 
 const nodeModulesIgnore = `
@@ -19,6 +23,34 @@ const nodeModulesIgnore = `
 /node_modules/
 `;
 
+/**
+ * @typedef {Object} StartAndEndCommandsResult
+ * @property {string} projectName
+ * @property {string} packageName - Always 'ember-cli'
+ * @property {string} commandName - Always 'ember'
+ * @property {Function} createProjectFromCache - Function to create project from cache
+ * @property {Function} createProjectFromRemote - Function to create project from remote
+ * @property {Object} startOptions - Start configuration options
+ * @property {Object} startOptions.baseBlueprint - Base blueprint for start
+ * @property {Object} startOptions.blueprint - Blueprint for start
+ * @property {string} startOptions.packageRange - Package range for start
+ * @property {Object} endOptions - End configuration options
+ * @property {Object} endOptions.baseBlueprint - Base blueprint for end
+ * @property {Object} endOptions.blueprint - Blueprint for end
+ * @property {string} endOptions.packageRange - Package range for end
+ */
+
+/**
+ * Creates start and end commands configuration for ember-cli-update process
+ *
+ * @param {Object} params - Configuration parameters
+ * @param {Object} params.packageJson - The package.json object of the project
+ * @param {Object} [params.baseBlueprint] - Base blueprint configuration object
+ * @param {Object} [params.startBlueprint] - Starting blueprint configuration object
+ * @param {Object} params.endBlueprint - Target blueprint configuration object
+ * @param {Object} [params.emberCliUpdateJson] - ember-cli-update.json configuration object
+ * @returns {StartAndEndCommandsResult} Configuration object with project details and command options
+ */
 module.exports = function getStartAndEndCommands({
   packageJson,
   baseBlueprint,
@@ -95,13 +127,23 @@ async function isDefaultAddonBlueprint(blueprint) {
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   let isDefaultAddonBlueprint;
+  if (blueprint.packageName === defaultAppPackageName) {
+    return false;
+  }
+
+  if (blueprint.packageName === defaultAddonPackageName) {
+    return true;
+  }
 
   if (isCustomBlueprint) {
     let keywords;
+
     if (blueprint.path) {
       keywords = utils.require(path.join(blueprint.path, 'package')).keywords;
     } else {
-      keywords = await npm.json('v', blueprint.packageName, 'keywords');
+      let packageInfo = await npm.json('v', blueprint.packageName);
+
+      keywords = packageInfo.keywords;
     }
 
     isDefaultAddonBlueprint = !(
