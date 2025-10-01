@@ -112,11 +112,11 @@ module.exports = async function emberCliUpdate({
       );
       packageName = downloadedPackage.name;
     }
-    let blueprintName;
+
+    let blueprintName = packageName;
+
     if (blueprintArgs.blueprintName !== blueprintArgs.packageName) {
       blueprintName = blueprintArgs.blueprintName;
-    } else {
-      blueprintName = packageName;
     }
 
     let existingBlueprint = findBlueprint(
@@ -124,9 +124,10 @@ module.exports = async function emberCliUpdate({
       packageName,
       blueprintName
     );
-    if (existingBlueprint) {
-      blueprint = existingBlueprint;
-    } else {
+
+    blueprint = existingBlueprint;
+
+    if (!existingBlueprint) {
       blueprint = loadSafeBlueprint({
         packageName,
         name: blueprintName,
