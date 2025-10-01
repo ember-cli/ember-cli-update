@@ -2,6 +2,13 @@
 
 const utils = require('./utils');
 const findBlueprint = require('./find-blueprint');
+const {
+  defaultPackageName,
+  defaultAppBlueprintName,
+  EMBER_LEGACY_BLUEPRINT_VERSION,
+  CLASSIC_BUILD_APP_BLUEPRINT
+} = require('./constants');
+const semver = require('semver');
 
 function addBlueprint(emberCliUpdateJson, blueprint) {
   emberCliUpdateJson.blueprints.push(blueprint);
@@ -65,6 +72,19 @@ async function saveBlueprint({ emberCliUpdateJsonPath, blueprint }) {
     addBlueprint(emberCliUpdateJson, savedBlueprint);
   } else {
     savedBlueprint.version = version;
+  }
+
+  if (
+    savedBlueprint.isBaseBlueprint &&
+    packageName === defaultPackageName &&
+    name === defaultAppBlueprintName &&
+    semver.gte(version, EMBER_LEGACY_BLUEPRINT_VERSION)
+  ) {
+    savedBlueprint.name = CLASSIC_BUILD_APP_BLUEPRINT;
+    delete savedBlueprint.packageName;
+    delete savedBlueprint.location;
+    delete savedBlueprint.codemodsSource;
+    delete savedBlueprint.outputRepo;
   }
 
   await utils.saveBlueprintFile(emberCliUpdateJsonPath, emberCliUpdateJson);

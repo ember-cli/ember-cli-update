@@ -20,8 +20,15 @@ const getBaseBlueprint = require('./get-base-blueprint');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
-const { defaultTo } = require('./constants');
+const {
+  defaultTo,
+  defaultAppBlueprintName,
+  defaultPackageName,
+  EMBER_LEGACY_BLUEPRINT_VERSION,
+  CLASSIC_BUILD_APP_BLUEPRINT
+} = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
+const semver = require('semver');
 
 /**
  * If `version` attribute exists in the `blueprint` object and URL is empty, skip. Otherwise resolve the details of
@@ -211,6 +218,18 @@ module.exports = async function emberCliUpdate({
         let versions = await getVersions(packageName);
         let getTagVersion = _getTagVersion(versions, packageName);
         endBlueprint.version = await getTagVersion(to);
+
+        if (
+          endBlueprint.isBaseBlueprint &&
+          packageName === defaultPackageName &&
+          endBlueprint.name === defaultAppBlueprintName &&
+          semver.gte(to, EMBER_LEGACY_BLUEPRINT_VERSION)
+        ) {
+          endBlueprint.name = CLASSIC_BUILD_APP_BLUEPRINT;
+          endBlueprint.packageName = CLASSIC_BUILD_APP_BLUEPRINT;
+
+          await _resolvePackage(endBlueprint, packageUrl, to);
+        }
       }
 
       let customDiffOptions = getStartAndEndCommands({
