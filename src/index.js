@@ -184,8 +184,6 @@ module.exports = async function emberCliUpdate({
     packageUrl = parsedPackage.url;
   }
 
-  let isCustomBlueprint = !isDefaultBlueprint(blueprint);
-
   let baseBlueprint = await getBaseBlueprint({
     cwd,
     blueprints,
@@ -214,25 +212,24 @@ module.exports = async function emberCliUpdate({
   let startBlueprint = { ...blueprint };
   /** @type {Blueprint} */
   let endBlueprint = { ...blueprint };
+  delete endBlueprint.version;
 
   let { promise, resolveConflictsProcess } = await boilerplateUpdate({
     cwd,
     projectOptions: ({ packageJson }) =>
       getProjectOptions(packageJson, blueprint),
     mergeOptions: async function mergeOptions({ packageJson, projectOptions }) {
-      delete endBlueprint.version;
+      if (isDefaultBlueprint(blueprint)) {
+        let packageName = getPackageName(projectOptions);
+        let versions = await getVersions(packageName);
+        let getTagVersion = _getTagVersion(versions, packageName);
 
-      if (isCustomBlueprint) {
+        endBlueprint.version = await getTagVersion(to);
+      } else {
         await Promise.all([
           _resolvePackage(startBlueprint, packageUrl, startBlueprint.version),
           _resolvePackage(endBlueprint, packageUrl, to)
         ]);
-      } else {
-      startBlueprint = { ...blueprint };
-        let packageName = getPackageName(projectOptions);
-        let versions = await getVersions(packageName);
-        let getTagVersion = _getTagVersion(versions, packageName);
-        endBlueprint.version = await getTagVersion(to);
       }
 
       let customDiffOptions = getStartAndEndCommands({
