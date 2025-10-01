@@ -13,6 +13,7 @@ function loadDefaultBlueprint(projectOptions = [], version) {
   let packageName = defaultPackageName;
   let name;
   let codemodsSource;
+
   if (projectOptions.includes('addon')) {
     name = defaultAddonBlueprintName;
     codemodsSource = 'ember-addon-codemods-manifest@1';
@@ -25,6 +26,7 @@ function loadDefaultBlueprint(projectOptions = [], version) {
   }
 
   let options = [];
+
   if (!projectOptions.includes('glimmer')) {
     if (projectOptions.includes('yarn')) {
       options.push('--yarn');

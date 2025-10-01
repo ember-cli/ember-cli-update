@@ -17,25 +17,29 @@ const isDefaultBlueprint = require('./is-default-blueprint');
  */
 async function getBaseBlueprint({ cwd, blueprints, blueprint }) {
   let baseBlueprint;
-
   let isCustomBlueprint = !isDefaultBlueprint(blueprint);
 
   if (isCustomBlueprint && !blueprint.isBaseBlueprint) {
     baseBlueprint = blueprints.find(b => b.isBaseBlueprint);
+
     if (baseBlueprint) {
       baseBlueprint = loadSafeBlueprint(baseBlueprint);
+
       let isCustomBlueprint = !isDefaultBlueprint(baseBlueprint);
+
       if (isCustomBlueprint) {
         if (baseBlueprint.location) {
           let parsedPackage = await parseBlueprintPackage({
             cwd,
             packageName: baseBlueprint.location
           });
+
           let downloadedPackage = await downloadPackage(
             baseBlueprint.packageName,
             parsedPackage.url,
             baseBlueprint.version
           );
+
           baseBlueprint.path = downloadedPackage.path;
         }
       }
