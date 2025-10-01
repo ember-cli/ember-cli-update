@@ -225,6 +225,24 @@ module.exports = async function emberCliUpdate({
         let getTagVersion = _getTagVersion(versions, packageName);
 
         endBlueprint.version = await getTagVersion(to);
+
+        if (
+          endBlueprint.packageName === defaultPackageName &&
+          endBlueprint.name === defaultAppBlueprintName &&
+          semver.gte(endBlueprint.version, EMBER_CLI_BLUEPRINT_VITE_BOUNDARY)
+        ) {
+          let { url } = await parseBlueprintPackage({
+            cwd,
+            packageName: defaultAppPackageName
+          });
+
+          endBlueprint.packageName = defaultAppPackageName;
+          endBlueprint.name = defaultAppPackageName;
+          delete endBlueprint.codemodsSource;
+          delete endBlueprint.outputRepo;
+
+          await _resolvePackage(endBlueprint, url, to);
+        }
       } else {
         await Promise.all([
           _resolvePackage(startBlueprint, packageUrl, startBlueprint.version),
@@ -254,6 +272,20 @@ module.exports = async function emberCliUpdate({
   return {
     promise: (async () => {
       let result = await promise;
+
+      if (
+        endBlueprint.packageName === defaultAppPackageName &&
+        semver.gte(endBlueprint.version, EMBER_CLI_BLUEPRINT_VITE_BOUNDARY)
+      ) {
+        // Drop legacy ember-cli app blueprint from list of blueprints
+        emberCliUpdateJson.blueprints = emberCliUpdateJson.blueprints.filter(
+          ({ name, packageName }) =>
+            name !== defaultAppBlueprintName &&
+            packageName !== defaultPackageName
+        );
+
+        await saveBlueprintFile(emberCliUpdateJsonPath, emberCliUpdateJson);
+      }
 
       await saveBlueprint({
         emberCliUpdateJsonPath,
