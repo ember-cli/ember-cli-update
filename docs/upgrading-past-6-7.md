@@ -1,6 +1,6 @@
 # Upgrading your Ember project past 6.7
 
-`ember-cli@6.8.0` is the first release to publish the default app blueprint as
+`ember-cli@6.7.0` is the first release to publish the default app blueprint as
 its own package [@ember-tooling/classic-build-app-blueprint][npm].
 
 [npm]: https://www.npmjs.com/package/@ember-tooling/classic-build-app-blueprint
