@@ -20,8 +20,13 @@ const getBaseBlueprint = require('./get-base-blueprint');
 const chooseBlueprintUpdates = require('./choose-blueprint-updates');
 const getBlueprintFilePath = require('./get-blueprint-file-path');
 const resolvePackage = require('./resolve-package');
-const { defaultTo } = require('./constants');
+const {
+  defaultTo,
+  defaultPackageName,
+  defaultAppBlueprintName
+} = require('./constants');
 const normalizeBlueprintArgs = require('./normalize-blueprint-args');
+const semver = require('semver');
 
 /**
  * If `version` attribute exists in the `blueprint` object and URL is empty, skip. Otherwise resolve the details of
@@ -211,6 +216,18 @@ module.exports = async function emberCliUpdate({
         let versions = await getVersions(packageName);
         let getTagVersion = _getTagVersion(versions, packageName);
         endBlueprint.version = await getTagVersion(to);
+
+        if (
+          packageName === defaultPackageName &&
+          endBlueprint.name === defaultAppBlueprintName &&
+          semver.gte(endBlueprint.version, '6.8.0')
+        ) {
+          console.log(
+            `You cannot use ember-cli-update to automatically upgrade past 6.7. Read the following documentation to find out how to proceed: https://github.com/ember-cli/ember-cli-update/blob/master/docs/upgrading-past-6-7-0.md `
+          );
+
+          process.exit(1);
+        }
       }
 
       let customDiffOptions = getStartAndEndCommands({
