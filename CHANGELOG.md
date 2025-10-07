@@ -1,5 +1,30 @@
 # Changelog
 
+## Release (2025-10-07)
+
+* ember-cli-update 3.0.0 (major)
+
+#### :boom: Breaking Change
+* `ember-cli-update`
+  * [#1268](https://github.com/ember-cli/ember-cli-update/pull/1268) Drop support for Node < 20 ([@pichfl](https://github.com/pichfl))
+
+#### :rocket: Enhancement
+* `ember-cli-update`
+  * [#1280](https://github.com/ember-cli/ember-cli-update/pull/1280) Warn users trying to upgrade past 6.7.0 - i.e. don't auto upgrade them to Vite ([@pichfl](https://github.com/pichfl))
+
+#### :house: Internal
+* `ember-cli-update`
+  * [#1278](https://github.com/ember-cli/ember-cli-update/pull/1278) Purge Node 8 related code ([@pichfl](https://github.com/pichfl))
+  * [#1270](https://github.com/ember-cli/ember-cli-update/pull/1270) swap to release-plan ([@mansona](https://github.com/mansona))
+  * [#1274](https://github.com/ember-cli/ember-cli-update/pull/1274) update eslint and remove some strange plugins ([@mansona](https://github.com/mansona))
+  * [#1271](https://github.com/ember-cli/ember-cli-update/pull/1271) Use Prettier ([@pichfl](https://github.com/pichfl))
+  * [#1269](https://github.com/ember-cli/ember-cli-update/pull/1269) Move to pnpm ([@pichfl](https://github.com/pichfl))
+  * [#1266](https://github.com/ember-cli/ember-cli-update/pull/1266) Disable scheduled CI runs ([@pichfl](https://github.com/pichfl))
+
+#### Committers: 2
+- Chris Manson ([@mansona](https://github.com/mansona))
+- Florian Pichler ([@pichfl](https://github.com/pichfl))
+
 
 
 ## v2.0.1 (2023-09-28)
