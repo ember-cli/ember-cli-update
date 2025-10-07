@@ -2,6 +2,17 @@
 
 ## Release (2025-10-07)
 
+* ember-cli-update 3.0.1 (patch)
+
+#### :house: Internal
+* `ember-cli-update`
+  * [#1281](https://github.com/ember-cli/ember-cli-update/pull/1281) prepare for using oidc for deployment ([@mansona](https://github.com/mansona))
+
+#### Committers: 1
+- Chris Manson ([@mansona](https://github.com/mansona))
+
+## Release (2025-10-07)
+
 * ember-cli-update 3.0.0 (major)
 
 #### :boom: Breaking Change
