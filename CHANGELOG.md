@@ -1,5 +1,16 @@
 # Changelog
 
+## Release (2025-10-17)
+
+* ember-cli-update 3.0.2 (patch)
+
+#### :bug: Bug Fix
+* `ember-cli-update`
+  * [#1283](https://github.com/ember-cli/ember-cli-update/pull/1283) Fix `upgrading-past-6-7-0.md` filename ([@bertdeblock](https://github.com/bertdeblock))
+
+#### Committers: 1
+- Bert De Block ([@bertdeblock](https://github.com/bertdeblock))
+
 ## Release (2025-10-07)
 
 * ember-cli-update 3.0.1 (patch)
