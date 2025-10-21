@@ -100,8 +100,8 @@ importers:
         specifier: ^0.17.2
         version: 0.17.2
       renovate-config-standard:
-        specifier: 2.1.2
-        version: 2.1.2
+        specifier: 2.4.2
+        version: 2.4.2
       sinon:
         specifier: ^14.0.0
         version: 14.0.2
@@ -4025,8 +4025,8 @@ packages:
   remove-trailing-separator@1.1.0:
     resolution: {integrity: sha512-/hS+Y0u3aOfIETiaiirUFwDBDzmXPvO+jAfKTitUngIPzdKc6Z0LoFjM/CK5PL4C+eKwHohlHAb6H0VFfmmUsw==}
 
-  renovate-config-standard@2.1.2:
-    resolution: {integrity: sha512-MBG0qAuaQF2X/CMwn63kS8swR3cIuKWhFDYQKm3LQjRY9ryxVW3gXq/O83ACHPMhQrqRDNmT/VzT4LHWX9DsRA==}
+  renovate-config-standard@2.4.2:
+    resolution: {integrity: sha512-eLVE5540NauzBag1BGISPMdX4LaG0ju9EnmjP5ha27kKbbgQmijnDoQZVUBSimPUxG2vcjkXuJ4j8b8YN+uxNA==}
 
   repeat-element@1.1.4:
     resolution: {integrity: sha512-LFiNfRcSu7KK3evMyYOuCzv3L10TW7yC1G2/+StMjK8Y6Vqd2MG7r/Qjw4ghtuCOjFvlnms/iMmLqpvW/ES/WQ==}
@@ -9729,7 +9729,7 @@ snapshots:
 
   remove-trailing-separator@1.1.0: {}
 
-  renovate-config-standard@2.1.2: {}
+  renovate-config-standard@2.4.2: {}
 
   repeat-element@1.1.4: {}
 
