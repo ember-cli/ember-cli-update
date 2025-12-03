@@ -49,8 +49,8 @@ importers:
         version: 17.7.2
     devDependencies:
       '@kellyselden/node-template':
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 3.1.0
+        version: 3.1.0
       chai:
         specifier: ^4.3.6
         version: 4.5.0
@@ -297,8 +297,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.30':
     resolution: {integrity: sha512-GQ7Nw5G2lTu/BtHTKfXhKHok2WGetd4XYcVKGx00SjAk8GMwgJM3zr6zORiPGuOE+/vkc90KtTosSSvaCjKb2Q==}
 
-  '@kellyselden/node-template@3.0.0':
-    resolution: {integrity: sha512-PYbDGIQb+mNIBUXedVQsCoQr6C3S7A0HerxaIMYT/YYh7bca/yE0G8NNcQStInJzcPv/9zjYzGmCNd8lKf239A==}
+  '@kellyselden/node-template@3.1.0':
+    resolution: {integrity: sha512-aFJnpqtNFDIkv3fNkMMgBrmOamn5PJH8ZPXRATAWRi95kJHrF+EnqiI65SN2P2o14TJ/bdUwkc7Gva/C6oTZ6Q==}
     engines: {node: '>=14.15'}
 
   '@manypkg/find-root@2.2.3':
@@ -3945,6 +3945,7 @@ packages:
   raw-body@1.1.7:
     resolution: {integrity: sha512-WmJJU2e9Y6M5UzTOkHaM7xJGAPQD8PNzx3bAd2+uhZAim6wDk6dAZxPVYLF67XhbR4hmKGh33Lpmh4XWrCH5Mg==}
     engines: {node: '>= 0.8.0'}
+    deprecated: No longer maintained. Please upgrade to a stable version.
 
   raw-body@2.5.2:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
@@ -5227,7 +5228,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@kellyselden/node-template@3.0.0': {}
+  '@kellyselden/node-template@3.1.0': {}
 
   '@manypkg/find-root@2.2.3':
     dependencies:
