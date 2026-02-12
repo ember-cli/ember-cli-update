@@ -1,5 +1,21 @@
 # Changelog
 
+## Release (2026-02-12)
+
+* ember-cli-update 3.0.2 (patch)
+
+#### :bug: Bug Fix
+* `ember-cli-update`
+  * [#1283](https://github.com/ember-cli/ember-cli-update/pull/1283) Fix `upgrading-past-6-7-0.md` filename ([@bertdeblock](https://github.com/bertdeblock))
+
+#### :memo: Documentation
+* `ember-cli-update`
+  * [#1285](https://github.com/ember-cli/ember-cli-update/pull/1285) Add instructions for already on vite for upgrading past 6.7 ([@kategengler](https://github.com/kategengler))
+
+#### Committers: 2
+- Bert De Block ([@bertdeblock](https://github.com/bertdeblock))
+- Katie Gengler ([@kategengler](https://github.com/kategengler))
+
 ## Release (2025-10-07)
 
 * ember-cli-update 3.0.1 (patch)
