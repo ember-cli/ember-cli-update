@@ -47,6 +47,7 @@ Re-run `ember-cli-update` after that.
 Use [ember-vite-codemod][mod] to upgrade your project. Then see [Already on Vite].
 
 ## Already on Vite
+
 [Already on Vite]: #already-on-vite
 
 You will also need to update
@@ -80,6 +81,5 @@ You will also need to update
 ```
 
 Re-run `ember-cli-update` after that.
-
 
 [mod]: https://github.com/mainmatter/ember-vite-codemod/
