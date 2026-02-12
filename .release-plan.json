@@ -2,17 +2,21 @@
   "solution": {
     "ember-cli-update": {
       "impact": "patch",
-      "oldVersion": "3.0.0",
-      "newVersion": "3.0.1",
+      "oldVersion": "3.0.1",
+      "newVersion": "3.0.2",
       "tagName": "latest",
       "constraints": [
         {
           "impact": "patch",
-          "reason": "Appears in changelog section :house: Internal"
+          "reason": "Appears in changelog section :bug: Bug Fix"
+        },
+        {
+          "impact": "patch",
+          "reason": "Appears in changelog section :memo: Documentation"
         }
       ],
       "pkgJSONPath": "./package.json"
     }
   },
-  "description": "## Release (2025-10-07)\n\n* ember-cli-update 3.0.1 (patch)\n\n#### :house: Internal\n* `ember-cli-update`\n  * [#1281](https://github.com/ember-cli/ember-cli-update/pull/1281) prepare for using oidc for deployment ([@mansona](https://github.com/mansona))\n\n#### Committers: 1\n- Chris Manson ([@mansona](https://github.com/mansona))\n"
+  "description": "## Release (2026-02-12)\n\n* ember-cli-update 3.0.2 (patch)\n\n#### :bug: Bug Fix\n* `ember-cli-update`\n  * [#1283](https://github.com/ember-cli/ember-cli-update/pull/1283) Fix `upgrading-past-6-7-0.md` filename ([@bertdeblock](https://github.com/bertdeblock))\n\n#### :memo: Documentation\n* `ember-cli-update`\n  * [#1285](https://github.com/ember-cli/ember-cli-update/pull/1285) Add instructions for already on vite for upgrading past 6.7 ([@kategengler](https://github.com/kategengler))\n\n#### Committers: 2\n- Bert De Block ([@bertdeblock](https://github.com/bertdeblock))\n- Katie Gengler ([@kategengler](https://github.com/kategengler))\n"
 }
