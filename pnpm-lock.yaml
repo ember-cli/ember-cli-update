@@ -109,8 +109,8 @@ importers:
         specifier: ^3.7.0
         version: 3.7.0(chai@4.5.0)(sinon@14.0.2)
       standard-node-template:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: 3.3.0
+        version: 3.3.0
       yargs-help-output:
         specifier: ^2.0.0
         version: 2.0.1
@@ -2274,29 +2274,31 @@ packages:
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@11.0.3:
     resolution: {integrity: sha512-2Nim7dha1KVkaiF4q6Dj+ngPPMdfvLJEOpZk/jKiUAkqKebpGAWQXAq9z1xu9HKu5lWfqw/FASuccEjyznjPaA==}
     engines: {node: 20 || >=22}
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
     hasBin: true
 
   glob@5.0.15:
     resolution: {integrity: sha512-c9IPMazfRITpmAAKi22dK1VKxGDX9ehhqfABDriL/lzO92xcUKEJPQHrVA/2YHSNFB4iFlykVmWvwo48nr3OxA==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@7.2.0:
     resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   glob@8.1.0:
     resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
     engines: {node: '>=12'}
-    deprecated: Glob versions prior to v9 are no longer supported
+    deprecated: Old versions of glob are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   global-dirs@3.0.1:
     resolution: {integrity: sha512-NBcGGFbBA9s1VzD41QXDG+3++t9Mn5t1FpLdhESY6oKY4gYTFpX4wO3sqGUa0Srjtbfj3szX0RnemmrVRUdULA==}
@@ -3945,6 +3947,7 @@ packages:
   raw-body@1.1.7:
     resolution: {integrity: sha512-WmJJU2e9Y6M5UzTOkHaM7xJGAPQD8PNzx3bAd2+uhZAim6wDk6dAZxPVYLF67XhbR4hmKGh33Lpmh4XWrCH5Mg==}
     engines: {node: '>= 0.8.0'}
+    deprecated: No longer maintained. Please upgrade to a stable version.
 
   raw-body@2.5.2:
     resolution: {integrity: sha512-8zGqypfENjCIqGhgXToC8aB2r7YrBX+AQAfIPs/Mlk+BtPTztOvTS01NRW/3Eh60J+a48lt8qsCzirQ6loCVfA==}
@@ -4414,8 +4417,8 @@ packages:
     resolution: {integrity: sha512-o57Wcn66jMQvfHG1FlYbWeZWW/dHZhJXjpIcTfXldXEk5nz5lStPo3mK0OJQfGR3RbZUlbISexbljkJzuEj/8Q==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
 
-  standard-node-template@3.0.0:
-    resolution: {integrity: sha512-LJZZpCtM8OXIoLHh89TtzGHZoMRe099Exnt4PizmxVe5d55FZ3iH5uVhwXsr59d5Kn+sdNA6091dymdvdeHlsg==}
+  standard-node-template@3.3.0:
+    resolution: {integrity: sha512-yAa0J7s5kuxvDjQXHX0t2OczywnHXegEvi7sdINkvotgz7J+us5IDLWK4uoLIJbnYy6MMBrXOzH6rUA7nN8jHA==}
     engines: {node: '>=14.15'}
 
   static-extend@0.1.2:
@@ -4553,6 +4556,7 @@ packages:
   tar@6.2.1:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   temp@0.9.1:
     resolution: {integrity: sha512-WMuOgiua1xb5R56lE0eH6ivpVmg/lq2OHm4+LtT/xtEtPQ+sz6N3bBM6WZ5FvO1lO4IKIOb43qnhoc4qxP5OeA==}
@@ -10183,7 +10187,7 @@ snapshots:
     dependencies:
       minipass: 3.3.6
 
-  standard-node-template@3.0.0: {}
+  standard-node-template@3.3.0: {}
 
   static-extend@0.1.2:
     dependencies:
